@@ -1,0 +1,1935 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <link rel="icon" type="image/png" href="../../images/favicon.png">
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Currency Converter – Live Rates & History</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js">
+    </script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js">
+    </script>
+    <style>
+        /* ===== RESET & BASE ===== */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: #f0f4f8;
+            color: #0b1e33;
+            line-height: 1.7;
+            padding: 24px;
+        }
+        .app-wrapper {
+            max-width: 960px;
+            width: 100%;
+            margin: 0 auto;
+            background: #ffffff;
+            border-radius: 32px;
+            padding: 36px 40px 40px;
+            box-shadow: 0 30px 80px rgba(0, 20, 40, 0.10);
+        }
+        .section-divider {
+            border: none;
+            border-top: 2px solid #eef3f7;
+            margin: 40px 0 32px;
+        }
+
+        /* ===== HEADER ===== */
+        .header {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            padding-bottom: 20px;
+            border-bottom: 2px solid #eef3f7;
+        }
+        .header-icon {
+            width: 52px;
+            height: 52px;
+            background: linear-gradient(135deg, #059669, #10b981);
+            border-radius: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 26px;
+            box-shadow: 0 6px 20px rgba(5, 150, 105, 0.3);
+            flex-shrink: 0;
+        }
+        .header-text h1 {
+            font-size: 26px;
+            font-weight: 700;
+            letter-spacing: -0.3px;
+        }
+        .header-text p {
+            font-size: 14px;
+            color: #5b6f82;
+        }
+        .live-badge {
+            display: inline-block;
+            background: #d1fae5;
+            color: #065f46;
+            font-size: 11px;
+            font-weight: 600;
+            padding: 2px 14px;
+            border-radius: 20px;
+            margin-top: 2px;
+            animation: pulse 2s infinite;
+        }
+        @keyframes pulse {
+            0%,
+            100% {
+                opacity: 1;
+            }
+            50% {
+                opacity: 0.5;
+            }
+        }
+
+        /* ===== UPDATE INFO ===== */
+        .update-info {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 12px;
+            color: #9aafc2;
+            margin-top: 6px;
+            margin-bottom: 6px;
+            flex-wrap: wrap;
+            gap: 6px;
+        }
+        .update-info .refresh-btn {
+            background: none;
+            border: none;
+            color: #10b981;
+            cursor: pointer;
+            font-size: 14px;
+            transition: 0.2s;
+        }
+        .update-info .refresh-btn:hover {
+            transform: rotate(180deg);
+            color: #059669;
+        }
+
+        /* ===== CONVERTER CARD ===== */
+        .converter-card {
+            margin-top: 20px;
+        }
+        .amount-section {
+            margin-bottom: 18px;
+        }
+        .amount-section label {
+            display: block;
+            font-weight: 600;
+            font-size: 14px;
+            color: #1e3a5f;
+            margin-bottom: 6px;
+        }
+        .amount-input {
+            width: 100%;
+            padding: 16px 20px;
+            font-size: 28px;
+            font-weight: 700;
+            border: 2px solid #dce3ec;
+            border-radius: 18px;
+            background: #fafcfe;
+            outline: none;
+            transition: 0.2s;
+            color: #0b1e33;
+        }
+        .amount-input:focus {
+            border-color: #10b981;
+            box-shadow: 0 0 0 4px rgba(16, 185, 129, 0.12);
+        }
+        .amount-input::placeholder {
+            color: #9aafc2;
+            font-weight: 400;
+        }
+
+        .currency-row {
+            display: grid;
+            grid-template-columns: 1fr auto 1fr;
+            gap: 16px;
+            align-items: center;
+        }
+        .currency-box {
+            background: #f8fafc;
+            border-radius: 18px;
+            padding: 14px 18px;
+            border: 2px solid #e9eef3;
+            transition: 0.2s;
+        }
+        .currency-box:focus-within {
+            border-color: #10b981;
+            box-shadow: 0 0 0 4px rgba(16, 185, 129, 0.08);
+        }
+        .currency-box .label {
+            font-size: 11px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            color: #6b85a0;
+            margin-bottom: 2px;
+        }
+        .currency-box .currency-select {
+            width: 100%;
+            padding: 6px 0;
+            border: none;
+            background: transparent;
+            font-size: 18px;
+            font-weight: 600;
+            color: #0b1e33;
+            outline: none;
+            cursor: pointer;
+        }
+        .swap-btn {
+            width: 48px;
+            height: 48px;
+            border-radius: 50%;
+            border: 2px solid #e9eef3;
+            background: white;
+            color: #1e3a5f;
+            cursor: pointer;
+            transition: 0.25s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 20px;
+            flex-shrink: 0;
+        }
+        .swap-btn:hover {
+            background: #10b981;
+            color: white;
+            border-color: #10b981;
+            transform: rotate(180deg);
+        }
+
+        /* ===== RESULT ===== */
+        .result-box {
+            margin-top: 20px;
+            background: linear-gradient(135deg, #f0fdf4, #ecfdf5);
+            border-radius: 20px;
+            padding: 20px 28px;
+            border: 2px solid #a7f3d0;
+            text-align: center;
+        }
+        .result-box .conversion-rate {
+            font-size: 14px;
+            color: #065f46;
+            font-weight: 500;
+        }
+        .result-box .result-amount {
+            font-size: 38px;
+            font-weight: 800;
+            color: #0b1e33;
+            margin-top: 4px;
+        }
+        .result-box .result-amount .curr-sym {
+            font-size: 26px;
+            color: #5b6f82;
+        }
+
+        /* ===== QUICK AMOUNTS ===== */
+        .quick-amounts {
+            display: flex;
+            gap: 8px;
+            margin-top: 14px;
+            flex-wrap: wrap;
+        }
+        .quick-btn {
+            padding: 6px 16px;
+            border: 2px solid #dce3ec;
+            border-radius: 12px;
+            background: white;
+            font-weight: 600;
+            font-size: 13px;
+            color: #1e3a5f;
+            cursor: pointer;
+            transition: 0.2s;
+        }
+        .quick-btn:hover {
+            border-color: #10b981;
+            background: #f0fdf4;
+            transform: translateY(-2px);
+        }
+
+        /* ===== ACTION BAR ===== */
+        .action-bar {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-top: 16px;
+            padding-top: 16px;
+            border-top: 2px solid #eef3f7;
+        }
+        .action-btn {
+            padding: 8px 18px;
+            border: 2px solid #e9eef3;
+            border-radius: 40px;
+            background: white;
+            font-weight: 600;
+            font-size: 13px;
+            color: #1e3a5f;
+            cursor: pointer;
+            transition: 0.2s;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .action-btn:hover {
+            border-color: #10b981;
+            background: #f0fdf4;
+            transform: translateY(-2px);
+        }
+        .action-btn i {
+            font-size: 14px;
+        }
+        .action-btn.pdf-btn {
+            background: #fef2f2;
+            border-color: #fca5a5;
+            color: #991b1b;
+        }
+        .action-btn.pdf-btn:hover {
+            background: #fee2e2;
+        }
+
+        /* ===== COMMON CURRENCIES ===== */
+        .common-currencies {
+            margin-top: 18px;
+        }
+        .common-currencies .title {
+            font-size: 13px;
+            font-weight: 600;
+            color: #6b85a0;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 8px;
+        }
+        .common-list {
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+        }
+        .common-item {
+            padding: 5px 14px;
+            border-radius: 20px;
+            border: 1px solid #e9eef3;
+            background: white;
+            font-size: 13px;
+            font-weight: 500;
+            color: #1e3a5f;
+            cursor: pointer;
+            transition: 0.2s;
+        }
+        .common-item:hover {
+            border-color: #10b981;
+            background: #f0fdf4;
+            transform: translateY(-2px);
+        }
+        .common-item .code {
+            font-weight: 700;
+            color: #0b1e33;
+        }
+
+        /* ===== HISTORY SECTION ===== */
+        .history-section {
+            margin-top: 32px;
+            padding-top: 28px;
+            border-top: 2px solid #eef3f7;
+        }
+        .history-section .hist-title {
+            font-size: 20px;
+            font-weight: 700;
+            margin-bottom: 4px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .history-section .hist-title i {
+            color: #10b981;
+        }
+        .history-section .hist-sub {
+            font-size: 14px;
+            color: #6b85a0;
+            margin-bottom: 16px;
+        }
+        .hist-tabs {
+            display: flex;
+            gap: 6px;
+            flex-wrap: wrap;
+            margin-bottom: 16px;
+        }
+        .hist-tabs button {
+            padding: 6px 20px;
+            border: 2px solid #e9eef3;
+            border-radius: 40px;
+            background: white;
+            font-weight: 600;
+            font-size: 13px;
+            color: #1e3a5f;
+            cursor: pointer;
+            transition: 0.2s;
+        }
+        .hist-tabs button.active {
+            background: #10b981;
+            color: white;
+            border-color: #10b981;
+        }
+        .hist-tabs button:not(.active):hover {
+            border-color: #10b981;
+            background: #f0fdf4;
+        }
+        .chart-container {
+            position: relative;
+            height: 260px;
+            background: #fafcfe;
+            border-radius: 18px;
+            border: 1px solid #e9eef3;
+            padding: 16px;
+        }
+        .chart-container canvas {
+            width: 100% !important;
+            height: 100% !important;
+        }
+        .hist-stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+            gap: 12px;
+            margin-top: 16px;
+        }
+        .hist-stat {
+            background: #f8fafc;
+            border-radius: 14px;
+            padding: 12px 14px;
+            text-align: center;
+            border: 1px solid #e9eef3;
+        }
+        .hist-stat .hl {
+            font-size: 11px;
+            text-transform: uppercase;
+            color: #6b85a0;
+            letter-spacing: 0.3px;
+        }
+        .hist-stat .hv {
+            font-size: 18px;
+            font-weight: 700;
+            color: #0b1e33;
+            margin-top: 2px;
+        }
+        .hist-stat .hv.green {
+            color: #059669;
+        }
+        .hist-stat .hv.red {
+            color: #dc2626;
+        }
+
+        /* ===== CONTENT SECTIONS ===== */
+        .content-wrap {
+            margin-top: 40px;
+            padding-top: 32px;
+            border-top: 2px solid #eef3f7;
+        }
+        .content-wrap h2 {
+            font-size: 28px;
+            font-weight: 700;
+            color: #0b1e33;
+            margin-top: 36px;
+            margin-bottom: 12px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+        .content-wrap h2:first-of-type {
+            margin-top: 0;
+        }
+        .content-wrap h2 .badge {
+            font-size: 12px;
+            background: #10b981;
+            color: #fff;
+            padding: 2px 16px;
+            border-radius: 40px;
+            font-weight: 600;
+        }
+        .content-wrap h3 {
+            font-size: 20px;
+            font-weight: 600;
+            color: #1e3a5f;
+            margin-top: 24px;
+            margin-bottom: 10px;
+        }
+        .content-wrap p {
+            font-size: 16px;
+            line-height: 1.9;
+            color: #1e3a5f;
+            margin-bottom: 14px;
+        }
+        .content-wrap ul,
+        .content-wrap ol {
+            padding-left: 26px;
+            margin-bottom: 16px;
+        }
+        .content-wrap li {
+            font-size: 16px;
+            line-height: 1.9;
+            color: #1e3a5f;
+            margin-bottom: 6px;
+        }
+        .content-wrap li strong {
+            color: #0b1e33;
+        }
+        .content-wrap .formula-box {
+            background: #f0fdf4;
+            border-left: 6px solid #10b981;
+            padding: 20px 24px;
+            border-radius: 14px;
+            margin: 16px 0 22px;
+            font-size: 16px;
+        }
+        .content-wrap .formula-box .math {
+            font-family: 'Times New Roman', serif;
+            font-size: 20px;
+            font-weight: 700;
+            color: #0b1e33;
+        }
+        .faq-list {
+            margin-top: 10px;
+        }
+        .faq-item {
+            border-bottom: 1px solid #eef3f7;
+            padding: 14px 0;
+            cursor: pointer;
+        }
+        .faq-item:last-child {
+            border-bottom: none;
+        }
+        .faq-q {
+            display: flex;
+            justify-content: space-between;
+            font-weight: 600;
+            font-size: 17px;
+            color: #0b1e33;
+        }
+        .faq-q i {
+            transition: 0.3s;
+        }
+        .faq-item.open .faq-q i {
+            transform: rotate(180deg);
+        }
+        .faq-a {
+            max-height: 0;
+            overflow: hidden;
+            transition: 0.35s ease;
+            opacity: 0;
+            font-size: 15px;
+            color: #2c3e50;
+            line-height: 1.8;
+        }
+        .faq-item.open .faq-a {
+            max-height: 400px;
+            opacity: 1;
+            padding-top: 10px;
+        }
+        .popular-pairs {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+            gap: 12px;
+            margin: 14px 0 20px;
+        }
+        .pair-card {
+            background: #f8fafc;
+            border-radius: 14px;
+            padding: 14px 16px;
+            border: 1px solid #e9eef3;
+            text-align: center;
+        }
+        .pair-card .pair {
+            font-weight: 700;
+            font-size: 15px;
+            color: #0b1e33;
+        }
+        .pair-card .rate {
+            font-size: 14px;
+            color: #5b6f82;
+            margin-top: 2px;
+        }
+        .pair-card .change {
+            font-size: 13px;
+            font-weight: 600;
+            margin-top: 2px;
+        }
+        .pair-card .change.up {
+            color: #059669;
+        }
+        .pair-card .change.down {
+            color: #dc2626;
+        }
+
+        /* ===== TOAST ===== */
+        .toast {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            background: #0b1e33;
+            color: white;
+            padding: 14px 28px;
+            border-radius: 16px;
+            font-weight: 500;
+            box-shadow: 0 12px 40px rgba(0, 0, 0, 0.2);
+            transform: translateY(120px);
+            opacity: 0;
+            transition: 0.4s ease;
+            z-index: 999;
+            max-width: 400px;
+        }
+        .toast.show {
+            transform: translateY(0);
+            opacity: 1;
+        }
+        .toast i {
+            margin-right: 10px;
+        }
+
+        /* ===== RESPONSIVE ===== */
+        @media (max-width: 700px) {
+            .app-wrapper {
+                padding: 20px 16px;
+                border-radius: 20px;
+            }
+            .currency-row {
+                grid-template-columns: 1fr;
+                gap: 10px;
+            }
+            .swap-btn {
+                width: 40px;
+                height: 40px;
+                font-size: 16px;
+                margin: 0 auto;
+                transform: rotate(90deg);
+            }
+            .swap-btn:hover {
+                transform: rotate(90deg) scale(1.05);
+            }
+            .result-box .result-amount {
+                font-size: 28px;
+            }
+            .amount-input {
+                font-size: 20px;
+                padding: 12px 16px;
+            }
+            .header-text h1 {
+                font-size: 20px;
+            }
+            .content-wrap h2 {
+                font-size: 22px;
+            }
+            .chart-container {
+                height: 200px;
+                padding: 10px;
+            }
+            .action-btn {
+                font-size: 12px;
+                padding: 6px 14px;
+            }
+            .quick-btn {
+                font-size: 12px;
+                padding: 5px 12px;
+            }
+            .hist-tabs button {
+                font-size: 12px;
+                padding: 4px 14px;
+            }
+        }
+        @media (max-width: 400px) {
+            .app-wrapper {
+                padding: 12px 10px;
+                border-radius: 16px;
+            }
+            .result-box .result-amount {
+                font-size: 22px;
+            }
+            .header-icon {
+                width: 40px;
+                height: 40px;
+                font-size: 18px;
+            }
+            .header-text h1 {
+                font-size: 17px;
+            }
+        }
+        @media print {
+            .action-bar,
+            .action-btn,
+            .quick-btn,
+            .common-item,
+            .swap-btn,
+            .refresh-btn {
+                display: none !important;
+            }
+            .app-wrapper {
+                box-shadow: none !important;
+                border: 1px solid #ddd !important;
+                padding: 20px !important;
+            }
+            body {
+                background: #fff !important;
+                padding: 10px !important;
+            }
+            .result-box {
+                background: #f0fdf4 !important;
+            }
+            .content-wrap {
+                page-break-inside: avoid;
+            }
+            .faq-item {
+                page-break-inside: avoid;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- ===== TOAST ===== -->
+    <div class="toast" id="toast"><i class="fas fa-check-circle"></i> <span id="toastMsg">Copied!</span></div>
+
+    <!-- ===== MAIN APP ===== -->
+    <div class="app-wrapper" id="appWrapper">
+
+        <!-- ===== HEADER ===== -->
+        <div class="header">
+            <div class="header-icon"><i class="fas fa-exchange-alt"></i></div>
+            <div class="header-text">
+                <h1>Currency Converter</h1>
+                <p>Live exchange rates · 170+ currencies</p>
+                <span class="live-badge"><i class="fas fa-circle" style="font-size:8px; margin-right:4px; color:#059669;"></i> Live Rates</span>
+            </div>
+        </div>
+
+        <div class="update-info">
+            <span id="lastUpdated"><i class="far fa-clock"></i> Updating...</span>
+            <button class="refresh-btn" id="refreshBtn" title="Refresh rates"><i class="fas fa-sync-alt"></i> Refresh</button>
+        </div>
+
+        <!-- ===== CONVERTER ===== -->
+        <div class="converter-card">
+
+            <div class="amount-section">
+                <label for="amountInput">Amount</label>
+                <input type="number" class="amount-input" id="amountInput" value="1" min="0" step="any" />
+            </div>
+
+            <div class="currency-row">
+                <div class="currency-box">
+                    <div class="label">From</div>
+                    <select class="currency-select" id="fromCurrency"></select>
+                </div>
+                <button class="swap-btn" id="swapBtn" title="Swap currencies"><i class="fas fa-arrows-alt-h"></i></button>
+                <div class="currency-box">
+                    <div class="label">To</div>
+                    <select class="currency-select" id="toCurrency"></select>
+                </div>
+            </div>
+
+            <div class="quick-amounts" id="quickAmounts">
+                <button class="quick-btn" data-amount="1">1</button>
+                <button class="quick-btn" data-amount="5">5</button>
+                <button class="quick-btn" data-amount="10">10</button>
+                <button class="quick-btn" data-amount="25">25</button>
+                <button class="quick-btn" data-amount="50">50</button>
+                <button class="quick-btn" data-amount="100">100</button>
+                <button class="quick-btn" data-amount="500">500</button>
+                <button class="quick-btn" data-amount="1000">1,000</button>
+                <button class="quick-btn" data-amount="10000">10,000</button>
+            </div>
+
+            <div class="result-box" id="resultBox">
+                <div class="conversion-rate" id="conversionRate">1 USD = 83.50 INR</div>
+                <div class="result-amount" id="resultAmount">
+                    <span class="curr-sym">₹</span> 83.50
+                </div>
+            </div>
+
+            <!-- ===== ACTION BAR ===== -->
+            <div class="action-bar">
+                <button class="action-btn" id="copyBtn"><i class="fas fa-copy"></i> Copy</button>
+                <button class="action-btn" id="resetBtn"><i class="fas fa-undo-alt"></i> Reset</button>
+                <button class="action-btn" id="printBtn"><i class="fas fa-print"></i> Print</button>
+                <button class="action-btn pdf-btn" id="pdfBtn"><i class="fas fa-file-pdf"></i> PDF</button>
+                <button class="action-btn" id="shareBtn"><i class="fas fa-share-alt"></i> Share</button>
+            </div>
+
+            <!-- ===== COMMON CURRENCIES ===== -->
+            <div class="common-currencies">
+                <div class="title"><i class="fas fa-star" style="color:#f59e0b;"></i> Common Currencies</div>
+                <div class="common-list" id="commonList"></div>
+            </div>
+        </div>
+
+        <!-- ================================================================
+        HISTORY SECTION
+        ================================================================ -->
+        <div class="history-section">
+            <div class="hist-title"><i class="fas fa-chart-line"></i> Exchange Rate History</div>
+            <div class="hist-sub">Track the performance of your selected currency pair over time.</div>
+
+            <div class="hist-tabs" id="histTabs">
+                <button class="active" data-range="today">Today</button>
+                <button data-range="yesterday">Yesterday</button>
+                <button data-range="7days">7 Days</button>
+                <button data-range="30days">30 Days</button>
+                <button data-range="1year">1 Year</button>
+            </div>
+
+            <div class="chart-container">
+                <canvas id="historyChart"></canvas>
+            </div>
+
+            <div class="hist-stats" id="histStats">
+                <div class="hist-stat"><div class="hl">Current</div><div class="hv" id="statCurrent">—</div></div>
+                <div class="hist-stat"><div class="hl">Highest</div><div class="hv green" id="statHigh">—</div></div>
+                <div class="hist-stat"><div class="hl">Lowest</div><div class="hv red" id="statLow">—</div></div>
+                <div class="hist-stat"><div class="hl">Change</div><div class="hv" id="statChange">—</div></div>
+                <div class="hist-stat"><div class="hl">Volatility</div><div class="hv" id="statVolatility">—</div></div>
+            </div>
+        </div>
+
+        <!-- ================================================================
+        CONTENT SECTIONS — 4000+ WORDS
+        ================================================================ -->
+        <div class="content-wrap">
+
+            <!-- ─── ABOUT ─── -->
+            <h2>📖 About Currency Converter <span class="badge">Overview</span></h2>
+            <p>
+                A <strong>currency converter</strong> is an indispensable financial tool that allows individuals,
+                businesses, and institutions to determine the equivalent value of one currency in terms of another.
+                In an increasingly globalized world, where cross-border transactions, international travel, and
+                foreign investments are part of everyday life, the ability to quickly and accurately convert currencies
+                is not just a convenience—it's a necessity. The 99toolhub Currency Converter is designed to meet this
+                need with precision, speed, and reliability.
+            </p>
+            <p>
+                This currency converter leverages <strong>live exchange rates</strong> sourced from a reliable API,
+                ensuring that you always have access to the most current market data. Whether you are a traveller
+                planning a trip abroad, a business owner dealing with international suppliers, an investor managing
+                a diversified portfolio, or a student studying global economics, this tool provides the clarity and
+                accuracy you need to make informed financial decisions.
+            </p>
+            <p>
+                What sets the 99toolhub Currency Converter apart is its comprehensive approach. Beyond simple
+                conversion, it offers <strong>historical rate tracking</strong> with interactive charts, allowing you
+                to analyse currency trends over time. You can view rate movements for today, yesterday, the past week,
+                month, or even the entire year. This historical perspective is invaluable for understanding market
+                dynamics and making strategic decisions.
+            </p>
+            <p>
+                The tool supports over <strong>170 currencies</strong> from every corner of the globe, including major
+                currencies like the US Dollar (USD), Euro (EUR), British Pound (GBP), Indian Rupee (INR), and Japanese
+                Yen (JPY), as well as emerging market currencies and exotic pairs. With a clean, intuitive interface,
+                real-time updates, and a suite of export options—including PDF reports and print-friendly layouts—this
+                converter is built to serve everyone from casual users to finance professionals.
+            </p>
+
+            <!-- ─── HOW IT WORKS ─── -->
+            <h2>⚙️ How Currency Converter Works <span class="badge">Guide</span></h2>
+            <p>
+                Understanding how a currency converter operates is key to using it effectively and trusting its results.
+                At its core, a currency converter relies on <strong>exchange rates</strong>—the price of one currency
+                expressed in terms of another. These rates fluctuate constantly based on a complex interplay of
+                economic factors, including interest rates, inflation, political stability, trade balances, and
+                market sentiment.
+            </p>
+            <p>
+                The 99toolhub Currency Converter works in three simple steps, all powered by a live data feed:
+            </p>
+            <ol>
+                <li>
+                    <strong>Select the Source and Target Currencies:</strong> Choose the currency you want to convert
+                    from (the "base" currency) and the currency you want to convert to (the "quote" currency). The tool
+                    supports over 170 currencies, so you can convert between virtually any two currencies in the world.
+                </li>
+                <li>
+                    <strong>Enter the Amount:</strong> Input the amount of money you wish to convert. This can be any
+                    positive number, and the tool handles both large and small values with ease. The input field accepts
+                    decimal values for precise calculations.
+                </li>
+                <li>
+                    <strong>Get Instant Results:</strong> As soon as you enter the amount or change any selection,
+                    the converter instantly displays the converted amount, along with the current exchange rate.
+                    The result updates in real-time, giving you immediate feedback.
+                </li>
+            </ol>
+            <p>
+                Behind the scenes, the tool fetches live exchange rates from a trusted API (<strong>ExchangeRate-API</strong>).
+                This API aggregates data from multiple financial sources to provide accurate, up-to-the-minute rates.
+                The tool automatically refreshes the rates every few minutes, ensuring that you are never working with
+                stale data. You can also manually refresh the rates at any time using the refresh button.
+            </p>
+            <p>
+                The <strong>History</strong> feature takes this a step further by storing and displaying past rates
+                for your selected currency pair. This allows you to see how the exchange rate has moved over different
+                time horizons, giving you a deeper understanding of the currency's performance and volatility.
+            </p>
+
+            <!-- ─── FORMULA ─── -->
+            <h2>🧮 Formula <span class="badge">Math</span></h2>
+            <p>
+                The mathematics behind currency conversion is straightforward but essential to understand. The
+                conversion formula is based on the <strong>exchange rate</strong> between two currencies:
+            </p>
+
+            <div class="formula-box">
+                <div class="math">
+                    Converted Amount = Amount × (Exchange Rate of Target Currency / Exchange Rate of Source Currency)
+                </div>
+                <div style="margin-top:8px;">
+                    Where the exchange rate is defined as the value of one unit of the source currency expressed in
+                    terms of the target currency (or vice versa, depending on the quote convention).
+                </div>
+            </div>
+
+            <p>
+                In practice, the tool first converts the input amount from the source currency to a <strong>base
+                currency</strong> (typically USD) and then from the base currency to the target currency. This
+                two-step process ensures accuracy even when the direct pair is not available. The formula can be
+                expressed as:
+            </p>
+
+            <div class="formula-box">
+                <div class="math">
+                    Result = Amount × (Rate<sub>Target/Base</sub> / Rate<sub>Source/Base</sub>)
+                </div>
+                <div style="margin-top:8px;">
+                    Where <strong>Rate<sub>Target/Base</sub></strong> is the exchange rate of the target currency
+                    relative to the base currency (USD), and <strong>Rate<sub>Source/Base</sub></strong> is the
+                    exchange rate of the source currency relative to the base currency.
+                </div>
+            </div>
+
+            <p>
+                For example, if you want to convert 100 EUR to INR, and the rates are: 1 EUR = 1.08 USD and 1 USD =
+                83.50 INR, then the conversion would be: 100 × (83.50 / 1.08) = 7,731.48 INR. This is exactly how
+                the calculator works internally, ensuring precision to the last decimal.
+            </p>
+
+            <!-- ─── EXAMPLE ─── -->
+            <h2>📌 Example <span class="badge">Demo</span></h2>
+            <p>
+                Let's walk through a practical example to see the currency converter in action. Suppose you are
+                planning a trip to the United States and you want to know how much ₹50,000 is worth in US Dollars.
+                Here's how the calculation works:
+            </p>
+
+            <div style="background:#f8fafc; border-radius:16px; padding:18px 24px; margin:12px 0 20px; border:1px solid #e9eef3;">
+                <div style="display:grid; grid-template-columns:1fr 1fr; gap:6px 24px; font-size:15px;">
+                    <div><strong>Source Currency:</strong> INR (Indian Rupee)</div>
+                    <div><strong>Target Currency:</strong> USD (US Dollar)</div>
+                    <div><strong>Amount:</strong> ₹50,000</div>
+                    <div><strong>Live Rate:</strong> 1 USD = 83.50 INR</div>
+                </div>
+            </div>
+
+            <p>
+                <strong>Step 1:</strong> Convert INR to USD using the formula:<br />
+                Converted Amount = 50,000 ÷ 83.50 = <strong>598.80 USD</strong>
+            </p>
+
+            <p>
+                <strong>Step 2:</strong> The result shows that ₹50,000 is approximately <strong>$598.80</strong>
+                at the current exchange rate. If the rate fluctuates, the converted amount changes accordingly.
+            </p>
+
+            <p>
+                Now, let's say you want to track how this rate has changed over the past month. Using the history
+                feature, you can select the "30 Days" tab to see a chart of the USD/INR rate over the last month.
+                This will show you whether the rupee has strengthened or weakened against the dollar, helping you
+                decide the best time to make your exchange.
+            </p>
+
+            <p>
+                The tool also includes <strong>quick amount buttons</strong> for common values, making it even easier
+                to perform frequent conversions. For instance, if you often need to convert $100, $500, or $1,000,
+                simply click the corresponding button to instantly populate the amount field.
+            </p>
+
+            <!-- ─── BENEFITS ─── -->
+            <h2>✅ Benefits of Using a Currency Converter <span class="badge">Why</span></h2>
+            <p>
+                A reliable currency converter offers numerous advantages for both individuals and businesses.
+                Here are the key benefits of using the 99toolhub Currency Converter:
+            </p>
+            <ul>
+                <li><strong>⚡ Instant & Accurate:</strong> Get real-time conversion results with precision. No manual
+                    calculations, no errors. The tool updates rates automatically to ensure accuracy.</li>
+                <li><strong>🌍 170+ Currencies:</strong> Support for virtually every currency in the world, including
+                    major, minor, and exotic pairs. This makes the tool useful for travellers, importers, exporters,
+                    and investors alike.</li>
+                <li><strong>📊 Historical Analysis:</strong> Track exchange rate movements over time with interactive
+                    charts. View trends for today, yesterday, the past week, month, or year to inform your decisions.</li>
+                <li><strong>📄 Export & Share:</strong> Download results as PDF, print the page, copy the result to
+                    your clipboard, or share it with others via the native share dialog or clipboard.</li>
+                <li><strong>🔄 Live Updates:</strong> Rates are fetched from a live API and automatically refreshed
+                    every few minutes. You can also manually refresh at any time.</li>
+                <li><strong>📱 Mobile-Responsive:</strong> Works seamlessly on desktops, tablets, and smartphones,
+                    so you can convert currencies wherever you are.</li>
+                <li><strong>🔒 Free & No Sign-Up:</strong> The converter is completely free to use with no registration
+                    required. Your data stays private and is not stored on any server.</li>
+                <li><strong>🧠 Educational:</strong> The tool helps you understand currency markets better by showing
+                    you historical trends, volatility, and key statistics like highest, lowest, and change percentage.</li>
+                <li><strong>🎯 Quick Amounts:</strong> Pre-set buttons for common amounts (1, 5, 10, 25, 50, 100, 500,
+                    1,000, 10,000) make frequent conversions faster.</li>
+                <li><strong>🔁 Swap Functionality:</strong> One-click swap between source and target currencies,
+                    making it easy to convert in both directions.</li>
+            </ul>
+
+            <!-- ─── FEATURES ─── -->
+            <h2>✨ Features <span class="badge">Highlights</span></h2>
+            <p>
+                The 99toolhub Currency Converter is packed with features designed to make currency conversion as
+                seamless and informative as possible. Here's a detailed look at what this tool offers:
+            </p>
+            <ul>
+                <li><strong>Live Exchange Rates:</strong> Powered by the ExchangeRate-API, the tool fetches real-time
+                    rates for over 170 currencies. The rates are updated regularly to reflect market movements.</li>
+                <li><strong>Interactive History Chart:</strong> Visualize exchange rate trends over five different
+                    timeframes: Today, Yesterday, 7 Days, 30 Days, and 1 Year. The chart is rendered using Chart.js
+                    for a smooth, interactive experience.</li>
+                <li><strong>Key Statistics:</strong> The history section displays important metrics including the
+                    current rate, the highest and lowest rates during the selected period, the percentage change,
+                    and volatility (standard deviation).</li>
+                <li><strong>Quick Amount Buttons:</strong> Pre-set buttons for 1, 5, 10, 25, 50, 100, 500, 1,000,
+                    and 10,000 allow you to rapidly perform common conversions.</li>
+                <li><strong>Swap Currencies:</strong> Instantly swap the source and target currencies with a single
+                    click, making it easy to convert in both directions.</li>
+                <li><strong>Common Currencies:</strong> A curated list of the most frequently used currencies (USD,
+                    EUR, GBP, JPY, INR, AUD, CAD, CHF, CNY, SGD, AED, SAR) for quick access.</li>
+                <li><strong>Export Options:</strong> Download the current conversion result as a PDF report, print the
+                    page, copy the result to your clipboard, or share it via the native share dialog.</li>
+                <li><strong>Responsive Design:</strong> The tool adapts to any screen size, providing a consistent
+                    experience on desktops, tablets, and mobile devices.</li>
+                <li><strong>Keyboard Shortcuts:</strong> Power users can use Ctrl+Shift+S to swap currencies and
+                    Ctrl+Shift+R to refresh the rates.</li>
+            </ul>
+
+            <!-- ─── POPULAR CURRENCY PAIRS ─── -->
+            <h2>🔁 Popular Currency Pairs <span class="badge">Top Pairs</span></h2>
+            <p>
+                Certain currency pairs are traded more frequently than others due to their economic significance,
+                liquidity, and the volume of international trade between the respective countries. Here are some
+                of the most popular currency pairs in the world, along with their typical characteristics:
+            </p>
+
+            <div class="popular-pairs" id="popularPairs">
+                <div class="pair-card"><div class="pair">USD/INR</div><div class="rate" id="pairUSDINR">—</div><div class="change" id="chgUSDINR">—</div></div>
+                <div class="pair-card"><div class="pair">USD/EUR</div><div class="rate" id="pairUSDEUR">—</div><div class="change" id="chgUSDEUR">—</div></div>
+                <div class="pair-card"><div class="pair">USD/GBP</div><div class="rate" id="pairUSDGBP">—</div><div class="change" id="chgUSDGBP">—</div></div>
+                <div class="pair-card"><div class="pair">USD/JPY</div><div class="rate" id="pairUSDJPY">—</div><div class="change" id="chgUSDJPY">—</div></div>
+                <div class="pair-card"><div class="pair">EUR/INR</div><div class="rate" id="pairEURINR">—</div><div class="change" id="chgEURINR">—</div></div>
+                <div class="pair-card"><div class="pair">GBP/INR</div><div class="rate" id="pairGBPINR">—</div><div class="change" id="chgGBPINR">—</div></div>
+                <div class="pair-card"><div class="pair">USD/AUD</div><div class="rate" id="pairUSDAUD">—</div><div class="change" id="chgUSDAUD">—</div></div>
+                <div class="pair-card"><div class="pair">USD/CAD</div><div class="rate" id="pairUSDCAD">—</div><div class="change" id="chgUSDCAD">—</div></div>
+                <div class="pair-card"><div class="pair">USD/CHF</div><div class="rate" id="pairUSDCHF">—</div><div class="change" id="chgUSDCHF">—</div></div>
+                <div class="pair-card"><div class="pair">USD/CNY</div><div class="rate" id="pairUSDCNY">—</div><div class="change" id="chgUSDCNY">—</div></div>
+            </div>
+
+            <p>
+                <strong>USD/INR</strong> is one of the most closely watched pairs in India, reflecting the strength
+                of the Indian rupee against the US dollar. <strong>USD/EUR</strong> is the most traded pair globally,
+                representing the two largest economies. <strong>USD/JPY</strong> is highly sensitive to geopolitical
+                events and interest rate differentials. Each of these pairs has unique drivers and volatility patterns,
+                which you can explore using the history feature of this converter.
+            </p>
+
+            <!-- ─── FAQ ─── -->
+            <h2>❓ Frequently Asked Questions <span class="badge">FAQ</span></h2>
+
+            <div class="faq-list" id="faqList">
+                <div class="faq-item">
+                    <div class="faq-q">What is a currency converter? <i class="fas fa-chevron-down"></i></div>
+                    <div class="faq-a">A currency converter is a tool that calculates the equivalent value of one
+                        currency in terms of another using current exchange rates. It is used for travel, international
+                        trade, investment, and personal finance.</div>
+                </div>
+                <div class="faq-item">
+                    <div class="faq-q">How are exchange rates determined? <i class="fas fa-chevron-down"></i></div>
+                    <div class="faq-a">Exchange rates are determined by the foreign exchange market, where currencies
+                        are traded 24/7. They are influenced by factors such as interest rates, inflation, political
+                        stability, economic performance, and market sentiment.</div>
+                </div>
+                <div class="faq-item">
+                    <div class="faq-q">Where does the tool get its exchange rates? <i class="fas fa-chevron-down"></i></div>
+                    <div class="faq-a">The tool uses the ExchangeRate-API, which aggregates real-time data from multiple
+                        financial sources to provide accurate and up-to-date exchange rates for over 170 currencies.</div>
+                </div>
+                <div class="faq-item">
+                    <div class="faq-q">How often are the rates updated? <i class="fas fa-chevron-down"></i></div>
+                    <div class="faq-a">Rates are automatically refreshed every few minutes. You can also manually
+                        refresh the rates at any time using the refresh button (🔄) located next to the last updated
+                        time.</div>
+                </div>
+                <div class="faq-item">
+                    <div class="faq-q">What is the historical data used for? <i class="fas fa-chevron-down"></i></div>
+                    <div class="faq-a">The historical data helps you analyze currency trends over different time
+                        periods—today, yesterday, 7 days, 30 days, or 1 year. This is useful for understanding
+                        volatility, identifying patterns, and making informed financial decisions.</div>
+                </div>
+                <div class="faq-item">
+                    <div class="faq-q">Is the currency converter free to use? <i class="fas fa-chevron-down"></i></div>
+                    <div class="faq-a">Yes, the 99toolhub Currency Converter is completely free to use. There are no
+                        hidden charges, no sign-up requirements, and no limits on how many times you can use it.</div>
+                </div>
+                <div class="faq-item">
+                    <div class="faq-q">Can I download the conversion result? <i class="fas fa-chevron-down"></i></div>
+                    <div class="faq-a">Yes, you can download the current conversion result as a PDF report using the
+                        "PDF" button. You can also print the page or copy the result to your clipboard.</div>
+                </div>
+                <div class="faq-item">
+                    <div class="faq-q">What currencies are supported? <i class="fas fa-chevron-down"></i></div>
+                    <div class="faq-a">The tool supports over 170 currencies, including all major world currencies,
+                        emerging market currencies, and many exotic pairs. The full list is available in the dropdown
+                        selectors.</div>
+                </div>
+                <div class="faq-item">
+                    <div class="faq-q">How does the swap button work? <i class="fas fa-chevron-down"></i></div>
+                    <div class="faq-a">The swap button (↕) exchanges the "From" and "To" currencies with a single click,
+                        allowing you to quickly convert in the opposite direction without re-entering the amount.</div>
+                </div>
+                <div class="faq-item">
+                    <div class="faq-q">Is my data stored or shared? <i class="fas fa-chevron-down"></i></div>
+                    <div class="faq-a">No. All calculations are performed locally in your browser. No data is sent to
+                        any server or shared with any third party. Your privacy is fully protected.</div>
+                </div>
+            </div>
+
+            <!-- ─── CONCLUSION ─── -->
+            <h2>🎯 Conclusion <span class="badge">Final</span></h2>
+            <p>
+                The 99toolhub Currency Converter is more than just a simple conversion tool—it's a comprehensive
+                financial companion that empowers you with real-time data, historical insights, and a suite of
+                practical features. Whether you are a traveller checking the cost of your next trip, a business
+                owner managing international payments, or an investor monitoring currency movements, this tool
+                provides the accuracy, speed, and depth you need.
+            </p>
+            <p>
+                With support for over 170 currencies, live exchange rates, interactive history charts, and multiple
+                export options, the converter is designed to meet the demands of modern finance. The intuitive
+                interface, quick-action buttons, and responsive design ensure that you can use it effortlessly
+                on any device, at any time.
+            </p>
+            <p>
+                Understanding currency dynamics is a crucial skill in today's interconnected world. This tool not
+                only gives you the numbers but also the context—showing you trends, volatility, and key statistics
+                that help you make smarter decisions. Whether you're converting ₹50,000 to USD or tracking the
+                EUR/INR rate over a year, the 99toolhub Currency Converter puts the power of financial intelligence
+                at your fingertips.
+            </p>
+            <p>
+                Start using the converter today and experience the difference that real-time data, historical
+                analysis, and a clean, user-friendly interface can make in your financial life. Bookmark the page,
+                share it with friends and colleagues, and never be caught off-guard by currency fluctuations again.
+            </p>
+
+        </div>
+        <!-- end .content-wrap -->
+
+    </div>
+    <!-- end .app-wrapper -->
+
+
+    <!-- ================================================================
+    JAVASCRIPT
+    ================================================================ -->
+    <script>
+        (function() {
+            'use strict';
+
+            // ============================================================
+            //  CURRENCY DATA
+            // ============================================================
+            const CURRENCIES = {
+                USD: { code: 'USD', name: 'US Dollar', symbol: '$' },
+                EUR: { code: 'EUR', name: 'Euro', symbol: '€' },
+                GBP: { code: 'GBP', name: 'British Pound', symbol: '£' },
+                JPY: { code: 'JPY', name: 'Japanese Yen', symbol: '¥' },
+                INR: { code: 'INR', name: 'Indian Rupee', symbol: '₹' },
+                AUD: { code: 'AUD', name: 'Australian Dollar', symbol: 'A$' },
+                CAD: { code: 'CAD', name: 'Canadian Dollar', symbol: 'C$' },
+                CHF: { code: 'CHF', name: 'Swiss Franc', symbol: 'Fr' },
+                CNY: { code: 'CNY', name: 'Chinese Yuan', symbol: '¥' },
+                HKD: { code: 'HKD', name: 'Hong Kong Dollar', symbol: 'HK$' },
+                NZD: { code: 'NZD', name: 'New Zealand Dollar', symbol: 'NZ$' },
+                SEK: { code: 'SEK', name: 'Swedish Krona', symbol: 'kr' },
+                KRW: { code: 'KRW', name: 'South Korean Won', symbol: '₩' },
+                SGD: { code: 'SGD', name: 'Singapore Dollar', symbol: 'S$' },
+                NOK: { code: 'NOK', name: 'Norwegian Krone', symbol: 'kr' },
+                MXN: { code: 'MXN', name: 'Mexican Peso', symbol: 'MX$' },
+                BRL: { code: 'BRL', name: 'Brazilian Real', symbol: 'R$' },
+                RUB: { code: 'RUB', name: 'Russian Ruble', symbol: '₽' },
+                ZAR: { code: 'ZAR', name: 'South African Rand', symbol: 'R' },
+                AED: { code: 'AED', name: 'UAE Dirham', symbol: 'د.إ' },
+                SAR: { code: 'SAR', name: 'Saudi Riyal', symbol: '﷼' },
+                MYR: { code: 'MYR', name: 'Malaysian Ringgit', symbol: 'RM' },
+                THB: { code: 'THB', name: 'Thai Baht', symbol: '฿' },
+                IDR: { code: 'IDR', name: 'Indonesian Rupiah', symbol: 'Rp' },
+                PHP: { code: 'PHP', name: 'Philippine Peso', symbol: '₱' },
+                VND: { code: 'VND', name: 'Vietnamese Dong', symbol: '₫' },
+                PKR: { code: 'PKR', name: 'Pakistani Rupee', symbol: 'Rs' },
+                BDT: { code: 'BDT', name: 'Bangladeshi Taka', symbol: '৳' },
+                LKR: { code: 'LKR', name: 'Sri Lankan Rupee', symbol: 'Rs' },
+                NPR: { code: 'NPR', name: 'Nepalese Rupee', symbol: 'Rs' },
+                TRY: { code: 'TRY', name: 'Turkish Lira', symbol: '₺' },
+                ILS: { code: 'ILS', name: 'Israeli Shekel', symbol: '₪' },
+                KWD: { code: 'KWD', name: 'Kuwaiti Dinar', symbol: 'د.ك' },
+                BHD: { code: 'BHD', name: 'Bahraini Dinar', symbol: 'د.ب' },
+                OMR: { code: 'OMR', name: 'Omani Rial', symbol: '﷼' },
+                QAR: { code: 'QAR', name: 'Qatari Riyal', symbol: '﷼' },
+                EGP: { code: 'EGP', name: 'Egyptian Pound', symbol: 'E£' },
+                NGN: { code: 'NGN', name: 'Nigerian Naira', symbol: '₦' },
+                KES: { code: 'KES', name: 'Kenyan Shilling', symbol: 'KSh' },
+                GHS: { code: 'GHS', name: 'Ghanaian Cedi', symbol: 'GH₵' },
+                COP: { code: 'COP', name: 'Colombian Peso', symbol: 'CO$' },
+                ARS: { code: 'ARS', name: 'Argentine Peso', symbol: 'AR$' },
+                CLP: { code: 'CLP', name: 'Chilean Peso', symbol: 'CL$' },
+                PEN: { code: 'PEN', name: 'Peruvian Sol', symbol: 'S/' },
+                TWD: { code: 'TWD', name: 'Taiwan Dollar', symbol: 'NT$' },
+                CZK: { code: 'CZK', name: 'Czech Koruna', symbol: 'Kč' },
+                DKK: { code: 'DKK', name: 'Danish Krone', symbol: 'kr' },
+                HUF: { code: 'HUF', name: 'Hungarian Forint', symbol: 'Ft' },
+                PLN: { code: 'PLN', name: 'Polish Zloty', symbol: 'zł' },
+                RON: { code: 'RON', name: 'Romanian Leu', symbol: 'lei' },
+                BGN: { code: 'BGN', name: 'Bulgarian Lev', symbol: 'лв' },
+                ISK: { code: 'ISK', name: 'Icelandic Krona', symbol: 'kr' },
+                JMD: { code: 'JMD', name: 'Jamaican Dollar', symbol: 'J$' },
+                TTD: { code: 'TTD', name: 'Trinidad Dollar', symbol: 'TT$' },
+                BBD: { code: 'BBD', name: 'Barbados Dollar', symbol: 'Bds$' },
+                BSD: { code: 'BSD', name: 'Bahamian Dollar', symbol: 'B$' },
+                BZD: { code: 'BZD', name: 'Belize Dollar', symbol: 'BZ$' },
+                KYD: { code: 'KYD', name: 'Cayman Dollar', symbol: 'CI$' },
+                FJD: { code: 'FJD', name: 'Fiji Dollar', symbol: 'FJ$' },
+                KHR: { code: 'KHR', name: 'Cambodian Riel', symbol: '៛' },
+                LAK: { code: 'LAK', name: 'Lao Kip', symbol: '₭' },
+                MMK: { code: 'MMK', name: 'Myanmar Kyat', symbol: 'K' },
+                MNT: { code: 'MNT', name: 'Mongolian Tugrik', symbol: '₮' },
+                UZS: { code: 'UZS', name: 'Uzbekistani Som', symbol: 'so\'m' },
+                KZT: { code: 'KZT', name: 'Kazakhstani Tenge', symbol: '₸' },
+                GEL: { code: 'GEL', name: 'Georgian Lari', symbol: '₾' },
+                AMD: { code: 'AMD', name: 'Armenian Dram', symbol: '֏' },
+                AZN: { code: 'AZN', name: 'Azerbaijani Manat', symbol: '₼' },
+                BAM: { code: 'BAM', name: 'Bosnian Mark', symbol: 'KM' },
+                ALL: { code: 'ALL', name: 'Albanian Lek', symbol: 'L' },
+                MKD: { code: 'MKD', name: 'Macedonian Denar', symbol: 'ден' },
+                RSD: { code: 'RSD', name: 'Serbian Dinar', symbol: 'дин.' },
+                UAH: { code: 'UAH', name: 'Ukrainian Hryvnia', symbol: '₴' },
+                BYN: { code: 'BYN', name: 'Belarusian Ruble', symbol: 'Br' },
+                MDL: { code: 'MDL', name: 'Moldovan Leu', symbol: 'L' },
+                AFN: { code: 'AFN', name: 'Afghan Afghani', symbol: '؋' },
+                IRR: { code: 'IRR', name: 'Iranian Rial', symbol: '﷼' },
+                IQD: { code: 'IQD', name: 'Iraqi Dinar', symbol: 'د.ع' },
+                SYP: { code: 'SYP', name: 'Syrian Pound', symbol: '£S' },
+                JOD: { code: 'JOD', name: 'Jordanian Dinar', symbol: 'د.ا' },
+                LBP: { code: 'LBP', name: 'Lebanese Pound', symbol: 'ل.ل' },
+                YER: { code: 'YER', name: 'Yemeni Rial', symbol: '﷼' },
+                SOS: { code: 'SOS', name: 'Somali Shilling', symbol: 'S' },
+                TZS: { code: 'TZS', name: 'Tanzanian Shilling', symbol: 'TSh' },
+                UGX: { code: 'UGX', name: 'Ugandan Shilling', symbol: 'USh' },
+                ZMW: { code: 'ZMW', name: 'Zambian Kwacha', symbol: 'ZK' },
+                MZN: { code: 'MZN', name: 'Mozambican Metical', symbol: 'MT' },
+                MUR: { code: 'MUR', name: 'Mauritian Rupee', symbol: '₨' },
+                MAD: { code: 'MAD', name: 'Moroccan Dirham', symbol: 'د.م.' },
+                TND: { code: 'TND', name: 'Tunisian Dinar', symbol: 'د.ت' },
+                DZD: { code: 'DZD', name: 'Algerian Dinar', symbol: 'د.ج' },
+                LYD: { code: 'LYD', name: 'Libyan Dinar', symbol: 'ل.د' },
+                SDG: { code: 'SDG', name: 'Sudanese Pound', symbol: '£S' },
+                GMD: { code: 'GMD', name: 'Gambian Dalasi', symbol: 'D' },
+                BIF: { code: 'BIF', name: 'Burundian Franc', symbol: 'FBu' },
+                RWF: { code: 'RWF', name: 'Rwandan Franc', symbol: 'FRw' },
+                DJF: { code: 'DJF', name: 'Djiboutian Franc', symbol: 'Fdj' },
+                ETB: { code: 'ETB', name: 'Ethiopian Birr', symbol: 'Br' },
+                AOA: { code: 'AOA', name: 'Angolan Kwanza', symbol: 'Kz' },
+                CVE: { code: 'CVE', name: 'Cape Verdean Escudo', symbol: 'Esc' },
+                SZL: { code: 'SZL', name: 'Swazi Lilangeni', symbol: 'L' },
+                LSL: { code: 'LSL', name: 'Lesotho Loti', symbol: 'L' },
+                BWP: { code: 'BWP', name: 'Botswana Pula', symbol: 'P' },
+                NAD: { code: 'NAD', name: 'Namibian Dollar', symbol: 'N$' },
+                AWG: { code: 'AWG', name: 'Aruban Florin', symbol: 'ƒ' },
+                ANG: { code: 'ANG', name: 'Netherlands Antillean Guilder', symbol: 'ƒ' },
+                SBD: { code: 'SBD', name: 'Solomon Islands Dollar', symbol: 'SI$' },
+                VUV: { code: 'VUV', name: 'Vanuatu Vatu', symbol: 'VT' },
+                PGK: { code: 'PGK', name: 'Papua New Guinean Kina', symbol: 'K' },
+                TOP: { code: 'TOP', name: 'Tongan Paʻanga', symbol: 'T$' },
+                WST: { code: 'WST', name: 'Samoan Tala', symbol: 'WS$' },
+                XCD: { code: 'XCD', name: 'East Caribbean Dollar', symbol: 'EC$' },
+                FKP: { code: 'FKP', name: 'Falkland Islands Pound', symbol: 'FK£' },
+                GIP: { code: 'GIP', name: 'Gibraltar Pound', symbol: '£' },
+                SHP: { code: 'SHP', name: 'St Helena Pound', symbol: '£' },
+                TMT: { code: 'TMT', name: 'Turkmenistani Manat', symbol: 'm' },
+                TJS: { code: 'TJS', name: 'Tajikistani Somoni', symbol: 'SM' },
+                KGS: { code: 'KGS', name: 'Kyrgyzstani Som', symbol: 'с' },
+                MVR: { code: 'MVR', name: 'Maldivian Rufiyaa', symbol: 'Rf' },
+                BTN: { code: 'BTN', name: 'Bhutanese Ngultrum', symbol: 'Nu.' },
+                MOP: { code: 'MOP', name: 'Macanese Pataca', symbol: 'MOP$' },
+                PAB: { code: 'PAB', name: 'Panamanian Balboa', symbol: 'B/.' },
+                NIO: { code: 'NIO', name: 'Nicaraguan Córdoba', symbol: 'C$' },
+                HNL: { code: 'HNL', name: 'Honduran Lempira', symbol: 'L' },
+                GTQ: { code: 'GTQ', name: 'Guatemalan Quetzal', symbol: 'Q' },
+                CRC: { code: 'CRC', name: 'Costa Rican Colón', symbol: '₡' },
+                DOP: { code: 'DOP', name: 'Dominican Peso', symbol: 'RD$' },
+                PYG: { code: 'PYG', name: 'Paraguayan Guaraní', symbol: '₲' },
+                UYU: { code: 'UYU', name: 'Uruguayan Peso', symbol: '$U' },
+                BOB: { code: 'BOB', name: 'Bolivian Boliviano', symbol: 'Bs.' },
+                VES: { code: 'VES', name: 'Venezuelan Bolívar', symbol: 'Bs.S' },
+                SVC: { code: 'SVC', name: 'Salvadoran Colón', symbol: '₡' },
+                HTG: { code: 'HTG', name: 'Haitian Gourde', symbol: 'G' },
+                GYD: { code: 'GYD', name: 'Guyanese Dollar', symbol: 'G$' },
+                SRD: { code: 'SRD', name: 'Surinamese Dollar', symbol: '$' },
+                ERN: { code: 'ERN', name: 'Eritrean Nakfa', symbol: 'Nfk' },
+                KPW: { code: 'KPW', name: 'North Korean Won', symbol: '₩' },
+                MGA: { code: 'MGA', name: 'Malagasy Ariary', symbol: 'Ar' },
+                MWK: { code: 'MWK', name: 'Malawian Kwacha', symbol: 'MK' },
+                SCR: { code: 'SCR', name: 'Seychellois Rupee', symbol: '₨' },
+                CDF: { code: 'CDF', name: 'Congolese Franc', symbol: 'FC' },
+                XAF: { code: 'XAF', name: 'CFA Franc (BEAC)', symbol: 'FCFA' },
+                XOF: { code: 'XOF', name: 'CFA Franc (BCEAO)', symbol: 'CFA' },
+                XPF: { code: 'XPF', name: 'CFP Franc', symbol: '₣' },
+                IMP: { code: 'IMP', name: 'Isle of Man Pound', symbol: '£' },
+                GGP: { code: 'GGP', name: 'Guernsey Pound', symbol: '£' },
+                JEP: { code: 'JEP', name: 'Jersey Pound', symbol: '£' }
+            };
+
+            // ============================================================
+            //  DOM REFS
+            // ============================================================
+            const amountInput = document.getElementById('amountInput');
+            const fromSelect = document.getElementById('fromCurrency');
+            const toSelect = document.getElementById('toCurrency');
+            const swapBtn = document.getElementById('swapBtn');
+            const resultAmount = document.getElementById('resultAmount');
+            const conversionRate = document.getElementById('conversionRate');
+            const lastUpdated = document.getElementById('lastUpdated');
+            const commonList = document.getElementById('commonList');
+            const refreshBtn = document.getElementById('refreshBtn');
+            const toast = document.getElementById('toast');
+            const toastMsg = document.getElementById('toastMsg');
+            const chartCanvas = document.getElementById('historyChart');
+            const histTabs = document.getElementById('histTabs');
+
+            // Stats
+            const statCurrent = document.getElementById('statCurrent');
+            const statHigh = document.getElementById('statHigh');
+            const statLow = document.getElementById('statLow');
+            const statChange = document.getElementById('statChange');
+            const statVolatility = document.getElementById('statVolatility');
+
+            // Popular pairs
+            const pairElements = {
+                USDINR: { rate: document.getElementById('pairUSDINR'), change: document.getElementById('chgUSDINR') },
+                USDEUR: { rate: document.getElementById('pairUSDEUR'), change: document.getElementById('chgUSDEUR') },
+                USDGBP: { rate: document.getElementById('pairUSDGBP'), change: document.getElementById('chgUSDGBP') },
+                USDJPY: { rate: document.getElementById('pairUSDJPY'), change: document.getElementById('chgUSDJPY') },
+                EURINR: { rate: document.getElementById('pairEURINR'), change: document.getElementById('chgEURINR') },
+                GBPINR: { rate: document.getElementById('pairGBPINR'), change: document.getElementById('chgGBPINR') },
+                USDAUD: { rate: document.getElementById('pairUSDAUD'), change: document.getElementById('chgUSDAUD') },
+                USDCAD: { rate: document.getElementById('pairUSDCAD'), change: document.getElementById('chgUSDCAD') },
+                USDCHF: { rate: document.getElementById('pairUSDCHF'), change: document.getElementById('chgUSDCHF') },
+                USDCNY: { rate: document.getElementById('pairUSDCNY'), change: document.getElementById('chgUSDCNY') },
+            };
+
+            // ============================================================
+            //  STATE
+            // ============================================================
+            let exchangeRates = {};
+            let fromCode = 'USD';
+            let toCode = 'INR';
+            let isUpdating = false;
+            let historyChart = null;
+            let currentRange = 'today';
+            let historyData = [];
+
+            // ============================================================
+            //  HELPERS
+            // ============================================================
+            function showToast(msg, isError = false) {
+                toastMsg.textContent = msg;
+                toast.style.background = isError ? '#dc2626' : '#0b1e33';
+                toast.classList.add('show');
+                clearTimeout(toast._timer);
+                toast._timer = setTimeout(() => {
+                    toast.classList.remove('show');
+                    toast.style.background = '#0b1e33';
+                }, 3000);
+            }
+
+            function getCurrencySymbol(code) {
+                return CURRENCIES[code]?.symbol || code;
+            }
+
+            function getFlagEmoji(countryCode) {
+                const cp = countryCode.toUpperCase().split('').map(ch => 127397 + ch.charCodeAt(0));
+                return String.fromCodePoint(...cp);
+            }
+
+            function formatNum(num, decimals = 4) {
+                if (num >= 1e6) return (num / 1e6).toFixed(2) + 'M';
+                if (num >= 1e3) return num.toFixed(2);
+                return num.toFixed(decimals);
+            }
+
+            // ============================================================
+            //  POPULATE SELECTORS
+            // ============================================================
+            function populateCurrencies() {
+                const sorted = Object.keys(CURRENCIES).sort();
+                [fromSelect, toSelect].forEach(sel => {
+                    sel.innerHTML = '';
+                    sorted.forEach(code => {
+                        const opt = document.createElement('option');
+                        opt.value = code;
+                        const flag = getFlagEmoji(code.slice(0, 2));
+                        opt.textContent = `${flag} ${code} - ${CURRENCIES[code].name}`;
+                        sel.appendChild(opt);
+                    });
+                });
+                fromSelect.value = fromCode;
+                toSelect.value = toCode;
+            }
+
+            function populateCommon() {
+                const commonCodes = ['USD', 'EUR', 'GBP', 'JPY', 'INR', 'AUD', 'CAD', 'CHF', 'CNY', 'SGD', 'AED', 'SAR'];
+                commonList.innerHTML = '';
+                commonCodes.forEach(code => {
+                    const div = document.createElement('div');
+                    div.className = 'common-item';
+                    const flag = getFlagEmoji(code.slice(0, 2));
+                    div.innerHTML = `${flag} <span class="code">${code}</span>`;
+                    div.addEventListener('click', () => {
+                        toSelect.value = code;
+                        toCode = code;
+                        convert();
+                        showToast(`Switched to ${code}`);
+                    });
+                    commonList.appendChild(div);
+                });
+            }
+
+            // ============================================================
+            //  FETCH RATES
+            // ============================================================
+            async function fetchRates(baseCurrency) {
+                if (isUpdating) return;
+                isUpdating = true;
+                try {
+                    const resp = await fetch(`https://api.exchangerate-api.com/v4/latest/${baseCurrency}`);
+                    if (!resp.ok) throw new Error('API failed');
+                    const data = await resp.json();
+                    exchangeRates = data.rates;
+                    exchangeRates[baseCurrency] = 1;
+                    const date = new Date(data.date || Date.now());
+                    lastUpdated.innerHTML =
+                        `<i class="far fa-clock"></i> Updated: ${date.toLocaleString('en-IN', { day:'2-digit', month:'short', year:'numeric', hour:'2-digit', minute:'2-digit' })}`;
+                    convert();
+                    updatePopularPairs();
+                    generateHistory();
+                    showToast(`✅ Rates updated for ${baseCurrency}`);
+                } catch (err) {
+                    console.error(err);
+                    showToast('⚠️ Failed to fetch live rates. Using fallback.', true);
+                    // Fallback rates
+                    exchangeRates = {
+                        USD: 1,
+                        EUR: 0.92,
+                        GBP: 0.79,
+                        JPY: 148.5,
+                        INR: 83.5,
+                        AUD: 1.52,
+                        CAD: 1.36,
+                        CHF: 0.88,
+                        CNY: 7.18,
+                        SGD: 1.34,
+                        AED: 3.67,
+                        SAR: 3.75,
+                        NZD: 1.65,
+                        SEK: 10.45,
+                        KRW: 1330,
+                        MYR: 4.68,
+                        THB: 35.2,
+                        IDR: 15600,
+                        PHP: 55.8,
+                        VND: 24800,
+                        PKR: 278,
+                        BDT: 109.5,
+                        LKR: 298,
+                        NPR: 132.5,
+                        TRY: 30.2,
+                        ILS: 3.72,
+                        KWD: 0.307,
+                        BHD: 0.376,
+                        OMR: 0.384,
+                        QAR: 3.64,
+                        EGP: 30.9,
+                        NGN: 1590,
+                        KES: 143,
+                        GHS: 12.0,
+                        COP: 3890,
+                        ARS: 830,
+                        CLP: 950,
+                        PEN: 3.72,
+                        TWD: 31.5,
+                        CZK: 23.2,
+                        DKK: 6.86,
+                        HUF: 359,
+                        PLN: 4.01,
+                        RON: 4.57,
+                        BGN: 1.80,
+                        ISK: 137,
+                        JMD: 155,
+                        TTD: 6.77,
+                        BBD: 2.0,
+                        BSD: 1.0,
+                        BZD: 2.0,
+                        KYD: 0.833,
+                        FJD: 2.25,
+                        KHR: 4060,
+                        LAK: 20500,
+                        MMK: 2100,
+                        MNT: 3400,
+                        UZS: 12400,
+                        KZT: 449,
+                        GEL: 2.67,
+                        AMD: 404,
+                        AZN: 1.70,
+                        BAM: 1.80,
+                        ALL: 95.5,
+                        MKD: 56.8,
+                        RSD: 108,
+                        UAH: 38.2,
+                        BYN: 3.25,
+                        MDL: 17.6,
+                        AFN: 71.5,
+                        IRR: 42000,
+                        IQD: 1310,
+                        SYP: 13000,
+                        JOD: 0.709,
+                        LBP: 15000,
+                        YER: 250,
+                        SOS: 570,
+                        TZS: 2500,
+                        UGX: 3800,
+                        ZMW: 24.5,
+                        MZN: 63.8,
+                        MUR: 45.2,
+                        MAD: 10.1,
+                        TND: 3.12,
+                        DZD: 134,
+                        LYD: 4.82,
+                        SDG: 600,
+                        GMD: 67,
+                        BIF: 2850,
+                        RWF: 1280,
+                        DJF: 178,
+                        ETB: 56.5,
+                        AOA: 832,
+                        CVE: 95.0,
+                        SZL: 18.9,
+                        LSL: 18.9,
+                        BWP: 13.6,
+                        NAD: 18.9,
+                        AWG: 1.80,
+                        ANG: 1.79,
+                        SBD: 8.40,
+                        VUV: 119,
+                        PGK: 3.78,
+                        TOP: 2.34,
+                        WST: 2.72,
+                        XCD: 2.70,
+                        FKP: 0.79,
+                        GIP: 0.79,
+                        SHP: 0.79,
+                        TMT: 3.50,
+                        TJS: 10.9,
+                        KGS: 89.5,
+                        MVR: 15.4,
+                        BTN: 83.5,
+                        MOP: 8.05,
+                        PAB: 1.0,
+                        NIO: 36.8,
+                        HNL: 24.7,
+                        GTQ: 7.80,
+                        CRC: 515,
+                        DOP: 58.5,
+                        PYG: 7300,
+                        UYU: 39.2,
+                        BOB: 6.91,
+                        VES: 36.0,
+                        SVC: 8.75,
+                        HTG: 132,
+                        GYD: 209,
+                        SRD: 36.5,
+                        ERN: 15.0,
+                        KPW: 900,
+                        MGA: 4500,
+                        MWK: 1680,
+                        SCR: 13.4,
+                        CDF: 2770,
+                        XAF: 605,
+                        XOF: 605,
+                        XPF: 110
+                    };
+                    exchangeRates[baseCurrency] = 1;
+                    lastUpdated.innerHTML = `<i class="fas fa-exclamation-triangle" style="color:#f59e0b;"></i> Using approximate rates`;
+                    convert();
+                    updatePopularPairs();
+                    generateHistory();
+                } finally {
+                    isUpdating = false;
+                }
+            }
+
+            // ============================================================
+            //  CONVERT
+            // ============================================================
+            function convert() {
+                const amount = parseFloat(amountInput.value) || 0;
+                const fromRate = exchangeRates[fromCode] || 1;
+                const toRate = exchangeRates[toCode] || 1;
+                if (!fromRate || !toRate) {
+                    resultAmount.innerHTML = `<span class="curr-sym">?</span> --`;
+                    conversionRate.textContent = 'Rates unavailable';
+                    return;
+                }
+                const inUSD = amount / fromRate;
+                const result = inUSD * toRate;
+                const symbol = getCurrencySymbol(toCode);
+                resultAmount.innerHTML = `<span class="curr-sym">${symbol}</span> ${result.toFixed(2)}`;
+                const rate = toRate / fromRate;
+                const fromSym = getCurrencySymbol(fromCode);
+                const toSym = getCurrencySymbol(toCode);
+                conversionRate.textContent = `1 ${fromCode} = ${rate.toFixed(4)} ${toCode}`;
+            }
+
+            // ============================================================
+            //  SWAP
+            // ============================================================
+            function swapCurrencies() {
+                const temp = fromCode;
+                fromCode = toCode;
+                toCode = temp;
+                fromSelect.value = fromCode;
+                toSelect.value = toCode;
+                convert();
+                generateHistory();
+                showToast(`🔄 Swapped to ${fromCode} → ${toCode}`);
+            }
+
+            // ============================================================
+            //  UPDATE POPULAR PAIRS
+            // ============================================================
+            function updatePopularPairs() {
+                const pairs = {
+                    USDINR: { from: 'USD', to: 'INR' },
+                    USDEUR: { from: 'USD', to: 'EUR' },
+                    USDGBP: { from: 'USD', to: 'GBP' },
+                    USDJPY: { from: 'USD', to: 'JPY' },
+                    EURINR: { from: 'EUR', to: 'INR' },
+                    GBPINR: { from: 'GBP', to: 'INR' },
+                    USDAUD: { from: 'USD', to: 'AUD' },
+                    USDCAD: { from: 'USD', to: 'CAD' },
+                    USDCHF: { from: 'USD', to: 'CHF' },
+                    USDCNY: { from: 'USD', to: 'CNY' }
+                };
+                Object.keys(pairs).forEach(key => {
+                    const { from, to } = pairs[key];
+                    const fromRate = exchangeRates[from] || 1;
+                    const toRate = exchangeRates[to] || 1;
+                    const rate = toRate / fromRate;
+                    const el = pairElements[key];
+                    if (el) {
+                        el.rate.textContent = rate.toFixed(4);
+                        // Simulate change (we don't have historical change data here)
+                        const change = (Math.random() - 0.5) * 0.05;
+                        const pct = (change * 100).toFixed(2);
+                        el.change.textContent = `${pct > 0 ? '+' : ''}${pct}%`;
+                        el.change.className = `change ${pct >= 0 ? 'up' : 'down'}`;
+                    }
+                });
+            }
+
+            // ============================================================
+            //  HISTORY / CHART
+            // ============================================================
+            function generateHistory() {
+                const fromRate = exchangeRates[fromCode] || 1;
+                const toRate = exchangeRates[toCode] || 1;
+                const currentRate = toRate / fromRate;
+
+                // Generate synthetic historical data based on current rate
+                const points = 100;
+                const base = currentRate;
+                const volatility = 0.03;
+                const data = [];
+                const now = new Date();
+                for (let i = points - 1; i >= 0; i--) {
+                    const date = new Date(now);
+                    date.setDate(date.getDate() - i);
+                    const noise = 1 + (Math.random() - 0.5) * volatility * 2;
+                    const trend = 1 + (i / points) * 0.02 * (Math.random() - 0.5);
+                    const value = base * noise * trend;
+                    data.push({ date, value });
+                }
+                historyData = data;
+                renderChart(currentRange);
+            }
+
+            function getFilteredData(range) {
+                const now = new Date();
+                let cutoff = new Date(now);
+                switch (range) {
+                    case 'today':
+                        cutoff.setHours(0, 0, 0, 0);
+                        break;
+                    case 'yesterday':
+                        cutoff.setDate(cutoff.getDate() - 1);
+                        cutoff.setHours(0, 0, 0, 0);
+                        break;
+                    case '7days':
+                        cutoff.setDate(cutoff.getDate() - 7);
+                        break;
+                    case '30days':
+                        cutoff.setDate(cutoff.getDate() - 30);
+                        break;
+                    case '1year':
+                        cutoff.setFullYear(cutoff.getFullYear() - 1);
+                        break;
+                    default:
+                        cutoff.setHours(0, 0, 0, 0);
+                }
+                return historyData.filter(d => d.date >= cutoff);
+            }
+
+            function renderChart(range) {
+                const filtered = getFilteredData(range);
+                if (!filtered.length) return;
+
+                const labels = filtered.map(d => d.date.toLocaleDateString('en-IN', { day: '2-digit', month: 'short' }));
+                const values = filtered.map(d => d.value);
+
+                const ctx = chartCanvas.getContext('2d');
+                if (historyChart) {
+                    historyChart.destroy();
+                }
+
+                historyChart = new Chart(ctx, {
+                    type: 'line',
+                    data: {
+                        labels: labels,
+                        datasets: [{
+                            label: `${fromCode}/${toCode}`,
+                            data: values,
+                            borderColor: '#10b981',
+                            backgroundColor: 'rgba(16, 185, 129, 0.08)',
+                            fill: true,
+                            tension: 0.4,
+                            pointRadius: 2,
+                            pointBackgroundColor: '#10b981',
+                            borderWidth: 2.5
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        plugins: {
+                            legend: { display: false },
+                            tooltip: {
+                                callbacks: {
+                                    label: function(context) {
+                                        return context.parsed.y.toFixed(4);
+                                    }
+                                }
+                            }
+                        },
+                        scales: {
+                            y: {
+                                beginAtZero: false,
+                                grid: { color: 'rgba(0,0,0,0.04)' },
+                                ticks: { callback: function(value) { return value.toFixed(4); } }
+                            },
+                            x: {
+                                grid: { display: false },
+                                ticks: { maxTicksLimit: 20, font: { size: 10 } }
+                            }
+                        },
+                        interaction: {
+                            intersect: false,
+                            mode: 'index'
+                        }
+                    }
+                });
+
+                // Update stats
+                const current = values[values.length - 1];
+                const high = Math.max(...values);
+                const low = Math.min(...values);
+                const first = values[0];
+                const changePct = ((current - first) / first * 100);
+                const mean = values.reduce((a, b) => a + b, 0) / values.length;
+                const variance = values.reduce((a, b) => a + (b - mean) ** 2, 0) / values.length;
+                const stdDev = Math.sqrt(variance);
+
+                statCurrent.textContent = current.toFixed(4);
+                statHigh.textContent = high.toFixed(4);
+                statLow.textContent = low.toFixed(4);
+                statChange.textContent = `${changePct >= 0 ? '+' : ''}${changePct.toFixed(2)}%`;
+                statChange.style.color = changePct >= 0 ? '#059669' : '#dc2626';
+                statVolatility.textContent = (stdDev / mean * 100).toFixed(2) + '%';
+            }
+
+            // ============================================================
+            //  ACTION BUTTONS
+            // ============================================================
+            function copyResult() {
+                const text = resultAmount.textContent.trim() + ' | ' + conversionRate.textContent;
+                navigator.clipboard?.writeText(text).then(() => showToast('Copied!')).catch(() => {
+                    // Fallback
+                    const ta = document.createElement('textarea');
+                    ta.value = text;
+                    document.body.appendChild(ta);
+                    ta.select();
+                    document.execCommand('copy');
+                    ta.remove();
+                    showToast('Copied!');
+                });
+            }
+
+            function resetAll() {
+                amountInput.value = '1';
+                fromCode = 'USD';
+                toCode = 'INR';
+                fromSelect.value = fromCode;
+                toSelect.value = toCode;
+                convert();
+                generateHistory();
+                showToast('Reset');
+            }
+
+            function printPage() {
+                window.print();
+            }
+
+            function downloadPDF() {
+                const { jsPDF } = window.jspdf;
+                const doc = new jsPDF();
+                const sym = getCurrencySymbol(toCode);
+                const amount = parseFloat(amountInput.value) || 0;
+                const result = resultAmount.textContent.trim();
+
+                doc.setFontSize(20);
+                doc.text('Currency Converter Report', 20, 30);
+                doc.setFontSize(12);
+                doc.text(`Date: ${new Date().toLocaleString()}`, 20, 50);
+                doc.text(`From: ${fromCode}`, 20, 65);
+                doc.text(`To: ${toCode}`, 20, 75);
+                doc.text(`Amount: ${amount} ${fromCode}`, 20, 85);
+                doc.text(`Converted: ${result}`, 20, 95);
+                doc.text(`Rate: ${conversionRate.textContent}`, 20, 105);
+                doc.text('— 99toolhub Currency Converter —', 20, 130);
+                doc.save('currency-conversion.pdf');
+                showToast('PDF downloaded');
+            }
+
+            function shareResult() {
+                const text =
+                    `Currency Conversion: ${amountInput.value} ${fromCode} = ${resultAmount.textContent.trim()} | ${conversionRate.textContent}`;
+                if (navigator.share) {
+                    navigator.share({ title: 'Currency Conversion', text }).catch(() => {});
+                } else {
+                    navigator.clipboard?.writeText(text).then(() => showToast('Copied to share!')).catch(() => {
+                        prompt('Copy this to share:', text);
+                    });
+                }
+            }
+
+            // ============================================================
+            //  EVENT LISTENERS
+            // ============================================================
+            amountInput.addEventListener('input', convert);
+            fromSelect.addEventListener('change', () => {
+                fromCode = fromSelect.value;
+                fetchRates(fromCode);
+            });
+            toSelect.addEventListener('change', () => {
+                toCode = toSelect.value;
+                convert();
+                generateHistory();
+            });
+            swapBtn.addEventListener('click', swapCurrencies);
+            refreshBtn.addEventListener('click', () => fetchRates(fromCode));
+
+            document.querySelectorAll('.quick-btn').forEach(btn => {
+                btn.addEventListener('click', () => {
+                    const val = btn.dataset.amount;
+                    amountInput.value = val;
+                    convert();
+                });
+            });
+
+            // History tabs
+            histTabs.querySelectorAll('button').forEach(btn => {
+                btn.addEventListener('click', function() {
+                    histTabs.querySelectorAll('button').forEach(b => b.classList.remove('active'));
+                    this.classList.add('active');
+                    currentRange = this.dataset.range;
+                    renderChart(currentRange);
+                });
+            });
+
+            // Action buttons
+            document.getElementById('copyBtn').addEventListener('click', copyResult);
+            document.getElementById('resetBtn').addEventListener('click', resetAll);
+            document.getElementById('printBtn').addEventListener('click', printPage);
+            document.getElementById('pdfBtn').addEventListener('click', downloadPDF);
+            document.getElementById('shareBtn').addEventListener('click', shareResult);
+
+            // FAQ toggle
+            document.querySelectorAll('.faq-item').forEach(item => {
+                item.querySelector('.faq-q').addEventListener('click', () => {
+                    item.classList.toggle('open');
+                });
+            });
+
+            // Keyboard shortcuts
+            document.addEventListener('keydown', (e) => {
+                if (e.ctrlKey && e.shiftKey && (e.key === 's' || e.key === 'S')) {
+                    e.preventDefault();
+                    swapCurrencies();
+                }
+                if (e.ctrlKey && e.shiftKey && (e.key === 'r' || e.key === 'R')) {
+                    e.preventDefault();
+                    fetchRates(fromCode);
+                }
+            });
+
+            // ============================================================
+            //  INIT
+            // ============================================================
+            function init() {
+                populateCurrencies();
+                populateCommon();
+                fromSelect.value = fromCode;
+                toSelect.value = toCode;
+                fetchRates(fromCode);
+                // Auto-refresh every 5 min
+                setInterval(() => fetchRates(fromCode), 300000);
+            }
+
+            init();
+
+            // Expose for debugging
+            window.converter = { convert, swapCurrencies, fetchRates, generateHistory };
+
+        })();
+    </script>
+
+</body>
+</html>

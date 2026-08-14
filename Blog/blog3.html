@@ -1,0 +1,2346 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<link rel="icon" type="image/png" href="../../images/favicon.png">
+    <!-- =========================================
+         BASIC SEO
+    ========================================== -->
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>
+        Online Forms ke liye Photo aur PDF Ready Kaise Karein? | 99ToolHub
+    </title>
+
+    <meta
+        name="description"
+        content="Online forms ke liye photo aur PDF ko correct size, dimensions, format aur file requirements ke according ready karne ka simple practical guide."
+    >
+
+    <meta
+        name="keywords"
+        content="online form photo resize, PDF resize, photo size for online form, PDF file size, image dimensions, online form documents, 99ToolHub"
+    >
+
+    <meta name="author" content="99ToolHub">
+
+
+    <style>
+
+        /* =====================================================
+           RESET
+        ===================================================== */
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family:
+                Inter,
+                system-ui,
+                -apple-system,
+                BlinkMacSystemFont,
+                "Segoe UI",
+                sans-serif;
+
+            background: #fafafa;
+
+            color: #171717;
+
+            line-height: 1.7;
+        }
+
+        img {
+            max-width: 100%;
+            display: block;
+        }
+
+        a {
+            text-decoration: none;
+            color: inherit;
+        }
+
+
+        /* =====================================================
+           READING PROGRESS
+        ===================================================== */
+
+        .reading-progress {
+            position: fixed;
+
+            top: 0;
+            left: 0;
+
+            width: 0%;
+
+            height: 3px;
+
+            background:
+                linear-gradient(
+                    90deg,
+                    #e83e8c,
+                    #8b5cf6
+                );
+
+            z-index: 9999;
+        }
+
+
+        /* =====================================================
+           BLOG HERO
+        ===================================================== */
+
+        .blog-hero {
+            width: 100%;
+
+            padding:
+                85px 20px 65px;
+
+            text-align: center;
+
+            background:
+
+                radial-gradient(
+                    circle at 15% 20%,
+                    rgba(232, 62, 140, 0.12),
+                    transparent 35%
+                ),
+
+                radial-gradient(
+                    circle at 85% 25%,
+                    rgba(124, 58, 237, 0.10),
+                    transparent 35%
+                ),
+
+                #ffffff;
+        }
+
+        .blog-header {
+            width: min(950px, 100%);
+
+            margin: auto;
+        }
+
+        .category {
+            display: inline-flex;
+
+            align-items: center;
+
+            justify-content: center;
+
+            padding:
+                7px 15px;
+
+            margin-bottom: 20px;
+
+            border-radius: 50px;
+
+            background: #fff0f6;
+
+            color: #d63384;
+
+            font-size: 12px;
+
+            font-weight: 800;
+
+            letter-spacing: 0.4px;
+        }
+
+        .blog-title {
+            max-width: 950px;
+
+            margin: auto;
+
+            font-size:
+                clamp(36px, 5vw, 62px);
+
+            line-height: 1.1;
+
+            letter-spacing: -2.2px;
+
+            font-weight: 850;
+
+            color: #111;
+        }
+
+        .blog-title span {
+            background:
+                linear-gradient(
+                    90deg,
+                    #e83e8c,
+                    #8b5cf6
+                );
+
+            -webkit-background-clip: text;
+
+            background-clip: text;
+
+            -webkit-text-fill-color: transparent;
+        }
+
+        .blog-description {
+            max-width: 720px;
+
+            margin:
+                22px auto 0;
+
+            font-size: 17px;
+
+            color: #666;
+
+            line-height: 1.7;
+        }
+
+        .blog-meta {
+            margin-top: 24px;
+
+            display: flex;
+
+            justify-content: center;
+
+            align-items: center;
+
+            flex-wrap: wrap;
+
+            gap: 10px;
+
+            font-size: 13px;
+
+            color: #888;
+        }
+
+
+        /* =====================================================
+           FEATURE IMAGE
+        ===================================================== */
+
+        .featured-image {
+            width:
+                min(1100px, calc(100% - 40px));
+
+            aspect-ratio: 16 / 9;
+
+            margin:
+                0 auto 60px;
+
+            overflow: hidden;
+
+            border-radius: 24px;
+
+            background: #eeeeee;
+
+            box-shadow:
+                0 20px 60px
+                rgba(0, 0, 0, 0.09);
+        }
+
+        .featured-image img {
+            width: 100%;
+
+            height: 100%;
+
+            object-fit: cover;
+
+            object-position: center;
+        }
+
+
+        /* =====================================================
+           ARTICLE
+        ===================================================== */
+
+        .article-container {
+            width:
+                min(820px, calc(100% - 40px));
+
+            margin: auto;
+        }
+
+        .article-content {
+            font-size: 16px;
+
+            color: #444;
+        }
+
+        .article-content p {
+            margin-bottom: 22px;
+        }
+
+        .article-content h2 {
+            margin-top: 55px;
+
+            margin-bottom: 18px;
+
+            font-size: 30px;
+
+            line-height: 1.25;
+
+            letter-spacing: -0.7px;
+
+            color: #111;
+        }
+
+        .article-content h3 {
+            margin-top: 30px;
+
+            margin-bottom: 10px;
+
+            font-size: 20px;
+
+            color: #222;
+        }
+
+
+        /* =====================================================
+           INTRO BOX
+        ===================================================== */
+
+        .intro-box {
+            margin:
+                30px 0 40px;
+
+            padding: 25px;
+
+            border-radius: 18px;
+
+            background:
+                linear-gradient(
+                    135deg,
+                    #fff3f8,
+                    #f5f2ff
+                );
+
+            border:
+                1px solid #f0dfeb;
+        }
+
+        .intro-box strong {
+            display: block;
+
+            margin-bottom: 7px;
+
+            color: #222;
+        }
+
+
+        /* =====================================================
+           FEATURES
+        ===================================================== */
+
+        .feature-grid {
+            display: grid;
+
+            grid-template-columns:
+                repeat(2, minmax(0, 1fr));
+
+            gap: 16px;
+
+            margin:
+                25px 0 40px;
+        }
+
+        .feature-card {
+            padding: 21px;
+
+            background: #ffffff;
+
+            border:
+                1px solid #eeeeee;
+
+            border-radius: 17px;
+
+            transition:
+                transform 0.25s ease,
+                box-shadow 0.25s ease;
+        }
+
+        .feature-card:hover {
+            transform:
+                translateY(-3px);
+
+            box-shadow:
+                0 12px 30px
+                rgba(0, 0, 0, 0.06);
+        }
+
+        .feature-icon {
+            font-size: 25px;
+
+            margin-bottom: 8px;
+        }
+
+        .feature-card h3 {
+            margin: 0 0 5px;
+
+            font-size: 17px;
+        }
+
+        .feature-card p {
+            margin: 0;
+
+            font-size: 13px;
+
+            color: #777;
+        }
+
+
+        /* =====================================================
+           SIMPLE LIST
+        ===================================================== */
+
+        .custom-list {
+            list-style: none;
+
+            margin:
+                20px 0 35px;
+
+            display: grid;
+
+            gap: 11px;
+        }
+
+        .custom-list li {
+            position: relative;
+
+            padding:
+                13px 16px 13px 43px;
+
+            border-radius: 12px;
+
+            background: #ffffff;
+
+            border:
+                1px solid #eeeeee;
+
+            font-size: 14px;
+
+            color: #555;
+        }
+
+        .custom-list li::before {
+            content: "✓";
+
+            position: absolute;
+
+            left: 15px;
+
+            top: 50%;
+
+            transform:
+                translateY(-50%);
+
+            width: 22px;
+
+            height: 22px;
+
+            display: flex;
+
+            align-items: center;
+
+            justify-content: center;
+
+            border-radius: 50%;
+
+            background: #fff0f6;
+
+            color: #d63384;
+
+            font-size: 12px;
+
+            font-weight: 800;
+        }
+
+
+        /* =====================================================
+           HOW TO USE
+        ===================================================== */
+
+        .steps {
+            margin:
+                25px 0 40px;
+
+            display: grid;
+
+            gap: 15px;
+        }
+
+        .step {
+            display: flex;
+
+            align-items: flex-start;
+
+            gap: 15px;
+
+            padding: 19px;
+
+            background: #ffffff;
+
+            border:
+                1px solid #eeeeee;
+
+            border-radius: 16px;
+        }
+
+        .step-number {
+            flex-shrink: 0;
+
+            width: 34px;
+
+            height: 34px;
+
+            display: flex;
+
+            align-items: center;
+
+            justify-content: center;
+
+            border-radius: 10px;
+
+            background: #171717;
+
+            color: #ffffff;
+
+            font-size: 13px;
+
+            font-weight: 800;
+        }
+
+        .step h3 {
+            margin: 0 0 4px;
+
+            font-size: 16px;
+        }
+
+        .step p {
+            margin: 0;
+
+            font-size: 14px;
+
+            color: #777;
+        }
+
+
+        /* =====================================================
+           TWO COLUMN BOX
+        ===================================================== */
+
+        .two-column {
+            display: grid;
+
+            grid-template-columns:
+                repeat(2, minmax(0, 1fr));
+
+            gap: 18px;
+
+            margin:
+                25px 0 40px;
+        }
+
+        .info-box {
+            padding: 24px;
+
+            background: #ffffff;
+
+            border:
+                1px solid #eeeeee;
+
+            border-radius: 18px;
+        }
+
+        .info-box h3 {
+            margin:
+                0 0 14px;
+
+            font-size: 19px;
+        }
+
+        .info-box ul {
+            padding-left: 20px;
+        }
+
+        .info-box li {
+            margin-bottom: 8px;
+
+            font-size: 14px;
+
+            color: #666;
+        }
+
+
+        /* =====================================================
+           USE CASES
+        ===================================================== */
+
+        .use-case-grid {
+            display: grid;
+
+            grid-template-columns:
+                repeat(2, minmax(0, 1fr));
+
+            gap: 16px;
+
+            margin:
+                25px 0 40px;
+        }
+
+        .use-case {
+            padding: 21px;
+
+            background: #ffffff;
+
+            border:
+                1px solid #eeeeee;
+
+            border-radius: 17px;
+
+            transition: 0.25s ease;
+        }
+
+        .use-case:hover {
+            transform:
+                translateY(-3px);
+
+            box-shadow:
+                0 12px 30px
+                rgba(0, 0, 0, 0.06);
+        }
+
+        .use-case-icon {
+            font-size: 25px;
+
+            margin-bottom: 7px;
+        }
+
+        .use-case h3 {
+            margin:
+                0 0 5px;
+
+            font-size: 17px;
+        }
+
+        .use-case p {
+            margin: 0;
+
+            font-size: 13px;
+
+            color: #777;
+        }
+
+
+        /* =====================================================
+           TIPS
+        ===================================================== */
+
+        .tip-box {
+            margin:
+                25px 0 40px;
+
+            padding: 24px;
+
+            border-radius: 18px;
+
+            background:
+                linear-gradient(
+                    135deg,
+                    #fff8ec,
+                    #fff4f8
+                );
+
+            border:
+                1px solid #f0e4d5;
+        }
+
+        .tip-box h3 {
+            margin:
+                0 0 10px;
+
+            font-size: 19px;
+        }
+
+        .tip-box p {
+            margin: 0;
+        }
+
+
+        /* =====================================================
+           FAQ
+        ===================================================== */
+
+        .faq-container {
+            margin:
+                25px 0 45px;
+        }
+
+        .faq-item {
+            margin-bottom: 10px;
+
+            background: #ffffff;
+
+            border:
+                1px solid #eeeeee;
+
+            border-radius: 14px;
+
+            overflow: hidden;
+        }
+
+        .faq-question {
+            width: 100%;
+
+            padding:
+                17px 18px;
+
+            border: none;
+
+            background: #ffffff;
+
+            text-align: left;
+
+            font-family: inherit;
+
+            font-size: 15px;
+
+            font-weight: 700;
+
+            color: #222;
+
+            cursor: pointer;
+
+            display: flex;
+
+            align-items: center;
+
+            justify-content: space-between;
+
+            gap: 15px;
+        }
+
+        .faq-question span:last-child {
+            font-size: 20px;
+
+            transition:
+                transform 0.25s ease;
+        }
+
+        .faq-answer {
+            max-height: 0;
+
+            overflow: hidden;
+
+            transition:
+                max-height 0.3s ease;
+        }
+
+        .faq-answer p {
+            padding:
+                0 18px 17px;
+
+            margin: 0;
+
+            font-size: 14px;
+
+            color: #666;
+        }
+
+        .faq-item.active
+        .faq-answer {
+            max-height: 300px;
+        }
+
+        .faq-item.active
+        .faq-question span:last-child {
+            transform:
+                rotate(45deg);
+        }
+
+
+        /* =====================================================
+           VERDICT
+        ===================================================== */
+
+        .verdict {
+            margin-top: 50px;
+
+            padding: 32px;
+
+            border-radius: 22px;
+
+            background: #171717;
+
+            color: #ffffff;
+        }
+
+        .verdict h2 {
+            margin:
+                0 0 12px;
+
+            color: #ffffff;
+        }
+
+        .verdict p {
+            margin: 0;
+
+            color: #d5d5d5;
+        }
+
+
+        /* =====================================================
+           CTA
+        ===================================================== */
+
+        .blog-cta {
+            margin-top: 30px;
+
+            padding: 27px;
+
+            text-align: center;
+
+            border-radius: 19px;
+
+            background:
+                linear-gradient(
+                    135deg,
+                    #fff0f6,
+                    #f3efff
+                );
+
+            border:
+                1px solid #eee0ea;
+        }
+
+        .blog-cta h3 {
+            margin:
+                0 0 7px;
+
+            font-size: 21px;
+        }
+
+        .blog-cta p {
+            margin:
+                0 0 18px;
+
+            font-size: 14px;
+
+            color: #666;
+        }
+
+        .cta-button {
+            display: inline-flex;
+
+            align-items: center;
+
+            justify-content: center;
+
+            padding:
+                11px 21px;
+
+            border-radius: 11px;
+
+            background: #171717;
+
+            color: #ffffff;
+
+            font-size: 13px;
+
+            font-weight: 700;
+
+            transition: 0.2s ease;
+        }
+
+        .cta-button:hover {
+            transform:
+                translateY(-2px);
+
+            background: #e83e8c;
+        }
+
+
+        /* =====================================================
+           SHARE
+        ===================================================== */
+
+        .share-section {
+            margin-top: 45px;
+
+            padding-top: 25px;
+
+            border-top:
+                1px solid #eeeeee;
+
+            display: flex;
+
+            justify-content: space-between;
+
+            align-items: center;
+
+            gap: 15px;
+        }
+
+        .share-title {
+            font-size: 14px;
+
+            font-weight: 700;
+        }
+
+        .share-buttons {
+            display: flex;
+
+            gap: 8px;
+        }
+
+        .share-button {
+            width: 39px;
+
+            height: 39px;
+
+            display: flex;
+
+            align-items: center;
+
+            justify-content: center;
+
+            border: none;
+
+            border-radius: 10px;
+
+            background: #f2f2f2;
+
+            color: #222;
+
+            font-family: inherit;
+
+            font-size: 12px;
+
+            font-weight: 700;
+
+            cursor: pointer;
+
+            transition: 0.2s ease;
+        }
+
+        .share-button:hover {
+            background: #171717;
+
+            color: #ffffff;
+
+            transform:
+                translateY(-2px);
+        }
+
+
+        /* =====================================================
+           COPY MESSAGE
+        ===================================================== */
+
+        .copy-message {
+            position: fixed;
+
+            bottom: 25px;
+
+            left: 50%;
+
+            transform:
+                translateX(-50%)
+                translateY(20px);
+
+            padding:
+                11px 18px;
+
+            border-radius: 10px;
+
+            background: #171717;
+
+            color: #ffffff;
+
+            font-size: 13px;
+
+            opacity: 0;
+
+            pointer-events: none;
+
+            transition:
+                opacity 0.25s ease,
+                transform 0.25s ease;
+
+            z-index: 9999;
+        }
+
+        .copy-message.show {
+            opacity: 1;
+
+            transform:
+                translateX(-50%)
+                translateY(0);
+        }
+
+
+        /* =====================================================
+           FOOTER
+        ===================================================== */
+
+        footer {
+            margin-top: 80px;
+
+            padding:
+                35px 20px;
+
+            text-align: center;
+
+            border-top:
+                1px solid #eeeeee;
+
+            color: #777;
+
+            font-size: 13px;
+        }
+
+
+        /* =====================================================
+           TABLET
+        ===================================================== */
+
+        @media (max-width: 900px) {
+
+            .blog-hero {
+                padding:
+                    65px 20px 55px;
+            }
+
+            .featured-image {
+                border-radius: 20px;
+
+                margin-bottom: 50px;
+            }
+        }
+
+
+        /* =====================================================
+           MOBILE
+        ===================================================== */
+
+        @media (max-width: 600px) {
+
+            .blog-hero {
+                padding:
+                    50px 15px 45px;
+            }
+
+            .category {
+                font-size: 10px;
+
+                padding:
+                    6px 12px;
+
+                margin-bottom: 15px;
+            }
+
+            .blog-title {
+                font-size: 33px;
+
+                line-height: 1.13;
+
+                letter-spacing: -1.2px;
+            }
+
+            .blog-description {
+                font-size: 14px;
+
+                line-height: 1.6;
+            }
+
+            .blog-meta {
+                font-size: 11px;
+
+                gap: 7px;
+            }
+
+            .featured-image {
+                width:
+                    calc(100% - 24px);
+
+                margin-bottom: 40px;
+
+                border-radius: 15px;
+            }
+
+            .article-container {
+                width:
+                    calc(100% - 30px);
+            }
+
+            .article-content {
+                font-size: 15px;
+            }
+
+            .article-content h2 {
+                font-size: 25px;
+
+                margin-top: 42px;
+            }
+
+            .feature-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .two-column {
+                grid-template-columns: 1fr;
+            }
+
+            .use-case-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .verdict {
+                padding: 23px;
+
+                border-radius: 17px;
+            }
+
+            .verdict h2 {
+                font-size: 24px;
+            }
+
+            .blog-cta {
+                padding: 22px;
+            }
+
+            .share-section {
+                flex-direction: column;
+
+                align-items: flex-start;
+            }
+        }
+
+
+        /* =====================================================
+           SMALL MOBILE
+        ===================================================== */
+
+        @media (max-width: 380px) {
+
+            .blog-title {
+                font-size: 29px;
+            }
+
+            .blog-description {
+                font-size: 13px;
+            }
+
+            .article-content {
+                font-size: 14px;
+            }
+        }
+
+    </style>
+
+</head>
+
+
+<body>
+
+
+<!-- =====================================================
+     READING PROGRESS BAR
+===================================================== -->
+
+<div
+    class="reading-progress"
+    id="readingProgress">
+</div>
+
+
+<!-- =====================================================
+     BLOG HERO
+===================================================== -->
+
+<section class="blog-hero">
+
+    <div class="blog-header">
+
+        <div class="category">
+            📄 ONLINE FORM GUIDE
+        </div>
+
+
+        <h1 class="blog-title">
+
+            Online Forms ke liye
+            <span>
+                Photo aur PDF Ready Kaise Karein?
+            </span>
+
+        </h1>
+
+
+        <p class="blog-description">
+
+            Size, dimensions, format aur file requirements ko
+            easily manage karne ka practical guide.
+
+        </p>
+
+
+        <div class="blog-meta">
+
+            <span>
+                📅 August 2026
+            </span>
+
+            <span>•</span>
+
+            <span>
+                ⏱ 7 min read
+            </span>
+
+            <span>•</span>
+
+            <span>
+                99ToolHub
+            </span>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+<!-- =====================================================
+     FEATURE IMAGE
+     Recommended: 16:9
+===================================================== -->
+
+<div class="featured-image">
+
+    <img
+        src="../images/image3.png"
+        alt="Online Forms ke liye Photo aur PDF Ready Kaise Karein"
+        loading="lazy"
+    >
+
+</div>
+
+
+<!-- =====================================================
+     ARTICLE
+===================================================== -->
+
+<main class="article-container">
+
+    <article class="article-content">
+
+
+        <!-- =================================================
+             BLOG TITLE
+        ================================================== -->
+
+        <h2>
+            📌 Online Forms ke liye Photo aur PDF Ready Kaise Karein?
+        </h2>
+
+
+        <!-- =================================================
+             DESCRIPTION
+        ================================================== -->
+
+        <div class="intro-box">
+
+            <strong>
+                Description
+            </strong>
+
+            <p>
+                Online form submit karte waqt photo aur PDF ko
+                correct size, dimensions, format aur file
+                requirements ke according ready karna important hai.
+                Is guide mein is process ko simple language mein samjhein.
+            </p>
+
+        </div>
+
+
+        <!-- =================================================
+             1. INTRODUCTION
+        ================================================== -->
+
+        <h2>
+            1. Introduction
+        </h2>
+
+        <p>
+            Aaj ke digital time mein school admission, college
+            applications, scholarship forms, government services,
+            job applications aur different online registrations
+            ke liye documents upload karne padte hain.
+        </p>
+
+        <p>
+            Online form mein sirf correct document hona enough nahi
+            hota. Kai forms mein photo aur PDF ke liye specific
+            file format, file size aur dimensions bhi required hote hain.
+        </p>
+
+        <p>
+            Agar photo ka size zyada ho, dimensions incorrect ho ya
+            PDF required limit se badi ho, to upload ke time problem
+            aa sakti hai.
+        </p>
+
+
+        <!-- =================================================
+             2. WHAT IS IT?
+        ================================================== -->
+
+        <h2>
+            2. What Is It?
+        </h2>
+
+        <p>
+            Online form ke liye photo aur PDF ready karna ka matlab
+            hai document ko form ki required specifications ke
+            according prepare karna.
+        </p>
+
+        <p>
+            Ismein photo ko resize, crop ya compress karna aur PDF
+            ko required file size aur format ke according optimize
+            karna include ho sakta hai.
+        </p>
+
+
+        <div class="two-column">
+
+            <div class="info-box">
+
+                <h3>
+                    🖼️ Photo Requirements
+                </h3>
+
+                <ul>
+
+                    <li>
+                        Correct image format
+                    </li>
+
+                    <li>
+                        Required dimensions
+                    </li>
+
+                    <li>
+                        Suitable file size
+                    </li>
+
+                    <li>
+                        Clear and readable image
+                    </li>
+
+                </ul>
+
+            </div>
+
+
+            <div class="info-box">
+
+                <h3>
+                    📄 PDF Requirements
+                </h3>
+
+                <ul>
+
+                    <li>
+                        Correct PDF format
+                    </li>
+
+                    <li>
+                        Required file size
+                    </li>
+
+                    <li>
+                        Clear document quality
+                    </li>
+
+                    <li>
+                        Required pages included
+                    </li>
+
+                </ul>
+
+            </div>
+
+        </div>
+
+
+        <!-- =================================================
+             3. HOW DOES IT WORK?
+        ================================================== -->
+
+        <h2>
+            3. How Does It Work?
+        </h2>
+
+        <p>
+            Sabse pehle online form ki official instructions check
+            karein. Wahan photo aur document ke liye required
+            format, dimensions aur maximum file size diya ho sakta hai.
+        </p>
+
+        <p>
+            Uske baad apni original photo ya document ko check karein.
+            Agar file requirements ke according nahi hai, to suitable
+            resize, crop, compress ya convert tool ka use kiya ja
+            sakta hai.
+        </p>
+
+        <p>
+            Final file upload karne se pehle uska format, dimensions,
+            size aur readability dobara verify karna useful hota hai.
+        </p>
+
+
+        <!-- =================================================
+             4. MAIN FEATURES
+        ================================================== -->
+
+        <h2>
+            4. Main Features
+        </h2>
+
+        <div class="feature-grid">
+
+
+            <div class="feature-card">
+
+                <div class="feature-icon">
+                    📏
+                </div>
+
+                <h3>
+                    Resize
+                </h3>
+
+                <p>
+                    Photo ko required dimensions ke according
+                    resize kiya ja sakta hai.
+                </p>
+
+            </div>
+
+
+            <div class="feature-card">
+
+                <div class="feature-icon">
+                    ✂️
+                </div>
+
+                <h3>
+                    Crop
+                </h3>
+
+                <p>
+                    Unwanted area remove karke required framing
+                    ke according photo prepare karein.
+                </p>
+
+            </div>
+
+
+            <div class="feature-card">
+
+                <div class="feature-icon">
+                    📦
+                </div>
+
+                <h3>
+                    Compress
+                </h3>
+
+                <p>
+                    Large image ya PDF ka file size reduce
+                    karne mein compression useful ho sakta hai.
+                </p>
+
+            </div>
+
+
+            <div class="feature-card">
+
+                <div class="feature-icon">
+                    🔄
+                </div>
+
+                <h3>
+                    Convert
+                </h3>
+
+                <p>
+                    Required format ke according file convert
+                    ki ja sakti hai.
+                </p>
+
+            </div>
+
+
+            <div class="feature-card">
+
+                <div class="feature-icon">
+                    🔍
+                </div>
+
+                <h3>
+                    Quality Check
+                </h3>
+
+                <p>
+                    Upload se pehle image aur document ki
+                    readability check karna important hai.
+                </p>
+
+            </div>
+
+
+            <div class="feature-card">
+
+                <div class="feature-icon">
+                    📱
+                </div>
+
+                <h3>
+                    Easy Preparation
+                </h3>
+
+                <p>
+                    Online tools ke through basic file preparation
+                    quickly ki ja sakti hai.
+                </p>
+
+            </div>
+
+        </div>
+
+
+        <!-- =================================================
+             5. WHO CAN USE IT?
+        ================================================== -->
+
+        <h2>
+            5. Who Can Use It?
+        </h2>
+
+        <ul class="custom-list">
+
+            <li>
+                Students — admission, scholarship aur examination forms ke liye.
+            </li>
+
+            <li>
+                Teachers — educational applications aur documents ke liye.
+            </li>
+
+            <li>
+                Freelancers — client forms aur document submissions ke liye.
+            </li>
+
+            <li>
+                Professionals — job applications aur official forms ke liye.
+            </li>
+
+            <li>
+                Creators — profile images aur online applications ke liye.
+            </li>
+
+            <li>
+                Businesses — registrations, applications aur documentation ke liye.
+            </li>
+
+        </ul>
+
+
+        <!-- =================================================
+             6. HOW TO USE IT?
+        ================================================== -->
+
+        <h2>
+            6. How to Use It?
+        </h2>
+
+        <div class="steps">
+
+
+            <div class="step">
+
+                <div class="step-number">
+                    1
+                </div>
+
+                <div>
+
+                    <h3>
+                        Requirements Check Karein
+                    </h3>
+
+                    <p>
+                        Form ki official instructions mein photo aur
+                        PDF ke required size, format aur dimensions dekhein.
+                    </p>
+
+                </div>
+
+            </div>
+
+
+            <div class="step">
+
+                <div class="step-number">
+                    2
+                </div>
+
+                <div>
+
+                    <h3>
+                        Original File Select Karein
+                    </h3>
+
+                    <p>
+                        Clear photo ya required document ko
+                        prepare karne ke liye select karein.
+                    </p>
+
+                </div>
+
+            </div>
+
+
+            <div class="step">
+
+                <div class="step-number">
+                    3
+                </div>
+
+                <div>
+
+                    <h3>
+                        Resize, Crop ya Compress Karein
+                    </h3>
+
+                    <p>
+                        Agar file requirements match nahi karti,
+                        to suitable tool se file ko adjust karein.
+                    </p>
+
+                </div>
+
+            </div>
+
+
+            <div class="step">
+
+                <div class="step-number">
+                    4
+                </div>
+
+                <div>
+
+                    <h3>
+                        Final File Upload Karein
+                    </h3>
+
+                    <p>
+                        Format, dimensions, file size aur clarity
+                        check karne ke baad file form mein upload karein.
+                    </p>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <!-- =================================================
+             7. BENEFITS
+        ================================================== -->
+
+        <h2>
+            7. Benefits
+        </h2>
+
+        <ul class="custom-list">
+
+            <li>
+                Online form mein file upload errors ko reduce karne mein help mil sakti hai.
+            </li>
+
+            <li>
+                Required dimensions aur file size maintain karna easy hota hai.
+            </li>
+
+            <li>
+                Large files ko suitable size mein prepare kiya ja sakta hai.
+            </li>
+
+            <li>
+                Documents ko upload karne se pehle properly organize kiya ja sakta hai.
+            </li>
+
+            <li>
+                Time bachane ke liye basic file preparation quickly ki ja sakti hai.
+            </li>
+
+        </ul>
+
+
+        <!-- =================================================
+             8. REAL-LIFE USE CASES
+        ================================================== -->
+
+        <h2>
+            8. Real-Life Use Cases
+        </h2>
+
+        <div class="use-case-grid">
+
+
+            <div class="use-case">
+
+                <div class="use-case-icon">
+                    🎓
+                </div>
+
+                <h3>
+                    College Admission
+                </h3>
+
+                <p>
+                    Admission forms mein required photo aur
+                    documents ko correct specifications ke according
+                    ready kiya ja sakta hai.
+                </p>
+
+            </div>
+
+
+            <div class="use-case">
+
+                <div class="use-case-icon">
+                    💼
+                </div>
+
+                <h3>
+                    Job Applications
+                </h3>
+
+                <p>
+                    Resume, certificates aur photographs ko
+                    application requirements ke according prepare karein.
+                </p>
+
+            </div>
+
+
+            <div class="use-case">
+
+                <div class="use-case-icon">
+                    🏛️
+                </div>
+
+                <h3>
+                    Government Forms
+                </h3>
+
+                <p>
+                    Online government applications mein required
+                    documents ko upload-ready banaya ja sakta hai.
+                </p>
+
+            </div>
+
+
+            <div class="use-case">
+
+                <div class="use-case-icon">
+                    🎓
+                </div>
+
+                <h3>
+                    Scholarship Forms
+                </h3>
+
+                <p>
+                    Certificates aur supporting documents ko
+                    required file specifications ke according prepare karein.
+                </p>
+
+            </div>
+
+        </div>
+
+
+        <!-- =================================================
+             9. IMPORTANT TIPS
+        ================================================== -->
+
+        <h2>
+            9. Important Tips
+        </h2>
+
+        <div class="tip-box">
+
+            <h3>
+                💡 Useful Tips
+            </h3>
+
+            <ul class="custom-list">
+
+                <li>
+                    File requirements hamesha official form instructions se check karein.
+                </li>
+
+                <li>
+                    Compression ke baad photo aur document ki readability zaroor check karein.
+                </li>
+
+                <li>
+                    Original high-quality file ko safe rakhein aur edited copy upload karein.
+                </li>
+
+                <li>
+                    Upload se pehle filename, format aur file size verify karein.
+                </li>
+
+            </ul>
+
+        </div>
+
+
+        <!-- =================================================
+             10. LIMITATIONS
+        ================================================== -->
+
+        <h2>
+            10. Limitations
+        </h2>
+
+        <ul class="custom-list">
+
+            <li>
+                Har online form ki requirements alag ho sakti hain.
+            </li>
+
+            <li>
+                Excessive compression se image ya document quality reduce ho sakti hai.
+            </li>
+
+            <li>
+                Sirf file size match karna enough nahi hai; format aur dimensions bhi correct hone chahiye.
+            </li>
+
+            <li>
+                Kuch forms specific file naming ya document requirements bhi de sakte hain.
+            </li>
+
+        </ul>
+
+
+        <!-- =================================================
+             11. FAQ
+        ================================================== -->
+
+        <h2>
+            11. FAQ
+        </h2>
+
+        <div class="faq-container">
+
+
+            <!-- FAQ 1 -->
+
+            <div class="faq-item">
+
+                <button
+                    class="faq-question"
+                    type="button">
+
+                    <span>
+                        Q1. Online form ke liye photo ka exact size kya hona chahiye?
+                    </span>
+
+                    <span>
+                        +
+                    </span>
+
+                </button>
+
+                <div class="faq-answer">
+
+                    <p>
+                        Exact size form par depend karta hai. Upload
+                        instructions mein diye gaye dimensions aur
+                        file-size limit ko follow karein.
+                    </p>
+
+                </div>
+
+            </div>
+
+
+            <!-- FAQ 2 -->
+
+            <div class="faq-item">
+
+                <button
+                    class="faq-question"
+                    type="button">
+
+                    <span>
+                        Q2. Photo ko compress karna zaroori hai?
+                    </span>
+
+                    <span>
+                        +
+                    </span>
+
+                </button>
+
+                <div class="faq-answer">
+
+                    <p>
+                        Agar photo allowed file-size limit se badi
+                        hai, to compression ki zarurat ho sakti hai.
+                    </p>
+
+                </div>
+
+            </div>
+
+
+            <!-- FAQ 3 -->
+
+            <div class="faq-item">
+
+                <button
+                    class="faq-question"
+                    type="button">
+
+                    <span>
+                        Q3. PDF ka size kaise kam karein?
+                    </span>
+
+                    <span>
+                        +
+                    </span>
+
+                </button>
+
+                <div class="faq-answer">
+
+                    <p>
+                        PDF compression tool ka use karke file size
+                        reduce kiya ja sakta hai. Compression ke baad
+                        document ki readability check karein.
+                    </p>
+
+                </div>
+
+            </div>
+
+
+            <!-- FAQ 4 -->
+
+            <div class="faq-item">
+
+                <button
+                    class="faq-question"
+                    type="button">
+
+                    <span>
+                        Q4. Kya photo ko JPG mein convert kar sakte hain?
+                    </span>
+
+                    <span>
+                        +
+                    </span>
+
+                </button>
+
+                <div class="faq-answer">
+
+                    <p>
+                        Haan, agar online form JPG format accept karta
+                        hai to compatible image converter se photo ko
+                        JPG format mein convert kiya ja sakta hai.
+                    </p>
+
+                </div>
+
+            </div>
+
+
+            <!-- FAQ 5 -->
+
+            <div class="faq-item">
+
+                <button
+                    class="faq-question"
+                    type="button">
+
+                    <span>
+                        Q5. Upload se pehle kya check karna chahiye?
+                    </span>
+
+                    <span>
+                        +
+                    </span>
+
+                </button>
+
+                <div class="faq-answer">
+
+                    <p>
+                        File format, file size, dimensions, clarity
+                        aur form ki official requirements ko final
+                        upload se pehle check karein.
+                    </p>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <!-- =================================================
+             12. CONCLUSION
+        ================================================== -->
+
+        <h2>
+            12. Conclusion
+        </h2>
+
+        <p>
+            Online form ke liye photo aur PDF ready karna difficult
+            nahi hai. Bas form ki official requirements ko carefully
+            check karna zaroori hai.
+        </p>
+
+        <p>
+            Photo ke liye dimensions, format aur file size par focus
+            karein, jabki PDF ke liye file size, pages, format aur
+            document readability check karein.
+        </p>
+
+        <p>
+            Resize, crop, compress aur convert jaise tools ka
+            properly use karke files ko upload-ready banaya ja sakta hai.
+        </p>
+
+        <p>
+            <strong>Best rule:</strong> upload karne se pehle hamesha
+            official form ki requirements ko final reference maan kar
+            file verify karein.
+        </p>
+
+
+        <!-- =================================================
+             13. 99TOOLHUB
+        ================================================== -->
+
+        <h2>
+            13. 99ToolHub
+        </h2>
+
+        <div class="blog-cta">
+
+            <h3>
+                Photo aur PDF ko Easily Ready Karein
+            </h3>
+
+            <p>
+                99ToolHub par image aur PDF related useful online
+                tools explore karein aur apni files ko form upload
+                ke liye conveniently prepare karein.
+            </p>
+
+            <a
+                href="../index.html#tools"
+                class="cta-button">
+
+                Explore 99ToolHub Tools →
+
+            </a>
+
+        </div>
+
+
+        <!-- =================================================
+             SHARE
+        ================================================== -->
+
+        <div class="share-section">
+
+            <div class="share-title">
+                Share this article
+            </div>
+
+            <div class="share-buttons">
+
+                <button
+                    class="share-button"
+                    id="shareButton"
+                    type="button">
+
+                    ↗
+
+                </button>
+
+                <button
+                    class="share-button"
+                    id="copyButton"
+                    type="button">
+
+                    🔗
+
+                </button>
+
+            </div>
+
+        </div>
+
+
+    </article>
+
+</main>
+
+
+<!-- =====================================================
+     COPY MESSAGE
+===================================================== -->
+
+<div
+    class="copy-message"
+    id="copyMessage">
+
+    Link copied!
+
+</div>
+
+
+<!-- =====================================================
+     FOOTER
+===================================================== -->
+
+<footer>
+
+    © <span id="currentYear"></span> 99ToolHub.
+    All rights reserved.
+
+</footer>
+
+
+<!-- =====================================================
+     JAVASCRIPT
+===================================================== -->
+
+<script>
+
+    /* =====================================================
+       CURRENT YEAR
+    ===================================================== */
+
+    document.getElementById("currentYear").textContent =
+        new Date().getFullYear();
+
+
+    /* =====================================================
+       READING PROGRESS
+    ===================================================== */
+
+    window.addEventListener("scroll", function () {
+
+        const progress =
+            document.getElementById("readingProgress");
+
+        const scrollTop =
+            window.scrollY;
+
+        const documentHeight =
+            document.documentElement.scrollHeight -
+            window.innerHeight;
+
+        const percentage =
+            documentHeight > 0
+                ? (scrollTop / documentHeight) * 100
+                : 0;
+
+        progress.style.width =
+            percentage + "%";
+
+    });
+
+
+    /* =====================================================
+       FAQ ACCORDION
+    ===================================================== */
+
+    const faqItems =
+        document.querySelectorAll(".faq-item");
+
+
+    faqItems.forEach(function (item) {
+
+        const question =
+            item.querySelector(".faq-question");
+
+
+        question.addEventListener("click", function () {
+
+            const isActive =
+                item.classList.contains("active");
+
+
+            faqItems.forEach(function (faq) {
+
+                faq.classList.remove("active");
+
+            });
+
+
+            if (!isActive) {
+
+                item.classList.add("active");
+
+            }
+
+        });
+
+    });
+
+
+    /* =====================================================
+       COPY LINK
+    ===================================================== */
+
+    const copyButton =
+        document.getElementById("copyButton");
+
+    const copyMessage =
+        document.getElementById("copyMessage");
+
+
+    copyButton.addEventListener("click", async function () {
+
+        try {
+
+            await navigator.clipboard.writeText(
+                window.location.href
+            );
+
+            copyMessage.textContent =
+                "Link copied!";
+
+            copyMessage.classList.add("show");
+
+
+            setTimeout(function () {
+
+                copyMessage.classList.remove("show");
+
+            }, 1800);
+
+
+        } catch (error) {
+
+            alert(
+                "Link copy nahi ho saka. Browser se URL manually copy karein."
+            );
+
+        }
+
+    });
+
+
+    /* =====================================================
+       SHARE BUTTON
+    ===================================================== */
+
+    const shareButton =
+        document.getElementById("shareButton");
+
+
+    shareButton.addEventListener("click", async function () {
+
+        const shareData = {
+
+            title:
+                "Online Forms ke liye Photo aur PDF Ready Kaise Karein?",
+
+            text:
+                "Size, dimensions, format aur file requirements ko easily manage karne ka practical guide.",
+
+            url:
+                window.location.href
+
+        };
+
+
+        if (navigator.share) {
+
+            try {
+
+                await navigator.share(
+                    shareData
+                );
+
+            } catch (error) {
+
+                /* User cancelled share */
+
+            }
+
+        }
+
+        else {
+
+            try {
+
+                await navigator.clipboard.writeText(
+                    window.location.href
+                );
+
+                copyMessage.textContent =
+                    "Link copied!";
+
+                copyMessage.classList.add("show");
+
+
+                setTimeout(function () {
+
+                    copyMessage.classList.remove("show");
+
+                }, 1800);
+
+            } catch (error) {
+
+                alert(
+                    "Share feature browser mein available nahi hai."
+                );
+
+            }
+
+        }
+
+    });
+
+</script>
+
+
+</body>
+</html>

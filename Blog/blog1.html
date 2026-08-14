@@ -1,0 +1,2657 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+ <link rel="icon" type="image/png" href="../../images/favicon.png">
+    <!-- =========================================
+         BASIC SEO
+    ========================================== -->
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>
+        PDF vs JPG: Document Share Karne ke liye Kaunsa Better Hai? | 99ToolHub
+    </title>
+
+    <meta
+        name="description"
+        content="PDF aur JPG ke differences, advantages aur use cases ko simple language mein samjhein. Jaane document share karne ke liye PDF ya JPG mein se kaunsa better hai."
+    >
+
+    <meta
+        name="keywords"
+        content="PDF vs JPG, PDF vs JPG difference, PDF or JPG, document sharing, PDF tools, JPG tools, 99ToolHub"
+    >
+
+    <meta name="author" content="99ToolHub">
+
+
+    <style>
+
+        /* =====================================================
+           RESET
+        ===================================================== */
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family:
+                Inter,
+                system-ui,
+                -apple-system,
+                BlinkMacSystemFont,
+                "Segoe UI",
+                sans-serif;
+
+            background: #fafafa;
+
+            color: #171717;
+
+            line-height: 1.7;
+        }
+
+        img {
+            max-width: 100%;
+            display: block;
+        }
+
+        a {
+            text-decoration: none;
+            color: inherit;
+        }
+
+
+        /* =====================================================
+           READING PROGRESS
+        ===================================================== */
+
+        .reading-progress {
+            position: fixed;
+
+            top: 0;
+            left: 0;
+
+            width: 0%;
+
+            height: 3px;
+
+            background:
+                linear-gradient(
+                    90deg,
+                    #e83e8c,
+                    #8b5cf6
+                );
+
+            z-index: 9999;
+        }
+
+
+
+        /* =====================================================
+           BLOG HERO
+        ===================================================== */
+
+        .blog-hero {
+            width: 100%;
+
+            padding:
+                85px 20px 65px;
+
+                
+            text-align: center;
+
+            background:
+
+                radial-gradient(
+                    circle at 15% 20%,
+                    rgba(232, 62, 140, 0.12),
+                    transparent 35%
+                ),
+
+                radial-gradient(
+                    circle at 85% 25%,
+                    rgba(124, 58, 237, 0.10),
+                    transparent 35%
+                ),
+
+                #ffffff;
+        }
+
+        .blog-header {
+            width: min(950px, 100%);
+
+            margin: auto;
+        }
+
+        .category {
+            display: inline-flex;
+
+            align-items: center;
+
+            justify-content: center;
+
+            padding:
+                7px 15px;
+
+            margin-bottom: 20px;
+
+            border-radius: 50px;
+
+            background: #fff0f6;
+
+            color: #d63384;
+
+            font-size: 12px;
+
+            font-weight: 800;
+
+            letter-spacing: 0.4px;
+        }
+
+        .blog-title {
+            max-width: 950px;
+
+            margin: auto;
+
+            font-size:
+                clamp(36px, 5vw, 62px);
+
+            line-height: 1.1;
+
+            letter-spacing: -2.2px;
+
+            font-weight: 850;
+
+            color: #111;
+        }
+
+        .blog-title span {
+            background:
+                linear-gradient(
+                    90deg,
+                    #e83e8c,
+                    #8b5cf6
+                );
+
+            -webkit-background-clip: text;
+
+            background-clip: text;
+
+            -webkit-text-fill-color: transparent;
+        }
+
+        .blog-description {
+            max-width: 720px;
+
+            margin:
+                22px auto 0;
+
+            font-size: 17px;
+
+            color: #666;
+
+            line-height: 1.7;
+        }
+
+        .blog-meta {
+            margin-top: 24px;
+
+            display: flex;
+
+            justify-content: center;
+
+            align-items: center;
+
+            flex-wrap: wrap;
+
+            gap: 10px;
+
+            font-size: 13px;
+
+            color: #888;
+        }
+
+
+        /* =====================================================
+           FEATURE IMAGE
+        ===================================================== */
+
+        .featured-image {
+            width:
+                min(1100px, calc(100% - 40px));
+
+            aspect-ratio: 16 / 9;
+
+            margin:
+                0 auto 60px;
+
+            overflow: hidden;
+
+            border-radius: 24px;
+
+            background: #eeeeee;
+
+            box-shadow:
+                0 20px 60px
+                rgba(0, 0, 0, 0.09);
+        }
+
+        .featured-image img {
+            width: 100%;
+
+            height: 100%;
+
+            object-fit: cover;
+
+            object-position: center;
+        }
+
+
+        /* =====================================================
+           ARTICLE
+        ===================================================== */
+
+        .article-container {
+            width:
+                min(820px, calc(100% - 40px));
+
+            margin: auto;
+        }
+
+        .article-content {
+            font-size: 16px;
+
+            color: #444;
+        }
+
+        .article-content p {
+            margin-bottom: 22px;
+        }
+
+        .article-content h2 {
+            margin-top: 55px;
+
+            margin-bottom: 18px;
+
+            font-size: 30px;
+
+            line-height: 1.25;
+
+            letter-spacing: -0.7px;
+
+            color: #111;
+        }
+
+        .article-content h3 {
+            margin-top: 30px;
+
+            margin-bottom: 10px;
+
+            font-size: 20px;
+
+            color: #222;
+        }
+
+
+        /* =====================================================
+           INTRO BOX
+        ===================================================== */
+
+        .intro-box {
+            margin:
+                30px 0 40px;
+
+            padding: 25px;
+
+            border-radius: 18px;
+
+            background:
+                linear-gradient(
+                    135deg,
+                    #fff3f8,
+                    #f5f2ff
+                );
+
+            border:
+                1px solid #f0dfeb;
+        }
+
+        .intro-box strong {
+            display: block;
+
+            margin-bottom: 7px;
+
+            color: #222;
+        }
+
+
+        /* =====================================================
+           FEATURES
+        ===================================================== */
+
+        .feature-grid {
+            display: grid;
+
+            grid-template-columns:
+                repeat(2, minmax(0, 1fr));
+
+            gap: 16px;
+
+            margin:
+                25px 0 40px;
+        }
+
+        .feature-card {
+            padding: 21px;
+
+            background: #ffffff;
+
+            border:
+                1px solid #eeeeee;
+
+            border-radius: 17px;
+
+            transition:
+                transform 0.25s ease,
+                box-shadow 0.25s ease;
+        }
+
+        .feature-card:hover {
+            transform:
+                translateY(-3px);
+
+            box-shadow:
+                0 12px 30px
+                rgba(0, 0, 0, 0.06);
+        }
+
+        .feature-icon {
+            font-size: 25px;
+
+            margin-bottom: 8px;
+        }
+
+        .feature-card h3 {
+            margin: 0 0 5px;
+
+            font-size: 17px;
+        }
+
+        .feature-card p {
+            margin: 0;
+
+            font-size: 13px;
+
+            color: #777;
+        }
+
+
+        /* =====================================================
+           SIMPLE LIST
+        ===================================================== */
+
+        .custom-list {
+            list-style: none;
+
+            margin:
+                20px 0 35px;
+
+            display: grid;
+
+            gap: 11px;
+        }
+
+        .custom-list li {
+            position: relative;
+
+            padding:
+                13px 16px 13px 43px;
+
+            border-radius: 12px;
+
+            background: #ffffff;
+
+            border:
+                1px solid #eeeeee;
+
+            font-size: 14px;
+
+            color: #555;
+        }
+
+        .custom-list li::before {
+            content: "✓";
+
+            position: absolute;
+
+            left: 15px;
+
+            top: 50%;
+
+            transform:
+                translateY(-50%);
+
+            width: 22px;
+
+            height: 22px;
+
+            display: flex;
+
+            align-items: center;
+
+            justify-content: center;
+
+            border-radius: 50%;
+
+            background: #fff0f6;
+
+            color: #d63384;
+
+            font-size: 12px;
+
+            font-weight: 800;
+        }
+
+
+        /* =====================================================
+           HOW TO USE
+        ===================================================== */
+
+        .steps {
+            margin:
+                25px 0 40px;
+
+            display: grid;
+
+            gap: 15px;
+        }
+
+        .step {
+            display: flex;
+
+            align-items: flex-start;
+
+            gap: 15px;
+
+            padding: 19px;
+
+            background: #ffffff;
+
+            border:
+                1px solid #eeeeee;
+
+            border-radius: 16px;
+        }
+
+        .step-number {
+            flex-shrink: 0;
+
+            width: 34px;
+
+            height: 34px;
+
+            display: flex;
+
+            align-items: center;
+
+            justify-content: center;
+
+            border-radius: 10px;
+
+            background: #171717;
+
+            color: #ffffff;
+
+            font-size: 13px;
+
+            font-weight: 800;
+        }
+
+        .step h3 {
+            margin: 0 0 4px;
+
+            font-size: 16px;
+        }
+
+        .step p {
+            margin: 0;
+
+            font-size: 14px;
+
+            color: #777;
+        }
+
+
+        /* =====================================================
+           COMPARISON TABLE
+        ===================================================== */
+
+        .table-wrapper {
+            width: 100%;
+
+            overflow-x: auto;
+
+            margin:
+                30px 0 45px;
+
+            border:
+                1px solid #eeeeee;
+
+            border-radius: 18px;
+
+            background: #ffffff;
+        }
+
+        .comparison-table {
+            width: 100%;
+
+            min-width: 620px;
+
+            border-collapse: collapse;
+        }
+
+        .comparison-table th,
+        .comparison-table td {
+            padding: 16px;
+
+            text-align: left;
+
+            border-bottom:
+                1px solid #eeeeee;
+        }
+
+        .comparison-table th {
+            background: #171717;
+
+            color: #ffffff;
+
+            font-size: 14px;
+        }
+
+        .comparison-table th:nth-child(2) {
+            background: #e83e8c;
+        }
+
+        .comparison-table th:nth-child(3) {
+            background: #7c3aed;
+        }
+
+        .comparison-table td {
+            font-size: 14px;
+
+            color: #555;
+        }
+
+        .comparison-table tr:last-child td {
+            border-bottom: none;
+        }
+
+
+        /* =====================================================
+           TWO COLUMN BOX
+        ===================================================== */
+
+        .two-column {
+            display: grid;
+
+            grid-template-columns:
+                repeat(2, minmax(0, 1fr));
+
+            gap: 18px;
+
+            margin:
+                25px 0 40px;
+        }
+
+        .info-box {
+            padding: 24px;
+
+            background: #ffffff;
+
+            border:
+                1px solid #eeeeee;
+
+            border-radius: 18px;
+        }
+
+        .info-box h3 {
+            margin:
+                0 0 14px;
+
+            font-size: 19px;
+        }
+
+        .info-box ul {
+            padding-left: 20px;
+        }
+
+        .info-box li {
+            margin-bottom: 8px;
+
+            font-size: 14px;
+
+            color: #666;
+        }
+
+
+        /* =====================================================
+           USE CASES
+        ===================================================== */
+
+        .use-case-grid {
+            display: grid;
+
+            grid-template-columns:
+                repeat(2, minmax(0, 1fr));
+
+            gap: 16px;
+
+            margin:
+                25px 0 40px;
+        }
+
+        .use-case {
+            padding: 21px;
+
+            background: #ffffff;
+
+            border:
+                1px solid #eeeeee;
+
+            border-radius: 17px;
+
+            transition: 0.25s ease;
+        }
+
+        .use-case:hover {
+            transform:
+                translateY(-3px);
+
+            box-shadow:
+                0 12px 30px
+                rgba(0, 0, 0, 0.06);
+        }
+
+        .use-case-icon {
+            font-size: 25px;
+
+            margin-bottom: 7px;
+        }
+
+        .use-case h3 {
+            margin:
+                0 0 5px;
+
+            font-size: 17px;
+        }
+
+        .use-case p {
+            margin: 0;
+
+            font-size: 13px;
+
+            color: #777;
+        }
+
+
+        /* =====================================================
+           TIPS
+        ===================================================== */
+
+        .tip-box {
+            margin:
+                25px 0 40px;
+
+            padding: 24px;
+
+            border-radius: 18px;
+
+            background:
+                linear-gradient(
+                    135deg,
+                    #fff8ec,
+                    #fff4f8
+                );
+
+            border:
+                1px solid #f0e4d5;
+        }
+
+        .tip-box h3 {
+            margin:
+                0 0 10px;
+
+            font-size: 19px;
+        }
+
+        .tip-box p {
+            margin: 0;
+        }
+
+
+        /* =====================================================
+           FAQ
+        ===================================================== */
+
+        .faq-container {
+            margin:
+                25px 0 45px;
+        }
+
+        .faq-item {
+            margin-bottom: 10px;
+
+            background: #ffffff;
+
+            border:
+                1px solid #eeeeee;
+
+            border-radius: 14px;
+
+            overflow: hidden;
+        }
+
+        .faq-question {
+            width: 100%;
+
+            padding:
+                17px 18px;
+
+            border: none;
+
+            background: #ffffff;
+
+            text-align: left;
+
+            font-family: inherit;
+
+            font-size: 15px;
+
+            font-weight: 700;
+
+            color: #222;
+
+            cursor: pointer;
+
+            display: flex;
+
+            align-items: center;
+
+            justify-content: space-between;
+
+            gap: 15px;
+        }
+
+        .faq-question span:last-child {
+            font-size: 20px;
+
+            transition:
+                transform 0.25s ease;
+        }
+
+        .faq-answer {
+            max-height: 0;
+
+            overflow: hidden;
+
+            transition:
+                max-height 0.3s ease;
+        }
+
+        .faq-answer p {
+            padding:
+                0 18px 17px;
+
+            margin: 0;
+
+            font-size: 14px;
+
+            color: #666;
+        }
+
+        .faq-item.active
+        .faq-answer {
+            max-height: 300px;
+        }
+
+        .faq-item.active
+        .faq-question span:last-child {
+            transform:
+                rotate(45deg);
+        }
+
+
+        /* =====================================================
+           VERDICT
+        ===================================================== */
+
+        .verdict {
+            margin-top: 50px;
+
+            padding: 32px;
+
+            border-radius: 22px;
+
+            background: #171717;
+
+            color: #ffffff;
+        }
+
+        .verdict h2 {
+            margin:
+                0 0 12px;
+
+            color: #ffffff;
+        }
+
+        .verdict p {
+            margin: 0;
+
+            color: #d5d5d5;
+        }
+
+
+        /* =====================================================
+           CTA
+        ===================================================== */
+
+        .blog-cta {
+            margin-top: 30px;
+
+            padding: 27px;
+
+            text-align: center;
+
+            border-radius: 19px;
+
+            background:
+                linear-gradient(
+                    135deg,
+                    #fff0f6,
+                    #f3efff
+                );
+
+            border:
+                1px solid #eee0ea;
+        }
+
+        .blog-cta h3 {
+            margin:
+                0 0 7px;
+
+            font-size: 21px;
+        }
+
+        .blog-cta p {
+            margin:
+                0 0 18px;
+
+            font-size: 14px;
+
+            color: #666;
+        }
+
+        .cta-button {
+            display: inline-flex;
+
+            align-items: center;
+
+            justify-content: center;
+
+            padding:
+                11px 21px;
+
+            border-radius: 11px;
+
+            background: #171717;
+
+            color: #ffffff;
+
+            font-size: 13px;
+
+            font-weight: 700;
+
+            transition: 0.2s ease;
+        }
+
+        .cta-button:hover {
+            transform:
+                translateY(-2px);
+
+            background: #e83e8c;
+        }
+
+
+        /* =====================================================
+           SHARE
+        ===================================================== */
+
+        .share-section {
+            margin-top: 45px;
+
+            padding-top: 25px;
+
+            border-top:
+                1px solid #eeeeee;
+
+            display: flex;
+
+            justify-content: space-between;
+
+            align-items: center;
+
+            gap: 15px;
+        }
+
+        .share-title {
+            font-size: 14px;
+
+            font-weight: 700;
+        }
+
+        .share-buttons {
+            display: flex;
+
+            gap: 8px;
+        }
+
+        .share-button {
+            width: 39px;
+
+            height: 39px;
+
+            display: flex;
+
+            align-items: center;
+
+            justify-content: center;
+
+            border: none;
+
+            border-radius: 10px;
+
+            background: #f2f2f2;
+
+            color: #222;
+
+            font-family: inherit;
+
+            font-size: 12px;
+
+            font-weight: 700;
+
+            cursor: pointer;
+
+            transition: 0.2s ease;
+        }
+
+        .share-button:hover {
+            background: #171717;
+
+            color: #ffffff;
+
+            transform:
+                translateY(-2px);
+        }
+
+
+        /* =====================================================
+           COPY MESSAGE
+        ===================================================== */
+
+        .copy-message {
+            position: fixed;
+
+            bottom: 25px;
+
+            left: 50%;
+
+            transform:
+                translateX(-50%)
+                translateY(20px);
+
+            padding:
+                11px 18px;
+
+            border-radius: 10px;
+
+            background: #171717;
+
+            color: #ffffff;
+
+            font-size: 13px;
+
+            opacity: 0;
+
+            pointer-events: none;
+
+            transition:
+                opacity 0.25s ease,
+                transform 0.25s ease;
+
+            z-index: 9999;
+        }
+
+        .copy-message.show {
+            opacity: 1;
+
+            transform:
+                translateX(-50%)
+                translateY(0);
+        }
+
+
+        /* =====================================================
+           FOOTER
+        ===================================================== */
+
+        footer {
+            margin-top: 80px;
+
+            padding:
+                35px 20px;
+
+            text-align: center;
+
+            border-top:
+                1px solid #eeeeee;
+
+            color: #777;
+
+            font-size: 13px;
+        }
+
+
+        /* =====================================================
+           TABLET
+        ===================================================== */
+
+        @media (max-width: 900px) {
+
+            .nav-links {
+                display: none;
+            }
+
+            .blog-hero {
+                padding:
+                    65px 20px 55px;
+            }
+
+            .featured-image {
+                border-radius: 20px;
+
+                margin-bottom: 50px;
+            }
+        }
+
+
+        /* =====================================================
+           MOBILE
+        ===================================================== */
+
+        @media (max-width: 600px) {
+
+            .navbar {
+                height: 62px;
+            }
+
+            .navbar-container {
+                padding:
+                    0 15px;
+            }
+
+            .logo {
+                font-size: 20px;
+            }
+
+            .blog-hero {
+                padding:
+                    50px 15px 45px;
+            }
+
+            .category {
+                font-size: 10px;
+
+                padding:
+                    6px 12px;
+
+                margin-bottom: 15px;
+            }
+
+            .blog-title {
+                font-size: 33px;
+
+                line-height: 1.13;
+
+                letter-spacing: -1.2px;
+            }
+
+            .blog-description {
+                font-size: 14px;
+
+                line-height: 1.6;
+            }
+
+            .blog-meta {
+                font-size: 11px;
+
+                gap: 7px;
+            }
+
+            .featured-image {
+                width:
+                    calc(100% - 24px);
+
+                margin-bottom: 40px;
+
+                border-radius: 15px;
+            }
+
+            .article-container {
+                width:
+                    calc(100% - 30px);
+            }
+
+            .article-content {
+                font-size: 15px;
+            }
+
+            .article-content h2 {
+                font-size: 25px;
+
+                margin-top: 42px;
+            }
+
+            .feature-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .two-column {
+                grid-template-columns: 1fr;
+            }
+
+            .use-case-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .verdict {
+                padding: 23px;
+
+                border-radius: 17px;
+            }
+
+            .verdict h2 {
+                font-size: 24px;
+            }
+
+            .blog-cta {
+                padding: 22px;
+            }
+
+            .share-section {
+                flex-direction: column;
+
+                align-items: flex-start;
+            }
+        }
+
+
+        /* =====================================================
+           SMALL MOBILE
+        ===================================================== */
+
+        @media (max-width: 380px) {
+
+            .blog-title {
+                font-size: 29px;
+            }
+
+            .blog-description {
+                font-size: 13px;
+            }
+
+            .article-content {
+                font-size: 14px;
+            }
+        }
+
+    </style>
+
+</head>
+
+
+<body>
+
+
+<!-- =====================================================
+     READING PROGRESS BAR
+===================================================== -->
+
+<div
+    class="reading-progress"
+    id="readingProgress">
+</div>
+
+
+
+
+
+<!-- =====================================================
+     BLOG HERO
+===================================================== -->
+
+<section class="blog-hero">
+
+    <div class="blog-header">
+
+
+        <div class="category">
+            📄 PDF & IMAGE GUIDE
+        </div>
+
+
+        <h1 class="blog-title">
+
+            PDF vs JPG:
+            <span>
+                Document Share Karne ke liye Kaunsa Better Hai?
+            </span>
+
+        </h1>
+
+
+        <p class="blog-description">
+
+            PDF aur JPG ke differences, advantages aur use cases
+            ko simple language mein samjhein.
+
+        </p>
+
+
+        <div class="blog-meta">
+
+            <span>
+                📅 August 2026
+            </span>
+
+            <span>•</span>
+
+            <span>
+                ⏱ 6 min read
+            </span>
+
+            <span>•</span>
+
+            <span>
+                99ToolHub
+            </span>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+
+<!-- =====================================================
+     FEATURE IMAGE
+     Recommended: 16:9
+===================================================== -->
+
+<div class="featured-image">
+
+    <img
+        src="../images/image1.png"
+        alt="PDF vs JPG Document Sharing"
+        loading="lazy"
+    >
+
+</div>
+
+
+
+<!-- =====================================================
+     ARTICLE
+===================================================== -->
+
+<main class="article-container">
+
+    <article class="article-content">
+
+
+        <!-- =================================================
+             BLOG TITLE
+        ================================================== -->
+
+        <h2>
+            📌 PDF vs JPG: Document Share Karne ke liye Kaunsa Better Hai?
+        </h2>
+
+
+        <!-- =================================================
+             DESCRIPTION
+        ================================================== -->
+
+        <div class="intro-box">
+
+            <strong>
+                Description
+            </strong>
+
+            <p>
+                PDF aur JPG ke differences, advantages aur
+                use cases ko simple language mein samjhein.
+            </p>
+
+        </div>
+
+
+
+        <!-- =================================================
+             1. INTRODUCTION
+        ================================================== -->
+
+        <h2>
+            1. Introduction
+        </h2>
+
+        <p>
+
+            Aaj ke digital time mein documents aur images ko
+            online share karna daily life ka normal part ban gaya
+            hai. School assignments se lekar office documents,
+            certificates, forms aur personal photos tak, different
+            types ki files ko regularly share karna padta hai.
+
+        </p>
+
+        <p>
+
+            Jab file share karne ki baat aati hai, PDF aur JPG
+            dono popular formats hain. Lekin dono ka purpose
+            different hota hai.
+
+        </p>
+
+        <p>
+
+            Is article mein hum PDF aur JPG ke differences,
+            advantages, limitations aur real-life use cases ko
+            simple language mein samjhenge.
+
+        </p>
+
+
+
+        <!-- =================================================
+             2. WHAT IS IT?
+        ================================================== -->
+
+        <h2>
+            2. What Is It?
+        </h2>
+
+
+        <h3>
+            📄 PDF kya hai?
+        </h3>
+
+        <p>
+
+            PDF ka full form
+            <strong>Portable Document Format</strong>
+            hai.
+
+            PDF ek document format hai jisme text, images,
+            tables, links aur multiple pages ko ek single file
+            mein store kiya ja sakta hai.
+
+        </p>
+
+        <h3>
+            🖼️ JPG kya hai?
+        </h3>
+
+        <p>
+
+            JPG ya JPEG ek popular image format hai jo mainly
+            photographs aur digital images ke liye use hota hai.
+
+            JPG ka advantage ye hai ki images ko relatively
+            manageable file size mein store aur share kiya ja
+            sakta hai.
+
+        </p>
+
+
+
+        <!-- =================================================
+             3. HOW DOES IT WORK?
+        ================================================== -->
+
+        <h2>
+            3. How Does It Work?
+        </h2>
+
+        <p>
+
+            PDF mein document ka content ek structured file ke
+            form mein store hota hai. Isliye ek PDF ke andar
+            multiple pages, text aur images ho sakte hain.
+
+        </p>
+
+        <p>
+
+            JPG mein complete content ek image ke form mein
+            store hota hai. Isliye ek JPG file ek individual
+            image ko represent karti hai.
+
+        </p>
+
+        <div class="two-column">
+
+            <div class="info-box">
+
+                <h3>
+                    📄 PDF
+                </h3>
+
+                <ul>
+
+                    <li>
+                        Multiple pages possible
+                    </li>
+
+                    <li>
+                        Text + images
+                    </li>
+
+                    <li>
+                        Document structure
+                    </li>
+
+                    <li>
+                        Printing friendly
+                    </li>
+
+                </ul>
+
+            </div>
+
+
+            <div class="info-box">
+
+                <h3>
+                    🖼️ JPG
+                </h3>
+
+                <ul>
+
+                    <li>
+                        Single image format
+                    </li>
+
+                    <li>
+                        Photos ke liye useful
+                    </li>
+
+                    <li>
+                        Easy image sharing
+                    </li>
+
+                    <li>
+                        Widely supported
+                    </li>
+
+                </ul>
+
+            </div>
+
+        </div>
+
+
+
+        <!-- =================================================
+             4. MAIN FEATURES
+        ================================================== -->
+
+        <h2>
+            4. Main Features
+        </h2>
+
+
+        <div class="feature-grid">
+
+
+            <div class="feature-card">
+
+                <div class="feature-icon">
+                    📄
+                </div>
+
+                <h3>
+                    Document Support
+                </h3>
+
+                <p>
+                    PDF text, images aur multiple pages ko
+                    ek file mein organize kar sakta hai.
+                </p>
+
+            </div>
+
+
+            <div class="feature-card">
+
+                <div class="feature-icon">
+                    🖼️
+                </div>
+
+                <h3>
+                    Image Support
+                </h3>
+
+                <p>
+                    JPG photographs aur digital images ke
+                    liye suitable hai.
+                </p>
+
+            </div>
+
+
+            <div class="feature-card">
+
+                <div class="feature-icon">
+                    📚
+                </div>
+
+                <h3>
+                    Multiple Pages
+                </h3>
+
+                <p>
+                    PDF mein multiple pages ko single file
+                    mein rakha ja sakta hai.
+                </p>
+
+            </div>
+
+
+            <div class="feature-card">
+
+                <div class="feature-icon">
+                    📱
+                </div>
+
+                <h3>
+                    Easy Sharing
+                </h3>
+
+                <p>
+                    Dono formats ko modern devices par
+                    easily share kiya ja sakta hai.
+                </p>
+
+            </div>
+
+
+            <div class="feature-card">
+
+                <div class="feature-icon">
+                    🖨️
+                </div>
+
+                <h3>
+                    Printing
+                </h3>
+
+                <p>
+                    Documents ke printing workflow mein
+                    PDF kaafi useful hai.
+                </p>
+
+            </div>
+
+
+            <div class="feature-card">
+
+                <div class="feature-icon">
+                    🌐
+                </div>
+
+                <h3>
+                    Wide Compatibility
+                </h3>
+
+                <p>
+                    PDF aur JPG dono widely supported
+                    formats hain.
+                </p>
+
+            </div>
+
+        </div>
+
+
+
+        <!-- =================================================
+             5. WHO CAN USE IT?
+        ================================================== -->
+
+        <h2>
+            5. Who Can Use It?
+        </h2>
+
+        <ul class="custom-list">
+
+            <li>
+                Students — assignments, notes aur certificates ke liye.
+            </li>
+
+            <li>
+                Teachers — study material aur educational documents ke liye.
+            </li>
+
+            <li>
+                Freelancers — client documents aur project files ke liye.
+            </li>
+
+            <li>
+                Professionals — reports, forms aur official files ke liye.
+            </li>
+
+            <li>
+                Creators — images aur visual content share karne ke liye.
+            </li>
+
+            <li>
+                Businesses — documents, invoices aur promotional images ke liye.
+            </li>
+
+        </ul>
+
+
+
+        <!-- =================================================
+             6. HOW TO USE IT?
+        ================================================== -->
+
+        <h2>
+            6. How to Use It?
+        </h2>
+
+
+        <p>
+
+            PDF ya JPG choose karne ka process simple hai.
+            Sabse pehle file ka purpose identify karein.
+
+        </p>
+
+
+        <div class="steps">
+
+
+            <div class="step">
+
+                <div class="step-number">
+                    1
+                </div>
+
+                <div>
+
+                    <h3>
+                        File Type Identify Karein
+                    </h3>
+
+                    <p>
+                        Decide karein ki aap document share
+                        kar rahe hain ya image.
+                    </p>
+
+                </div>
+
+            </div>
+
+
+            <div class="step">
+
+                <div class="step-number">
+                    2
+                </div>
+
+                <div>
+
+                    <h3>
+                        Right Format Choose Karein
+                    </h3>
+
+                    <p>
+                        Documents ke liye PDF aur photographs
+                        ke liye JPG choose kar sakte hain.
+                    </p>
+
+                </div>
+
+            </div>
+
+
+            <div class="step">
+
+                <div class="step-number">
+                    3
+                </div>
+
+                <div>
+
+                    <h3>
+                        File Size Check Karein
+                    </h3>
+
+                    <p>
+                        Agar file bahut large hai to suitable
+                        compression tool ka use karein.
+                    </p>
+
+                </div>
+
+            </div>
+
+
+            <div class="step">
+
+                <div class="step-number">
+                    4
+                </div>
+
+                <div>
+
+                    <h3>
+                        Share Karein
+                    </h3>
+
+                    <p>
+                        Required platform ya recipient ke
+                        according file share karein.
+                    </p>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+
+        <!-- =================================================
+             COMPARISON TABLE
+        ================================================== -->
+
+        <h2>
+            PDF vs JPG Comparison
+        </h2>
+
+
+        <div class="table-wrapper">
+
+            <table class="comparison-table">
+
+                <thead>
+
+                    <tr>
+
+                        <th>
+                            Feature
+                        </th>
+
+                        <th>
+                            PDF
+                        </th>
+
+                        <th>
+                            JPG
+                        </th>
+
+                    </tr>
+
+                </thead>
+
+                <tbody>
+
+                    <tr>
+
+                        <td>
+                            Main Purpose
+                        </td>
+
+                        <td>
+                            Documents
+                        </td>
+
+                        <td>
+                            Images
+                        </td>
+
+                    </tr>
+
+                    <tr>
+
+                        <td>
+                            Multiple Pages
+                        </td>
+
+                        <td>
+                            Yes
+                        </td>
+
+                        <td>
+                            No
+                        </td>
+
+                    </tr>
+
+                    <tr>
+
+                        <td>
+                            Text
+                        </td>
+
+                        <td>
+                            Excellent
+                        </td>
+
+                        <td>
+                            Image ke form mein
+                        </td>
+
+                    </tr>
+
+                    <tr>
+
+                        <td>
+                            Photos
+                        </td>
+
+                        <td>
+                            Supported
+                        </td>
+
+                        <td>
+                            Excellent
+                        </td>
+
+                    </tr>
+
+                    <tr>
+
+                        <td>
+                            Printing
+                        </td>
+
+                        <td>
+                            Excellent
+                        </td>
+
+                        <td>
+                            Good
+                        </td>
+
+                    </tr>
+
+                    <tr>
+
+                        <td>
+                            Document Layout
+                        </td>
+
+                        <td>
+                            Maintained
+                        </td>
+
+                        <td>
+                            Image only
+                        </td>
+
+                    </tr>
+
+                </tbody>
+
+            </table>
+
+        </div>
+
+
+
+        <!-- =================================================
+             7. BENEFITS
+        ================================================== -->
+
+        <h2>
+            7. Benefits
+        </h2>
+
+        <ul class="custom-list">
+
+            <li>
+                Documents ko organized way mein share karna easy hota hai.
+            </li>
+
+            <li>
+                PDF multiple pages ko ek single file mein combine kar sakta hai.
+            </li>
+
+            <li>
+                JPG simple photos aur images ke liye convenient hai.
+            </li>
+
+            <li>
+                Dono formats widely supported hain.
+            </li>
+
+            <li>
+                Different online platforms par commonly accepted hain.
+            </li>
+
+        </ul>
+
+
+
+        <!-- =================================================
+             8. REAL-LIFE USE CASES
+        ================================================== -->
+
+        <h2>
+            8. Real-Life Use Cases
+        </h2>
+
+
+        <div class="use-case-grid">
+
+
+            <div class="use-case">
+
+                <div class="use-case-icon">
+                    🎓
+                </div>
+
+                <h3>
+                    Student Assignments
+                </h3>
+
+                <p>
+                    Multiple-page assignments ko PDF format
+                    mein submit karna convenient ho sakta hai.
+                </p>
+
+            </div>
+
+
+            <div class="use-case">
+
+                <div class="use-case-icon">
+                    📑
+                </div>
+
+                <h3>
+                    Official Documents
+                </h3>
+
+                <p>
+                    Applications, reports aur certificates
+                    ke liye PDF useful hota hai.
+                </p>
+
+            </div>
+
+
+            <div class="use-case">
+
+                <div class="use-case-icon">
+                    📸
+                </div>
+
+                <h3>
+                    Photo Sharing
+                </h3>
+
+                <p>
+                    Personal photographs aur simple images
+                    ke liye JPG convenient hai.
+                </p>
+
+            </div>
+
+
+            <div class="use-case">
+
+                <div class="use-case-icon">
+                    🌐
+                </div>
+
+                <h3>
+                    Website Images
+                </h3>
+
+                <p>
+                    Photographic content ke liye JPG commonly
+                    used image format hai.
+                </p>
+
+            </div>
+
+        </div>
+
+
+
+        <!-- =================================================
+             9. IMPORTANT TIPS
+        ================================================== -->
+
+        <h2>
+            9. Important Tips
+        </h2>
+
+
+        <div class="tip-box">
+
+            <h3>
+                💡 Useful Tips
+            </h3>
+
+            <ul class="custom-list">
+
+                <li>
+                    Text-heavy documents ke liye PDF ko preference dein.
+                </li>
+
+                <li>
+                    Single photographs ke liye JPG convenient option ho sakta hai.
+                </li>
+
+                <li>
+                    File upload karne se pehle size aur format requirements check karein.
+                </li>
+
+                <li>
+                    Large files ko share karne se pehle appropriate compression use karein.
+                </li>
+
+            </ul>
+
+        </div>
+
+
+
+        <!-- =================================================
+             10. LIMITATIONS
+        ================================================== -->
+
+        <h2>
+            10. Limitations
+        </h2>
+
+        <ul class="custom-list">
+
+            <li>
+                Large PDFs mein file size kaafi badh sakta hai.
+            </li>
+
+            <li>
+                JPG text-heavy documents ke liye ideal format nahi hai.
+            </li>
+
+            <li>
+                JPG mein repeated compression se image quality reduce ho sakti hai.
+            </li>
+
+            <li>
+                Har platform ki apni file-size aur format requirements ho sakti hain.
+            </li>
+
+        </ul>
+
+
+
+        <!-- =================================================
+             11. FAQ
+        ================================================== -->
+
+        <h2>
+            11. FAQ
+        </h2>
+
+
+        <div class="faq-container">
+
+
+            <!-- FAQ 1 -->
+
+            <div class="faq-item">
+
+                <button
+                    class="faq-question"
+                    type="button">
+
+                    <span>
+                        Q1. Document share karne ke liye PDF better hai?
+                    </span>
+
+                    <span>
+                        +
+                    </span>
+
+                </button>
+
+
+                <div class="faq-answer">
+
+                    <p>
+                        Haan, text-based documents, reports,
+                        certificates aur multiple-page files ke
+                        liye PDF generally convenient choice hai.
+                    </p>
+
+                </div>
+
+            </div>
+
+
+            <!-- FAQ 2 -->
+
+            <div class="faq-item">
+
+                <button
+                    class="faq-question"
+                    type="button">
+
+                    <span>
+                        Q2. Photo share karne ke liye JPG better hai?
+                    </span>
+
+                    <span>
+                        +
+                    </span>
+
+                </button>
+
+
+                <div class="faq-answer">
+
+                    <p>
+                        Single photographs aur simple images ke
+                        liye JPG ek practical aur widely supported
+                        option hai.
+                    </p>
+
+                </div>
+
+            </div>
+
+
+            <!-- FAQ 3 -->
+
+            <div class="faq-item">
+
+                <button
+                    class="faq-question"
+                    type="button">
+
+                    <span>
+                        Q3. Kya JPG ko PDF mein convert kar sakte hain?
+                    </span>
+
+                    <span>
+                        +
+                    </span>
+
+                </button>
+
+
+                <div class="faq-answer">
+
+                    <p>
+                        Haan, JPG images ko PDF file mein convert
+                        kiya ja sakta hai. Multiple images ko
+                        ek PDF document mein bhi combine kiya ja
+                        sakta hai.
+                    </p>
+
+                </div>
+
+            </div>
+
+
+            <!-- FAQ 4 -->
+
+            <div class="faq-item">
+
+                <button
+                    class="faq-question"
+                    type="button">
+
+                    <span>
+                        Q4. PDF ka file size JPG se bada hota hai?
+                    </span>
+
+                    <span>
+                        +
+                    </span>
+
+                </button>
+
+
+                <div class="faq-answer">
+
+                    <p>
+                        Zaroori nahi. File size content, image
+                        quality, number of pages aur compression
+                        jaise factors par depend karta hai.
+                    </p>
+
+                </div>
+
+            </div>
+
+
+            <!-- FAQ 5 -->
+
+            <div class="faq-item">
+
+                <button
+                    class="faq-question"
+                    type="button">
+
+                    <span>
+                        Q5. PDF aur JPG mein se kaunsa choose karein?
+                    </span>
+
+                    <span>
+                        +
+                    </span>
+
+                </button>
+
+
+                <div class="faq-answer">
+
+                    <p>
+                        Documents aur multiple-page files ke liye
+                        PDF choose karein. Photos aur individual
+                        images ke liye JPG convenient option hai.
+                    </p>
+
+                </div>
+
+            </div>
+
+
+        </div>
+
+
+
+        <!-- =================================================
+             12. CONCLUSION
+        ================================================== -->
+
+        <h2>
+            12. Conclusion
+        </h2>
+
+        <p>
+
+            PDF aur JPG dono useful file formats hain, lekin
+            unka purpose different hai.
+
+        </p>
+
+        <p>
+
+            Agar aapko certificate, application, report,
+            assignment ya multiple-page document share karna hai,
+            to PDF generally better choice hai.
+
+        </p>
+
+        <p>
+
+            Agar aapko photograph, screenshot ya simple image
+            share karni hai, to JPG zyada convenient ho sakta hai.
+
+        </p>
+
+        <p>
+
+            Isliye <strong>PDF vs JPG ka winner fixed nahi hai</strong>.
+            Best format hamesha aapke specific use case par depend
+            karta hai.
+
+        </p>
+
+
+
+        <!-- =================================================
+             13. 99TOOLHUB
+        ================================================== -->
+
+        <h2>
+            13. 99ToolHub
+        </h2>
+
+
+        <div class="blog-cta">
+
+            <h3>
+                PDF aur Image Tools ek hi jagah
+            </h3>
+
+            <p>
+
+                99ToolHub par PDF aur image related useful
+                online tools ko simple aur convenient interface
+                ke saath explore karein.
+
+            </p>
+
+            <a
+                href="../index.html#tools"
+                class="cta-button">
+
+                Explore 99ToolHub Tools →
+
+            </a>
+
+        </div>
+
+
+
+        <!-- =================================================
+             SHARE
+        ================================================== -->
+
+        <div class="share-section">
+
+            <div class="share-title">
+
+                Share this article
+
+            </div>
+
+
+            <div class="share-buttons">
+
+                <button
+                    class="share-button"
+                    id="shareButton"
+                    type="button">
+
+                    ↗
+
+                </button>
+
+
+                <button
+                    class="share-button"
+                    id="copyButton"
+                    type="button">
+
+                    🔗
+
+                </button>
+
+            </div>
+
+        </div>
+
+
+    </article>
+
+</main>
+
+
+
+<!-- =====================================================
+     COPY MESSAGE
+===================================================== -->
+
+<div
+    class="copy-message"
+    id="copyMessage">
+
+    Link copied!
+
+</div>
+
+
+
+<!-- =====================================================
+     FOOTER
+===================================================== -->
+
+<footer>
+
+    © <span id="currentYear"></span> 99ToolHub.
+    All rights reserved.
+
+</footer>
+
+
+
+<!-- =====================================================
+     JAVASCRIPT
+===================================================== -->
+
+<script>
+
+    /* =====================================================
+       CURRENT YEAR
+    ===================================================== */
+
+    document.getElementById("currentYear").textContent =
+        new Date().getFullYear();
+
+
+
+    /* =====================================================
+       READING PROGRESS
+    ===================================================== */
+
+    window.addEventListener("scroll", function () {
+
+        const progress =
+            document.getElementById("readingProgress");
+
+        const scrollTop =
+            window.scrollY;
+
+        const documentHeight =
+            document.documentElement.scrollHeight -
+            window.innerHeight;
+
+        const percentage =
+            (scrollTop / documentHeight) * 100;
+
+        progress.style.width =
+            percentage + "%";
+
+    });
+
+
+
+    /* =====================================================
+       FAQ ACCORDION
+    ===================================================== */
+
+    const faqItems =
+        document.querySelectorAll(".faq-item");
+
+
+    faqItems.forEach(function (item) {
+
+        const question =
+            item.querySelector(".faq-question");
+
+
+        question.addEventListener("click", function () {
+
+            const isActive =
+                item.classList.contains("active");
+
+
+            /* Close all FAQs */
+
+            faqItems.forEach(function (faq) {
+
+                faq.classList.remove("active");
+
+            });
+
+
+            /* Open clicked FAQ */
+
+            if (!isActive) {
+
+                item.classList.add("active");
+
+            }
+
+        });
+
+    });
+
+
+
+    /* =====================================================
+       COPY LINK
+    ===================================================== */
+
+    const copyButton =
+        document.getElementById("copyButton");
+
+    const copyMessage =
+        document.getElementById("copyMessage");
+
+
+    copyButton.addEventListener("click", async function () {
+
+        try {
+
+            await navigator.clipboard.writeText(
+                window.location.href
+            );
+
+            copyMessage.classList.add("show");
+
+
+            setTimeout(function () {
+
+                copyMessage.classList.remove("show");
+
+            }, 1800);
+
+
+        } catch (error) {
+
+            alert(
+                "Link copy nahi ho saka. Browser se URL manually copy karein."
+            );
+
+        }
+
+    });
+
+
+
+    /* =====================================================
+       SHARE BUTTON
+    ===================================================== */
+
+    const shareButton =
+        document.getElementById("shareButton");
+
+
+    shareButton.addEventListener("click", async function () {
+
+        const shareData = {
+
+            title:
+                "PDF vs JPG: Document Share Karne ke liye Kaunsa Better Hai?",
+
+            text:
+                "PDF aur JPG ke differences, advantages aur use cases ko simple language mein samjhein.",
+
+            url:
+                window.location.href
+
+        };
+
+
+        /* Native Share */
+
+        if (
+            navigator.share
+        ) {
+
+            try {
+
+                await navigator.share(
+                    shareData
+                );
+
+            } catch (error) {
+
+                /* User cancelled share */
+
+            }
+
+        }
+
+        /* Fallback */
+
+        else {
+
+            try {
+
+                await navigator.clipboard.writeText(
+                    window.location.href
+                );
+
+                copyMessage.textContent =
+                    "Link copied!";
+
+                copyMessage.classList.add("show");
+
+
+                setTimeout(function () {
+
+                    copyMessage.classList.remove("show");
+
+                }, 1800);
+
+            } catch (error) {
+
+                alert(
+                    "Share feature browser mein available nahi hai."
+                );
+
+            }
+
+        }
+
+    });
+
+</script>
+
+
+</body>
+</html>

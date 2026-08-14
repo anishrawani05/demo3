@@ -1,0 +1,1496 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <link rel="icon" type="image/png" href="../../images/favicon.png">
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>GST Calculator 2026 – 99toolhub</title>
+
+    <!-- ─── EXTERNAL LIBRARIES ─── -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js">
+    </script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js">
+    </script>
+
+    <style>
+        /* ════════════════════════════════════════════════════════════════
+                   RESET & BASE
+                   ════════════════════════════════════════════════════════════════ */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Roboto, Arial, sans-serif;
+        }
+
+        body {
+            background: #f5f7ff;
+            color: #1a1a2e;
+        }
+
+        /* ════════════════════════════════════════════════════════════════
+                   HERO
+                   ════════════════════════════════════════════════════════════════ */
+        .hero {
+            background: linear-gradient(145deg, #0d1b6b, #1a2a8a);
+            color: #fff;
+            text-align: center;
+            padding: 50px 20px 190px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero::after {
+            content: '';
+            position: absolute;
+            bottom: -2px;
+            left: 0;
+            right: 0;
+            height: 80px;
+            background: #f5f7ff;
+            border-radius: 50% 50% 0 0 / 100% 100% 0 0;
+        }
+
+        .hero .brand {
+            display: inline-block;
+            background: rgba(255, 255, 255, 0.12);
+            padding: 6px 24px;
+            border-radius: 40px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            letter-spacing: 1px;
+            margin-bottom: 16px;
+            backdrop-filter: blur(4px);
+        }
+
+        .hero h1 {
+            font-size: 48px;
+            font-weight: 800;
+            letter-spacing: -0.5px;
+            position: relative;
+            z-index: 1;
+        }
+
+        .hero h1 span {
+            color: #ffd54f;
+        }
+
+        .hero p {
+            font-size: 20px;
+            max-width: 780px;
+            margin: 14px auto 0;
+            line-height: 1.8;
+            opacity: 0.92;
+            position: relative;
+            z-index: 1;
+        }
+
+        .hero .year-badge {
+            display: inline-block;
+            background: #ffd54f;
+            color: #0d1b6b;
+            padding: 4px 20px;
+            border-radius: 40px;
+            font-weight: 700;
+            font-size: 14px;
+            margin-top: 12px;
+            position: relative;
+            z-index: 1;
+        }
+
+        /* ════════════════════════════════════════════════════════════════
+                   CARD / CALCULATOR
+                   ════════════════════════════════════════════════════════════════ */
+        .card {
+            max-width: 1100px;
+            margin: -130px auto 30px;
+            background: #ffffff;
+            padding: 45px 50px 40px;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(13, 27, 107, 0.12);
+            position: relative;
+            z-index: 2;
+            border: 1px solid rgba(26, 42, 138, 0.08);
+        }
+
+        .card .calc-title {
+            font-size: 28px;
+            font-weight: 700;
+            color: #0d1b6b;
+            margin-bottom: 4px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            flex-wrap: wrap;
+        }
+
+        .card .calc-title small {
+            font-size: 15px;
+            font-weight: 400;
+            color: #666;
+            background: #eef0ff;
+            padding: 2px 16px;
+            border-radius: 30px;
+        }
+
+        .card .calc-sub {
+            color: #666;
+            margin-bottom: 28px;
+            font-size: 16px;
+        }
+
+        .form-row {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 32px;
+            margin-bottom: 40px;
+        }
+
+        .form-group label {
+            display: block;
+            font-size: 17px;
+            font-weight: 700;
+            color: #0d1b6b;
+            margin-bottom: 8px;
+        }
+
+        .form-group label .emoji {
+            margin-right: 6px;
+        }
+
+        .form-group input,
+        .form-group select {
+            width: 100%;
+            padding: 15px 18px;
+            font-size: 18px;
+            border: 2px solid #e0e4f0;
+            border-radius: 12px;
+            background: #fafbff;
+            outline: none;
+            transition: 0.25s;
+            color: #1a1a2e;
+        }
+
+        .form-group input:focus,
+        .form-group select:focus {
+            border-color: #1a2a8a;
+            box-shadow: 0 0 0 4px rgba(26, 42, 138, 0.10);
+            background: #fff;
+        }
+
+        .form-group select {
+            cursor: pointer;
+            appearance: none;
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%231a2a8a' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");
+            background-repeat: no-repeat;
+            background-position: right 18px center;
+            padding-right: 48px;
+        }
+
+        /* ─── RESULT ROW ─── */
+        .result-row {
+            display: flex;
+            align-items: center;
+            justify-content: space-around;
+            text-align: center;
+            background: #f8f9ff;
+            border-radius: 16px;
+            padding: 28px 20px;
+            border: 1px solid #e0e4f0;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+
+        .result-item {
+            min-width: 110px;
+        }
+
+        .result-item h2 {
+            font-size: 40px;
+            font-weight: 700;
+            color: #1a1a2e;
+            letter-spacing: -0.5px;
+        }
+
+        .result-item p {
+            font-size: 15px;
+            margin-top: 4px;
+            color: #555;
+            font-weight: 500;
+        }
+
+        .result-item p.green {
+            color: #0a7a3a;
+            font-weight: 600;
+        }
+
+        .result-item p.blue {
+            color: #1a2a8a;
+            font-weight: 600;
+        }
+
+        .symbol {
+            font-size: 36px;
+            color: #1a2a8a;
+            font-weight: 300;
+            padding: 0 4px;
+        }
+
+        /* ─── QUICK TIP ─── */
+        .quick-tip {
+            margin-top: 22px;
+            background: #eef0ff;
+            padding: 16px 22px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            font-size: 15px;
+            color: #0d1b6b;
+            border-left: 5px solid #1a2a8a;
+        }
+
+        .quick-tip strong {
+            font-weight: 700;
+        }
+
+        /* ════════════════════════════════════════════════════════════════
+                   ACTION BUTTONS
+                   ════════════════════════════════════════════════════════════════ */
+        .action-bar {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-top: 24px;
+            justify-content: center;
+            border-top: 1px solid #eef0f7;
+            padding-top: 22px;
+        }
+
+        .action-bar .btn {
+            padding: 10px 22px;
+            border: none;
+            border-radius: 40px;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            transition: 0.2s;
+            background: #f0f2ff;
+            color: #1a2a8a;
+            border: 1px solid #d0d4e8;
+        }
+
+        .action-bar .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 18px rgba(26, 42, 138, 0.12);
+        }
+
+        .action-bar .btn-pdf {
+            background: #fce4ec;
+            color: #b71c1c;
+            border-color: #ef9a9a;
+        }
+        .action-bar .btn-pdf:hover {
+            background: #ffcdd2;
+        }
+
+        .action-bar .btn-excel {
+            background: #e8f5e9;
+            color: #1e5e2a;
+            border-color: #a5d6a7;
+        }
+        .action-bar .btn-excel:hover {
+            background: #c8e6c9;
+        }
+
+        .action-bar .btn-share {
+            background: #e3f2fd;
+            color: #0d47a1;
+            border-color: #90caf9;
+        }
+        .action-bar .btn-share:hover {
+            background: #bbdefb;
+        }
+
+        .action-bar .btn-history {
+            background: #fff3e0;
+            color: #bf360c;
+            border-color: #ffcc80;
+        }
+        .action-bar .btn-history:hover {
+            background: #ffe0b2;
+        }
+
+        .action-bar .btn-history-dl {
+            background: #f3e5f5;
+            color: #4a148c;
+            border-color: #ce93d8;
+        }
+        .action-bar .btn-history-dl:hover {
+            background: #e1bee7;
+        }
+
+        .action-bar .btn-reset {
+            background: #e8e8e8;
+            color: #444;
+            border-color: #ccc;
+        }
+        .action-bar .btn-reset:hover {
+            background: #d5d5d5;
+        }
+
+        /* ════════════════════════════════════════════════════════════════
+                   HISTORY PANEL
+                   ════════════════════════════════════════════════════════════════ */
+        .history-panel {
+            display: none;
+            margin-top: 24px;
+            background: #fafbff;
+            border-radius: 14px;
+            border: 1px solid #e0e4f0;
+            padding: 20px 24px;
+            max-height: 380px;
+            overflow-y: auto;
+        }
+
+        .history-panel.open {
+            display: block;
+        }
+
+        .history-panel .hdr {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 14px;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+
+        .history-panel .hdr h3 {
+            color: #0d1b6b;
+            font-size: 20px;
+        }
+
+        .history-panel .hdr .count {
+            font-size: 14px;
+            color: #666;
+            background: #eef0ff;
+            padding: 2px 14px;
+            border-radius: 30px;
+        }
+
+        .history-panel table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 14px;
+        }
+
+        .history-panel th {
+            background: #eef0ff;
+            color: #0d1b6b;
+            padding: 10px 12px;
+            text-align: left;
+            font-weight: 600;
+            border-bottom: 2px solid #d0d4e8;
+        }
+
+        .history-panel td {
+            padding: 10px 12px;
+            border-bottom: 1px solid #eef0f7;
+            color: #1a1a2e;
+        }
+
+        .history-panel tr:hover td {
+            background: #f0f2ff;
+        }
+
+        .history-panel .empty-msg {
+            text-align: center;
+            color: #999;
+            padding: 30px 0;
+            font-size: 16px;
+        }
+
+        .history-panel .del-btn {
+            background: none;
+            border: none;
+            color: #c62828;
+            cursor: pointer;
+            font-size: 18px;
+            padding: 2px 8px;
+            border-radius: 6px;
+            transition: 0.15s;
+        }
+
+        .history-panel .del-btn:hover {
+            background: #ffcdd2;
+        }
+
+        /* ════════════════════════════════════════════════════════════════
+                   CONTENT SECTIONS
+                   ════════════════════════════════════════════════════════════════ */
+        .content-wrap {
+            max-width: 1100px;
+            margin: 0 auto 50px;
+            padding: 0 20px;
+        }
+
+        .content-section {
+            background: #fff;
+            padding: 40px 50px;
+            border-radius: 20px;
+            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.04);
+            border: 1px solid #eef0f7;
+            margin-bottom: 30px;
+        }
+
+        .content-section h2 {
+            font-size: 30px;
+            color: #0d1b6b;
+            margin-bottom: 12px;
+            margin-top: 0;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            flex-wrap: wrap;
+        }
+
+        .content-section h2 .badge {
+            font-size: 13px;
+            background: #1a2a8a;
+            color: #fff;
+            padding: 2px 16px;
+            border-radius: 40px;
+            font-weight: 600;
+        }
+
+        .content-section h3 {
+            font-size: 22px;
+            color: #0d1b6b;
+            margin-top: 26px;
+            margin-bottom: 10px;
+        }
+
+        .content-section h4 {
+            font-size: 18px;
+            color: #0d1b6b;
+            margin-top: 18px;
+            margin-bottom: 8px;
+        }
+
+        .content-section p {
+            font-size: 17px;
+            line-height: 1.9;
+            color: #2c2c3e;
+            margin-bottom: 14px;
+        }
+
+        .content-section ul,
+        .content-section ol {
+            padding-left: 28px;
+            margin-bottom: 16px;
+        }
+
+        .content-section li {
+            font-size: 17px;
+            line-height: 1.9;
+            color: #2c2c3e;
+            margin-bottom: 8px;
+        }
+
+        .content-section li strong {
+            color: #0d1b6b;
+        }
+
+        /* ─── TABLE ─── */
+        .table-wrap {
+            overflow-x: auto;
+            margin: 18px 0 26px;
+            border-radius: 14px;
+            border: 1px solid #e0e4f0;
+        }
+
+        .table-wrap table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 16px;
+        }
+
+        .table-wrap th {
+            background: #0d1b6b;
+            color: #fff;
+            padding: 14px 18px;
+            text-align: left;
+            font-weight: 600;
+        }
+
+        .table-wrap td {
+            padding: 12px 18px;
+            border-bottom: 1px solid #eef0f7;
+            color: #2c2c3e;
+        }
+
+        .table-wrap tr:last-child td {
+            border-bottom: none;
+        }
+
+        .table-wrap tr:nth-child(even) td {
+            background: #f8f9ff;
+        }
+
+        .rate-badge {
+            display: inline-block;
+            padding: 2px 16px;
+            border-radius: 30px;
+            font-weight: 700;
+            font-size: 14px;
+        }
+
+        .rate-badge.zero {
+            background: #e8f5e9;
+            color: #1e7e34;
+        }
+        .rate-badge.five {
+            background: #e3f2fd;
+            color: #0d47a1;
+        }
+        .rate-badge.eighteen {
+            background: #fce4ec;
+            color: #880e4f;
+        }
+        .rate-badge.forty {
+            background: #fbe9e7;
+            color: #7f0000;
+        }
+
+        /* ─── FORMULA BOX ─── */
+        .formula-box {
+            background: #f0f2ff;
+            padding: 22px 28px;
+            border-radius: 14px;
+            margin: 16px 0 22px;
+            border-left: 6px solid #1a2a8a;
+            font-size: 18px;
+            line-height: 2;
+        }
+
+        .formula-box .math {
+            font-family: 'Times New Roman', serif;
+            font-size: 22px;
+            font-weight: 700;
+            color: #0d1b6b;
+        }
+
+        .formula-box .math small {
+            font-weight: 400;
+            font-size: 17px;
+            color: #444;
+        }
+
+        /* ─── FAQ ─── */
+        .faq-list {
+            margin-top: 8px;
+        }
+
+        .faq-item {
+            background: #f8f9ff;
+            border: 1px solid #e0e4f0;
+            border-radius: 14px;
+            padding: 16px 22px;
+            margin-bottom: 12px;
+            transition: 0.2s;
+        }
+
+        .faq-item:hover {
+            border-color: #1a2a8a;
+            box-shadow: 0 4px 12px rgba(26, 42, 138, 0.06);
+        }
+
+        .faq-item .q {
+            font-weight: 700;
+            color: #0d1b6b;
+            font-size: 18px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .faq-item .q::before {
+            content: '❓';
+            font-size: 20px;
+        }
+
+        .faq-item .a {
+            margin-top: 8px;
+            padding-left: 38px;
+            color: #2c2c3e;
+            line-height: 1.8;
+            font-size: 16px;
+        }
+
+        /* ─── FOOTER ─── */
+        .footer {
+            max-width: 1100px;
+            margin: 0 auto 40px;
+            padding: 0 20px;
+            text-align: center;
+            color: #888;
+            font-size: 14px;
+            border-top: 1px solid #e0e4f0;
+            padding-top: 24px;
+        }
+
+        .footer a {
+            color: #1a2a8a;
+            text-decoration: none;
+            font-weight: 600;
+        }
+
+        .footer a:hover {
+            text-decoration: underline;
+        }
+
+        /* ════════════════════════════════════════════════════════════════
+                   RESPONSIVE
+                   ════════════════════════════════════════════════════════════════ */
+        @media (max-width: 900px) {
+            .form-row {
+                grid-template-columns: 1fr 1fr;
+                gap: 22px;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .hero h1 {
+                font-size: 30px;
+            }
+            .hero p {
+                font-size: 17px;
+            }
+            .hero {
+                padding: 36px 16px 150px;
+            }
+
+            .card {
+                margin: -100px 12px 24px;
+                padding: 24px 16px 28px;
+            }
+
+            .card .calc-title {
+                font-size: 22px;
+            }
+
+            .form-row {
+                grid-template-columns: 1fr;
+                gap: 16px;
+                margin-bottom: 24px;
+            }
+
+            .form-group label {
+                font-size: 15px;
+            }
+            .form-group input,
+            .form-group select {
+                font-size: 16px;
+                padding: 13px 14px;
+            }
+
+            .result-row {
+                flex-direction: column;
+                gap: 8px;
+                padding: 18px 12px;
+            }
+
+            .result-item h2 {
+                font-size: 30px;
+            }
+            .symbol {
+                font-size: 28px;
+            }
+
+            .action-bar .btn {
+                font-size: 13px;
+                padding: 8px 16px;
+            }
+
+            .content-section {
+                padding: 24px 16px;
+            }
+            .content-section h2 {
+                font-size: 24px;
+            }
+            .content-section h3 {
+                font-size: 19px;
+            }
+            .content-section p,
+            .content-section li {
+                font-size: 16px;
+            }
+
+            .formula-box {
+                font-size: 15px;
+                padding: 16px 14px;
+            }
+            .formula-box .math {
+                font-size: 18px;
+            }
+
+            .faq-item .q {
+                font-size: 16px;
+            }
+            .faq-item .a {
+                padding-left: 16px;
+                font-size: 15px;
+            }
+
+            .table-wrap th,
+            .table-wrap td {
+                padding: 10px 12px;
+                font-size: 14px;
+            }
+
+            .quick-tip {
+                font-size: 14px;
+                flex-wrap: wrap;
+                padding: 12px 16px;
+            }
+
+            .history-panel {
+                padding: 14px 12px;
+            }
+            .history-panel table {
+                font-size: 12px;
+            }
+            .history-panel th,
+            .history-panel td {
+                padding: 6px 8px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .hero h1 {
+                font-size: 26px;
+            }
+            .card .calc-title {
+                font-size: 19px;
+            }
+            .result-item h2 {
+                font-size: 24px;
+            }
+            .content-section h2 {
+                font-size: 21px;
+            }
+        }
+
+        /* ─── PRINT ─── */
+        @media print {
+            .hero {
+                background: #0d1b6b !important;
+                padding: 30px 20px 40px !important;
+            }
+            .hero::after {
+                display: none;
+            }
+            .card {
+                box-shadow: none;
+                border: 1px solid #ccc;
+                margin-top: 20px;
+            }
+            .action-bar {
+                display: none !important;
+            }
+            .history-panel {
+                display: none !important;
+            }
+            .content-section {
+                box-shadow: none;
+                border: 1px solid #e0e4f0;
+                page-break-inside: avoid;
+            }
+            .faq-item {
+                page-break-inside: avoid;
+            }
+            body {
+                background: #fff;
+            }
+            .quick-tip {
+                background: #eef0ff !important;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- ════════════════════════════════════════════════════════════════
+    HERO
+    ════════════════════════════════════════════════════════════════ -->
+    <section class="hero">
+        <div class="brand">99toolhub</div>
+        <h1>FREE <span>GST</span> CALCULATOR <span style="font-size:0.6em;color:#ffd54f;">2026</span></h1>
+        <p>Calculate GST in seconds — exclusive or inclusive. Updated for 2026 rates.</p>
+        <div class="year-badge">📌 2026 Rates: 0% · 5% · 18% · 40%</div>
+    </section>
+
+    <!-- ════════════════════════════════════════════════════════════════
+    CALCULATOR CARD
+    ════════════════════════════════════════════════════════════════ -->
+    <div class="card" id="calcCard">
+
+        <div class="calc-title">
+            🧮 GST Calculator
+            <small>India 2026</small>
+        </div>
+        <p class="calc-sub">Enter an amount, choose the GST rate and tax type, and see the results instantly.</p>
+
+        <div class="form-row">
+            <div class="form-group">
+                <label><span class="emoji">💰</span> Amount (₹)</label>
+                <input type="number" id="amount" placeholder="Enter amount" value="1000" oninput="calculateGST()" />
+            </div>
+
+            <div class="form-group">
+                <label><span class="emoji">📊</span> GST Rate</label>
+                <select id="gstRate" onchange="calculateGST()">
+                    <option value="0">0% — Nil / Exempt</option>
+                    <option value="5">5% — Essential goods</option>
+                    <option value="18" selected>18% — Standard rate</option>
+                    <option value="40">40% — Luxury / Sin goods</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label><span class="emoji">⚙️</span> Tax Type</label>
+                <select id="taxType" onchange="calculateGST()">
+                    <option value="exclusive">Exclusive — Add GST</option>
+                    <option value="inclusive">Inclusive — GST included</option>
+                </select>
+            </div>
+        </div>
+
+        <!-- ─── RESULTS ─── -->
+        <div class="result-row">
+            <div class="result-item">
+                <h2 id="actualAmount">₹1,000</h2>
+                <p class="blue">Actual Amount</p>
+            </div>
+
+            <span class="symbol">+</span>
+
+            <div class="result-item">
+                <h2 id="gstAmount" style="color:#0a7a3a;">₹180</h2>
+                <p class="green">GST Amount</p>
+            </div>
+
+            <span class="symbol">=</span>
+
+            <div class="result-item">
+                <h2 id="totalAmount" style="color:#0d1b6b;">₹1,180</h2>
+                <p>Total Amount</p>
+            </div>
+        </div>
+
+        <div class="quick-tip">
+            <span style="font-size:22px;">💡</span>
+            <div>
+                <strong>Tip:</strong> <strong>Exclusive</strong> = add GST to base price. &nbsp;|&nbsp;
+                <strong>Inclusive</strong> = extract GST from total price.
+            </div>
+        </div>
+
+        <!-- ─── ACTION BUTTONS ─── -->
+        <div class="action-bar">
+            <button class="btn btn-pdf" onclick="downloadPDF()">📄 Download PDF</button>
+            <button class="btn btn-excel" onclick="downloadExcel()">📊 Download Excel</button>
+            <button class="btn btn-share" onclick="shareResult()">🔗 Share Result</button>
+            <button class="btn btn-history" onclick="toggleHistory()">📜 History</button>
+            <button class="btn btn-history-dl" onclick="downloadHistory()">⬇️ History Download</button>
+            <button class="btn btn-reset" onclick="resetAll()">🔄 Reset</button>
+        </div>
+
+        <!-- ─── HISTORY PANEL ─── -->
+        <div class="history-panel" id="historyPanel">
+            <div class="hdr">
+                <h3>📋 Calculation History</h3>
+                <span class="count" id="historyCount">0 entries</span>
+            </div>
+            <div id="historyList">
+                <div class="empty-msg">No calculations yet. Start using the calculator above!</div>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- ════════════════════════════════════════════════════════════════
+    CONTENT WRAPPER
+    ════════════════════════════════════════════════════════════════ -->
+    <div class="content-wrap">
+
+        <!-- ─── 1. WHAT IS GST ─── -->
+        <section class="content-section">
+            <h2>📖 What is GST? <span class="badge">Basics</span></h2>
+
+            <p>
+                <strong>GST</strong> stands for <strong>Goods and Services Tax</strong>. It is a comprehensive,
+                multi-stage, destination-based tax that is levied on every value addition. GST was introduced in India
+                on <strong>1 July 2017</strong> and replaced a complex web of cascading indirect taxes such as VAT,
+                service tax, excise duty, and more. The idea behind GST was to create a unified tax system that would
+                make India a single common market and boost economic growth.
+            </p>
+
+            <p>
+                GST is a <strong>consumption-based tax</strong>, meaning it is levied at the point of consumption
+                rather than the point of origin. This ensures that the tax revenue goes to the state where the goods or
+                services are consumed, not where they are produced. GST applies to the supply of goods and services,
+                and it is collected at every stage of the supply chain — from manufacturing to the final sale to the
+                consumer.
+            </p>
+
+            <h3>📌 Key Features of GST</h3>
+            <ul>
+                <li><strong>One Nation, One Tax:</strong> GST subsumed multiple central and state taxes into a single
+                    tax system, simplifying compliance and reducing the cascading effect of tax-on-tax.</li>
+                <li><strong>Dual GST Model:</strong> India follows a dual GST model where both the Centre and States
+                    levy GST simultaneously. CGST (Central GST) is collected by the Centre, and SGST (State GST) is
+                    collected by the states on intra-state transactions. For inter-state transactions, IGST (Integrated
+                    GST) is levied and collected by the Centre, which is then shared with the states.</li>
+                <li><strong>Destination-Based:</strong> GST is collected at the point of consumption, ensuring that the
+                    state where the goods are consumed gets the tax revenue.</li>
+                <li><strong>Input Tax Credit (ITC):</strong> Businesses can claim credit for the GST they have paid on
+                    their purchases (inputs). This ensures that tax is levied only on the value added at each stage,
+                    eliminating the cascading effect.</li>
+                <li><strong>Digitisation:</strong> GST is entirely technology-driven through the GSTN (Goods and Services
+                    Tax Network) portal, making compliance easier and more transparent.</li>
+            </ul>
+        </section>
+
+        <!-- ─── 2. HOW GST CALCULATOR WORKS ─── -->
+        <section class="content-section">
+            <h2>⚙️ How GST Calculator Works <span class="badge">Guide</span></h2>
+
+            <p>
+                A GST calculator is a simple yet powerful tool that helps you determine the GST amount and the total
+                price of a product or service. Whether you are a business owner, an accountant, or a consumer, using a
+                GST calculator saves time and eliminates manual calculation errors. Here's how our GST calculator
+                works in three easy steps:
+            </p>
+
+            <ol>
+                <li>
+                    <strong>Enter the Amount:</strong> Type the monetary value you want to work with. This could be the
+                    base price (for exclusive GST) or the total price including GST (for inclusive GST).
+                </li>
+                <li>
+                    <strong>Select the GST Rate:</strong> Choose the applicable GST rate from the dropdown.
+                    <strong>For 2026, the available rates are 0%, 5%, 18%, and 40%.</strong>
+                </li>
+                <li>
+                    <strong>Choose Tax Type (Exclusive or Inclusive):</strong>
+                    <ul>
+                        <li><strong>Exclusive:</strong> The amount you entered does <em>not</em> include GST.
+                            The calculator will add the GST amount to your base price and show you the total.</li>
+                        <li><strong>Inclusive:</strong> The amount you entered <em>already includes</em> GST.
+                            The calculator will split the total amount into the actual base price and the GST component.
+                        </li>
+                    </ul>
+                </li>
+            </ol>
+
+            <p>
+                Once you make your selections, the calculator instantly displays:
+            </p>
+            <ul>
+                <li><strong>Actual Amount:</strong> The base price before GST (or the amount excluding tax).</li>
+                <li><strong>GST Amount:</strong> The exact tax amount calculated based on the rate you selected.</li>
+                <li><strong>Total Amount:</strong> The final price after adding GST (for exclusive) or the total
+                    inclusive amount (for inclusive).</li>
+            </ul>
+        </section>
+
+        <!-- ─── 3. GST FORMULA ─── -->
+        <section class="content-section">
+            <h2>🧮 GST Formula <span class="badge">Math</span></h2>
+
+            <p>
+                The GST calculation is based on simple mathematical formulas. Whether you are adding GST to a price or
+                extracting GST from a total, the formulas are straightforward. Here's a detailed breakdown:
+            </p>
+
+            <h3>📌 1. Exclusive GST (Adding GST to a Base Price)</h3>
+            <p>
+                When the price you have <strong>does not include GST</strong>, you need to add the tax to get the final
+                total. The formulas are:
+            </p>
+            <div class="formula-box">
+                <div class="math">
+                    GST Amount = (Original Cost × GST Rate) / 100
+                </div>
+                <div class="math" style="margin-top:6px;">
+                    Total Price = Original Cost + GST Amount
+                </div>
+                <div style="margin-top:10px;font-size:16px;color:#444;">
+                    <strong>Example:</strong> Original cost ₹1,000, GST 18% → GST = ₹180, Total = ₹1,180
+                </div>
+            </div>
+
+            <h3>📌 2. Inclusive GST (Extracting GST from a Total Price)</h3>
+            <p>
+                When the price you have <strong>already includes GST</strong>, you need to work backwards to find the
+                base amount and the tax component. The formulas are:
+            </p>
+            <div class="formula-box">
+                <div class="math">
+                    GST Amount = (Total Price × GST Rate) / (100 + GST Rate)
+                </div>
+                <div class="math" style="margin-top:6px;">
+                    Original Cost = Total Price – GST Amount
+                </div>
+                <div style="margin-top:10px;font-size:16px;color:#444;">
+                    <strong>Example:</strong> Total price ₹1,180, GST 18% → GST = ₹180, Base = ₹1,000
+                </div>
+            </div>
+        </section>
+
+        <!-- ─── 4. GST RATES IN INDIA 2026 ─── -->
+        <section class="content-section">
+            <h2>📊 GST Rates in India <span class="badge">2026</span></h2>
+
+            <p>
+                As per the latest GST Council updates for 2026, the following GST rates are applicable. The rates have
+                been streamlined to four main slabs: <strong>0%, 5%, 18%, and 40%</strong>. Here is a detailed breakdown:
+            </p>
+
+            <div class="table-wrap">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>GST Rate</th>
+                            <th>Category</th>
+                            <th>Examples</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><span class="rate-badge zero">0%</span></td>
+                            <td><strong>Nil / Exempt</strong></td>
+                            <td>Fresh fruits &amp; vegetables, milk, eggs, bread, salt, educational services, healthcare
+                                services</td>
+                        </tr>
+                        <tr>
+                            <td><span class="rate-badge five">5%</span></td>
+                            <td><strong>Essential / Mass Consumption</strong></td>
+                            <td>Edible oils, sugar, tea, spices, coal, fertilisers, railway tickets (economy), packaged
+                                food items</td>
+                        </tr>
+                        <tr>
+                            <td><span class="rate-badge eighteen">18%</span></td>
+                            <td><strong>Standard Rate</strong></td>
+                            <td>Most goods and services: smartphones, laptops, FMCG products, AC restaurants, telecom
+                                services, financial services, IT services</td>
+                        </tr>
+                        <tr>
+                            <td><span class="rate-badge forty">40%</span></td>
+                            <td><strong>Luxury / Sin / Demerit</strong></td>
+                            <td>Automobiles, motorcycles, aerated beverages, tobacco products, pan masala, luxury
+                                watches, high-end cosmetics, cement</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <h3>📌 Special Notes for 2026</h3>
+            <ul>
+                <li>The 28% slab has been merged into the 40% slab for luxury and sin goods.</li>
+                <li>The 12% slab has been merged into the 18% slab for standard goods and services.</li>
+                <li>Essential items continue to enjoy 0% and 5% rates to protect the common man.</li>
+                <li>Gold and jewellery continue to attract a special rate of 3% (not included in the main slabs).</li>
+            </ul>
+        </section>
+
+        <!-- ─── 5. BENEFITS ─── -->
+        <section class="content-section">
+            <h2>✅ Benefits of Using a GST Calculator <span class="badge">Why</span></h2>
+
+            <ul>
+                <li><strong>⚡ Instant & Accurate:</strong> Get results in real-time with zero manual errors.</li>
+                <li><strong>🧠 Easy to Use:</strong> No tax expertise needed. Just enter the amount, select the rate and type.</li>
+                <li><strong>💰 Saves Time:</strong> Eliminates tedious manual GST calculations.</li>
+                <li><strong>📊 Dual Mode (Exclusive / Inclusive):</strong> Handles both adding and extracting GST.</li>
+                <li><strong>📈 Supports 2026 Rates:</strong> 0%, 5%, 18%, and 40% — all updated.</li>
+                <li><strong>📜 History Tracker:</strong> Automatically saves your calculations for future reference.</li>
+                <li><strong>📄 Export Options:</strong> Download results as PDF or Excel, or share with a click.</li>
+                <li><strong>📱 Mobile-Friendly:</strong> Works perfectly on all devices.</li>
+                <li><strong>🔒 Free & No Sign-Up:</strong> Completely free to use.</li>
+            </ul>
+        </section>
+
+        <!-- ─── 6. FAQ ─── -->
+        <section class="content-section">
+            <h2>❓ Frequently Asked Questions <span class="badge">FAQ</span></h2>
+
+            <div class="faq-list">
+
+                <div class="faq-item">
+                    <div class="q">What are the GST rates for 2026?</div>
+                    <div class="a">For 2026, the GST rates in India are 0%, 5%, 18%, and 40%. The 12% and 28% slabs have
+                        been merged into 18% and 40% respectively, streamlining the tax structure.</div>
+                </div>
+
+                <div class="faq-item">
+                    <div class="q">What is the difference between exclusive and inclusive GST?</div>
+                    <div class="a">Exclusive GST means the price does not include tax — GST is added on top. Inclusive
+                        GST means the price already includes tax — the GST is embedded in the displayed price.</div>
+                </div>
+
+                <div class="faq-item">
+                    <div class="q">How does the history feature work?</div>
+                    <div class="a">Every time you calculate GST, the result is automatically saved in your browser's
+                        local storage. You can view, delete, or download your entire history as a CSV file.</div>
+                </div>
+
+                <div class="faq-item">
+                    <div class="q">Can I download my calculation results?</div>
+                    <div class="a">Yes, you can download the current result as a PDF or Excel file using the buttons
+                        provided. You can also download your entire calculation history as a CSV file.</div>
+                </div>
+
+                <div class="faq-item">
+                    <div class="q">Who needs to register for GST in India?</div>
+                    <div class="a">Any business with an annual turnover exceeding ₹40 lakhs (₹20 lakhs for special
+                        category states) must register for GST. For service providers, the threshold is ₹20 lakhs
+                        (₹10 lakhs for special category states).</div>
+                </div>
+
+                <div class="faq-item">
+                    <div class="q">What is Input Tax Credit (ITC) under GST?</div>
+                    <div class="a">ITC allows businesses to claim credit for the GST they have paid on purchases and
+                        services used for business purposes. This prevents the cascading effect of tax and ensures that
+                        GST is levied only on the value added at each stage.</div>
+                </div>
+
+                <div class="faq-item">
+                    <div class="q">Is the GST calculator free to use?</div>
+                    <div class="a">Yes, the GST calculator on 99toolhub is completely free to use. There is no sign-up,
+                        no hidden charges, and no limitations on how many times you can use it.</div>
+                </div>
+
+            </div>
+        </section>
+
+    </div>
+
+    <!-- ════════════════════════════════════════════════════════════════
+    FOOTER
+    ════════════════════════════════════════════════════════════════ -->
+    <div class="footer">
+        &copy; 2026 <a href="#">99toolhub</a> — GST Calculator. All rights reserved. &bull; Made with ❤️ in India.
+    </div>
+
+
+    <!-- ════════════════════════════════════════════════════════════════
+    JAVASCRIPT
+    ════════════════════════════════════════════════════════════════ -->
+    <script>
+        /**
+         * ─────────────────────────────────────────────────────────────
+         *  99toolhub — GST Calculator 2026
+         *  Core logic: calculate GST, history, export functions.
+         * ─────────────────────────────────────────────────────────────
+         */
+
+        // ─── DOM REFS ──────────────────────────────────────────────────────
+        const $ = (id) => document.getElementById(id);
+        const amountInput = $('amount');
+        const gstRateSelect = $('gstRate');
+        const taxTypeSelect = $('taxType');
+        const actualEl = $('actualAmount');
+        const gstEl = $('gstAmount');
+        const totalEl = $('totalAmount');
+        const historyPanel = $('historyPanel');
+        const historyList = $('historyList');
+        const historyCount = $('historyCount');
+
+        // ─── HELPERS ──────────────────────────────────────────────────────
+        function formatINR(num) {
+            return '₹' + num.toLocaleString('en-IN', { maximumFractionDigits: 2 });
+        }
+
+        function getCurrentResult() {
+            const amount = parseFloat(amountInput.value) || 0;
+            const rate = parseFloat(gstRateSelect.value);
+            const taxType = taxTypeSelect.value;
+            let actual = 0,
+                gst = 0,
+                total = 0;
+            if (taxType === 'exclusive') {
+                actual = amount;
+                gst = amount * (rate / 100);
+                total = actual + gst;
+            } else {
+                total = amount;
+                gst = (total * rate) / (100 + rate);
+                actual = total - gst;
+            }
+            return { amount, rate, taxType, actual, gst, total };
+        }
+
+        // ─── CALCULATE ────────────────────────────────────────────────────
+        function calculateGST() {
+            const { actual, gst, total } = getCurrentResult();
+            actualEl.textContent = formatINR(actual);
+            gstEl.textContent = formatINR(gst);
+            totalEl.textContent = formatINR(total);
+            gstEl.style.color = gst > 0 ? '#0a7a3a' : '#888';
+        }
+
+        // ─── SAVE HISTORY ──────────────────────────────────────────────────
+        function saveToHistory() {
+            const { amount, rate, taxType, actual, gst, total } = getCurrentResult();
+            if (amount <= 0) return;
+
+            const entry = {
+                id: Date.now(),
+                timestamp: new Date().toLocaleString(),
+                amount: amount,
+                rate: rate,
+                taxType: taxType === 'exclusive' ? 'Exclusive' : 'Inclusive',
+                actual: Math.round(actual * 100) / 100,
+                gst: Math.round(gst * 100) / 100,
+                total: Math.round(total * 100) / 100
+            };
+
+            let history = JSON.parse(localStorage.getItem('gstHistory_99toolhub') || '[]');
+            history.unshift(entry);
+            if (history.length > 200) history = history.slice(0, 200);
+            localStorage.setItem('gstHistory_99toolhub', JSON.stringify(history));
+            renderHistory();
+        }
+
+        // ─── RENDER HISTORY ──────────────────────────────────────────────
+        function renderHistory() {
+            const history = JSON.parse(localStorage.getItem('gstHistory_99toolhub') || '[]');
+            historyCount.textContent = history.length + ' entries';
+
+            if (history.length === 0) {
+                historyList.innerHTML = '<div class="empty-msg">No calculations yet. Start using the calculator above!</div>';
+                return;
+            }
+
+            let html = `
+                <table>
+                    <thead>
+                        <tr>
+                            <th>#</th>
+                            <th>Time</th>
+                            <th>Amount (₹)</th>
+                            <th>Rate</th>
+                            <th>Type</th>
+                            <th>Actual (₹)</th>
+                            <th>GST (₹)</th>
+                            <th>Total (₹)</th>
+                            <th></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+            `;
+
+            history.forEach((e, i) => {
+                html += `
+                    <tr>
+                        <td>${i + 1}</td>
+                        <td>${e.timestamp}</td>
+                        <td>${e.amount}</td>
+                        <td>${e.rate}%</td>
+                        <td>${e.taxType}</td>
+                        <td>${e.actual.toFixed(2)}</td>
+                        <td>${e.gst.toFixed(2)}</td>
+                        <td>${e.total.toFixed(2)}</td>
+                        <td><button class="del-btn" onclick="deleteHistory(${e.id})" title="Delete">✕</button></td>
+                    </tr>
+                `;
+            });
+
+            html += '</tbody></table>';
+            historyList.innerHTML = html;
+        }
+
+        // ─── DELETE HISTORY ENTRY ─────────────────────────────────────────
+        function deleteHistory(id) {
+            let history = JSON.parse(localStorage.getItem('gstHistory_99toolhub') || '[]');
+            history = history.filter(e => e.id !== id);
+            localStorage.setItem('gstHistory_99toolhub', JSON.stringify(history));
+            renderHistory();
+        }
+
+        // ─── TOGGLE HISTORY PANEL ────────────────────────────────────────
+        function toggleHistory() {
+            historyPanel.classList.toggle('open');
+            if (historyPanel.classList.contains('open')) {
+                renderHistory();
+            }
+        }
+
+        // ─── DOWNLOAD HISTORY (CSV) ──────────────────────────────────────
+        function downloadHistory() {
+            const history = JSON.parse(localStorage.getItem('gstHistory_99toolhub') || '[]');
+            if (history.length === 0) {
+                alert('No history to download. Please perform some calculations first.');
+                return;
+            }
+
+            let csv = 'S.No.,Timestamp,Amount,Rate%,Type,Actual (₹),GST (₹),Total (₹)\n';
+            history.forEach((e, i) => {
+                csv +=
+                    `${i+1},${e.timestamp},${e.amount},${e.rate},${e.taxType},${e.actual.toFixed(2)},${e.gst.toFixed(2)},${e.total.toFixed(2)}\n`;
+            });
+
+            const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+            const link = document.createElement('a');
+            link.href = URL.createObjectURL(blob);
+            link.download = 'GST_History_99toolhub.csv';
+            link.click();
+            URL.revokeObjectURL(link.href);
+        }
+
+        // ─── SHARE RESULT ────────────────────────────────────────────────
+        function shareResult() {
+            const { actual, gst, total } = getCurrentResult();
+            const rate = gstRateSelect.value;
+            const type = taxTypeSelect.value === 'exclusive' ? 'Exclusive (Add GST)' : 'Inclusive (GST included)';
+            const text =
+                `📊 GST Calculation (2026)\nRate: ${rate}% | Type: ${type}\nActual Amount: ₹${actual.toFixed(2)}\nGST Amount: ₹${gst.toFixed(2)}\nTotal Amount: ₹${total.toFixed(2)}\n\n— 99toolhub GST Calculator`;
+
+            if (navigator.share) {
+                navigator.share({ title: 'GST Calculation', text: text, url: window.location.href })
+                    .catch(() => {});
+            } else {
+                navigator.clipboard.writeText(text + '\n' + window.location.href)
+                    .then(() => alert('📋 Result copied to clipboard! Share it anywhere.'))
+                    .catch(() => prompt('Copy this text to share:', text));
+            }
+        }
+
+        // ─── DOWNLOAD PDF ────────────────────────────────────────────────
+        function downloadPDF() {
+            const card = document.getElementById('calcCard');
+            const clone = card.cloneNode(true);
+            // remove action bar and history panel from clone
+            const actionBar = clone.querySelector('.action-bar');
+            if (actionBar) actionBar.remove();
+            const histPanel = clone.querySelector('.history-panel');
+            if (histPanel) histPanel.remove();
+            // remove quick tip from clone for cleaner PDF
+            const tip = clone.querySelector('.quick-tip');
+            if (tip) tip.remove();
+
+            clone.style.margin = '0';
+            clone.style.padding = '30px';
+            clone.style.boxShadow = 'none';
+            clone.style.border = '1px solid #ccc';
+            clone.style.borderRadius = '12px';
+            clone.style.background = '#fff';
+
+            const wrapper = document.createElement('div');
+            wrapper.style.padding = '20px';
+            wrapper.style.background = '#fff';
+            wrapper.appendChild(clone);
+            document.body.appendChild(wrapper);
+
+            const opt = {
+                margin: [0.5, 0.5, 0.5, 0.5],
+                filename: 'GST_Calculation_99toolhub.pdf',
+                image: { type: 'jpeg', quality: 0.98 },
+                html2canvas: { scale: 2, useCORS: true, letterRendering: true },
+                jsPDF: { unit: 'in', format: 'a4', orientation: 'portrait' }
+            };
+
+            html2pdf().set(opt).from(wrapper).save()
+                .then(() => document.body.removeChild(wrapper))
+                .catch(() => {
+                    document.body.removeChild(wrapper);
+                    alert('Could not generate PDF. Please try again or use Print > Save as PDF.');
+                });
+        }
+
+        // ─── DOWNLOAD EXCEL ──────────────────────────────────────────────
+        function downloadExcel() {
+            const { amount, rate, taxType, actual, gst, total } = getCurrentResult();
+            if (amount <= 0) {
+                alert('Please enter a valid amount first.');
+                return;
+            }
+
+            const data = [
+                ['GST Calculator Report — 99toolhub (2026)'],
+                [],
+                ['Parameter', 'Value'],
+                ['Amount Entered (₹)', amount],
+                ['GST Rate (%)', rate],
+                ['Tax Type', taxType === 'exclusive' ? 'Exclusive (Add GST)' : 'Inclusive (GST included)'],
+                ['Actual Amount (₹)', Math.round(actual * 100) / 100],
+                ['GST Amount (₹)', Math.round(gst * 100) / 100],
+                ['Total Amount (₹)', Math.round(total * 100) / 100],
+                [],
+                ['Generated on:', new Date().toLocaleString()]
+            ];
+
+            const wb = XLSX.utils.book_new();
+            const ws = XLSX.utils.aoa_to_sheet(data);
+            XLSX.utils.book_append_sheet(wb, ws, 'GST');
+            XLSX.writeFile(wb, 'GST_Calculation_99toolhub.xlsx');
+        }
+
+        // ─── RESET ────────────────────────────────────────────────────────
+        function resetAll() {
+            amountInput.value = '';
+            gstRateSelect.value = '18';
+            taxTypeSelect.value = 'exclusive';
+            calculateGST();
+            // close history panel
+            historyPanel.classList.remove('open');
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        // ─── AUTO-CALCULATE & SAVE HISTORY ──────────────────────────────
+        let saveTimeout = null;
+
+        function handleAutoSave() {
+            calculateGST();
+            clearTimeout(saveTimeout);
+            saveTimeout = setTimeout(() => {
+                const amount = parseFloat(amountInput.value) || 0;
+                if (amount > 0) saveToHistory();
+            }, 600);
+        }
+
+        // ─── EVENT BINDINGS ──────────────────────────────────────────────
+        amountInput.addEventListener('input', handleAutoSave);
+        gstRateSelect.addEventListener('change', handleAutoSave);
+        taxTypeSelect.addEventListener('change', handleAutoSave);
+
+        // ─── INIT ─────────────────────────────────────────────────────────
+        window.addEventListener('DOMContentLoaded', () => {
+            calculateGST();
+            renderHistory();
+            // auto-save initial calculation if amount > 0
+            setTimeout(() => {
+                if (parseFloat(amountInput.value) > 0) saveToHistory();
+            }, 800);
+        });
+
+        // Expose functions globally
+        window.calculateGST = calculateGST;
+        window.toggleHistory = toggleHistory;
+        window.downloadHistory = downloadHistory;
+        window.shareResult = shareResult;
+        window.downloadPDF = downloadPDF;
+        window.downloadExcel = downloadExcel;
+        window.resetAll = resetAll;
+        window.deleteHistory = deleteHistory;
+    </script>
+
+</body>
+</html>

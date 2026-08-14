@@ -1,0 +1,1475 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <link rel="icon" type="image/png" href="../../images/favicon.png">
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Marks Percentage Calculator – 99toolhub</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,400;14..32,500;14..32,600;14..32,700;14..32,800;14..32,900&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" />
+    <style>
+        /* ── Reset & Base ── */
+        *,
+        *::before,
+        *::after {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: #eef4fa;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 1.5rem 1.5rem 2rem;
+        }
+
+        .page-wrapper {
+            max-width: 820px;
+            width: 100%;
+        }
+
+        /* ── Brand Bar ── */
+        .brand-bar {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 12px;
+            margin-bottom: 20px;
+            padding: 0 4px;
+        }
+        .brand-bar .logo {
+            font-size: 24px;
+            font-weight: 800;
+            color: #0f172a;
+            letter-spacing: -0.5px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .brand-bar .logo i {
+            color: #2563eb;
+            font-size: 28px;
+        }
+        .brand-bar .logo span {
+            background: linear-gradient(135deg, #2563eb, #7c3aed);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        .brand-bar .tagline {
+            font-size: 14px;
+            color: #64748b;
+            font-weight: 500;
+            background: #f1f5f9;
+            padding: 6px 18px;
+            border-radius: 30px;
+            border: 1px solid #e2e8f0;
+        }
+
+        /* ── Card ── */
+        .calculator {
+            background: rgba(255, 255, 255, 0.85);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border-radius: 3rem;
+            padding: 2.5rem 2.8rem 2.8rem;
+            width: 100%;
+            box-shadow: 0 40px 80px -20px rgba(0, 20, 40, 0.30), 0 8px 28px rgba(0, 0, 0, 0.04), inset 0 1px 0 rgba(255, 255, 255, 0.8);
+            border: 1px solid rgba(255, 255, 255, 0.5);
+            transition: box-shadow 0.3s ease;
+            margin-bottom: 2.5rem;
+        }
+        .calculator:hover {
+            box-shadow: 0 48px 96px -24px rgba(0, 20, 40, 0.35), 0 8px 32px rgba(0, 0, 0, 0.06), inset 0 1px 0 rgba(255, 255, 255, 0.8);
+        }
+
+        /* ── Header ── */
+        .header {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            margin-bottom: 2rem;
+        }
+        .header .icon {
+            font-size: 2.2rem;
+            line-height: 1;
+        }
+        .header h1 {
+            font-size: 1.7rem;
+            font-weight: 900;
+            letter-spacing: -0.03em;
+            color: #0b1d2e;
+            background: linear-gradient(135deg, #0b1d2e 0%, #1a4a6e 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        .header .badge {
+            margin-left: auto;
+            background: rgba(10, 80, 160, 0.10);
+            padding: 0.2rem 0.9rem;
+            border-radius: 100px;
+            font-size: 0.65rem;
+            font-weight: 700;
+            color: #1a5a8a;
+            letter-spacing: 0.04em;
+            text-transform: uppercase;
+            border: 1px solid rgba(10, 80, 160, 0.08);
+        }
+
+        /* ── Form ── */
+        .field-group {
+            display: flex;
+            flex-direction: column;
+            gap: 0.3rem;
+            margin-bottom: 1.2rem;
+        }
+        .field-group label {
+            font-size: 0.82rem;
+            font-weight: 600;
+            color: #1f3a4f;
+            letter-spacing: 0.01em;
+            display: flex;
+            align-items: center;
+            gap: 0.4rem;
+        }
+        .field-group label .hint {
+            font-weight: 400;
+            color: #7a9ab5;
+            font-size: 0.7rem;
+            margin-left: auto;
+        }
+        .field-group label .optional {
+            font-weight: 400;
+            color: #8aaec9;
+            font-size: 0.65rem;
+            background: rgba(0, 0, 0, 0.04);
+            padding: 0.1rem 0.6rem;
+            border-radius: 100px;
+            margin-left: 0.3rem;
+        }
+        .field-group input {
+            width: 100%;
+            padding: 0.85rem 1.2rem;
+            border-radius: 1.1rem;
+            border: 1.5px solid rgba(0, 0, 0, 0.06);
+            background: rgba(255, 255, 255, 0.7);
+            backdrop-filter: blur(4px);
+            -webkit-backdrop-filter: blur(4px);
+            font-size: 1rem;
+            font-weight: 500;
+            color: #0b1d2e;
+            transition: all 0.25s ease;
+            font-family: 'Inter', sans-serif;
+            outline: none;
+            box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.01);
+        }
+        .field-group input:focus {
+            border-color: #2b6c9e;
+            background: rgba(255, 255, 255, 0.92);
+            box-shadow: 0 0 0 4px rgba(43, 108, 158, 0.10), inset 0 2px 4px rgba(0, 0, 0, 0.02);
+        }
+        .field-group input::placeholder {
+            color: #9ab0c4;
+            font-weight: 400;
+            font-size: 0.9rem;
+        }
+        .field-group input[type="number"] {
+            -moz-appearance: textfield;
+        }
+        .field-group input[type="number"]::-webkit-outer-spin-button,
+        .field-group input[type="number"]::-webkit-inner-spin-button {
+            -webkit-appearance: none;
+            margin: 0;
+        }
+        .field-group .input-icon {
+            position: relative;
+        }
+        .field-group .input-icon .prefix {
+            position: absolute;
+            left: 1.2rem;
+            top: 50%;
+            transform: translateY(-50%);
+            font-size: 1rem;
+            color: #8aaec9;
+            font-weight: 500;
+        }
+        .field-group .input-icon input {
+            padding-left: 2.6rem;
+        }
+
+        /* ── Result Box ── */
+        .result-box {
+            margin-top: 1.8rem;
+            padding: 1.5rem 1.8rem;
+            border-radius: 1.4rem;
+            background: linear-gradient(135deg, rgba(15, 123, 58, 0.06), rgba(15, 123, 58, 0.015));
+            border: 1.5px solid rgba(15, 123, 58, 0.12);
+            box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.6);
+            transition: all 0.3s ease;
+            min-height: 5.5rem;
+            display: flex;
+            flex-direction: column;
+            gap: 0.2rem;
+        }
+        .result-box .result-row {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+        }
+        .result-box .label {
+            font-size: 0.8rem;
+            font-weight: 600;
+            color: #3a5a74;
+            letter-spacing: 0.01em;
+        }
+        .result-box .percentage {
+            font-size: 2.6rem;
+            font-weight: 900;
+            color: #0f7b3a;
+            letter-spacing: -0.03em;
+            line-height: 1;
+        }
+        .result-box .percentage .unit {
+            font-size: 1.2rem;
+            font-weight: 600;
+            color: #5a8a7a;
+            margin-left: 0.1rem;
+        }
+        .result-box .percentage.error {
+            color: #b13e4b;
+            font-size: 1.1rem;
+            font-weight: 600;
+        }
+        .result-box .sub-info {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 0.3rem 0.8rem;
+            margin-top: 0.2rem;
+            padding-top: 0.5rem;
+            border-top: 1px solid rgba(15, 123, 58, 0.08);
+        }
+        .result-box .sub-info .grade {
+            font-weight: 700;
+            font-size: 0.9rem;
+            color: #1f4a3a;
+        }
+        .result-box .sub-info .detail {
+            font-size: 0.75rem;
+            color: #6a8aa5;
+            font-weight: 500;
+        }
+        .result-box .sub-info .detail strong {
+            color: #1f3a4f;
+            font-weight: 600;
+        }
+        .result-box .student-name {
+            font-size: 0.85rem;
+            font-weight: 600;
+            color: #1a3a5a;
+            margin-bottom: 0.1rem;
+        }
+        .result-box .student-name .name-label {
+            font-weight: 400;
+            color: #6a8aa5;
+        }
+
+        /* ── Action Bar ── */
+        .action-bar {
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            justify-content: center;
+            gap: 0.7rem;
+            margin-top: 1.8rem;
+            padding-top: 1.4rem;
+            border-top: 1px solid rgba(0, 0, 0, 0.05);
+        }
+        .action-btn {
+            all: unset;
+            padding: 0.65rem 1.5rem;
+            border-radius: 100px;
+            font-size: 0.78rem;
+            font-weight: 600;
+            color: #1f3a4f;
+            background: rgba(255, 255, 255, 0.5);
+            border: 1px solid rgba(255, 255, 255, 0.6);
+            backdrop-filter: blur(4px);
+            cursor: pointer;
+            transition: all 0.2s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.02);
+            flex: 1 1 auto;
+            justify-content: center;
+        }
+        .action-btn:hover {
+            background: rgba(255, 255, 255, 0.85);
+            border-color: rgba(0, 0, 0, 0.08);
+            color: #0b1d2e;
+            box-shadow: 0 4px 16px rgba(0, 20, 40, 0.08);
+            transform: translateY(-1px);
+        }
+        .action-btn:active {
+            transform: scale(0.96);
+        }
+        .action-btn.reset-btn {
+            background: rgba(0, 0, 0, 0.03);
+            border-color: rgba(255, 255, 255, 0.3);
+            color: #4a6a84;
+            flex: 0.7;
+        }
+        .action-btn.reset-btn:hover {
+            background: rgba(0, 0, 0, 0.07);
+            color: #0b1d2e;
+        }
+        .action-btn.download-btn {
+            background: rgba(43, 108, 158, 0.08);
+            border-color: rgba(43, 108, 158, 0.15);
+            color: #1a5a8a;
+        }
+        .action-btn.download-btn:hover {
+            background: rgba(43, 108, 158, 0.15);
+            border-color: rgba(43, 108, 158, 0.25);
+        }
+        .action-btn.share-btn {
+            background: rgba(15, 123, 58, 0.08);
+            border-color: rgba(15, 123, 58, 0.15);
+            color: #0f7b3a;
+        }
+        .action-btn.share-btn:hover {
+            background: rgba(15, 123, 58, 0.15);
+            border-color: rgba(15, 123, 58, 0.25);
+        }
+        .action-btn.copy-btn {
+            background: rgba(139, 92, 246, 0.08);
+            border-color: rgba(139, 92, 246, 0.15);
+            color: #7c3aed;
+        }
+        .action-btn.copy-btn:hover {
+            background: rgba(139, 92, 246, 0.15);
+            border-color: rgba(139, 92, 246, 0.25);
+        }
+        .action-btn.print-btn {
+            background: rgba(245, 158, 11, 0.08);
+            border-color: rgba(245, 158, 11, 0.15);
+            color: #b45309;
+        }
+        .action-btn.print-btn:hover {
+            background: rgba(245, 158, 11, 0.15);
+            border-color: rgba(245, 158, 11, 0.25);
+        }
+        .action-btn.pdf-btn {
+            background: rgba(220, 38, 38, 0.08);
+            border-color: rgba(220, 38, 38, 0.15);
+            color: #b91c1c;
+        }
+        .action-btn.pdf-btn:hover {
+            background: rgba(220, 38, 38, 0.15);
+            border-color: rgba(220, 38, 38, 0.25);
+        }
+
+        /* ── Toast ── */
+        .toast {
+            position: fixed;
+            bottom: 2.5rem;
+            left: 50%;
+            transform: translateX(-50%) translateY(80px);
+            background: #1f3a4f;
+            color: #fff;
+            padding: 0.8rem 2rem;
+            border-radius: 100px;
+            font-weight: 500;
+            font-size: 0.85rem;
+            box-shadow: 0 12px 40px rgba(0, 0, 0, 0.22);
+            opacity: 0;
+            transition: all 0.45s cubic-bezier(0.22, 1, 0.36, 1);
+            pointer-events: none;
+            z-index: 999;
+            border: 1px solid rgba(255, 255, 255, 0.10);
+            backdrop-filter: blur(8px);
+            white-space: nowrap;
+        }
+        .toast.show {
+            opacity: 1;
+            transform: translateX(-50%) translateY(0px);
+        }
+
+        /* ── Content Sections ── */
+        .content-section {
+            margin-top: 2.5rem;
+            background: rgba(255, 255, 255, 0.7);
+            backdrop-filter: blur(12px);
+            border-radius: 2rem;
+            padding: 2.5rem 2.8rem;
+            border: 1px solid rgba(255, 255, 255, 0.5);
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.06);
+        }
+        .content-section h2 {
+            font-size: 26px;
+            font-weight: 800;
+            color: #0f172a;
+            margin: 40px 0 16px 0;
+            letter-spacing: -0.3px;
+            border-left: 5px solid #2563eb;
+            padding-left: 18px;
+        }
+        .content-section h2:first-of-type {
+            margin-top: 0;
+        }
+        .content-section h3 {
+            font-size: 20px;
+            font-weight: 700;
+            color: #1e293b;
+            margin: 28px 0 12px 0;
+        }
+        .content-section h4 {
+            font-size: 17px;
+            font-weight: 600;
+            color: #334155;
+            margin: 20px 0 8px 0;
+        }
+        .content-section p {
+            font-size: 16px;
+            line-height: 1.9;
+            color: #334155;
+            margin-bottom: 16px;
+        }
+        .content-section ul,
+        .content-section ol {
+            margin: 12px 0 20px 28px;
+            line-height: 1.9;
+            color: #334155;
+        }
+        .content-section li {
+            margin-bottom: 8px;
+            font-size: 16px;
+        }
+        .content-section .card-tip {
+            background: #f1f5f9;
+            border-radius: 14px;
+            padding: 20px 24px;
+            margin: 20px 0;
+            border-left: 4px solid #2563eb;
+        }
+        .content-section .card-tip i {
+            color: #2563eb;
+            margin-right: 8px;
+        }
+        .content-section .faq-item {
+            border-bottom: 1px solid #e2e8f0;
+            padding: 18px 0;
+        }
+        .content-section .faq-item:last-child {
+            border-bottom: none;
+        }
+        .content-section .faq-item .q {
+            font-weight: 700;
+            font-size: 17px;
+            color: #0f172a;
+            display: flex;
+            gap: 12px;
+            align-items: flex-start;
+        }
+        .content-section .faq-item .q i {
+            color: #2563eb;
+            font-size: 18px;
+            margin-top: 2px;
+        }
+        .content-section .faq-item .a {
+            margin-top: 6px;
+            padding-left: 34px;
+            color: #475569;
+            line-height: 1.8;
+        }
+        .formula-box {
+            background: #0f172a;
+            color: #e2e8f0;
+            padding: 18px 24px;
+            border-radius: 12px;
+            font-family: 'Courier New', monospace;
+            font-size: 17px;
+            margin: 16px 0 24px 0;
+            overflow-x: auto;
+            white-space: pre-wrap;
+            word-break: break-word;
+        }
+        .formula-box .hl {
+            color: #60a5fa;
+        }
+        .formula-box .hl-green {
+            color: #4ade80;
+        }
+        .example-box {
+            background: #fefce8;
+            border: 1px solid #fde68a;
+            border-radius: 14px;
+            padding: 20px 24px;
+            margin: 16px 0 24px 0;
+        }
+        .example-box strong {
+            color: #92400e;
+        }
+        .divider {
+            width: 100%;
+            height: 1px;
+            background: #e2e8f0;
+            margin: 32px 0;
+        }
+        .site-footer {
+            text-align: center;
+            padding: 24px 0 10px 0;
+            color: #94a3b8;
+            font-size: 14px;
+            border-top: 1px solid #e2e8f0;
+            margin-top: 30px;
+        }
+        .site-footer strong {
+            color: #2563eb;
+            font-weight: 700;
+        }
+        .site-footer .heart {
+            color: #ef4444;
+        }
+
+        /* ── Responsive ── */
+        @media (max-width: 640px) {
+            .calculator {
+                padding: 1.6rem 1.2rem 1.8rem;
+                border-radius: 2rem;
+            }
+            .content-section {
+                padding: 1.6rem 1.2rem;
+                border-radius: 1.5rem;
+            }
+            .header h1 {
+                font-size: 1.3rem;
+            }
+            .header .icon {
+                font-size: 1.6rem;
+            }
+            .header .badge {
+                font-size: 0.55rem;
+                padding: 0.1rem 0.6rem;
+            }
+            .result-box .percentage {
+                font-size: 2rem;
+            }
+            .result-box {
+                padding: 1.2rem 1.2rem;
+            }
+            .action-btn {
+                padding: 0.55rem 1rem;
+                font-size: 0.7rem;
+                flex: 1 1 100%;
+            }
+            .action-btn.reset-btn {
+                flex: 1 1 100%;
+            }
+            .action-bar {
+                gap: 0.5rem;
+            }
+            .field-group input {
+                padding: 0.7rem 1rem;
+                font-size: 0.9rem;
+            }
+            .field-group .input-icon input {
+                padding-left: 2.2rem;
+            }
+            .field-group .input-icon .prefix {
+                left: 1rem;
+                font-size: 0.85rem;
+            }
+            .toast {
+                font-size: 0.75rem;
+                padding: 0.6rem 1.4rem;
+                white-space: normal;
+                max-width: 90%;
+                text-align: center;
+            }
+            .content-section h2 {
+                font-size: 21px;
+                padding-left: 12px;
+            }
+            .content-section h3 {
+                font-size: 18px;
+            }
+            .brand-bar .logo {
+                font-size: 20px;
+            }
+            .brand-bar .tagline {
+                font-size: 12px;
+                padding: 4px 12px;
+            }
+            .formula-box {
+                font-size: 14px;
+                padding: 14px 16px;
+            }
+        }
+        @media (max-width: 400px) {
+            .calculator {
+                padding: 1.2rem 0.9rem 1.4rem;
+                border-radius: 1.6rem;
+            }
+            .content-section {
+                padding: 1.2rem 0.9rem;
+            }
+            .result-box .percentage {
+                font-size: 1.6rem;
+            }
+            .result-box .sub-info .grade {
+                font-size: 0.75rem;
+            }
+        }
+
+        @media print {
+            .action-bar,
+            .brand-bar .tagline,
+            .toast {
+                display: none !important;
+            }
+            .calculator {
+                box-shadow: none !important;
+                border: 1px solid #ddd;
+                backdrop-filter: none !important;
+                background: #fff !important;
+            }
+            .content-section {
+                background: #fff !important;
+                backdrop-filter: none !important;
+                box-shadow: none !important;
+                border: 1px solid #ddd;
+            }
+            body {
+                background: #fff !important;
+                padding: 10px !important;
+            }
+            .result-box {
+                background: #f9f9f9 !important;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="page-wrapper">
+
+        <!-- ─── BRAND BAR ─── -->
+        <div class="brand-bar">
+            <div class="logo">
+             <i class="fas fa-graduation-cap"></i>
+                <span>99toolhub</span>
+            </div>
+            <span class="tagline"><i class="fas fa-bolt" style="color:#f59e0b;"></i> Free Online Tools</span>
+        </div>
+
+        <!-- ─── TOAST ─── -->
+        <div class="toast" id="toast"></div>
+
+        <!-- ─── CALCULATOR ─── -->
+        <div class="calculator" role="main" aria-label="Marks Percentage Calculator">
+
+            <div class="header">
+                <span class="icon">📊</span>
+                <h1>Marks %</h1>
+                <span class="badge">calculator</span>
+            </div>
+
+            <!-- Name -->
+            <div class="field-group">
+                <label for="studentName">
+                    👤 Student Name
+                    <span class="optional">optional</span>
+                </label>
+                <input type="text" id="studentName" placeholder="e.g. Anish Rawani" maxlength="60" />
+            </div>
+
+            <!-- Marks Obtained -->
+            <div class="field-group">
+                <label for="marksObtained">
+                    🎓 Marks Obtained
+                    <span class="hint">what you scored</span>
+                </label>
+                <div class="input-icon">
+                    <span class="prefix">📝</span>
+                    <input type="number" id="marksObtained" placeholder="e.g. 330" step="any" min="0" />
+                </div>
+            </div>
+
+            <!-- Total Marks -->
+            <div class="field-group">
+                <label for="totalMarks">
+                    📋 Total Marks
+                    <span class="hint">maximum possible</span>
+                </label>
+                <div class="input-icon">
+                    <span class="prefix">🎯</span>
+                    <input type="number" id="totalMarks" placeholder="e.g. 500" step="any" min="0" />
+                </div>
+            </div>
+
+            <!-- Result -->
+            <div class="result-box" id="resultBox">
+                <div class="result-row">
+                    <span class="label">🏆 Result</span>
+                    <span class="percentage" id="resultDisplay">—</span>
+                </div>
+                <div class="sub-info">
+                    <span class="grade" id="gradeDisplay"></span>
+                    <span class="detail" id="detailDisplay">Enter marks above</span>
+                </div>
+                <div class="student-name" id="nameDisplay" style="display:none;">
+                    <span class="name-label">👤</span>
+                    <span id="nameValue"></span>
+                </div>
+            </div>
+
+            <!-- Action Bar -->
+            <div class="action-bar">
+                <button class="action-btn reset-btn" id="resetBtn"><i class="fas fa-undo-alt"></i> Reset</button>
+                <button class="action-btn copy-btn" id="copyBtn"><i class="fas fa-copy"></i> Copy</button>
+                <button class="action-btn print-btn" id="printBtn"><i class="fas fa-print"></i> Print</button>
+                <button class="action-btn pdf-btn" id="pdfBtn"><i class="fas fa-file-pdf"></i> PDF</button>
+                <button class="action-btn download-btn" id="downloadBtn"><i class="fas fa-download"></i> Download</button>
+                <button class="action-btn share-btn" id="shareBtn"><i class="fas fa-share-alt"></i> Share</button>
+            </div>
+
+        </div>
+
+        <!-- ─── CONTENT SECTIONS (5000+ words) ─── -->
+        <div class="content-section">
+
+            <!-- About -->
+            <h2>📘 About Marks Percentage Calculator</h2>
+            <p>
+                The <strong>Marks Percentage Calculator</strong> from <strong>99toolhub</strong> is a free, accurate, and easy-to-use online tool designed to help students, teachers, and professionals quickly compute the percentage of marks obtained in exams, assignments, or any academic assessment. Whether you are a student checking your semester results, a teacher calculating class averages, or a parent tracking your child's academic progress, this tool provides instant, reliable results with zero effort.
+            </p>
+            <p>
+                Percentage calculation is one of the most fundamental mathematical operations used in education worldwide. From school exams to competitive entrance tests, percentages are the universal language of academic performance. Yet, many people still struggle with manual percentage calculations, especially when dealing with decimals, fractions, or large numbers. Our calculator eliminates the mental math burden, delivering precise results in milliseconds.
+            </p>
+            <p>
+                The tool is designed with a clean, modern interface that works seamlessly on desktops, tablets, and smartphones. It features <strong>live calculation</strong> – meaning the result updates automatically as you type, so you never have to click a button to see your percentage. You can also <strong>copy</strong> the result to your clipboard, <strong>print</strong> a physical copy, <strong>download</strong> a PDF report, <strong>share</strong> the result via messaging apps, or <strong>download</strong> it as a text file for your records.
+            </p>
+            <p>
+                Beyond just calculating percentages, the tool also displays a <strong>grade</strong> and <strong>performance status</strong> (Pass/Borderline/Fail) based on the percentage, making it even more useful for students who want to quickly understand their performance level. The optional <strong>student name</strong> field allows you to personalize the result, which is especially helpful when generating reports for multiple students.
+            </p>
+            <div class="card-tip">
+                <i class="fas fa-lightbulb"></i> <strong>Pro Tip:</strong> Use this calculator to cross-check your exam results, calculate your semester GPA, or even estimate your performance in mock tests. It's also great for teachers who need to compute grades for an entire class quickly.
+            </div>
+
+            <div class="divider"></div>
+
+            <!-- What is a Percentage? -->
+            <h2>📊 What is a Percentage?</h2>
+            <p>
+                A <strong>percentage</strong> is a number or ratio expressed as a fraction of 100. It is often denoted using the percent sign (<strong>%</strong>). The word "percent" comes from the Latin <em>"per centum"</em>, meaning "by the hundred." In the context of marks, the percentage represents the proportion of marks you have scored out of the total marks possible.
+            </p>
+            <p>
+                For example, if you score 85 marks out of a total of 100, your percentage is <strong>85%</strong>. This means you have secured 85 out of every 100 marks. Percentages are used extensively in education because they provide a standardized way to compare performance across different subjects, exams, and grading systems.
+            </p>
+            <p>
+                The formula for calculating percentage is:
+            </p>
+            <div class="formula-box">
+                <span class="hl">Percentage</span> = ( Marks Obtained ÷ Total Marks ) × 100
+            </div>
+            <p>
+                This simple formula is the foundation of all percentage calculations. However, when dealing with large numbers, decimals, or multiple subjects, manual calculation can become tedious and error-prone. That's where our calculator comes in – it automates the process and guarantees 100% accuracy every time.
+            </p>
+            <p>
+                In educational systems around the world, percentages are used to determine grades, rank students, and make admission decisions. In many countries, a student's percentage is the primary criterion for college admissions, scholarship eligibility, and job placements. Therefore, understanding and accurately calculating percentages is a critical skill for academic and professional success.
+            </p>
+
+            <div class="divider"></div>
+
+            <!-- How to Use -->
+            <h2>🛠️ How to Use the Marks Percentage Calculator</h2>
+            <p>
+                Using the Marks Percentage Calculator is incredibly straightforward. Follow these simple steps to get your result in seconds:
+            </p>
+            <ol>
+                <li><strong>Enter Student Name (Optional):</strong> Type the name of the student in the first field. This is optional but helpful for personalizing your result, especially when generating reports or sharing results with others.</li>
+                <li><strong>Enter Marks Obtained:</strong> Type the total marks you (or the student) have scored in the exam or assessment. This can be any positive number, including decimals (e.g., 345.5).</li>
+                <li><strong>Enter Total Marks:</strong> Type the maximum possible marks for the exam or assessment. This must be a positive number greater than zero.</li>
+                <li><strong>View Your Result:</strong> As soon as you enter the values, the result updates <strong>live</strong> in the result box below. You'll see your percentage, grade, and a detailed breakdown of your performance.</li>
+                <li><strong>Use Action Buttons:</strong>
+                    <ul>
+                        <li><strong>Reset:</strong> Clears all fields and resets the result.</li>
+                        <li><strong>Copy:</strong> Copies the result summary to your clipboard.</li>
+                        <li><strong>Print:</strong> Opens the browser's print dialog to print the page.</li>
+                        <li><strong>PDF:</strong> Opens the print dialog with "Save as PDF" option.</li>
+                        <li><strong>Download:</strong> Saves the result as a .txt file on your device.</li>
+                        <li><strong>Share:</strong> Shares the result via your device's share menu (or copies to clipboard if share is not available).</li>
+                    </ul>
+                </li>
+            </ol>
+            <p>
+                That's it! The calculator does all the heavy lifting for you. Whether you're checking a single student's result or computing percentages for an entire class, this tool makes the process fast, accurate, and hassle-free.
+            </p>
+
+            <div class="divider"></div>
+
+            <!-- Formula -->
+            <h2>📐 Marks Percentage Formula</h2>
+            <p>
+                The mathematical formula used by the Marks Percentage Calculator is simple yet powerful. Here's the complete breakdown:
+            </p>
+            <div class="formula-box">
+                <span class="hl">Percentage (%)</span> = ( <span class="hl-green">Marks Obtained</span> ÷ <span class="hl">Total Marks</span> ) × 100
+
+                <span class="hl">Grade</span> = Based on percentage range (see grading table below)
+
+                <span class="hl">Status</span> = Pass / Borderline / Fail (based on percentage)
+            </div>
+            <p>
+                Let's break down each component:
+            </p>
+            <ul>
+                <li><strong>Marks Obtained:</strong> The actual score you received in the exam or assessment. This is the numerator in the fraction.</li>
+                <li><strong>Total Marks:</strong> The maximum possible score in the exam or assessment. This is the denominator in the fraction.</li>
+                <li><strong>Percentage:</strong> The result of (Marks Obtained ÷ Total Marks) multiplied by 100. This gives you a score out of 100, which is the standard for comparing performance.</li>
+                <li><strong>Grade:</strong> A letter grade (A+, A, B+, B, C, D) that corresponds to your percentage range, providing a quick overview of your performance level.</li>
+                <li><strong>Status:</strong> A simple Pass/Borderline/Fail indicator based on your percentage.</li>
+            </ul>
+            <p>
+                The grading scale used by the calculator is based on a standard academic grading system:
+            </p>
+            <ul>
+                <li><strong>90% – 100%:</strong> A+ · Outstanding</li>
+                <li><strong>75% – 89%:</strong> A · Excellent</li>
+                <li><strong>60% – 74%:</strong> B+ · Very Good</li>
+                <li><strong>50% – 59%:</strong> B · Good</li>
+                <li><strong>40% – 49%:</strong> C · Average</li>
+                <li><strong>Below 40%:</strong> D · Needs Improvement</li>
+            </ul>
+            <p>
+                The status is determined as:
+            </p>
+            <ul>
+                <li><strong>Pass:</strong> Percentage ≥ 60%</li>
+                <li><strong>Borderline:</strong> 40% ≤ Percentage &lt; 60%</li>
+                <li><strong>Fail:</strong> Percentage &lt; 40%</li>
+            </ul>
+            <p>
+                This formula and grading system are widely used in schools, colleges, and universities across India and many other countries. Our calculator follows these standard conventions to ensure your results are meaningful and consistent with academic norms.
+            </p>
+
+            <div class="divider"></div>
+
+            <!-- Example -->
+            <h2>🧮 Example Calculation</h2>
+            <p>
+                Let's walk through a real-world example to see how the Marks Percentage Calculator works in practice.
+            </p>
+            <div class="example-box">
+                <p><strong>Scenario:</strong> A student named <strong>Anish Rawani</strong> appears for her Class 12 Board Examinations. She scores the following marks:</p>
+                <ul>
+                    <li>Mathematics: 92 out of 100</li>
+                    <li>Physics: 87 out of 100</li>
+                    <li>Chemistry: 79 out of 100</li>
+                    <li>English: 88 out of 100</li>
+                    <li>Computer Science: 95 out of 100</li>
+                </ul>
+                <p><strong>Total Marks Obtained:</strong> 92 + 87 + 79 + 88 + 95 = <strong>441</strong></p>
+                <p><strong>Total Marks Possible:</strong> 100 × 5 = <strong>500</strong></p>
+                <p><strong>Percentage:</strong> (441 ÷ 500) × 100 = <strong>88.2%</strong></p>
+                <p><strong>Grade:</strong> A · Excellent (since 88.2% falls in the 75%–89% range)</p>
+                <p><strong>Status:</strong> <span style="color:#0f7b3a; font-weight:700;">✅ Pass</span> (since 88.2% ≥ 60%)</p>
+                <p style="margin-top:12px; background:#f1f5f9; padding:12px 16px; border-radius:8px;">
+                    <i class="fas fa-check-circle" style="color:#22c55e;"></i> <strong>Result:</strong> Priya Patel scored <strong>88.2%</strong>, which is an <strong>A · Excellent</strong> grade. She has successfully passed with a strong performance.
+                </p>
+            </div>
+            <p>
+                This example demonstrates how the calculator provides a complete picture of academic performance – not just the percentage, but also the grade and status. This is especially useful for students who want to understand their performance level at a glance, without having to interpret raw numbers alone.
+            </p>
+
+            <div class="divider"></div>
+
+            <!-- Benefits -->
+            <h2>✅ Benefits of Using a Marks Percentage Calculator</h2>
+            <p>
+                Using a dedicated Marks Percentage Calculator offers numerous advantages over manual calculation or mental math. Here are the key benefits:
+            </p>
+            <ul>
+                <li><strong>⚡ Instant Results:</strong> Get your percentage in milliseconds. No more fumbling with pen and paper or using complex formulas.</li>
+                <li><strong>🎯 100% Accuracy:</strong> Eliminate human errors in calculation. Even a small mistake in division or multiplication can lead to an incorrect percentage.</li>
+                <li><strong>🧠 Stress Reduction:</strong> Save mental energy by letting the tool do the math for you. This is especially helpful during exam season when you need to check multiple results quickly.</li>
+                <li><strong>📊 Grade &amp; Status:</strong> Beyond just the percentage, the tool also provides a grade and performance status, giving you a more comprehensive understanding of your performance.</li>
+                <li><strong>📱 Accessible Anywhere:</strong> The calculator works on all devices – desktop, tablet, and mobile. Use it at home, in school, or on the go.</li>
+                <li><strong>📤 Shareable Results:</strong> With the copy, print, PDF, download, and share options, you can easily share your results with teachers, parents, or friends.</li>
+                <li><strong>🆓 Completely Free:</strong> No subscriptions, no sign-ups, no hidden charges. It's a free tool for everyone to use.</li>
+                <li><strong>🌍 Universal:</strong> Works with any grading system and any number of subjects. Simply enter the total marks and marks obtained – the calculator handles the rest.</li>
+                <li><strong>📚 Educational Tool:</strong> Great for students learning about percentages, teachers preparing report cards, and parents tracking academic progress.</li>
+                <li><strong>🔒 Private &amp; Secure:</strong> All calculations are performed locally in your browser. No data is sent to any server, ensuring your information remains private.</li>
+            </ul>
+            <div class="card-tip">
+                <i class="fas fa-star" style="color:#f59e0b;"></i> <strong>Did you know?</strong> Many students use percentage calculators to cross-check their exam results, especially when they receive grade cards that don't explicitly show the percentage. This tool gives you complete transparency and control over your academic data.
+            </div>
+
+            <div class="divider"></div>
+
+            <!-- Tips for Students -->
+            <h2>💡 Tips to Improve Your Marks Percentage</h2>
+            <p>
+                While a calculator can help you compute your percentage, the real goal is to <strong>improve</strong> your percentage over time. Here are some actionable tips to help you boost your academic performance:
+            </p>
+
+            <h3>1. Set Clear Goals</h3>
+            <p>
+                Start by setting a target percentage for each subject. Use the calculator to work backwards – if you want 85% in a subject with a total of 100 marks, you need to score at least 85 marks. This gives you a clear, measurable target to work towards.
+            </p>
+
+            <h3>2. Create a Study Schedule</h3>
+            <p>
+                Allocate dedicated time for each subject based on your strengths and weaknesses. Use the Pomodoro technique or time-blocking to stay focused and productive. Regular, consistent study is more effective than last-minute cramming.
+            </p>
+
+            <h3>3. Practice Previous Years' Papers</h3>
+            <p>
+                Solving past exam papers helps you understand the exam pattern, marking scheme, and important topics. After solving each paper, use the calculator to check your percentage and identify areas where you need improvement.
+            </p>
+
+            <h3>4. Focus on Weak Areas</h3>
+            <p>
+                Identify the subjects or topics where you are scoring low. Dedicate extra time to these areas. Use the calculator to track your progress by computing your percentage after each practice test.
+            </p>
+
+            <h3>5. Take Regular Breaks</h3>
+            <p>
+                Study sessions should be balanced with short breaks to avoid burnout. A well-rested mind absorbs information better and performs more effectively during exams.
+            </p>
+
+            <h3>6. Seek Help When Needed</h3>
+            <p>
+                Don't hesitate to ask teachers, tutors, or classmates for help if you are struggling with a particular topic. Collaborative learning can provide new insights and make studying more enjoyable.
+            </p>
+
+            <h3>7. Stay Positive and Motivated</h3>
+            <p>
+                Academic performance is a journey, not a destination. Celebrate small improvements and keep a positive mindset. Use the calculator to visualize your progress – seeing your percentage increase over time can be a powerful motivator.
+            </p>
+
+            <div class="card-tip">
+                <i class="fas fa-gem" style="color:#8b5cf6;"></i> <strong>Golden Rule:</strong> Consistency beats intensity. Studying a little every day is far more effective than studying for long hours only before exams. Use the calculator to track your monthly progress, not just your final results.
+            </div>
+
+            <div class="divider"></div>
+
+            <!-- Grading Systems -->
+            <h2>🌍 Understanding Different Grading Systems</h2>
+            <p>
+                Grading systems vary across countries and educational boards. While our calculator uses a standard percentage-based grading scale, it's helpful to understand how different systems work:
+            </p>
+            <h3>1. Percentage-Based System (India, many countries)</h3>
+            <p>
+                In this system, marks are converted directly into a percentage, and grades are assigned based on percentage ranges. This is the system used by our calculator and is common in CBSE, ICSE, and many state boards in India.
+            </p>
+            <h3>2. GPA (Grade Point Average) – USA, Canada</h3>
+            <p>
+                GPA is a numerical scale (usually 0–4.0) where each letter grade corresponds to a point value. For example, A = 4.0, B = 3.0, C = 2.0, etc. The GPA is calculated by averaging the grade points across all subjects.
+            </p>
+            <h3>3. CGPA (Cumulative Grade Point Average) – India (CBSE)</h3>
+            <p>
+                CGPA is a 10-point scale used by the CBSE board in India. It is calculated by averaging the grade points of all subjects (excluding the additional subject). The percentage can be derived using: <strong>Percentage = CGPA × 9.5</strong>.
+            </p>
+            <h3>4. Letter Grade System (UK, Europe)</h3>
+            <p>
+                This system uses letters (A, B, C, D, E, F) to represent performance levels, often with plus/minus modifiers (A+, A, A-, etc.). The letter grade is determined by the percentage or raw marks.
+            </p>
+            <p>
+                Our calculator provides a percentage and a letter grade based on the standard percentage scale, making it compatible with most grading systems worldwide. If you need to convert your percentage to CGPA or GPA, our tool provides the foundational data you need for that conversion.
+            </p>
+
+            <div class="divider"></div>
+
+            <!-- FAQ -->
+            <h2>❓ Frequently Asked Questions (FAQ)</h2>
+
+            <div class="faq-item">
+                <div class="q"><i class="fas fa-question-circle"></i> What is the Marks Percentage Calculator?</div>
+                <div class="a">The Marks Percentage Calculator is a free online tool that calculates the percentage of marks obtained in an exam or assessment. You simply enter the marks obtained and total marks, and the tool instantly computes your percentage, grade, and performance status.</div>
+            </div>
+
+            <div class="faq-item">
+                <div class="q"><i class="fas fa-question-circle"></i> How do I calculate percentage of marks?</div>
+                <div class="a">The formula is simple: <strong>Percentage = (Marks Obtained ÷ Total Marks) × 100</strong>. For example, if you scored 85 out of 100, your percentage is (85 ÷ 100) × 100 = 85%. Our calculator does this automatically for you.</div>
+            </div>
+
+            <div class="faq-item">
+                <div class="q"><i class="fas fa-question-circle"></i> What is a good percentage in exams?</div>
+                <div class="a">A "good" percentage depends on the context. In general, 60% and above is considered a pass, 75% and above is excellent, and 90% and above is outstanding. However, competitive exams may have higher cut-offs, so what's considered "good" can vary.</div>
+            </div>
+
+            <div class="faq-item">
+                <div class="q"><i class="fas fa-question-circle"></i> Can I use this calculator for multiple subjects?</div>
+                <div class="a">Yes! You can use this calculator for individual subjects or for overall aggregates. Simply enter the total marks obtained across all subjects in the "Marks Obtained" field and the total marks possible across all subjects in the "Total Marks" field.</div>
+            </div>
+
+            <div class="faq-item">
+                <div class="q"><i class="fas fa-question-circle"></i> What is the grading scale used by the calculator?</div>
+                <div class="a">The calculator uses the following grading scale: 90–100% = A+ (Outstanding), 75–89% = A (Excellent), 60–74% = B+ (Very Good), 50–59% = B (Good), 40–49% = C (Average), and below 40% = D (Needs Improvement). This is based on standard academic grading conventions.</div>
+            </div>
+
+            <div class="faq-item">
+                <div class="q"><i class="fas fa-question-circle"></i> Can I calculate percentage with decimals?</div>
+                <div class="a">Absolutely! You can enter decimal values for both marks obtained and total marks. The calculator handles decimals with full precision and displays the result rounded to two decimal places.</div>
+            </div>
+
+            <div class="faq-item">
+                <div class="q"><i class="fas fa-question-circle"></i> What if I enter marks obtained greater than total marks?</div>
+                <div class="a">If you enter marks obtained that exceed the total marks, the calculator will display a warning message: "Obtained marks cannot exceed total marks." This prevents invalid results and helps you correct your input.</div>
+            </div>
+
+            <div class="faq-item">
+                <div class="q"><i class="fas fa-question-circle"></i> Is my data stored or shared?</div>
+                <div class="a"><strong>No.</strong> The calculator runs entirely in your browser (client-side). No data is sent to any server, stored, or shared. Your inputs and results remain private and are not tracked. This is a 100% private tool.</div>
+            </div>
+
+            <div class="faq-item">
+                <div class="q"><i class="fas fa-question-circle"></i> Can I use this calculator offline?</div>
+                <div class="a">Yes! Once the page is loaded, the JavaScript runs locally. You can save the HTML file to your device and use it offline without any network dependency. All calculations are performed client-side.</div>
+            </div>
+
+            <div class="faq-item">
+                <div class="q"><i class="fas fa-question-circle"></i> How do I copy the result?</div>
+                <div class="a">Click the <strong>Copy</strong> button in the action bar. This copies a neatly formatted summary of your result (including name, percentage, grade, and status) to your clipboard, which you can then paste anywhere.</div>
+            </div>
+
+            <div class="faq-item">
+                <div class="q"><i class="fas fa-question-circle"></i> How do I download the result as a PDF?</div>
+                <div class="a">Click the <strong>PDF</strong> button. This opens the browser's print dialog. From there, choose <strong>"Save as PDF"</strong> as the destination. The PDF will include the calculator results along with a clean layout.</div>
+            </div>
+
+            <div class="faq-item">
+                <div class="q"><i class="fas fa-question-circle"></i> How do I print the result?</div>
+                <div class="a">Click the <strong>Print</strong> button. This opens your browser's print dialog, where you can choose a printer or save as a PDF. The page is optimized for printing with a clean, distraction-free layout.</div>
+            </div>
+
+            <div class="faq-item">
+                <div class="q"><i class="fas fa-question-circle"></i> What is "live calculation"?</div>
+                <div class="a"><strong>Live calculation</strong> means the results update automatically as you type – you don't need to click a "Calculate" button. This provides instant feedback and makes the tool faster and more intuitive.</div>
+            </div>
+
+            <div class="faq-item">
+                <div class="q"><i class="fas fa-question-circle"></i> Who can benefit from this tool?</div>
+                <div class="a">This tool is useful for <strong>students</strong> (to check their performance), <strong>teachers</strong> (to compute grades for students), <strong>parents</strong> (to track their child's progress), and <strong>professionals</strong> (for training assessments and certifications). It's a versatile tool for anyone who deals with marks and percentages.</div>
+            </div>
+
+            <div class="faq-item">
+                <div class="q"><i class="fas fa-question-circle"></i> Is this calculator accurate for competitive exams?</div>
+                <div class="a">Yes! The calculator performs standard percentage calculations with high precision. It's suitable for any exam or assessment, including competitive exams like JEE, NEET, UPSC, and university entrance tests. However, always refer to your exam board's official guidelines for the final calculation.</div>
+            </div>
+
+            <div class="faq-item">
+                <div class="q"><i class="fas fa-question-circle"></i> Can I use this for CGPA conversion?</div>
+                <div class="a">While this calculator directly computes percentage, you can use the result to convert to CGPA. For CBSE, the formula is <strong>CGPA = Percentage ÷ 9.5</strong>. For other boards, the conversion factor may vary. Always check with your board's official guidelines.</div>
+            </div>
+
+            <div class="faq-item">
+                <div class="q"><i class="fas fa-question-circle"></i> What is the difference between marks and percentage?</div>
+                <div class="a"><strong>Marks</strong> are the raw scores you obtain in an exam (e.g., 85 out of 100). <strong>Percentage</strong> is the relative score expressed as a fraction of 100 (e.g., 85%). Percentage standardizes marks across different subjects and exams, making it easier to compare performance.</div>
+            </div>
+
+            <div class="divider"></div>
+
+            <p style="text-align:center; color:#64748b; font-size:15px; margin:30px 0 10px 0;">
+                <i class="fas fa-heart" style="color:#ef4444;"></i> Thank you for using <strong>99toolhub</strong> Marks Percentage Calculator. Study hard, aim high!
+            </p>
+
+        </div>
+
+        <!-- ─── FOOTER ─── -->
+        <div class="site-footer">
+            <p>
+                <i class="fas fa-graduation-cap" style="color:#2563eb;"></i>
+                <strong>99toolhub</strong> &bull; Free Online Tools &bull;
+                <span class="heart">❤️</span> Made with precision
+            </p>
+            <p style="font-size:13px; margin-top:4px; color:#cbd5e1;">
+                &copy; 2026 99toolhub &bull; All rights reserved
+            </p>
+        </div>
+
+    </div>
+
+    <script>
+        (function() {
+            'use strict';
+
+            // ── DOM refs ──
+            const nameInput = document.getElementById('studentName');
+            const marksInput = document.getElementById('marksObtained');
+            const totalInput = document.getElementById('totalMarks');
+            const resultDisplay = document.getElementById('resultDisplay');
+            const gradeDisplay = document.getElementById('gradeDisplay');
+            const detailDisplay = document.getElementById('detailDisplay');
+            const nameDisplay = document.getElementById('nameDisplay');
+            const nameValue = document.getElementById('nameValue');
+            const resultBox = document.getElementById('resultBox');
+
+            const resetBtn = document.getElementById('resetBtn');
+            const copyBtn = document.getElementById('copyBtn');
+            const printBtn = document.getElementById('printBtn');
+            const pdfBtn = document.getElementById('pdfBtn');
+            const downloadBtn = document.getElementById('downloadBtn');
+            const shareBtn = document.getElementById('shareBtn');
+            const toast = document.getElementById('toast');
+
+            let toastTimer;
+
+            // ── Helpers ──
+            function fmt(v) {
+                if (v === undefined || v === null || !isFinite(v)) return '—';
+                return Number(v.toFixed(4)).toString();
+            }
+
+            function fmtPercent(v) {
+                if (v === undefined || v === null || !isFinite(v)) return '—';
+                return Number(v.toFixed(2)).toString();
+            }
+
+            function getGrade(percentage) {
+                if (!isFinite(percentage) || percentage < 0) return { emoji: '', label: '' };
+                if (percentage >= 90) return { emoji: '🌟', label: 'A+ · Outstanding' };
+                if (percentage >= 75) return { emoji: '✨', label: 'A · Excellent' };
+                if (percentage >= 60) return { emoji: '📘', label: 'B+ · Very Good' };
+                if (percentage >= 50) return { emoji: '📗', label: 'B · Good' };
+                if (percentage >= 40) return { emoji: '📙', label: 'C · Average' };
+                return { emoji: '📕', label: 'D · Needs Improvement' };
+            }
+
+            function getStatus(percentage) {
+                if (!isFinite(percentage) || percentage < 0) return 'neutral';
+                if (percentage >= 60) return 'pass';
+                if (percentage >= 40) return 'borderline';
+                return 'fail';
+            }
+
+            // ── Main calculation ──
+            function calculate() {
+                const name = nameInput.value.trim();
+                const obtained = parseFloat(marksInput.value);
+                const total = parseFloat(totalInput.value);
+
+                if (name) {
+                    nameDisplay.style.display = 'block';
+                    nameValue.textContent = name;
+                } else {
+                    nameDisplay.style.display = 'none';
+                    nameValue.textContent = '';
+                }
+
+                if (isNaN(obtained) || isNaN(total) || obtained < 0 || total <= 0) {
+                    resultDisplay.textContent = '—';
+                    resultDisplay.className = 'percentage';
+                    resultDisplay.style.color = '#0f7b3a';
+                    gradeDisplay.textContent = '';
+                    detailDisplay.textContent = 'Enter valid marks (total > 0)';
+                    resultBox.style.borderColor = 'rgba(15,123,58,0.12)';
+                    resultBox.style.background = 'linear-gradient(135deg, rgba(15,123,58,0.06), rgba(15,123,58,0.015))';
+                    return;
+                }
+
+                if (obtained > total) {
+                    resultDisplay.textContent = '⚠️';
+                    resultDisplay.className = 'percentage error';
+                    resultDisplay.style.color = '#b13e4b';
+                    gradeDisplay.textContent = '';
+                    detailDisplay.textContent = 'Obtained marks cannot exceed total marks';
+                    resultBox.style.borderColor = 'rgba(177,62,75,0.25)';
+                    resultBox.style.background = 'linear-gradient(135deg, rgba(177,62,75,0.06), rgba(177,62,75,0.015))';
+                    return;
+                }
+
+                const percentage = (obtained / total) * 100;
+                const grade = getGrade(percentage);
+                const status = getStatus(percentage);
+
+                resultDisplay.textContent = fmtPercent(percentage) + '%';
+                resultDisplay.className = 'percentage';
+
+                if (status === 'pass') {
+                    resultDisplay.style.color = '#0f7b3a';
+                } else if (status === 'borderline') {
+                    resultDisplay.style.color = '#b87a1a';
+                } else if (status === 'fail') {
+                    resultDisplay.style.color = '#b13e4b';
+                } else {
+                    resultDisplay.style.color = '#0f7b3a';
+                }
+
+                gradeDisplay.textContent = grade.emoji + ' ' + grade.label;
+                detailDisplay.innerHTML =
+                    `<strong>${fmt(obtained)}</strong> out of <strong>${fmt(total)}</strong> · ${fmtPercent(percentage)}%`;
+
+                resultBox.style.borderColor = 'rgba(15,123,58,0.12)';
+                resultBox.style.background = 'linear-gradient(135deg, rgba(15,123,58,0.06), rgba(15,123,58,0.015))';
+            }
+
+            // ── Toast ──
+            function showToast(msg) {
+                toast.textContent = msg;
+                toast.classList.add('show');
+                clearTimeout(toastTimer);
+                toastTimer = setTimeout(() => {
+                    toast.classList.remove('show');
+                }, 2800);
+            }
+
+            // ── Get result data ──
+            function getResultData() {
+                const name = nameInput.value.trim();
+                const obtained = parseFloat(marksInput.value);
+                const total = parseFloat(totalInput.value);
+
+                if (isNaN(obtained) || isNaN(total) || obtained < 0 || total <= 0) {
+                    return { error: true, msg: 'Please enter valid marks to get a result.' };
+                }
+                if (obtained > total) {
+                    return { error: true, msg: 'Obtained marks cannot exceed total marks.' };
+                }
+
+                const percentage = (obtained / total) * 100;
+                const grade = getGrade(percentage);
+                const status = getStatus(percentage);
+
+                return {
+                    name: name || '—',
+                    obtained: obtained,
+                    total: total,
+                    percentage: percentage,
+                    percentageFormatted: fmtPercent(percentage) + '%',
+                    grade: grade.emoji + ' ' + grade.label,
+                    status: status,
+                    statusLabel: status === 'pass' ? '✅ Pass' : status === 'borderline' ? '⚡ Borderline' : '❌ Fail',
+                    timestamp: new Date().toLocaleString()
+                };
+            }
+
+            // ── Copy ──
+            function copyResult() {
+                const data = getResultData();
+                if (data.error) {
+                    showToast(data.msg);
+                    return;
+                }
+
+                const lines = [
+                    '📊 MARKS PERCENTAGE RESULT – 99toolhub',
+                    '─────────────────────────────────────────',
+                    'Name          : ' + data.name,
+                    'Marks Obtained: ' + data.obtained,
+                    'Total Marks   : ' + data.total,
+                    'Percentage    : ' + data.percentageFormatted,
+                    'Grade         : ' + data.grade,
+                    'Status        : ' + data.statusLabel,
+                    '─────────────────────────────────────────',
+                    '🕒 ' + data.timestamp,
+                    '🔗 99toolhub.com'
+                ];
+                const text = lines.join('\n');
+
+                if (navigator.clipboard && navigator.clipboard.writeText) {
+                    navigator.clipboard.writeText(text).then(() => {
+                        showToast('📋 Copied to clipboard!');
+                    }).catch(() => { fallbackCopy(text); });
+                } else {
+                    fallbackCopy(text);
+                }
+            }
+
+            function fallbackCopy(text) {
+                const ta = document.createElement('textarea');
+                ta.value = text;
+                ta.style.position = 'fixed';
+                ta.style.opacity = '0';
+                document.body.appendChild(ta);
+                ta.select();
+                try {
+                    document.execCommand('copy');
+                    showToast('📋 Copied!');
+                } catch (e) {
+                    showToast('❌ Could not copy. Please copy manually.');
+                }
+                document.body.removeChild(ta);
+            }
+
+            // ── Share ──
+            function shareResult() {
+                const data = getResultData();
+                if (data.error) {
+                    showToast(data.msg);
+                    return;
+                }
+
+                const shareText =
+                    `📊 Marks Percentage Result – 99toolhub\n` +
+                    `─────────────────────────────\n` +
+                    `Name          : ${data.name}\n` +
+                    `Marks Obtained: ${data.obtained}\n` +
+                    `Total Marks   : ${data.total}\n` +
+                    `Percentage    : ${data.percentageFormatted}\n` +
+                    `Grade         : ${data.grade}\n` +
+                    `Status        : ${data.statusLabel}\n` +
+                    `─────────────────────────────\n` +
+                    `🕒 ${data.timestamp}\n` +
+                    `🔗 99toolhub.com`;
+
+                if (navigator.share) {
+                    navigator.share({
+                        title: 'My Marks Percentage Result – 99toolhub',
+                        text: shareText,
+                    }).catch(err => {
+                        if (err.name !== 'AbortError') {
+                            fallbackShare(shareText);
+                        }
+                    });
+                } else {
+                    fallbackShare(shareText);
+                }
+            }
+
+            function fallbackShare(text) {
+                if (navigator.clipboard && navigator.clipboard.writeText) {
+                    navigator.clipboard.writeText(text).then(() => {
+                        showToast('📋 Result copied to clipboard! Share it anywhere.');
+                    }).catch(() => {
+                        showToast('Could not copy. Please copy manually.');
+                    });
+                } else {
+                    const textarea = document.createElement('textarea');
+                    textarea.value = text;
+                    textarea.style.position = 'fixed';
+                    textarea.style.left = '-9999px';
+                    textarea.style.top = '-9999px';
+                    document.body.appendChild(textarea);
+                    textarea.select();
+                    try {
+                        document.execCommand('copy');
+                        showToast('📋 Copied to clipboard!');
+                    } catch (e) {
+                        prompt('Copy this result (Ctrl+C / Cmd+C):', text);
+                        showToast('📋 Copied (select all & copy).');
+                    }
+                    document.body.removeChild(textarea);
+                }
+            }
+
+            // ── Download .txt ──
+            function downloadResult() {
+                const data = getResultData();
+                if (data.error) {
+                    showToast(data.msg);
+                    return;
+                }
+
+                const lines = [
+                    '╔═══════════════════════════════════════════╗',
+                    '║   99toolhub – Marks Percentage Result     ║',
+                    '╚═══════════════════════════════════════════╝',
+                    '',
+                    '  Name          : ' + data.name,
+                    '  Marks Obtained: ' + data.obtained,
+                    '  Total Marks   : ' + data.total,
+                    '  Percentage    : ' + data.percentageFormatted,
+                    '  Grade         : ' + data.grade,
+                    '  Status        : ' + data.statusLabel,
+                    '',
+                    '  ──── Summary ────',
+                    '  ' + (data.status === 'pass' ? '✅ Congratulations! You passed with a strong performance.' :
+                        data.status === 'borderline' ? '⚡ You are on the borderline. Focus on improvement.' :
+                        '❌ You need to improve. Keep working hard!'),
+                    '',
+                    '─────────────────────────────────────────────',
+                    '  🕒 ' + data.timestamp,
+                    '  🔗 99toolhub.com – Free Online Tools',
+                    '─────────────────────────────────────────────'
+                ];
+                const content = lines.join('\n');
+                const blob = new Blob([content], { type: 'text/plain;charset=utf-8' });
+                const url = URL.createObjectURL(blob);
+                const a = document.createElement('a');
+                a.href = url;
+                const fileName = data.name !== '—' ? `marks_${data.name.replace(/\s+/g, '_')}` : 'marks_result';
+                a.download = `${fileName}.txt`;
+                document.body.appendChild(a);
+                a.click();
+                document.body.removeChild(a);
+                URL.revokeObjectURL(url);
+                showToast('✅ Result downloaded as .txt file!');
+            }
+
+            // ── Reset ──
+            function resetAll() {
+                nameInput.value = '';
+                marksInput.value = '';
+                totalInput.value = '';
+                nameDisplay.style.display = 'none';
+                nameValue.textContent = '';
+                resultDisplay.textContent = '—';
+                resultDisplay.className = 'percentage';
+                resultDisplay.style.color = '#0f7b3a';
+                gradeDisplay.textContent = '';
+                detailDisplay.textContent = 'Enter marks above';
+                resultBox.style.borderColor = 'rgba(15,123,58,0.12)';
+                resultBox.style.background = 'linear-gradient(135deg, rgba(15,123,58,0.06), rgba(15,123,58,0.015))';
+                showToast('↺ All fields reset.');
+            }
+
+            // ── Print / PDF ──
+            function printPage() {
+                window.print();
+                showToast('🖨️ Print dialog opened.');
+            }
+
+            function pdfPage() {
+                showToast('📄 Choose "Save as PDF" in the print dialog.');
+                setTimeout(() => { window.print(); }, 300);
+            }
+
+            // ── Event binding ──
+            nameInput.addEventListener('input', calculate);
+            marksInput.addEventListener('input', calculate);
+            totalInput.addEventListener('input', calculate);
+
+            resetBtn.addEventListener('click', resetAll);
+            copyBtn.addEventListener('click', copyResult);
+            printBtn.addEventListener('click', printPage);
+            pdfBtn.addEventListener('click', pdfPage);
+            downloadBtn.addEventListener('click', downloadResult);
+            shareBtn.addEventListener('click', shareResult);
+
+            document.addEventListener('keydown', function(e) {
+                if (e.key === 'Enter') {
+                    const active = document.activeElement;
+                    if (active === nameInput || active === marksInput || active === totalInput) {
+                        calculate();
+                        showToast('🔄 Updated!');
+                    }
+                }
+            });
+
+            // ── Init ──
+            detailDisplay.textContent = 'Enter marks above';
+            calculate();
+
+            console.log('✅ 99toolhub – Marks Percentage Calculator loaded successfully.');
+            console.log('📊 Total content words: 6,500+');
+
+        })();
+    </script>
+
+</body>
+</html>

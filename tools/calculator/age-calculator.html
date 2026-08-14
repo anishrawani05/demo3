@@ -1,0 +1,1893 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <link rel="icon" type="image/png" href="../../images/favicon.png">
+    <meta charset="UTF-8">
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Age Calculator - 99toolhub</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,400;14..32,500;14..32,600;14..32,700;14..32,800;14..32,900&display=swap" rel="stylesheet">
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: #F0F7F7;
+            color: #1a2a3a;
+            line-height: 1.7;
+            padding: 0;
+        }
+
+        .page-wrapper {
+            max-width: 880px;
+            width: 100%;
+            margin: 0 auto;
+            padding: 30px 20px 40px;
+        }
+
+        /* ─── BRAND BAR ─── */
+        .brand-bar {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 12px;
+            margin-bottom: 28px;
+            padding: 0 4px;
+        }
+
+        .brand-bar .logo {
+            font-weight: 800;
+            font-size: 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            color: #0b2a2a;
+        }
+
+        .brand-bar .logo i {
+            color: #009688;
+            font-size: 1.7rem;
+        }
+
+        .brand-bar .logo span {
+            background: linear-gradient(135deg, #009688, #26a69a);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .brand-bar .tagline {
+            font-size: 14px;
+            color: #64748b;
+            font-weight: 500;
+            background: #e8f0f0;
+            padding: 6px 18px;
+            border-radius: 30px;
+            border: 1px solid #c8dede;
+        }
+
+        /* ─── TOOL HEADER ─── */
+        .tool-header {
+            text-align: center;
+            padding: 20px 0 10px;
+        }
+
+        .tool-header h1 {
+            font-size: 2.2rem;
+            font-weight: 900;
+            color: #0b2a2a;
+            letter-spacing: -0.03em;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 12px;
+        }
+
+        .tool-header h1 i {
+            color: #009688;
+        }
+
+        .tool-header p {
+            color: #5a7a7a;
+            font-size: 1.05rem;
+            margin-top: 4px;
+        }
+
+        .tool-header .badge {
+            display: inline-block;
+            background: #dcfce7;
+            color: #00796B;
+            font-size: 12px;
+            font-weight: 600;
+            padding: 3px 16px;
+            border-radius: 30px;
+            margin-top: 6px;
+        }
+
+        .tool-header .badge i {
+            font-size: 10px;
+            color: #009688;
+            margin-right: 4px;
+        }
+
+        /* ─── MAIN CARD ─── */
+        .main-card {
+            background: #ffffff;
+            border-radius: 24px;
+            padding: 32px 34px 36px;
+            border: 1px solid #d8eaea;
+            box-shadow: 0 6px 24px rgba(0, 100, 90, 0.06);
+            margin: 16px 0 10px;
+        }
+
+        .input-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            margin-bottom: 20px;
+        }
+
+        .input-group label {
+            display: block;
+            font-weight: 600;
+            font-size: 0.9rem;
+            color: #3a5a5a;
+            margin-bottom: 6px;
+        }
+
+        .input-group label i {
+            color: #009688;
+            margin-right: 6px;
+        }
+
+        .input-group input {
+            width: 100%;
+            padding: 14px 18px;
+            border: 1.5px solid #d8eaea;
+            border-radius: 12px;
+            font-size: 1rem;
+            font-family: 'Inter', sans-serif;
+            background: #faffff;
+            transition: 0.2s;
+            color: #0b2a2a;
+            outline: none;
+        }
+
+        .input-group input:focus {
+            border-color: #009688;
+            box-shadow: 0 0 0 4px rgba(0, 150, 136, 0.10);
+            background: #ffffff;
+        }
+
+        .input-group input::placeholder {
+            color: #9ab8b8;
+        }
+
+        .btn-calc {
+            width: 100%;
+            padding: 14px;
+            background: #009688;
+            color: #fff;
+            border: none;
+            border-radius: 60px;
+            font-size: 1rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: 0.25s;
+            font-family: 'Inter', sans-serif;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+        }
+
+        .btn-calc:hover {
+            background: #00796B;
+            transform: translateY(-2px);
+            box-shadow: 0 8px 24px rgba(0, 150, 136, 0.30);
+        }
+
+        .btn-calc:active {
+            transform: scale(0.96);
+        }
+
+        /* ─── RESULT SECTION ─── */
+        .result-section {
+            margin-top: 24px;
+            padding: 20px 24px 24px;
+            background: #eaf5f5;
+            border-radius: 16px;
+            border: 1px solid #c8dede;
+            display: none;
+        }
+
+        .result-section .result-title {
+            font-weight: 700;
+            font-size: 1.1rem;
+            color: #00796B;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 14px;
+        }
+
+        .result-section .result-title i {
+            font-size: 1.2rem;
+        }
+
+        .result-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr;
+            gap: 12px;
+            margin-bottom: 16px;
+        }
+
+        .result-item {
+            background: #ffffff;
+            border-radius: 12px;
+            padding: 12px 16px;
+            border: 1px solid #d8eaea;
+            text-align: center;
+        }
+
+        .result-item .label {
+            font-size: 0.75rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.3px;
+            color: #5a7a7a;
+        }
+
+        .result-item .value {
+            font-size: 1.5rem;
+            font-weight: 800;
+            color: #0b2a2a;
+            margin-top: 2px;
+        }
+
+        .result-item .value .unit {
+            font-size: 0.8rem;
+            font-weight: 400;
+            color: #5a7a7a;
+        }
+
+        .result-item.highlight {
+            background: #009688;
+            border-color: #009688;
+        }
+
+        .result-item.highlight .label {
+            color: rgba(255, 255, 255, 0.7);
+        }
+
+        .result-item.highlight .value {
+            color: #ffffff;
+        }
+
+        .result-item.highlight .value .unit {
+            color: rgba(255, 255, 255, 0.6);
+        }
+
+        .result-divider {
+            border: none;
+            border-top: 2px dashed #c8dede;
+            margin: 16px 0;
+        }
+
+        .result-detail-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+            margin-bottom: 12px;
+        }
+
+        .result-detail {
+            display: flex;
+            justify-content: space-between;
+            padding: 8px 14px;
+            background: #ffffff;
+            border-radius: 10px;
+            border: 1px solid #d8eaea;
+            font-size: 0.95rem;
+        }
+
+        .result-detail .dlabel {
+            color: #5a7a7a;
+            font-weight: 500;
+        }
+
+        .result-detail .dvalue {
+            font-weight: 700;
+            color: #0b2a2a;
+        }
+
+        .result-detail .dvalue .u {
+            font-weight: 400;
+            color: #5a7a7a;
+            font-size: 0.8rem;
+        }
+
+        .result-day-names {
+            display: flex;
+            justify-content: space-between;
+            gap: 12px;
+            margin-bottom: 12px;
+            flex-wrap: wrap;
+        }
+
+        .result-day-names .day-box {
+            flex: 1;
+            background: #ffffff;
+            border-radius: 10px;
+            padding: 10px 16px;
+            border: 1px solid #d8eaea;
+            text-align: center;
+            min-width: 120px;
+        }
+
+        .result-day-names .day-box .dlabel {
+            font-size: 0.75rem;
+            font-weight: 600;
+            color: #5a7a7a;
+            text-transform: uppercase;
+        }
+
+        .result-day-names .day-box .dvalue {
+            font-weight: 700;
+            font-size: 1.1rem;
+            color: #0b2a2a;
+            margin-top: 2px;
+        }
+
+        /* ─── CALENDARS ─── */
+        .calendar-box {
+            display: flex;
+            gap: 24px;
+            justify-content: center;
+            flex-wrap: wrap;
+            margin-top: 16px;
+            padding-top: 16px;
+            border-top: 2px solid #c8dede;
+        }
+
+        .calendar {
+            border: 1px solid #c8dede;
+            background: #ffffff;
+            border-radius: 12px;
+            overflow: hidden;
+            width: 240px;
+            flex-shrink: 0;
+        }
+
+        .calendar .cal-header {
+            background: #009688;
+            color: #fff;
+            text-align: center;
+            padding: 10px;
+            font-weight: 700;
+            font-size: 0.95rem;
+        }
+
+        .calendar .cal-header .cal-sub {
+            font-size: 0.7rem;
+            font-weight: 400;
+            opacity: 0.8;
+        }
+
+        .calendar .days,
+        .calendar .dates {
+            display: grid;
+            grid-template-columns: repeat(7, 1fr);
+        }
+
+        .calendar .days div {
+            background: #eaf5f5;
+            color: #3a5a5a;
+            padding: 6px;
+            font-weight: 600;
+            font-size: 0.7rem;
+            text-align: center;
+        }
+
+        .calendar .dates div {
+            padding: 6px;
+            text-align: center;
+            border: 1px solid #f0f7f7;
+            font-size: 0.85rem;
+            min-height: 34px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .calendar .dates .empty {
+            background: #faffff;
+        }
+
+        .calendar .dates .mark {
+            background: #fef3c7 !important;
+            color: #7a5a0a !important;
+            font-weight: 700;
+            border-radius: 50%;
+            border-color: #fde68a !important;
+        }
+
+        .calendar .dates .mark-birth {
+            background: #dcfce7 !important;
+            color: #00796B !important;
+            font-weight: 700;
+            border-radius: 50%;
+            border-color: #86d9b6 !important;
+        }
+
+        .calendar .dates .mark-today {
+            background: #fef3c7 !important;
+            color: #7a5a0a !important;
+            font-weight: 700;
+            border-radius: 50%;
+            border-color: #fde68a !important;
+        }
+
+        /* ─── ACTION BAR ─── */
+        .action-bar {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin: 20px 0 6px 0;
+            padding: 18px 0 6px 0;
+            border-top: 2px solid #d8eaea;
+            justify-content: center;
+        }
+
+        .action-bar .btn-action {
+            padding: 10px 20px;
+            border-radius: 60px;
+            font-weight: 600;
+            font-size: 0.85rem;
+            border: none;
+            cursor: pointer;
+            transition: 0.25s;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            font-family: 'Inter', sans-serif;
+            background: #eaf5f5;
+            color: #0b2a2a;
+            border: 1px solid #c8dede;
+        }
+
+        .action-bar .btn-action:hover {
+            background: #d8eaea;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.06);
+        }
+
+        .action-bar .btn-action i {
+            font-size: 1rem;
+        }
+
+        .action-bar .btn-action.reset-btn {
+            background: #fef2f2;
+            border-color: #fccccc;
+            color: #991b1b;
+        }
+
+        .action-bar .btn-action.reset-btn:hover {
+            background: #fde8e8;
+        }
+
+        .action-bar .btn-action.copy-btn {
+            background: #e8f0fe;
+            border-color: #bdd3f0;
+            color: #1a4a8a;
+        }
+
+        .action-bar .btn-action.copy-btn:hover {
+            background: #d4e4fc;
+        }
+
+        .action-bar .btn-action.pdf-btn {
+            background: #fef3e8;
+            border-color: #fad4b8;
+            color: #8a3a1a;
+        }
+
+        .action-bar .btn-action.pdf-btn:hover {
+            background: #fce8d4;
+        }
+
+        .action-bar .btn-action.share-btn {
+            background: #e8faf0;
+            border-color: #b8e8cc;
+            color: #1a6a3a;
+        }
+
+        .action-bar .btn-action.share-btn:hover {
+            background: #d4f5e0;
+        }
+
+        /* ─── TOAST ─── */
+        .toast {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            background: #0b2a2a;
+            color: #ffffff;
+            padding: 14px 28px;
+            border-radius: 60px;
+            font-weight: 500;
+            box-shadow: 0 12px 30px rgba(0, 0, 0, 0.2);
+            backdrop-filter: blur(8px);
+            opacity: 0;
+            transform: translateY(20px);
+            transition: 0.3s ease;
+            pointer-events: none;
+            z-index: 999;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 0.95rem;
+            font-family: 'Inter', sans-serif;
+        }
+
+        .toast.show {
+            opacity: 1;
+            transform: translateY(0);
+            pointer-events: auto;
+        }
+
+        /* ─── CONTENT SECTION ─── */
+        .content-section {
+            margin-top: 48px;
+            background: rgba(255, 255, 255, 0.88);
+            backdrop-filter: blur(12px);
+            border-radius: 28px;
+            padding: 36px 40px 40px 40px;
+            border: 1px solid rgba(200, 220, 220, 0.5);
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.04);
+        }
+
+        .content-section h2 {
+            font-size: 26px;
+            font-weight: 800;
+            color: #0b2a2a;
+            margin: 42px 0 16px 0;
+            letter-spacing: -0.3px;
+            border-left: 5px solid #009688;
+            padding-left: 18px;
+        }
+
+        .content-section h2:first-of-type {
+            margin-top: 0;
+        }
+
+        .content-section h3 {
+            font-size: 20px;
+            font-weight: 700;
+            color: #1a3a3a;
+            margin: 28px 0 12px 0;
+        }
+
+        .content-section h4 {
+            font-size: 17px;
+            font-weight: 600;
+            color: #2a4a4a;
+            margin: 20px 0 8px 0;
+        }
+
+        .content-section p {
+            font-size: 16px;
+            line-height: 1.9;
+            color: #2a4a4a;
+            margin-bottom: 16px;
+        }
+
+        .content-section ul,
+        .content-section ol {
+            margin: 12px 0 20px 28px;
+            line-height: 1.9;
+            color: #2a4a4a;
+        }
+
+        .content-section li {
+            margin-bottom: 8px;
+            font-size: 16px;
+        }
+
+        .content-section .card-tip {
+            background: #eaf5f5;
+            border-radius: 14px;
+            padding: 20px 24px;
+            margin: 20px 0;
+            border-left: 4px solid #009688;
+        }
+
+        .content-section .card-tip i {
+            color: #009688;
+            margin-right: 8px;
+        }
+
+        .content-section .faq-item {
+            border-bottom: 1px solid #d8eaea;
+            padding: 18px 0;
+        }
+
+        .content-section .faq-item:last-child {
+            border-bottom: none;
+        }
+
+        .content-section .faq-item .q {
+            font-weight: 700;
+            font-size: 17px;
+            color: #0b2a2a;
+            display: flex;
+            gap: 12px;
+            align-items: flex-start;
+        }
+
+        .content-section .faq-item .q i {
+            color: #009688;
+            font-size: 18px;
+            margin-top: 2px;
+        }
+
+        .content-section .faq-item .a {
+            margin-top: 6px;
+            padding-left: 34px;
+            color: #3a5a5a;
+            line-height: 1.8;
+        }
+
+        .formula-box {
+            background: #0b2a2a;
+            color: #d8eaea;
+            padding: 18px 24px;
+            border-radius: 12px;
+            font-family: 'Courier New', monospace;
+            font-size: 16px;
+            margin: 16px 0 24px 0;
+            overflow-x: auto;
+            white-space: pre-wrap;
+            word-break: break-word;
+            line-height: 1.8;
+        }
+
+        .formula-box .hl {
+            color: #4dd0e1;
+        }
+
+        .formula-box .hl-green {
+            color: #81c784;
+        }
+
+        .formula-box .hl-blue {
+            color: #64b5f6;
+        }
+
+        .example-box {
+            background: #fefce8;
+            border: 1px solid #fde68a;
+            border-radius: 14px;
+            padding: 20px 24px;
+            margin: 16px 0 24px 0;
+        }
+
+        .example-box strong {
+            color: #7a5a0a;
+        }
+
+        .divider {
+            width: 100%;
+            height: 1px;
+            background: #d8eaea;
+            margin: 32px 0;
+        }
+
+        .glossary-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px;
+        }
+
+        .glossary-item {
+            background: #f5fbfb;
+            border-radius: 12px;
+            padding: 12px 16px;
+            border: 1px solid #d8eaea;
+        }
+
+        .glossary-item .term {
+            font-weight: 700;
+            color: #0b2a2a;
+            font-size: 0.95rem;
+        }
+
+        .glossary-item .def {
+            font-size: 0.85rem;
+            color: #5a7a7a;
+            margin-top: 2px;
+        }
+
+        .disclaimer-box {
+            background: #fef2f2;
+            border-radius: 16px;
+            padding: 24px 28px;
+            border-left: 5px solid #dc2626;
+            margin: 32px 0 16px 0;
+        }
+
+        .disclaimer-box .disclaimer-title {
+            font-weight: 700;
+            color: #991b1b;
+            font-size: 18px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .disclaimer-box .disclaimer-title i {
+            font-size: 22px;
+        }
+
+        .disclaimer-box p {
+            color: #7f1d1d;
+            font-size: 15px;
+            line-height: 1.8;
+            margin-top: 8px;
+        }
+
+        .footer-note {
+            text-align: center;
+            padding: 24px 0 10px;
+            color: #8aaaaa;
+            font-size: 14px;
+            border-top: 1px solid #d8eaea;
+            margin-top: 30px;
+        }
+
+        .footer-note strong {
+            color: #009688;
+            font-weight: 700;
+        }
+
+        .footer-note .heart {
+            color: #ef4444;
+        }
+
+        @media (max-width: 640px) {
+            .input-row {
+                grid-template-columns: 1fr;
+                gap: 14px;
+            }
+
+            .main-card {
+                padding: 22px 18px 26px;
+            }
+
+            .tool-header h1 {
+                font-size: 1.6rem;
+            }
+
+            .brand-bar .logo {
+                font-size: 1.2rem;
+            }
+
+            .brand-bar .tagline {
+                font-size: 12px;
+                padding: 4px 12px;
+            }
+
+            .result-grid {
+                grid-template-columns: 1fr 1fr;
+                gap: 10px;
+            }
+
+            .result-detail-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .result-day-names {
+                flex-direction: column;
+            }
+
+            .result-day-names .day-box {
+                min-width: unset;
+            }
+
+            .action-bar .btn-action {
+                flex: 1 1 100%;
+                justify-content: center;
+                padding: 12px 16px;
+            }
+
+            .calendar {
+                width: 100%;
+            }
+
+            .content-section {
+                padding: 24px 18px;
+                border-radius: 20px;
+            }
+
+            .content-section h2 {
+                font-size: 21px;
+                padding-left: 12px;
+            }
+
+            .content-section h3 {
+                font-size: 18px;
+            }
+
+            .formula-box {
+                font-size: 14px;
+                padding: 14px 16px;
+            }
+
+            .glossary-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .disclaimer-box {
+                padding: 16px 18px;
+            }
+
+            .toast {
+                right: 16px;
+                left: 16px;
+                bottom: 20px;
+                font-size: 0.85rem;
+                padding: 12px 18px;
+                text-align: center;
+                justify-content: center;
+            }
+        }
+
+        @media print {
+            .brand-bar .tagline,
+            .btn-calc,
+            .action-bar,
+            .footer-note,
+            .toast {
+                display: none !important;
+            }
+
+            .main-card {
+                box-shadow: none !important;
+                border: 1px solid #d8eaea !important;
+                background: #fff !important;
+            }
+
+            .content-section {
+                background: #fff !important;
+                backdrop-filter: none !important;
+                box-shadow: none !important;
+                border: 1px solid #d8eaea !important;
+            }
+
+            .result-section {
+                background: #f5fbfb !important;
+                border: 1px solid #d8eaea !important;
+            }
+
+            body {
+                background: #fff !important;
+                padding: 10px !important;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="page-wrapper">
+
+        <!-- ===== BRAND BAR ===== -->
+        <div class="brand-bar">
+            <div class="logo">
+<i class="fas fa-birthday-cake"></i>
+                <span>99toolhub</span>
+            </div>
+            <span class="tagline"><i class="fas fa-bolt" style="color:#009688;"></i> Free Online Tools</span>
+        </div>
+
+        <!-- ===== TOOL HEADER ===== -->
+        <div class="tool-header">
+            <h1><i class="fas fa-calendar-alt"></i> Age Calculator</h1>
+            <p>Calculate your exact age in years, months, days, hours, minutes & seconds</p>
+            <span class="badge"><i class="fas fa-circle"></i> Live Calculation</span>
+        </div>
+
+        <!-- ===== MAIN CARD ===== -->
+        <div class="main-card">
+
+            <!-- Input Row -->
+            <div class="input-row">
+                <div class="input-group">
+                    <label><i class="fas fa-birthday-cake"></i> Date of Birth</label>
+                    <input type="date" id="dob" value="2000-01-01">
+                </div>
+                <div class="input-group">
+                    <label><i class="fas fa-calendar-day"></i> Age at the Date of</label>
+                    <input type="date" id="ageAtDate" value="">
+                </div>
+            </div>
+
+            <button class="btn-calc" onclick="calculateAge()"><i class="fas fa-calculator"></i> Calculate Age</button>
+
+            <!-- ===== RESULT SECTION ===== -->
+            <div class="result-section" id="resultSection">
+
+                <div class="result-title"><i class="fas fa-chart-bar"></i> Your Age Details</div>
+
+                <!-- Day Names -->
+                <div class="result-day-names">
+                    <div class="day-box">
+                        <div class="dlabel">Date of Birth Day</div>
+                        <div class="dvalue" id="birthDay">—</div>
+                    </div>
+                    <div class="day-box">
+                        <div class="dlabel">Today / Target Day</div>
+                        <div class="dvalue" id="currentDay">—</div>
+                    </div>
+                </div>
+
+                <!-- Main Age Grid -->
+                <div class="result-grid">
+                    <div class="result-item highlight">
+                        <div class="label">Years</div>
+                        <div class="value" id="years">0 <span class="unit">yrs</span></div>
+                    </div>
+                    <div class="result-item">
+                        <div class="label">Months</div>
+                        <div class="value" id="months">0 <span class="unit">mos</span></div>
+                    </div>
+                    <div class="result-item">
+                        <div class="label">Days</div>
+                        <div class="value" id="daysResult">0 <span class="unit">days</span></div>
+                    </div>
+                </div>
+
+                <hr class="result-divider">
+
+                <!-- Detailed Breakdown -->
+                <div class="result-detail-grid">
+                    <div class="result-detail">
+                        <span class="dlabel">Total Days Lived</span>
+                        <span class="dvalue" id="totalDays">0 <span class="u">days</span></span>
+                    </div>
+                    <div class="result-detail">
+                        <span class="dlabel">Total Hours</span>
+                        <span class="dvalue" id="totalHours">0 <span class="u">hrs</span></span>
+                    </div>
+                    <div class="result-detail">
+                        <span class="dlabel">Total Minutes</span>
+                        <span class="dvalue" id="totalMinutes">0 <span class="u">mins</span></span>
+                    </div>
+                    <div class="result-detail">
+                        <span class="dlabel">Total Seconds</span>
+                        <span class="dvalue" id="totalSeconds">0 <span class="u">secs</span></span>
+                    </div>
+                </div>
+
+                <!-- Calendars -->
+                <div id="calendarBox" class="calendar-box"></div>
+
+            </div>
+
+        </div>
+
+        <!-- ===== ACTION BAR ===== -->
+        <div class="action-bar">
+            <button class="btn-action reset-btn" onclick="resetAll()"><i class="fas fa-undo-alt"></i> Reset</button>
+            <button class="btn-action copy-btn" onclick="copyResult()"><i class="fas fa-copy"></i> Copy</button>
+            <button class="btn-action pdf-btn" onclick="downloadPDF()"><i class="fas fa-file-pdf"></i> PDF</button>
+            <button class="btn-action" onclick="printPage()"><i class="fas fa-print"></i> Print</button>
+            <button class="btn-action share-btn" onclick="shareResult()"><i class="fas fa-share-alt"></i> Share</button>
+        </div>
+
+        <!-- ===== CONTENT SECTION (28 Sections) ===== -->
+        <div class="content-section">
+
+            <!-- 1. About Age Calculator -->
+            <h2>📘 About Age Calculator</h2>
+            <p>
+                The <strong>99toolhub Age Calculator</strong> is a precise, user-friendly online tool that calculates your exact age down to the second. Simply enter your date of birth and a target date (or use today's date), and the tool instantly computes your age in years, months, days, hours, minutes, and seconds. It also displays two calendars with your birth date and target date marked, giving you a visual representation of the time span.
+            </p>
+            <p>
+                Whether you're planning a birthday celebration, checking eligibility for school admissions, government exams, or job applications, or simply curious about your exact age, this tool provides accurate results in seconds. All calculations are performed locally in your browser — no data is sent to any server, ensuring your privacy is always protected.
+            </p>
+
+            <div class="divider"></div>
+
+            <!-- 2. What is an Age Calculator? -->
+            <h2>📊 What is an Age Calculator?</h2>
+            <p>
+                An <strong>age calculator</strong> is a digital tool that computes a person's age based on their date of birth and a specified reference date. It calculates the difference between two dates and expresses that difference in various units — years, months, days, hours, minutes, and seconds.
+            </p>
+            <p>
+                Unlike simple subtraction of years, an age calculator accounts for the complexities of calendar dates, including varying month lengths and leap years, to provide an accurate result. Our tool goes a step further by showing you the day of the week for both your birth date and the target date, along with visual calendars to help you understand the time span at a glance.
+            </p>
+
+            <div class="divider"></div>
+
+            <!-- 3. Why Use an Age Calculator? -->
+            <h2>🎯 Why Use an Age Calculator?</h2>
+            <p>
+                Age calculators are essential for a variety of personal, professional, and legal purposes. Here's why you should use one:
+            </p>
+            <ul>
+                <li><strong>⚡ Instant Results:</strong> No manual calculations — get your exact age in milliseconds.</li>
+                <li><strong>🎯 100% Accuracy:</strong> Eliminates errors from manual date calculations, especially with leap years and varying month lengths.</li>
+                <li><strong>🔄 Dual Date Support:</strong> Calculate age on any past, present, or future date — not just today.</li>
+                <li><strong>📊 Multiple Units:</strong> See your age in years, months, days, hours, minutes, and seconds.</li>
+                <li><strong>📅 Visual Calendars:</strong> See both dates marked on calendars for a visual understanding.</li>
+                <li><strong>🆓 Free & Private:</strong> No sign-ups, no data storage — all calculations are done locally.</li>
+                <li><strong>📱 Accessible:</strong> Works on desktop, tablet, and mobile devices.</li>
+            </ul>
+
+            <div class="divider"></div>
+
+            <!-- 4. How to Use the Age Calculator -->
+            <h2>🛠️ How to Use the Age Calculator</h2>
+            <p>
+                Using the 99toolhub Age Calculator is simple and intuitive. Follow these steps:
+            </p>
+            <ol>
+                <li><strong>Enter Your Date of Birth:</strong> Select your birth date using the date picker.</li>
+                <li><strong>Enter the Target Date:</strong> Select the date on which you want to calculate your age. By default, it's set to today's date.</li>
+                <li><strong>Click Calculate:</strong> Press the "Calculate Age" button to see your results instantly.</li>
+                <li><strong>View Your Results:</strong> The tool displays your age in years, months, days, hours, minutes, and seconds, along with the day of the week for both dates and visual calendars.</li>
+            </ol>
+            <p>
+                You can also use the <strong>Reset</strong> button to clear all inputs and results, or the <strong>Copy</strong>, <strong>PDF</strong>, <strong>Print</strong>, and <strong>Share</strong> buttons to save or share your results.
+            </p>
+
+            <div class="divider"></div>
+
+            <!-- 5. Age Calculation Formula -->
+            <h2>📐 Age Calculation Formula</h2>
+            <p>
+                The age calculation formula is based on the difference between two dates. Here's how it works:
+            </p>
+            <div class="formula-box">
+                <span class="hl-blue">Age Calculation</span>
+
+                <span class="hl">Step 1:</span> Subtract the birth year from the target year to get the initial age in years.
+
+                <span class="hl">Step 2:</span> Subtract the birth month from the target month. If the result is negative, borrow 1 year and add 12 months.
+
+                <span class="hl">Step 3:</span> Subtract the birth day from the target day. If the result is negative, borrow 1 month and add the number of days in the previous month.
+
+                <span class="hl-green">Result:</span> Age = Years, Months, Days (Y-M-D)
+
+                <span class="hl-blue">For total seconds:</span>
+                Total Seconds = (Target Date − Birth Date) in milliseconds ÷ 1000
+            </div>
+            <p>
+                This formula accounts for all calendar complexities, including leap years and varying month lengths, ensuring 100% accurate results.
+            </p>
+
+            <div class="divider"></div>
+
+            <!-- 6. How Age is Calculated -->
+            <h2>🧮 How Age is Calculated</h2>
+            <p>
+                Age calculation is more than just subtracting birth year from the current year. Here's a detailed breakdown:
+            </p>
+            <ol>
+                <li><strong>Years:</strong> Subtract the birth year from the target year.</li>
+                <li><strong>Months:</strong> Subtract the birth month from the target month. If the birth month is greater, borrow 1 year (12 months) from the years.</li>
+                <li><strong>Days:</strong> Subtract the birth day from the target day. If the birth day is greater, borrow 1 month (the number of days in the previous month) from the months.</li>
+            </ol>
+            <div class="example-box">
+                <p><strong>Example:</strong> Birth Date = 15 March 1990, Target Date = 20 July 2026</p>
+                <ul>
+                    <li>Years: 2026 − 1990 = 36</li>
+                    <li>Months: July (7) − March (3) = 4 months</li>
+                    <li>Days: 20 − 15 = 5 days</li>
+                    <li><strong>Age:</strong> 36 years, 4 months, 5 days</li>
+                </ul>
+            </div>
+
+            <div class="divider"></div>
+
+            <!-- 7. Years, Months, Weeks, Days, Hours, Minutes & Seconds Explained -->
+            <h2>⏱️ Time Units Explained</h2>
+            <p>
+                Our age calculator breaks down your age into multiple time units to give you a complete picture:
+            </p>
+            <ul>
+                <li><strong>Years:</strong> The number of full years between the two dates.</li>
+                <li><strong>Months:</strong> The remaining months after subtracting full years.</li>
+                <li><strong>Days:</strong> The remaining days after subtracting full months.</li>
+                <li><strong>Total Days:</strong> The total number of days lived, including all leap years.</li>
+                <li><strong>Total Hours:</strong> Total days × 24 hours.</li>
+                <li><strong>Total Minutes:</strong> Total hours × 60 minutes.</li>
+                <li><strong>Total Seconds:</strong> Total minutes × 60 seconds.</li>
+            </ul>
+            <p>
+                Seeing your age in seconds can be a fun way to appreciate just how much time has passed!
+            </p>
+
+            <div class="divider"></div>
+
+            <!-- 8. Date of Birth (DOB) Explained -->
+            <h2>📅 Date of Birth (DOB) Explained</h2>
+            <p>
+                Your <strong>Date of Birth (DOB)</strong> is the exact day, month, and year you were born. It is a fundamental piece of information used for:
+            </p>
+            <ul>
+                <li><strong>Legal Identification:</strong> Passports, driver's licenses, PAN cards, and Aadhaar.</li>
+                <li><strong>Eligibility Verification:</strong> School admissions, competitive exams, and job applications.</li>
+                <li><strong>Healthcare:</strong> Medical records, vaccination schedules, and age-related health screenings.</li>
+                <li><strong>Financial Planning:</strong> Retirement age, insurance premiums, and investment horizons.</li>
+            </ul>
+            <p>
+                In our calculator, your DOB serves as the starting point for calculating your age on any target date.
+            </p>
+
+            <div class="divider"></div>
+
+            <!-- 9. Current Date and Age Difference -->
+            <h2>📆 Current Date and Age Difference</h2>
+            <p>
+                The "Age at the Date of" field allows you to calculate your age on any specific date — not just today. This is useful for:
+            </p>
+            <ul>
+                <li><strong>Birthday Planning:</strong> Calculate exactly how old you'll be on your next birthday.</li>
+                <li><strong>Retirement Planning:</strong> Determine your age at retirement.</li>
+                <li><strong>Exam Eligibility:</strong> Check if you meet the age criteria for a specific exam on the exam date.</li>
+                <li><strong>Historical Curiosity:</strong> Find out how old you were on a significant past date.</li>
+            </ul>
+            <p>
+                By default, the target date is set to today's date, but you can change it to any date you like.
+            </p>
+
+            <div class="divider"></div>
+
+            <!-- 10. Leap Year and Age Calculation -->
+            <h2>🔄 Leap Year and Age Calculation</h2>
+            <p>
+                A <strong>leap year</strong> occurs every 4 years (with some exceptions) and has 366 days instead of 365. Leap years affect age calculation because:
+            </p>
+            <ul>
+                <li>People born on February 29th celebrate their birthday only once every 4 years.</li>
+                <li>Total days lived between two dates includes leap days, which must be counted correctly.</li>
+                <li>Our calculator automatically accounts for leap years, ensuring accurate results for all dates.</li>
+            </ul>
+            <p>
+                Leap years are an important consideration in age calculation, and our tool handles them seamlessly.
+            </p>
+
+            <div class="divider"></div>
+
+            <!-- 11. Time Zone and Date Considerations -->
+            <h2>🌍 Time Zone and Date Considerations</h2>
+            <p>
+                Age is typically calculated based on the local date and time of the person. However, time zones can affect the exact age if you are calculating down to the second:
+            </p>
+            <ul>
+                <li>Our calculator uses the local time zone of your device.</li>
+                <li>For most practical purposes, the day-level accuracy is sufficient.</li>
+                <li>For exact age down to the second, the time zone of the birth location and the current location should ideally be the same.</li>
+            </ul>
+            <p>
+                For general use — years, months, and days — time zone differences are negligible.
+            </p>
+
+            <div class="divider"></div>
+
+            <!-- 12. Exact Age vs Approximate Age -->
+            <h2>🎯 Exact Age vs Approximate Age</h2>
+            <p>
+                There is a distinction between <strong>exact age</strong> and <strong>approximate age</strong>:
+            </p>
+            <ul>
+                <li><strong>Exact Age:</strong> The precise difference between two dates, accounting for years, months, days, hours, minutes, and seconds.</li>
+                <li><strong>Approximate Age:</strong> Rounded to the nearest year or number of years (e.g., "I'm 30 years old" even though you might be 30 years and 6 months).</li>
+            </ul>
+            <p>
+                Our calculator provides both: an exact age breakdown in years, months, and days, as well as total hours, minutes, and seconds for those who want extreme precision.
+            </p>
+
+            <div class="divider"></div>
+
+            <!-- 13. Age Calculator for Birthday Planning -->
+            <h2>🎂 Age Calculator for Birthday Planning</h2>
+            <p>
+                Planning a birthday celebration? Our age calculator helps you:
+            </p>
+            <ul>
+                <li>Know exactly how old you (or someone else) will be on their next birthday.</li>
+                <li>Determine the exact date of a milestone birthday (e.g., 18th, 21st, 25th, 30th, 50th).</li>
+                <li>Find out the day of the week for a birthday — useful for party planning.</li>
+                <li>Calculate age differences between family members or friends.</li>
+            </ul>
+
+            <div class="divider"></div>
+
+            <!-- 14. Age Calculator for School Admissions -->
+            <h2>🏫 Age Calculator for School Admissions</h2>
+            <p>
+                School admissions often have strict age criteria. Our calculator helps parents:
+            </p>
+            <ul>
+                <li>Determine if a child meets the minimum or maximum age requirement for a specific grade.</li>
+                <li>Calculate the child's age on the admission date.</li>
+                <li>Plan the child's enrollment timeline based on their birth date.</li>
+                <li>Verify age for admission forms and documentation.</li>
+            </ul>
+
+            <div class="divider"></div>
+
+            <!-- 15. Age Calculator for Government Exams -->
+            <h2>📝 Age Calculator for Government Exams</h2>
+            <p>
+                Most government exams in India (UPSC, SSC, Banking, Railways, etc.) have strict age limits. Our calculator helps aspirants:
+            </p>
+            <ul>
+                <li>Check eligibility against the age criteria for the exam.</li>
+                <li>Calculate age on the exam date or the cutoff date specified in the notification.</li>
+                <li>Determine how many attempts are left based on age relaxations.</li>
+                <li>Plan their exam strategy with accurate age information.</li>
+            </ul>
+
+            <div class="divider"></div>
+
+            <!-- 16. Age Calculator for Job Eligibility -->
+            <h2>💼 Age Calculator for Job Eligibility</h2>
+            <p>
+                Many jobs have minimum age requirements, and some have maximum age limits. Our calculator helps:
+            </p>
+            <ul>
+                <li>Verify if you meet the age criteria for a job posting.</li>
+                <li>Calculate your age on the application deadline or joining date.</li>
+                <li>Determine your age for retirement planning and pension eligibility.</li>
+                <li>Check age requirements for internships, apprenticeships, and traineeships.</li>
+            </ul>
+
+            <div class="divider"></div>
+
+            <!-- 17. Age Calculator for Retirement Planning -->
+            <h2>🏦 Age Calculator for Retirement Planning</h2>
+            <p>
+                Retirement planning requires knowing exactly when you'll reach retirement age. Our calculator helps:
+            </p>
+            <ul>
+                <li>Determine your retirement date based on your date of birth and retirement age.</li>
+                <li>Calculate how many years, months, and days are left until retirement.</li>
+                <li>Plan your financial investments and savings timeline.</li>
+                <li>Understand pension and superannuation eligibility dates.</li>
+            </ul>
+
+            <div class="divider"></div>
+
+            <!-- 18. Age Calculator for Passport & Official Documents -->
+            <h2>🛂 Age Calculator for Passport & Official Documents</h2>
+            <p>
+                Official documents require accurate age information. Our calculator helps:
+            </p>
+            <ul>
+                <li>Verify your age for passport applications, visas, and immigration.</li>
+                <li>Calculate age for driving licenses, voter ID, and other government IDs.</li>
+                <li>Ensure consistency across multiple official documents.</li>
+                <li>Provide precise age details for legal and administrative purposes.</li>
+            </ul>
+
+            <div class="divider"></div>
+
+            <!-- 19. Common Age Calculation Mistakes -->
+            <h2>⚠️ Common Age Calculation Mistakes</h2>
+            <p>
+                Even simple age calculations can have pitfalls. Here are common mistakes to avoid:
+            </p>
+            <ul>
+                <li><strong>Forgetting Leap Years:</strong> Not accounting for February 29th can lead to errors in total days lived.</li>
+                <li><strong>Incorrect Month Lengths:</strong> Using 30 days for all months is inaccurate — months have 28, 29, 30, or 31 days.</li>
+                <li><strong>Off-by-One Errors:</strong> Forgetting that age at birth is 0 years, not 1 year.</li>
+                <li><strong>Time Zone Issues:</strong> Calculating age across time zones without considering the date change.</li>
+                <li><strong>Using the Wrong Date Format:</strong> DD/MM/YYYY vs MM/DD/YYYY confusion.</li>
+                <li><strong>Not Accounting for the Target Date:</strong> Age on a specific date is different from age today.</li>
+            </ul>
+
+            <div class="divider"></div>
+
+            <!-- 20. Benefits of Using an Age Calculator -->
+            <h2>✅ Benefits of Using an Age Calculator</h2>
+            <p>
+                Here's why the 99toolhub Age Calculator is the best choice for your age calculation needs:
+            </p>
+            <ul>
+                <li><strong>⚡ Instant Results:</strong> Get your exact age in seconds.</li>
+                <li><strong>🎯 100% Accuracy:</strong> Accounts for leap years and varying month lengths.</li>
+                <li><strong>📊 Multiple Units:</strong> Years, months, days, hours, minutes, and seconds.</li>
+                <li><strong>📅 Visual Calendars:</strong> See your birth date and target date marked on calendars.</li>
+                <li><strong>🔄 Dual Date Support:</strong> Calculate age on any date — past, present, or future.</li>
+                <li><strong>🆓 Free & Private:</strong> No sign-ups, no data storage.</li>
+                <li><strong>📱 Accessible:</strong> Works on all devices.</li>
+                <li><strong>📤 Export & Share:</strong> Copy, PDF, print, and share your results.</li>
+            </ul>
+
+            <div class="divider"></div>
+
+            <!-- 21. Real-Life Uses of an Age Calculator -->
+            <h2>🌍 Real-Life Uses of an Age Calculator</h2>
+            <p>
+                Age calculators are used in countless real-life scenarios:
+            </p>
+            <ul>
+                <li><strong>Personal:</strong> Celebrating birthdays, anniversaries, and milestones.</li>
+                <li><strong>Education:</strong> School admissions, college applications, and scholarship eligibility.</li>
+                <li><strong>Employment:</strong> Job eligibility, retirement planning, and pension calculations.</li>
+                <li><strong>Legal:</strong> Age of consent, voting age, drinking age, and legal capacity.</li>
+                <li><strong>Healthcare:</strong> Age-related health screenings, vaccine schedules, and life insurance.</li>
+                <li><strong>Finance:</strong> Retirement savings, investment horizons, and loan tenures.</li>
+                <li><strong>Travel:</strong> Passport validity, visa requirements, and age-based travel discounts.</li>
+            </ul>
+
+            <div class="divider"></div>
+
+            <!-- 22. Example Age Calculations -->
+            <h2>🧮 Example Age Calculations</h2>
+
+            <div class="example-box">
+                <p><strong>Example 1: Standard Age</strong></p>
+                <ul>
+                    <li><strong>Date of Birth:</strong> 15 March 1990</li>
+                    <li><strong>Target Date:</strong> 20 July 2026</li>
+                    <li><strong>Calculation:</strong></li>
+                    <li>Years: 2026 − 1990 = 36</li>
+                    <li>Months: July (7) − March (3) = 4</li>
+                    <li>Days: 20 − 15 = 5</li>
+                    <li><strong>Result:</strong> 36 years, 4 months, 5 days</li>
+                </ul>
+            </div>
+
+            <div class="example-box">
+                <p><strong>Example 2: Date with Borrowing</strong></p>
+                <ul>
+                    <li><strong>Date of Birth:</strong> 25 December 1995</li>
+                    <li><strong>Target Date:</strong> 10 January 2026</li>
+                    <li><strong>Calculation:</strong></li>
+                    <li>Years: 2026 − 1995 = 31</li>
+                    <li>Months: January (1) − December (12) → borrow 1 year → 13 − 12 = 1 month</li>
+                    <li>Days: 10 − 25 → borrow 1 month (31 days) → (10 + 31) − 25 = 16 days</li>
+                    <li><strong>Result:</strong> 30 years, 1 month, 16 days</li>
+                </ul>
+            </div>
+
+            <div class="example-box">
+                <p><strong>Example 3: Leap Year Birthday</strong></p>
+                <ul>
+                    <li><strong>Date of Birth:</strong> 29 February 2000</li>
+                    <li><strong>Target Date:</strong> 28 February 2026</li>
+                    <li><strong>Result:</strong> 25 years, 11 months, 28 days (since 2026 is not a leap year)</li>
+                </ul>
+            </div>
+
+            <div class="divider"></div>
+
+            <!-- 23. Frequently Asked Questions (FAQs) -->
+            <h2>❓ Frequently Asked Questions</h2>
+
+            <div class="faq-item">
+                <div class="q"><i class="fas fa-question-circle"></i> What is an age calculator?</div>
+                <div class="a">An age calculator is a tool that computes a person's exact age based on their date of birth and a target date, expressing the result in years, months, days, hours, minutes, and seconds.</div>
+            </div>
+
+            <div class="faq-item">
+                <div class="q"><i class="fas fa-question-circle"></i> How do I calculate my exact age?</div>
+                <div class="a">Enter your date of birth and the target date in the calculator, then click "Calculate." The tool will show your exact age in multiple units.</div>
+            </div>
+
+            <div class="faq-item">
+                <div class="q"><i class="fas fa-question-circle"></i> What is the difference between age in years and exact age?</div>
+                <div class="a">Age in years is often rounded to the nearest whole number. Exact age includes years, months, days, and can go down to seconds for complete precision.</div>
+            </div>
+
+            <div class="faq-item">
+                <div class="q"><i class="fas fa-question-circle"></i> Does this calculator account for leap years?</div>
+                <div class="a">Yes, the calculator automatically accounts for leap years, ensuring accurate total days lived and correct age calculation for all dates.</div>
+            </div>
+
+            <div class="faq-item">
+                <div class="q"><i class="fas fa-question-circle"></i> Can I calculate age on a future date?</div>
+                <div class="a">Yes, simply enter a future date in the "Age at the Date of" field to calculate how old you will be on that date.</div>
+            </div>
+
+            <div class="faq-item">
+                <div class="q"><i class="fas fa-question-circle"></i> What is the maximum age this calculator can compute?</div>
+                <div class="a">There is no practical limit — the calculator can handle any valid date, covering centuries.</div>
+            </div>
+
+            <div class="faq-item">
+                <div class="q"><i class="fas fa-question-circle"></i> Can I use this for someone else's age?</div>
+                <div class="a">Yes, simply enter their date of birth and the target date to calculate their age.</div>
+            </div>
+
+            <div class="faq-item">
+                <div class="q"><i class="fas fa-question-circle"></i> What is the "Age at the Date of" field?</div>
+                <div class="a">It's the date on which you want to calculate the age. By default, it's set to today, but you can change it to any date.</div>
+            </div>
+
+            <div class="faq-item">
+                <div class="q"><i class="fas fa-question-circle"></i> Is my data stored or shared?</div>
+                <div class="a">No. All calculations are performed locally in your browser. Your data is never sent to any server, stored, or shared.</div>
+            </div>
+
+            <div class="faq-item">
+                <div class="q"><i class="fas fa-question-circle"></i> Can this calculator be used offline?</div>
+                <div class="a">Yes, once the page is loaded, the calculator works entirely offline without an internet connection.</div>
+            </div>
+
+            <div class="faq-item">
+                <div class="q"><i class="fas fa-question-circle"></i> What if I enter a date of birth that is after the target date?</div>
+                <div class="a">The calculator will show a warning message indicating that the date of birth cannot be in the future relative to the target date.</div>
+            </div>
+
+            <div class="faq-item">
+                <div class="q"><i class="fas fa-question-circle"></i> Why does my age in total seconds seem so large?</div>
+                <div class="a">Because there are 31,536,000 seconds in a year (on average), so even a 30-year-old has lived nearly 1 billion seconds!</div>
+            </div>
+
+            <div class="divider"></div>
+
+            <!-- 24. Age Calculation Terms Glossary -->
+            <h2>📖 Age Calculation Terms Glossary</h2>
+            <div class="glossary-grid">
+                <div class="glossary-item"><div class="term">Date of Birth (DOB)</div><div class="def">The exact date a person was born, including day, month, and year.</div></div>
+                <div class="glossary-item"><div class="term">Target Date</div><div class="def">The date on which age is being calculated — can be past, present, or future.</div></div>
+                <div class="glossary-item"><div class="term">Leap Year</div><div class="def">A year with 366 days (February 29th), occurring every 4 years.</div></div>
+                <div class="glossary-item"><div class="term">Age in Years</div><div class="def">The number of full years between the DOB and the target date.</div></div>
+                <div class="glossary-item"><div class="term">Age in Months</div><div class="def">The remaining months after subtracting full years.</div></div>
+                <div class="glossary-item"><div class="term">Age in Days</div><div class="def">The remaining days after subtracting full months.</div></div>
+                <div class="glossary-item"><div class="term">Total Days Lived</div><div class="def">The total number of days between the DOB and the target date.</div></div>
+                <div class="glossary-item"><div class="term">Exact Age</div><div class="def">Precise age expressed in years, months, days, hours, minutes, and seconds.</div></div>
+                <div class="glossary-item"><div class="term">Approximate Age</div><div class="def">Age rounded to the nearest whole year or standard unit.</div></div>
+                <div class="glossary-item"><div class="term">Borrowing in Date Math</div><div class="def">When a subtraction yields a negative result, borrowing from the next higher unit.</div></div>
+            </div>
+
+            <div class="divider"></div>
+
+            <!-- 25. Tips for Accurate Age Calculation -->
+            <h2>💡 Tips for Accurate Age Calculation</h2>
+            <p>
+                Follow these tips to ensure your age calculations are always accurate:
+            </p>
+            <ul>
+                <li><strong>Use the correct date format:</strong> Ensure you're entering dates in the format recognized by the tool (YYYY-MM-DD).</li>
+                <li><strong>Account for time zones:</strong> If calculating down to the second, consider that time zones affect the exact moment of birth.</li>
+                <li><strong>Don't forget leap years:</strong> Always count February 29th when calculating total days lived.</li>
+                <li><strong>Borrow correctly:</strong> When subtracting days, borrow the correct number of days from the previous month.</li>
+                <li><strong>Use a reliable tool:</strong> Our calculator handles all these complexities automatically.</li>
+                <li><strong>Double-check your inputs:</strong> A small typo in the year can throw off the entire calculation.</li>
+                <li><strong>Consider the target date:</strong> Age today is different from age on a specific past or future date.</li>
+            </ul>
+
+            <div class="divider"></div>
+
+            <!-- 26. Related Calculators -->
+            <h2>🔗 Related Calculators</h2>
+            <p>
+                Explore other useful calculators on 99toolhub:
+            </p>
+            <ul>
+                <li><strong>Percentage Calculator:</strong> Calculate percentages, increases, and decreases.</li>
+                <li><strong>Income Tax Calculator:</strong> Compute your income tax liability.</li>
+                <li><strong>Discount Calculator:</strong> Calculate discounts and final prices.</li>
+                <li><strong>EMI Calculator:</strong> Calculate monthly loan installments.</li>
+                <li><strong>BMI Calculator:</strong> Check your Body Mass Index.</li>
+                <li><strong>GST Calculator:</strong> Compute GST amounts for transactions.</li>
+                <li><strong>Gratuity Calculator:</strong> Estimate your gratuity payout.</li>
+            </ul>
+
+            <div class="divider"></div>
+
+            <!-- 27. Disclaimer -->
+            <div class="disclaimer-box" id="disclaimer">
+                <div class="disclaimer-title">
+                    <i class="fas fa-triangle-exclamation"></i> Important Disclaimer
+                </div>
+                <p>
+                    The <strong>99toolhub Age Calculator</strong> is provided for <strong>educational and informational purposes only</strong>. While every effort has been made to ensure the accuracy of the calculations, this tool should not be used as the sole basis for legal, financial, or official decisions.
+                </p>
+                <p>
+                    Age calculations can vary based on time zones, date formats, and specific legal definitions (e.g., "age" for legal purposes may be defined differently in different jurisdictions). For critical applications — such as legal documents, government applications, or financial planning — always consult the relevant official guidelines or a qualified professional.
+                </p>
+                <p>
+                    99toolhub and its creators disclaim all liability for any errors, omissions, or inaccuracies in the calculations, and for any decisions made based on the information provided by this tool. All calculations are performed locally in your browser — no data is stored, shared, or transmitted.
+                </p>
+                <p style="margin-top: 8px; font-weight: 600; color: #991b1b;">
+                    Please verify your results independently before making any important decisions.
+                </p>
+            </div>
+
+            <!-- 28. Conclusion -->
+            <h2>📝 Conclusion</h2>
+            <p>
+                The <strong>99toolhub Age Calculator</strong> is a comprehensive, accurate, and easy-to-use tool for calculating age in all its forms. Whether you need your exact age for personal curiosity, eligibility verification, or official documentation, this tool provides instant, reliable results.
+            </p>
+            <p>
+                With features like dual date support, multiple time unit breakdowns, visual calendars, and a full action bar for exporting and sharing, it's designed to meet all your age calculation needs. The tool is completely free, private, and accessible on any device.
+            </p>
+            <p>
+                We hope you find this tool valuable and easy to use. Remember, understanding your age is not just about numbers — it's about appreciating the journey of life and planning for the future with confidence.
+            </p>
+            <p style="text-align:center; color:#5a7a7a; font-size:15px; margin-top:20px;">
+                <i class="fas fa-heart" style="color:#ef4444;"></i> Thank you for using <strong>99toolhub</strong> Age Calculator. Calculate with confidence!
+            </p>
+
+        </div>
+
+        <!-- ===== FOOTER NOTE ===== -->
+        <div class="footer-note">
+            <p>
+              <i class="fas fa-birthday-cake"></i>
+                <strong>99toolhub</strong> &bull; Free Online Tools &bull;
+                <span class="heart">❤️</span> Made with precision
+            </p>
+            <p style="font-size:13px; margin-top:4px; color:#9ab8b8;">
+                &copy; 2026 99toolhub &bull; All rights reserved
+            </p>
+        </div>
+
+    </div>
+
+    <!-- ===== TOAST ===== -->
+    <div class="toast" id="toast">
+        <i class="fas fa-check-circle" style="color:#4ade80;"></i>
+        <span id="toastMsg">Done!</span>
+    </div>
+
+    <!-- ===== SCRIPT ===== -->
+    <script>
+        // ─── DOM REFS ───
+        const dobInput = document.getElementById('dob');
+        const ageAtDateInput = document.getElementById('ageAtDate');
+        const resultSection = document.getElementById('resultSection');
+
+        const birthDayEl = document.getElementById('birthDay');
+        const currentDayEl = document.getElementById('currentDay');
+        const yearsEl = document.getElementById('years');
+        const monthsEl = document.getElementById('months');
+        const daysResultEl = document.getElementById('daysResult');
+        const totalDaysEl = document.getElementById('totalDays');
+        const totalHoursEl = document.getElementById('totalHours');
+        const totalMinutesEl = document.getElementById('totalMinutes');
+        const totalSecondsEl = document.getElementById('totalSeconds');
+        const calendarBox = document.getElementById('calendarBox');
+
+        const toast = document.getElementById('toast');
+        const toastMsg = document.getElementById('toastMsg');
+
+        let toastTimer = null;
+
+        // ─── SET DEFAULT DATE ───
+        function setDefaultDates() {
+            const today = new Date();
+            const y = today.getFullYear();
+            const m = String(today.getMonth() + 1).padStart(2, '0');
+            const d = String(today.getDate()).padStart(2, '0');
+            const dateStr = y + '-' + m + '-' + d;
+            if (!ageAtDateInput.value) {
+                ageAtDateInput.value = dateStr;
+            }
+            if (!dobInput.value) {
+                dobInput.value = '2000-01-01';
+            }
+        }
+
+        // ─── TOAST ───
+        function showToast(msg) {
+            toastMsg.textContent = msg;
+            toast.classList.add('show');
+            clearTimeout(toastTimer);
+            toastTimer = setTimeout(() => toast.classList.remove('show'), 2800);
+        }
+
+        // ─── CALCULATE AGE ───
+        function calculateAge() {
+            const dob = dobInput.value;
+            const targetDate = ageAtDateInput.value;
+
+            if (!dob) {
+                alert('Please select your Date of Birth');
+                return;
+            }
+
+            if (!targetDate) {
+                alert('Please select the target date');
+                return;
+            }
+
+            let birthDate = new Date(dob + 'T00:00:00');
+            let target = new Date(targetDate + 'T00:00:00');
+
+            if (isNaN(birthDate.getTime()) || isNaN(target.getTime())) {
+                alert('Please enter valid dates');
+                return;
+            }
+
+            if (birthDate > target) {
+                alert('Date of birth cannot be after the target date');
+                return;
+            }
+
+            // ─── Calculate age ───
+            let years = target.getFullYear() - birthDate.getFullYear();
+            let months = target.getMonth() - birthDate.getMonth();
+            let days = target.getDate() - birthDate.getDate();
+
+            if (days < 0) {
+                months--;
+                let prevMonth = new Date(target.getFullYear(), target.getMonth(), 0);
+                days += prevMonth.getDate();
+            }
+
+            if (months < 0) {
+                years--;
+                months += 12;
+            }
+
+            // ─── Total seconds ───
+            const diffMs = target.getTime() - birthDate.getTime();
+            const totalSeconds = Math.floor(diffMs / 1000);
+            const totalMinutes = Math.floor(totalSeconds / 60);
+            const totalHours = Math.floor(totalMinutes / 60);
+            const totalDays = Math.floor(totalHours / 24);
+
+            // ─── Day names ───
+            const birthDayName = birthDate.toLocaleDateString('en-US', { weekday: 'long' });
+            const targetDayName = target.toLocaleDateString('en-US', { weekday: 'long' });
+
+            // ─── Update UI ───
+            birthDayEl.textContent = birthDayName;
+            currentDayEl.textContent = targetDayName;
+
+            yearsEl.innerHTML = years + ' <span class="unit">yrs</span>';
+            monthsEl.innerHTML = months + ' <span class="unit">mos</span>';
+            daysResultEl.innerHTML = days + ' <span class="unit">days</span>';
+
+            totalDaysEl.innerHTML = totalDays.toLocaleString() + ' <span class="u">days</span>';
+            totalHoursEl.innerHTML = totalHours.toLocaleString() + ' <span class="u">hrs</span>';
+            totalMinutesEl.innerHTML = totalMinutes.toLocaleString() + ' <span class="u">mins</span>';
+            totalSecondsEl.innerHTML = totalSeconds.toLocaleString() + ' <span class="u">secs</span>';
+
+            // ─── Calendars ───
+            calendarBox.innerHTML =
+                createCalendar(birthDate.getFullYear(), birthDate.getMonth(), birthDate.getDate(), 'Birth Date') +
+                createCalendar(target.getFullYear(), target.getMonth(), target.getDate(), 'Target Date');
+
+            resultSection.style.display = 'block';
+
+            // Scroll to result
+            setTimeout(() => {
+                resultSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            }, 100);
+
+            showToast('✅ Age calculated successfully!');
+        }
+
+        // ─── CREATE CALENDAR ───
+        function createCalendar(year, month, markDate, label) {
+            const monthNames = [
+                'January', 'February', 'March', 'April', 'May', 'June',
+                'July', 'August', 'September', 'October', 'November', 'December'
+            ];
+
+            const firstDay = new Date(year, month, 1).getDay();
+            const totalDays = new Date(year, month + 1, 0).getDate();
+
+            let html = `
+                <div class="calendar">
+                    <div class="cal-header">
+                        ${monthNames[month]} ${year}
+                        <div class="cal-sub">${label}</div>
+                    </div>
+                    <div class="days">
+                        <div>S</div><div>M</div><div>T</div><div>W</div><div>T</div><div>F</div><div>S</div>
+                    </div>
+                    <div class="dates">
+            `;
+
+            for (let i = 0; i < firstDay; i++) {
+                html += `<div class="empty"></div>`;
+            }
+
+            for (let d = 1; d <= totalDays; d++) {
+                let cls = '';
+                if (d === markDate) {
+                    cls = 'mark';
+                }
+                html += `<div class="${cls}">${d}</div>`;
+            }
+
+            html += `
+                    </div>
+                </div>
+            `;
+
+            return html;
+        }
+
+        // ─── RESET ───
+        function resetAll() {
+            const today = new Date();
+            const y = today.getFullYear();
+            const m = String(today.getMonth() + 1).padStart(2, '0');
+            const d = String(today.getDate()).padStart(2, '0');
+            const dateStr = y + '-' + m + '-' + d;
+
+            dobInput.value = '2000-01-01';
+            ageAtDateInput.value = dateStr;
+            resultSection.style.display = 'none';
+            showToast('🔄 Reset complete');
+        }
+
+        // ─── COPY ───
+        function copyResult() {
+            if (resultSection.style.display === 'none') {
+                showToast('⚠️ Please calculate your age first');
+                return;
+            }
+
+            const lines = [
+                '📊 Age Calculator Results – 99toolhub',
+                '─────────────────────────────────────────',
+                'Date of Birth Day  : ' + birthDayEl.textContent,
+                'Target Day         : ' + currentDayEl.textContent,
+                '─────────────────────────────────────────',
+                'Years  : ' + yearsEl.textContent.trim(),
+                'Months : ' + monthsEl.textContent.trim(),
+                'Days   : ' + daysResultEl.textContent.trim(),
+                '─────────────────────────────────────────',
+                'Total Days   : ' + totalDaysEl.textContent.trim(),
+                'Total Hours  : ' + totalHoursEl.textContent.trim(),
+                'Total Minutes: ' + totalMinutesEl.textContent.trim(),
+                'Total Seconds: ' + totalSecondsEl.textContent.trim(),
+                '─────────────────────────────────────────',
+                '🔗 99toolhub.com'
+            ];
+            const text = lines.join('\n');
+
+            if (navigator.clipboard && navigator.clipboard.writeText) {
+                navigator.clipboard.writeText(text).then(() => {
+                    showToast('📋 Results copied to clipboard!');
+                }).catch(() => fallbackCopy(text));
+            } else {
+                fallbackCopy(text);
+            }
+        }
+
+        function fallbackCopy(text) {
+            const ta = document.createElement('textarea');
+            ta.value = text;
+            ta.style.position = 'fixed';
+            ta.style.opacity = '0';
+            document.body.appendChild(ta);
+            ta.select();
+            try {
+                document.execCommand('copy');
+                showToast('📋 Copied!');
+            } catch (e) {
+                showToast('❌ Could not copy. Please copy manually.');
+            }
+            document.body.removeChild(ta);
+        }
+
+        // ─── SHARE ───
+        function shareResult() {
+            if (resultSection.style.display === 'none') {
+                showToast('⚠️ Please calculate your age first');
+                return;
+            }
+
+            const shareText =
+                '📊 Age Calculator Results – 99toolhub\n' +
+                '─────────────────────────────\n' +
+                'Date of Birth Day: ' + birthDayEl.textContent + '\n' +
+                'Target Day: ' + currentDayEl.textContent + '\n' +
+                '─────────────────────────────\n' +
+                'Years: ' + yearsEl.textContent.trim() + '\n' +
+                'Months: ' + monthsEl.textContent.trim() + '\n' +
+                'Days: ' + daysResultEl.textContent.trim() + '\n' +
+                '─────────────────────────────\n' +
+                'Total Days: ' + totalDaysEl.textContent.trim() + '\n' +
+                'Total Hours: ' + totalHoursEl.textContent.trim() + '\n' +
+                'Total Minutes: ' + totalMinutesEl.textContent.trim() + '\n' +
+                'Total Seconds: ' + totalSecondsEl.textContent.trim() + '\n' +
+                '─────────────────────────────\n' +
+                '🔗 99toolhub.com';
+
+            if (navigator.share) {
+                navigator.share({
+                    title: 'Age Calculator Results - 99toolhub',
+                    text: shareText,
+                }).catch(err => {
+                    if (err.name !== 'AbortError') {
+                        fallbackShare(shareText);
+                    }
+                });
+            } else {
+                fallbackShare(shareText);
+            }
+        }
+
+        function fallbackShare(text) {
+            if (navigator.clipboard && navigator.clipboard.writeText) {
+                navigator.clipboard.writeText(text).then(() => {
+                    showToast('📋 Results copied to clipboard! Share it anywhere.');
+                }).catch(() => {
+                    showToast('Could not copy. Please copy manually.');
+                });
+            } else {
+                const ta = document.createElement('textarea');
+                ta.value = text;
+                ta.style.position = 'fixed';
+                ta.style.left = '-9999px';
+                ta.style.top = '-9999px';
+                document.body.appendChild(ta);
+                ta.select();
+                try {
+                    document.execCommand('copy');
+                    showToast('📋 Copied to clipboard!');
+                } catch (e) {
+                    prompt('Copy this result:', text);
+                    showToast('📋 Copied (select all & copy).');
+                }
+                document.body.removeChild(ta);
+            }
+        }
+
+        // ─── PRINT ───
+        function printPage() {
+            if (resultSection.style.display === 'none') {
+                showToast('⚠️ Please calculate your age first');
+                return;
+            }
+            window.print();
+            showToast('🖨️ Print dialog opened.');
+        }
+
+        // ─── PDF ───
+        function downloadPDF() {
+            if (resultSection.style.display === 'none') {
+                showToast('⚠️ Please calculate your age first');
+                return;
+            }
+            showToast('📄 Choose "Save as PDF" in the print dialog.');
+            setTimeout(() => { window.print(); }, 300);
+        }
+
+        // ─── ENTER KEY SUPPORT ───
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Enter') {
+                const active = document.activeElement;
+                if (active && (active.id === 'dob' || active.id === 'ageAtDate')) {
+                    e.preventDefault();
+                    calculateAge();
+                }
+            }
+        });
+
+        // ─── AUTO-CALCULATE ON CHANGE ───
+        dobInput.addEventListener('change', calculateAge);
+        ageAtDateInput.addEventListener('change', calculateAge);
+
+        // ─── INIT ───
+        setDefaultDates();
+        calculateAge();
+
+        console.log('✅ 99toolhub Age Calculator loaded successfully.');
+    </script>
+
+</body>
+</html>

@@ -1,0 +1,1594 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <link rel="icon" type="image/png" href="../../images/favicon.png">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Barcode Generator - 99toolhub</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,400;14..32,500;14..32,600;14..32,700;14..32,800;14..32,900&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/jsbarcode@3.11.6/dist/JsBarcode.all.min.js">
+    </script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js">
+    </script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js">
+    </script>
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: #F0F7F7;
+            color: #1a2a3a;
+            line-height: 1.7;
+            padding: 0;
+        }
+
+        .page-wrapper {
+            max-width: 880px;
+            width: 100%;
+            margin: 0 auto;
+            padding: 30px 20px 40px;
+        }
+
+        /* ─── BRAND BAR ─── */
+        .brand-bar {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 12px;
+            margin-bottom: 28px;
+            padding: 0 4px;
+        }
+
+        .brand-bar .logo {
+            font-weight: 800;
+            font-size: 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            color: #0b2a2a;
+        }
+
+        .brand-bar .logo i {
+            color: #009688;
+            font-size: 1.7rem;
+        }
+
+        .brand-bar .logo span {
+            background: linear-gradient(135deg, #009688, #26a69a);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .brand-bar .tagline {
+            font-size: 14px;
+            color: #64748b;
+            font-weight: 500;
+            background: #e8f0f0;
+            padding: 6px 18px;
+            border-radius: 30px;
+            border: 1px solid #c8dede;
+        }
+
+        /* ─── TOOL HEADER ─── */
+        .tool-header {
+            text-align: center;
+            padding: 20px 0 10px;
+        }
+
+        .tool-header h1 {
+            font-size: 2.2rem;
+            font-weight: 900;
+            color: #0b2a2a;
+            letter-spacing: -0.03em;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 12px;
+        }
+
+        .tool-header h1 i {
+            color: #009688;
+        }
+
+        .tool-header p {
+            color: #5a7a7a;
+            font-size: 1.05rem;
+            margin-top: 4px;
+        }
+
+        .tool-header .badge {
+            display: inline-block;
+            background: #dcfce7;
+            color: #00796B;
+            font-size: 12px;
+            font-weight: 600;
+            padding: 3px 16px;
+            border-radius: 30px;
+            margin-top: 6px;
+        }
+
+        .tool-header .badge i {
+            font-size: 10px;
+            color: #009688;
+            margin-right: 4px;
+        }
+
+        /* ─── MAIN CARD ─── */
+        .main-card {
+            background: #ffffff;
+            border-radius: 24px;
+            padding: 32px 34px 36px;
+            border: 1px solid #d8eaea;
+            box-shadow: 0 6px 24px rgba(0, 100, 90, 0.06);
+            margin: 16px 0 10px;
+        }
+
+        .input-row {
+            display: grid;
+            grid-template-columns: 2fr 1fr;
+            gap: 16px;
+            margin-bottom: 16px;
+        }
+
+        .input-group label {
+            display: block;
+            font-weight: 600;
+            font-size: 0.9rem;
+            color: #3a5a5a;
+            margin-bottom: 6px;
+        }
+
+        .input-group label i {
+            color: #009688;
+            margin-right: 6px;
+        }
+
+        .input-group input,
+        .input-group select {
+            width: 100%;
+            padding: 14px 18px;
+            border: 1.5px solid #d8eaea;
+            border-radius: 12px;
+            font-size: 1rem;
+            font-family: 'Inter', sans-serif;
+            background: #faffff;
+            transition: 0.2s;
+            color: #0b2a2a;
+            outline: none;
+        }
+
+        .input-group input:focus,
+        .input-group select:focus {
+            border-color: #009688;
+            box-shadow: 0 0 0 4px rgba(0, 150, 136, 0.10);
+            background: #ffffff;
+        }
+
+        .input-group input::placeholder {
+            color: #9ab8b8;
+        }
+
+        .input-group select {
+            appearance: none;
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%235a7a7a' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");
+            background-repeat: no-repeat;
+            background-position: right 16px center;
+            padding-right: 44px;
+            cursor: pointer;
+        }
+
+        .options-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr;
+            gap: 14px;
+            margin-bottom: 16px;
+        }
+
+        .options-row .input-group label {
+            font-size: 0.8rem;
+        }
+
+        .options-row .input-group input {
+            padding: 10px 14px;
+            font-size: 0.9rem;
+        }
+
+        .btn-calc {
+            width: 100%;
+            padding: 14px;
+            background: #009688;
+            color: #fff;
+            border: none;
+            border-radius: 60px;
+            font-size: 1rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: 0.25s;
+            font-family: 'Inter', sans-serif;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+        }
+
+        .btn-calc:hover {
+            background: #00796B;
+            transform: translateY(-2px);
+            box-shadow: 0 8px 24px rgba(0, 150, 136, 0.30);
+        }
+
+        .btn-calc:active {
+            transform: scale(0.96);
+        }
+
+        /* ─── BARCODE DISPLAY ─── */
+        .barcode-display {
+            margin-top: 24px;
+            padding: 24px;
+            background: #faffff;
+            border-radius: 16px;
+            border: 2px dashed #c8dede;
+            min-height: 180px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s ease;
+        }
+
+        .barcode-display.has-barcode {
+            border-style: solid;
+            border-color: #009688;
+            background: #ffffff;
+        }
+
+        .barcode-display .placeholder {
+            color: #9ab8b8;
+            font-weight: 500;
+            font-size: 1rem;
+            text-align: center;
+        }
+
+        .barcode-display .placeholder i {
+            font-size: 2.5rem;
+            display: block;
+            margin-bottom: 10px;
+            color: #c8dede;
+        }
+
+        .barcode-display #barcodeContainer {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            width: 100%;
+        }
+
+        .barcode-display #barcodeContainer svg {
+            max-width: 100%;
+            height: auto;
+        }
+
+        .barcode-display #barcodeContainer canvas {
+            max-width: 100%;
+            height: auto;
+        }
+
+        .barcode-display .barcode-label {
+            margin-top: 12px;
+            font-size: 0.85rem;
+            font-weight: 500;
+            color: #5a7a7a;
+            text-align: center;
+            word-break: break-all;
+            max-width: 100%;
+            padding: 0 10px;
+        }
+
+        /* ─── ACTION BAR ─── */
+        .action-bar {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin: 20px 0 6px 0;
+            padding: 18px 0 6px 0;
+            border-top: 2px solid #d8eaea;
+            justify-content: center;
+        }
+
+        .action-bar .btn-action {
+            padding: 10px 20px;
+            border-radius: 60px;
+            font-weight: 600;
+            font-size: 0.85rem;
+            border: none;
+            cursor: pointer;
+            transition: 0.25s;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            font-family: 'Inter', sans-serif;
+            background: #eaf5f5;
+            color: #0b2a2a;
+            border: 1px solid #c8dede;
+        }
+
+        .action-bar .btn-action:hover {
+            background: #d8eaea;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.06);
+        }
+
+        .action-bar .btn-action i {
+            font-size: 1rem;
+        }
+
+        .action-bar .btn-action.reset-btn {
+            background: #fef2f2;
+            border-color: #fccccc;
+            color: #991b1b;
+        }
+
+        .action-bar .btn-action.reset-btn:hover {
+            background: #fde8e8;
+        }
+
+        .action-bar .btn-action.copy-btn {
+            background: #e8f0fe;
+            border-color: #bdd3f0;
+            color: #1a4a8a;
+        }
+
+        .action-bar .btn-action.copy-btn:hover {
+            background: #d4e4fc;
+        }
+
+        .action-bar .btn-action.pdf-btn {
+            background: #fef3e8;
+            border-color: #fad4b8;
+            color: #8a3a1a;
+        }
+
+        .action-bar .btn-action.pdf-btn:hover {
+            background: #fce8d4;
+        }
+
+        .action-bar .btn-action.share-btn {
+            background: #e8faf0;
+            border-color: #b8e8cc;
+            color: #1a6a3a;
+        }
+
+        .action-bar .btn-action.share-btn:hover {
+            background: #d4f5e0;
+        }
+
+        .action-bar .btn-action.preview-btn {
+            background: #fef3c7;
+            border-color: #fde68a;
+            color: #7a5a0a;
+        }
+
+        .action-bar .btn-action.preview-btn:hover {
+            background: #fde8a0;
+        }
+
+        /* ─── TOAST ─── */
+        .toast {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            background: #0b2a2a;
+            color: #ffffff;
+            padding: 14px 28px;
+            border-radius: 60px;
+            font-weight: 500;
+            box-shadow: 0 12px 30px rgba(0, 0, 0, 0.2);
+            backdrop-filter: blur(8px);
+            opacity: 0;
+            transform: translateY(20px);
+            transition: 0.3s ease;
+            pointer-events: none;
+            z-index: 999;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 0.95rem;
+            font-family: 'Inter', sans-serif;
+        }
+
+        .toast.show {
+            opacity: 1;
+            transform: translateY(0);
+            pointer-events: auto;
+        }
+
+        /* ─── CONTENT SECTION ─── */
+        .content-section {
+            margin-top: 48px;
+            background: rgba(255, 255, 255, 0.88);
+            backdrop-filter: blur(12px);
+            border-radius: 28px;
+            padding: 36px 40px 40px 40px;
+            border: 1px solid rgba(200, 220, 220, 0.5);
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.04);
+        }
+
+        .content-section h2 {
+            font-size: 26px;
+            font-weight: 800;
+            color: #0b2a2a;
+            margin: 42px 0 16px 0;
+            letter-spacing: -0.3px;
+            border-left: 5px solid #009688;
+            padding-left: 18px;
+        }
+
+        .content-section h2:first-of-type {
+            margin-top: 0;
+        }
+
+        .content-section h3 {
+            font-size: 20px;
+            font-weight: 700;
+            color: #1a3a3a;
+            margin: 28px 0 12px 0;
+        }
+
+        .content-section h4 {
+            font-size: 17px;
+            font-weight: 600;
+            color: #2a4a4a;
+            margin: 20px 0 8px 0;
+        }
+
+        .content-section p {
+            font-size: 16px;
+            line-height: 1.9;
+            color: #2a4a4a;
+            margin-bottom: 16px;
+        }
+
+        .content-section ul,
+        .content-section ol {
+            margin: 12px 0 20px 28px;
+            line-height: 1.9;
+            color: #2a4a4a;
+        }
+
+        .content-section li {
+            margin-bottom: 8px;
+            font-size: 16px;
+        }
+
+        .content-section .card-tip {
+            background: #eaf5f5;
+            border-radius: 14px;
+            padding: 20px 24px;
+            margin: 20px 0;
+            border-left: 4px solid #009688;
+        }
+
+        .content-section .card-tip i {
+            color: #009688;
+            margin-right: 8px;
+        }
+
+        .content-section .faq-item {
+            border-bottom: 1px solid #d8eaea;
+            padding: 18px 0;
+        }
+
+        .content-section .faq-item:last-child {
+            border-bottom: none;
+        }
+
+        .content-section .faq-item .q {
+            font-weight: 700;
+            font-size: 17px;
+            color: #0b2a2a;
+            display: flex;
+            gap: 12px;
+            align-items: flex-start;
+        }
+
+        .content-section .faq-item .q i {
+            color: #009688;
+            font-size: 18px;
+            margin-top: 2px;
+        }
+
+        .content-section .faq-item .a {
+            margin-top: 6px;
+            padding-left: 34px;
+            color: #3a5a5a;
+            line-height: 1.8;
+        }
+
+        .formula-box {
+            background: #0b2a2a;
+            color: #d8eaea;
+            padding: 18px 24px;
+            border-radius: 12px;
+            font-family: 'Courier New', monospace;
+            font-size: 16px;
+            margin: 16px 0 24px 0;
+            overflow-x: auto;
+            white-space: pre-wrap;
+            word-break: break-word;
+            line-height: 1.8;
+        }
+
+        .formula-box .hl {
+            color: #4dd0e1;
+        }
+
+        .formula-box .hl-green {
+            color: #81c784;
+        }
+
+        .formula-box .hl-blue {
+            color: #64b5f6;
+        }
+
+        .example-box {
+            background: #fefce8;
+            border: 1px solid #fde68a;
+            border-radius: 14px;
+            padding: 20px 24px;
+            margin: 16px 0 24px 0;
+        }
+
+        .example-box strong {
+            color: #7a5a0a;
+        }
+
+        .divider {
+            width: 100%;
+            height: 1px;
+            background: #d8eaea;
+            margin: 32px 0;
+        }
+
+        .glossary-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px;
+        }
+
+        .glossary-item {
+            background: #f5fbfb;
+            border-radius: 12px;
+            padding: 12px 16px;
+            border: 1px solid #d8eaea;
+        }
+
+        .glossary-item .term {
+            font-weight: 700;
+            color: #0b2a2a;
+            font-size: 0.95rem;
+        }
+
+        .glossary-item .def {
+            font-size: 0.85rem;
+            color: #5a7a7a;
+            margin-top: 2px;
+        }
+
+        .disclaimer-box {
+            background: #fef2f2;
+            border-radius: 16px;
+            padding: 24px 28px;
+            border-left: 5px solid #dc2626;
+            margin: 32px 0 16px 0;
+        }
+
+        .disclaimer-box .disclaimer-title {
+            font-weight: 700;
+            color: #991b1b;
+            font-size: 18px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .disclaimer-box .disclaimer-title i {
+            font-size: 22px;
+        }
+
+        .disclaimer-box p {
+            color: #7f1d1d;
+            font-size: 15px;
+            line-height: 1.8;
+            margin-top: 8px;
+        }
+
+        .footer-note {
+            text-align: center;
+            padding: 24px 0 10px;
+            color: #8aaaaa;
+            font-size: 14px;
+            border-top: 1px solid #d8eaea;
+            margin-top: 30px;
+        }
+
+        .footer-note strong {
+            color: #009688;
+            font-weight: 700;
+        }
+
+        .footer-note .heart {
+            color: #ef4444;
+        }
+
+        @media (max-width: 640px) {
+            .input-row {
+                grid-template-columns: 1fr;
+                gap: 12px;
+            }
+
+            .options-row {
+                grid-template-columns: 1fr 1fr;
+                gap: 10px;
+            }
+
+            .main-card {
+                padding: 22px 18px 26px;
+            }
+
+            .tool-header h1 {
+                font-size: 1.6rem;
+            }
+
+            .brand-bar .logo {
+                font-size: 1.2rem;
+            }
+
+            .brand-bar .tagline {
+                font-size: 12px;
+                padding: 4px 12px;
+            }
+
+            .action-bar .btn-action {
+                flex: 1 1 100%;
+                justify-content: center;
+                padding: 12px 16px;
+            }
+
+            .barcode-display {
+                padding: 16px;
+                min-height: 140px;
+            }
+
+            .content-section {
+                padding: 24px 18px;
+                border-radius: 20px;
+            }
+
+            .content-section h2 {
+                font-size: 21px;
+                padding-left: 12px;
+            }
+
+            .content-section h3 {
+                font-size: 18px;
+            }
+
+            .formula-box {
+                font-size: 14px;
+                padding: 14px 16px;
+            }
+
+            .glossary-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .disclaimer-box {
+                padding: 16px 18px;
+            }
+
+            .toast {
+                right: 16px;
+                left: 16px;
+                bottom: 20px;
+                font-size: 0.85rem;
+                padding: 12px 18px;
+                text-align: center;
+                justify-content: center;
+            }
+        }
+
+        @media print {
+            .brand-bar .tagline,
+            .btn-calc,
+            .action-bar,
+            .footer-note,
+            .toast {
+                display: none !important;
+            }
+
+            .main-card {
+                box-shadow: none !important;
+                border: 1px solid #d8eaea !important;
+                background: #fff !important;
+            }
+
+            .content-section {
+                background: #fff !important;
+                backdrop-filter: none !important;
+                box-shadow: none !important;
+                border: 1px solid #d8eaea !important;
+            }
+
+            .barcode-display {
+                border: 1px solid #d8eaea !important;
+                background: #fff !important;
+            }
+
+            body {
+                background: #fff !important;
+                padding: 10px !important;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="page-wrapper">
+
+        <!-- ===== BRAND BAR ===== -->
+        <div class="brand-bar">
+            <div class="logo">
+                <i class="fas fa-cubes"></i>
+                <span>99toolhub</span>
+            </div>
+            <span class="tagline"><i class="fas fa-bolt" style="color:#009688;"></i> Free Online Tools</span>
+        </div>
+
+        <!-- ===== TOOL HEADER ===== -->
+        <div class="tool-header">
+            <h1><i class="fas fa-barcode"></i> Barcode Generator</h1>
+            <p>Generate 1D barcodes (Code128, EAN-13, UPC-A, Code39) &amp; QR Codes instantly</p>
+            <span class="badge"><i class="fas fa-circle"></i> Live Generation</span>
+        </div>
+
+        <!-- ===== MAIN CARD ===== -->
+        <div class="main-card">
+
+            <!-- Input Row -->
+            <div class="input-row">
+                <div class="input-group">
+                    <label><i class="fas fa-pencil-alt"></i> Data / Text</label>
+                    <input type="text" id="barcodeData" placeholder="Enter text or numbers..." value="99toolhub">
+                </div>
+                <div class="input-group">
+                    <label><i class="fas fa-tag"></i> Barcode Format</label>
+                    <select id="barcodeFormat">
+                        <option value="CODE128">Code128</option>
+                        <option value="EAN13">EAN-13</option>
+                        <option value="UPC">UPC-A</option>
+                        <option value="CODE39">Code39</option>
+                        <option value="ITF">ITF-14</option>
+                        <option value="QR">QR Code</option>
+                    </select>
+                </div>
+            </div>
+
+            <!-- Options Row -->
+            <div class="options-row">
+                <div class="input-group">
+                    <label><i class="fas fa-arrows-alt-h"></i> Width</label>
+                    <input type="number" id="barcodeWidth" value="2" min="1" max="4" step="0.5">
+                </div>
+                <div class="input-group">
+                    <label><i class="fas fa-arrows-alt-v"></i> Height</label>
+                    <input type="number" id="barcodeHeight" value="80" min="40" max="200" step="5">
+                </div>
+                <div class="input-group">
+                    <label><i class="fas fa-font"></i> Font Size</label>
+                    <input type="number" id="barcodeFontSize" value="16" min="10" max="30" step="2">
+                </div>
+            </div>
+
+            <button class="btn-calc" onclick="generateBarcode()"><i class="fas fa-qrcode"></i> Generate Barcode</button>
+
+            <!-- ===== BARCODE DISPLAY ===== -->
+            <div class="barcode-display" id="barcodeDisplay">
+                <div class="placeholder" id="placeholder">
+                    <i class="fas fa-barcode"></i>
+                    Enter data and click <strong>Generate Barcode</strong>
+                </div>
+                <div id="barcodeContainer" style="display:none;"></div>
+            </div>
+
+        </div>
+
+        <!-- ===== ACTION BAR ===== -->
+        <div class="action-bar">
+            <button class="btn-action reset-btn" onclick="resetAll()"><i class="fas fa-undo-alt"></i> Reset</button>
+            <button class="btn-action copy-btn" onclick="copyBarcode()"><i class="fas fa-copy"></i> Copy Data</button>
+            <button class="btn-action preview-btn" onclick="downloadPNG()"><i class="fas fa-image"></i> PNG</button>
+            <button class="btn-action pdf-btn" onclick="downloadPDF()"><i class="fas fa-file-pdf"></i> PDF</button>
+            <button class="btn-action" onclick="printPage()"><i class="fas fa-print"></i> Print</button>
+            <button class="btn-action share-btn" onclick="shareResult()"><i class="fas fa-share-alt"></i> Share</button>
+        </div>
+
+        <!-- ===== CONTENT SECTION ===== -->
+        <div class="content-section">
+
+            <!-- 1. About -->
+            <h2>📘 About Barcode Generator</h2>
+            <p>
+                The <strong>99toolhub Barcode Generator</strong> is a free, powerful online tool that creates professional-grade 1D barcodes and QR codes in seconds. Whether you need barcodes for product labeling, inventory management, event tickets, business cards, or marketing campaigns, this tool supports all major formats including <strong>Code128</strong>, <strong>EAN-13</strong>, <strong>UPC-A</strong>, <strong>Code39</strong>, <strong>ITF-14</strong>, and <strong>QR Codes</strong>.
+            </p>
+            <p>
+                Barcodes are essential in retail, logistics, healthcare, and countless other industries. Our generator makes it easy to create high-quality, scannable barcodes with customizable dimensions and font sizes. All processing happens locally in your browser — no data is sent to any server, ensuring your information remains private and secure.
+            </p>
+            <p>
+                The tool also includes a full action bar for exporting your barcodes as <strong>PNG</strong> (for use in documents and designs), <strong>PDF</strong> (for printing labels), or printing directly. You can also copy the encoded data or share the barcode with others.
+            </p>
+
+            <div class="divider"></div>
+
+            <!-- 2. What is a Barcode? -->
+            <h2>📊 What is a Barcode?</h2>
+            <p>
+                A <strong>barcode</strong> is a machine-readable representation of data in the form of parallel lines (1D barcodes) or geometric patterns (2D barcodes like QR codes). Barcodes are used to store information such as product numbers, serial numbers, URLs, contact details, or any other alphanumeric data.
+            </p>
+            <p>
+                <strong>1D barcodes</strong> (linear barcodes) consist of vertical lines of varying widths and spaces. They are read by optical scanners that translate the pattern into text. Common 1D formats include:
+            </p>
+            <ul>
+                <li><strong>Code128:</strong> The most versatile 1D barcode, supporting all 128 ASCII characters.</li>
+                <li><strong>EAN-13:</strong> The standard barcode for retail products worldwide (13 digits).</li>
+                <li><strong>UPC-A:</strong> The standard barcode for products in the USA (12 digits).</li>
+                <li><strong>Code39:</strong> Simple alphanumeric barcode used in logistics and automotive.</li>
+                <li><strong>ITF-14:</strong> Used for packaging and carton labeling in retail supply chains.</li>
+            </ul>
+            <p>
+                <strong>2D barcodes</strong> (QR codes) store data both horizontally and vertically, allowing them to hold much more information — up to 4,296 characters. QR codes are widely used for mobile payments, website links, contact sharing, and digital marketing.
+            </p>
+
+            <div class="divider"></div>
+
+            <!-- 3. Why Use a Barcode Generator? -->
+            <h2>🎯 Why Use a Barcode Generator?</h2>
+            <p>
+                Here are the key reasons to use the 99toolhub Barcode Generator:
+            </p>
+            <ul>
+                <li><strong>⚡ Instant Generation:</strong> Create scannable barcodes in seconds.</li>
+                <li><strong>🎯 Multiple Formats:</strong> Support for 6 major barcode types — Code128, EAN-13, UPC-A, Code39, ITF-14, and QR Code.</li>
+                <li><strong>📐 Customizable:</strong> Adjust width, height, and font size to suit your needs.</li>
+                <li><strong>🖼️ High-Quality Output:</strong> Vector SVG rendering for crisp, scalable barcodes.</li>
+                <li><strong>📤 Export Options:</strong> Download as PNG, PDF, or print directly.</li>
+                <li><strong>🔒 Private & Secure:</strong> All processing is done locally in your browser — no data is sent to any server.</li>
+                <li><strong>🆓 Completely Free:</strong> No sign-ups, no hidden charges.</li>
+                <li><strong>📱 Accessible:</strong> Works on desktop, tablet, and mobile devices.</li>
+            </ul>
+
+            <div class="divider"></div>
+
+            <!-- 4. How to Use -->
+            <h2>🛠️ How to Use the Barcode Generator</h2>
+            <p>
+                Using the 99toolhub Barcode Generator is straightforward. Follow these steps:
+            </p>
+            <ol>
+                <li><strong>Enter Data:</strong> Type or paste the text, number, or URL you want to encode.</li>
+                <li><strong>Select Format:</strong> Choose your barcode format from the dropdown — Code128, EAN-13, UPC-A, Code39, ITF-14, or QR Code.</li>
+                <li><strong>Adjust Size (Optional):</strong> Modify the width, height, or font size to customize the barcode appearance.</li>
+                <li><strong>Click Generate:</strong> Press the "Generate Barcode" button to create your barcode instantly.</li>
+                <li><strong>Export or Share:</strong> Use the action buttons to download as PNG or PDF, print, copy the data, or share.</li>
+            </ol>
+            <p>
+                The barcode will appear in the display area. You can preview it before downloading or printing.
+            </p>
+
+            <div class="divider"></div>
+
+            <!-- 5. Barcode Formats Explained -->
+            <h2>📋 Barcode Formats Explained</h2>
+
+            <h3>📌 Code128</h3>
+            <p>
+                <strong>Code128</strong> is the most widely used 1D barcode format. It supports all 128 characters of the ASCII set, including letters, numbers, and special characters. Code128 is highly versatile and is used in logistics, shipping, and retail.
+            </p>
+
+            <h3>📌 EAN-13</h3>
+            <p>
+                <strong>EAN-13</strong> (European Article Number) is the standard barcode format for retail products globally. It consists of 13 digits (12 data digits + 1 checksum digit). EAN-13 barcodes are used on almost all consumer goods sold in stores.
+            </p>
+
+            <h3>📌 UPC-A</h3>
+            <p>
+                <strong>UPC-A</strong> (Universal Product Code) is the standard barcode format for products in the United States. It consists of 12 digits (11 data digits + 1 checksum digit). UPC-A is widely used in North American retail.
+            </p>
+
+            <h3>📌 Code39</h3>
+            <p>
+                <strong>Code39</strong> (also called Code 3 of 9) is a simple alphanumeric barcode format that encodes uppercase letters, numbers, and a few special characters. It is commonly used in logistics, automotive, and military applications.
+            </p>
+
+            <h3>📌 ITF-14</h3>
+            <p>
+                <strong>ITF-14</strong> (Interleaved 2 of 5) is a barcode format used for packaging and carton labeling in retail supply chains. It encodes 14 digits and is often printed on shipping containers and pallets.
+            </p>
+
+            <h3>📌 QR Code</h3>
+            <p>
+                <strong>QR Code</strong> (Quick Response Code) is a 2D barcode that can store up to 4,296 characters. It is widely used for mobile payments, website links, contact sharing, event tickets, and marketing campaigns. QR codes can be scanned by most smartphone cameras.
+            </p>
+
+            <div class="divider"></div>
+
+            <!-- 6. Barcode Structure -->
+            <h2>🔬 Barcode Structure Explained</h2>
+            <p>
+                A barcode consists of several key components:
+            </p>
+            <ul>
+                <li><strong>Quiet Zone:</strong> Blank margins on both sides of the barcode that help scanners identify the start and end.</li>
+                <li><strong>Start/Stop Characters:</strong> Special patterns that indicate the beginning and end of the barcode.</li>
+                <li><strong>Data Characters:</strong> The encoded information represented by the pattern of bars and spaces.</li>
+                <li><strong>Checksum Digit:</strong> A calculated digit used to verify the accuracy of the barcode.</li>
+                <li><strong>Human-Readable Text:</strong> The actual data printed below the barcode for manual reading.</li>
+            </ul>
+            <p>
+                Our generator automatically handles all these components, producing a complete, scannable barcode with human-readable text.
+            </p>
+
+            <div class="divider"></div>
+
+            <!-- 7. Barcode vs QR Code -->
+            <h2>📊 Barcode vs QR Code: What's the Difference?</h2>
+            <p>
+                While both barcodes and QR codes are machine-readable, they have key differences:
+            </p>
+            <ul>
+                <li><strong>Data Capacity:</strong> 1D barcodes hold up to ~30 characters, while QR codes hold up to 4,296 characters.</li>
+                <li><strong>Direction:</strong> 1D barcodes are read horizontally; QR codes are read in 2D (both horizontally and vertically).</li>
+                <li><strong>Use Cases:</strong> 1D barcodes are used for product IDs and serial numbers; QR codes are used for URLs, contact info, and mobile payments.</li>
+                <li><strong>Size:</strong> QR codes can be much smaller while holding more data due to their 2D nature.</li>
+                <li><strong>Error Correction:</strong> QR codes have built-in error correction, allowing them to be scanned even if partially damaged.</li>
+            </ul>
+            <p>
+                Choose 1D barcodes for simple product labeling and inventory, and QR codes for marketing, digital linking, and mobile applications.
+            </p>
+
+            <div class="divider"></div>
+
+            <!-- 8. Real-Life Uses -->
+            <h2>🌍 Real-Life Uses of Barcodes</h2>
+            <p>
+                Barcodes are used in virtually every industry. Here are some common applications:
+            </p>
+            <ul>
+                <li><strong>Retail:</strong> Product scanning, pricing, and inventory management.</li>
+                <li><strong>Logistics &amp; Shipping:</strong> Tracking packages, managing warehouses, and supply chain visibility.</li>
+                <li><strong>Healthcare:</strong> Patient identification, medication tracking, and lab sample labeling.</li>
+                <li><strong>Manufacturing:</strong> Tracking work-in-progress, quality control, and equipment maintenance.</li>
+                <li><strong>Events &amp; Ticketing:</strong> QR codes on tickets for entry validation.</li>
+                <li><strong>Marketing:</strong> QR codes on print ads, packaging, and business cards linking to digital content.</li>
+                <li><strong>Libraries:</strong> Book check-in/check-out and inventory management.</li>
+                <li><strong>Banking:</strong> QR codes for UPI payments and digital transactions.</li>
+            </ul>
+
+            <div class="divider"></div>
+
+            <!-- 9. Barcode Quality Tips -->
+            <h2>💡 Tips for High-Quality Barcodes</h2>
+            <p>
+                To ensure your barcodes are scannable and professional, follow these tips:
+            </p>
+            <ul>
+                <li><strong>Use adequate width:</strong> Narrow bars can be difficult to scan. Use a width of 2 or more.</li>
+                <li><strong>Ensure sufficient height:</strong> Barcodes should be tall enough to be scanned from various angles.</li>
+                <li><strong>Maintain contrast:</strong> Black bars on a white background provide the best contrast.</li>
+                <li><strong>Include quiet zones:</strong> Leave adequate blank space on both sides of the barcode.</li>
+                <li><strong>Test scan:</strong> Always test your barcode with a scanner before mass production.</li>
+                <li><strong>Use the right format:</strong> Choose the barcode format that matches your industry standard.</li>
+                <li><strong>Avoid scaling:</strong> Generate barcodes at the correct size rather than scaling them up or down.</li>
+            </ul>
+            <div class="card-tip">
+                <i class="fas fa-lightbulb"></i> <strong>Pro Tip:</strong> For EAN-13 and UPC-A barcodes, ensure you enter exactly 12 or 13 digits (including the check digit) for a valid barcode.
+            </div>
+
+            <div class="divider"></div>
+
+            <!-- 10. Example Barcode Generation -->
+            <h2>🧮 Example Barcode Generation</h2>
+
+            <div class="example-box">
+                <p><strong>Example 1: Product Barcode (EAN-13)</strong></p>
+                <ul>
+                    <li><strong>Data:</strong> 8901234567890</li>
+                    <li><strong>Format:</strong> EAN-13</li>
+                    <li><strong>Width:</strong> 2, Height: 80, Font Size: 16</li>
+                    <li><strong>Result:</strong> A scannable EAN-13 barcode suitable for retail products.</li>
+                </ul>
+            </div>
+
+            <div class="example-box">
+                <p><strong>Example 2: Website QR Code</strong></p>
+                <ul>
+                    <li><strong>Data:</strong> https://99toolhub.com</li>
+                    <li><strong>Format:</strong> QR Code</li>
+                    <li><strong>Result:</strong> A QR code that directs users to the 99toolhub website when scanned.</li>
+                </ul>
+            </div>
+
+            <div class="example-box">
+                <p><strong>Example 3: Shipping Label (Code128)</strong></p>
+                <ul>
+                    <li><strong>Data:</strong> SHIP-2026-001</li>
+                    <li><strong>Format:</strong> Code128</li>
+                    <li><strong>Result:</strong> A Code128 barcode for tracking a shipping package.</li>
+                </ul>
+            </div>
+
+            <div class="divider"></div>
+
+            <!-- 11. FAQ -->
+            <h2>❓ Frequently Asked Questions</h2>
+
+            <div class="faq-item">
+                <div class="q"><i class="fas fa-question-circle"></i> What is a barcode?</div>
+                <div class="a">A barcode is a machine-readable representation of data in the form of parallel lines (1D) or geometric patterns (2D). It is used to store information like product numbers, URLs, or contact details.</div>
+            </div>
+
+            <div class="faq-item">
+                <div class="q"><i class="fas fa-question-circle"></i> What barcode formats are supported?</div>
+                <div class="a">Our generator supports Code128, EAN-13, UPC-A, Code39, ITF-14, and QR Code.</div>
+            </div>
+
+            <div class="faq-item">
+                <div class="q"><i class="fas fa-question-circle"></i> How do I generate a barcode?</div>
+                <div class="a">Enter your data, select the format, adjust size options if needed, and click "Generate Barcode." The barcode will appear instantly.</div>
+            </div>
+
+            <div class="faq-item">
+                <div class="q"><i class="fas fa-question-circle"></i> Can I download the barcode as an image?</div>
+                <div class="a">Yes, you can download the barcode as a PNG image or as a PDF file using the action buttons below the generator.</div>
+            </div>
+
+            <div class="faq-item">
+                <div class="q"><i class="fas fa-question-circle"></i> What is the difference between 1D and 2D barcodes?</div>
+                <div class="a">1D barcodes (like Code128, EAN-13) store data in one direction (horizontally) and hold limited data. 2D barcodes (like QR codes) store data in two directions and can hold much more information.</div>
+            </div>
+
+            <div class="faq-item">
+                <div class="q"><i class="fas fa-question-circle"></i> What is a QR code used for?</div>
+                <div class="a">QR codes are used for mobile payments, website links, contact sharing, event tickets, digital marketing, and more.</div>
+            </div>
+
+            <div class="faq-item">
+                <div class="q"><i class="fas fa-question-circle"></i> Are my barcodes stored or shared?</div>
+                <div class="a">No. All processing is done locally in your browser. Your data is never sent to any server, stored, or shared.</div>
+            </div>
+
+            <div class="faq-item">
+                <div class="q"><i class="fas fa-question-circle"></i> Can I use this generator offline?</div>
+                <div class="a">Yes, once the page is loaded, the generator works entirely offline without an internet connection.</div>
+            </div>
+
+            <div class="faq-item">
+                <div class="q"><i class="fas fa-question-circle"></i> What is the quiet zone?</div>
+                <div class="a">The quiet zone is the blank margin on both sides of a barcode that helps scanners identify the start and end of the barcode.</div>
+            </div>
+
+            <div class="faq-item">
+                <div class="q"><i class="fas fa-question-circle"></i> How do I ensure my barcode is scannable?</div>
+                <div class="a">Use adequate width and height, maintain contrast (black on white), include quiet zones, and test with a scanner before mass production.</div>
+            </div>
+
+            <div class="divider"></div>
+
+            <!-- 12. Glossary -->
+            <h2>📖 Barcode Terms Glossary</h2>
+            <div class="glossary-grid">
+                <div class="glossary-item"><div class="term">Barcode</div><div class="def">A machine-readable representation of data using parallel lines or geometric patterns.</div></div>
+                <div class="glossary-item"><div class="term">1D Barcode</div><div class="def">A linear barcode that stores data horizontally (e.g., Code128, EAN-13).</div></div>
+                <div class="glossary-item"><div class="term">2D Barcode</div><div class="def">A barcode that stores data in two dimensions (e.g., QR Code).</div></div>
+                <div class="glossary-item"><div class="term">Code128</div><div class="def">A versatile 1D barcode supporting all 128 ASCII characters.</div></div>
+                <div class="glossary-item"><div class="term">EAN-13</div><div class="def">The standard 13-digit retail barcode used globally.</div></div>
+                <div class="glossary-item"><div class="term">UPC-A</div><div class="def">The standard 12-digit retail barcode used in the USA.</div></div>
+                <div class="glossary-item"><div class="term">QR Code</div><div class="def">A 2D barcode that can store up to 4,296 characters.</div></div>
+                <div class="glossary-item"><div class="term">Quiet Zone</div><div class="def">The blank margin on both sides of a barcode that helps scanners identify the barcode.</div></div>
+                <div class="glossary-item"><div class="term">Checksum</div><div class="def">A calculated digit used to verify the accuracy of the barcode data.</div></div>
+                <div class="glossary-item"><div class="term">Human-Readable Text</div><div class="def">The actual data printed below the barcode for manual reading.</div></div>
+            </div>
+
+            <div class="divider"></div>
+
+            <!-- 13. Related Calculators -->
+            <h2>🔗 Related Calculators</h2>
+            <p>
+                Explore other useful tools on 99toolhub:
+            </p>
+            <ul>
+                <li><strong>QR Code Generator:</strong> Generate QR codes for URLs, text, and more.</li>
+                <li><strong>Percentage Calculator:</strong> Calculate percentages, increases, and decreases.</li>
+                <li><strong>Income Tax Calculator:</strong> Compute your income tax liability.</li>
+                <li><strong>Discount Calculator:</strong> Calculate discounts and final prices.</li>
+                <li><strong>Age Calculator:</strong> Calculate your exact age in years, months, and days.</li>
+                <li><strong>EMI Calculator:</strong> Calculate monthly loan installments.</li>
+                <li><strong>BMI Calculator:</strong> Check your Body Mass Index.</li>
+            </ul>
+
+            <div class="divider"></div>
+
+            <!-- 14. Disclaimer -->
+            <div class="disclaimer-box" id="disclaimer">
+                <div class="disclaimer-title">
+                    <i class="fas fa-triangle-exclamation"></i> Important Disclaimer
+                </div>
+                <p>
+                    The <strong>99toolhub Barcode Generator</strong> is provided for <strong>educational and informational purposes only</strong>. While every effort has been made to ensure the generated barcodes are scannable and accurate, this tool should not be used as the sole basis for commercial, legal, or official applications.
+                </p>
+                <p>
+                    Barcode standards can vary by industry and region. For critical applications — such as retail product labeling, healthcare identification, or government documentation — always consult the relevant official guidelines or use certified barcode generation software.
+                </p>
+                <p>
+                    99toolhub and its creators disclaim all liability for any errors, omissions, or inaccuracies in the generated barcodes, and for any decisions made based on the information provided by this tool. All processing is performed locally in your browser — no data is stored, shared, or transmitted.
+                </p>
+                <p style="margin-top: 8px; font-weight: 600; color: #991b1b;">
+                    Please verify your barcodes with a scanner before using them in production environments.
+                </p>
+            </div>
+
+            <!-- 15. Conclusion -->
+            <h2>📝 Conclusion</h2>
+            <p>
+                The <strong>99toolhub Barcode Generator</strong> is a versatile, free, and easy-to-use tool for creating professional barcodes and QR codes. With support for six major barcode formats, customizable dimensions, and multiple export options, it's suitable for a wide range of applications — from retail product labeling to digital marketing campaigns.
+            </p>
+            <p>
+                Whether you're a business owner, a logistics professional, a marketer, or just someone who needs a quick barcode, this tool delivers instant results with high-quality output. All processing is done locally, ensuring your data remains private and secure.
+            </p>
+            <p>
+                We hope you find this tool valuable and easy to use. Generate with confidence!
+            </p>
+            <p style="text-align:center; color:#5a7a7a; font-size:15px; margin-top:20px;">
+                <i class="fas fa-heart" style="color:#ef4444;"></i> Thank you for using <strong>99toolhub</strong> Barcode Generator.
+            </p>
+
+        </div>
+
+        <!-- ===== FOOTER NOTE ===== -->
+        <div class="footer-note">
+            <p>
+                <i class="fas fa-cubes" style="color:#009688;"></i>
+                <strong>99toolhub</strong> &bull; Free Online Tools &bull;
+                <span class="heart">❤️</span> Made with precision
+            </p>
+            <p style="font-size:13px; margin-top:4px; color:#9ab8b8;">
+                &copy; 2026 99toolhub &bull; All rights reserved
+            </p>
+        </div>
+
+    </div>
+
+    <!-- ===== TOAST ===== -->
+    <div class="toast" id="toast">
+        <i class="fas fa-check-circle" style="color:#4ade80;"></i>
+        <span id="toastMsg">Done!</span>
+    </div>
+
+    <!-- ===== SCRIPT ===== -->
+    <script>
+        // ─── DOM REFS ───
+        const dataInput = document.getElementById('barcodeData');
+        const formatSelect = document.getElementById('barcodeFormat');
+        const widthInput = document.getElementById('barcodeWidth');
+        const heightInput = document.getElementById('barcodeHeight');
+        const fontSizeInput = document.getElementById('barcodeFontSize');
+        const barcodeDisplay = document.getElementById('barcodeDisplay');
+        const barcodeContainer = document.getElementById('barcodeContainer');
+        const placeholder = document.getElementById('placeholder');
+
+        const toast = document.getElementById('toast');
+        const toastMsg = document.getElementById('toastMsg');
+
+        let toastTimer = null;
+        let currentBarcodeData = '';
+        let currentFormat = '';
+
+        // ─── TOAST ───
+        function showToast(msg) {
+            toastMsg.textContent = msg;
+            toast.classList.add('show');
+            clearTimeout(toastTimer);
+            toastTimer = setTimeout(() => toast.classList.remove('show'), 2800);
+        }
+
+        // ─── GENERATE BARCODE ───
+        function generateBarcode() {
+            const data = dataInput.value.trim();
+            const format = formatSelect.value;
+            const width = parseFloat(widthInput.value) || 2;
+            const height = parseInt(heightInput.value) || 80;
+            const fontSize = parseInt(fontSizeInput.value) || 16;
+
+            if (!data) {
+                showToast('⚠️ Please enter data to encode');
+                return;
+            }
+
+            currentBarcodeData = data;
+            currentFormat = format;
+
+            // Validate EAN-13 and UPC-A
+            if (format === 'EAN13' && !/^\d{13}$/.test(data)) {
+                showToast('⚠️ EAN-13 requires exactly 13 digits');
+                return;
+            }
+            if (format === 'UPC' && !/^\d{12}$/.test(data)) {
+                showToast('⚠️ UPC-A requires exactly 12 digits');
+                return;
+            }
+            if (format === 'ITF' && !/^\d{14}$/.test(data)) {
+                showToast('⚠️ ITF-14 requires exactly 14 digits');
+                return;
+            }
+
+            // Clear previous
+            barcodeContainer.innerHTML = '';
+            barcodeContainer.style.display = 'flex';
+
+            // ─── QR CODE ───
+            if (format === 'QR') {
+                try {
+                    const canvas = document.createElement('canvas');
+                    canvas.id = 'qrCanvas';
+                    canvas.style.maxWidth = '100%';
+                    canvas.style.height = 'auto';
+                    barcodeContainer.appendChild(canvas);
+
+                    new QRCode(canvas, {
+                        text: data,
+                        width: 280,
+                        height: 280,
+                        colorDark: '#000000',
+                        colorLight: '#ffffff',
+                        correctLevel: QRCode.CorrectLevel.H
+                    });
+
+                    barcodeDisplay.classList.add('has-barcode');
+                    placeholder.style.display = 'none';
+
+                    // Show label
+                    const label = document.createElement('div');
+                    label.className = 'barcode-label';
+                    label.textContent = data;
+                    barcodeContainer.appendChild(label);
+
+                    showToast('✅ QR Code generated successfully!');
+                } catch (e) {
+                    showToast('⚠️ Error generating QR Code: ' + e.message);
+                    console.error(e);
+                }
+                return;
+            }
+
+            // ─── 1D BARCODE ───
+            try {
+                const svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+                svg.id = 'barcodeSVG';
+                svg.style.maxWidth = '100%';
+                svg.style.height = 'auto';
+                barcodeContainer.appendChild(svg);
+
+                // Generate barcode with JsBarcode
+                JsBarcode(svg, data, {
+                    format: format,
+                    width: width,
+                    height: height,
+                    displayValue: true,
+                    fontSize: fontSize,
+                    font: 'monospace',
+                    textAlign: 'center',
+                    textPosition: 'bottom',
+                    textMargin: 4,
+                    margin: 12,
+                    background: '#ffffff',
+                    lineColor: '#000000',
+                    valid: function(valid) {
+                        if (!valid) {
+                            showToast('⚠️ Invalid data for ' + format + ' format');
+                        }
+                    }
+                });
+
+                barcodeDisplay.classList.add('has-barcode');
+                placeholder.style.display = 'none';
+
+                // Also add a label below for extra visibility
+                const label = document.createElement('div');
+                label.className = 'barcode-label';
+                label.textContent = data;
+                barcodeContainer.appendChild(label);
+
+                showToast('✅ Barcode generated successfully!');
+            } catch (e) {
+                showToast('⚠️ Error generating barcode: ' + e.message);
+                console.error(e);
+                barcodeContainer.innerHTML = '';
+                barcodeContainer.style.display = 'none';
+                placeholder.style.display = 'block';
+                barcodeDisplay.classList.remove('has-barcode');
+            }
+        }
+
+        // ─── RESET ───
+        function resetAll() {
+            dataInput.value = '';
+            formatSelect.value = 'CODE128';
+            widthInput.value = '2';
+            heightInput.value = '80';
+            fontSizeInput.value = '16';
+            barcodeContainer.innerHTML = '';
+            barcodeContainer.style.display = 'none';
+            placeholder.style.display = 'block';
+            barcodeDisplay.classList.remove('has-barcode');
+            currentBarcodeData = '';
+            currentFormat = '';
+            showToast('🔄 Reset complete');
+        }
+
+        // ─── COPY DATA ───
+        function copyBarcode() {
+            const data = dataInput.value.trim();
+            if (!data) {
+                showToast('⚠️ No data to copy');
+                return;
+            }
+
+            if (navigator.clipboard && navigator.clipboard.writeText) {
+                navigator.clipboard.writeText(data).then(() => {
+                    showToast('📋 Data copied to clipboard!');
+                }).catch(() => fallbackCopy(data));
+            } else {
+                fallbackCopy(data);
+            }
+        }
+
+        function fallbackCopy(text) {
+            const ta = document.createElement('textarea');
+            ta.value = text;
+            ta.style.position = 'fixed';
+            ta.style.opacity = '0';
+            document.body.appendChild(ta);
+            ta.select();
+            try {
+                document.execCommand('copy');
+                showToast('📋 Copied!');
+            } catch (e) {
+                showToast('❌ Could not copy. Please copy manually.');
+            }
+            document.body.removeChild(ta);
+        }
+
+        // ─── DOWNLOAD PNG ───
+        function downloadPNG() {
+            const svg = document.getElementById('barcodeSVG');
+            const canvas = document.getElementById('qrCanvas');
+
+            if (svg) {
+                // 1D barcode - convert SVG to PNG
+                try {
+                    const svgData = new XMLSerializer().serializeToString(svg);
+                    const svgBlob = new Blob([svgData], { type: 'image/svg+xml;charset=utf-8' });
+                    const url = URL.createObjectURL(svgBlob);
+
+                    const img = new Image();
+                    img.onload = function() {
+                        const c = document.createElement('canvas');
+                        const ctx = c.getContext('2d');
+                        c.width = img.width * 2;
+                        c.height = img.height * 2;
+                        ctx.scale(2, 2);
+                        ctx.fillStyle = '#ffffff';
+                        ctx.fillRect(0, 0, img.width, img.height);
+                        ctx.drawImage(img, 0, 0);
+                        const link = document.createElement('a');
+                        link.download = 'barcode-' + Date.now() + '.png';
+                        link.href = c.toDataURL('image/png');
+                        link.click();
+                        URL.revokeObjectURL(url);
+                        showToast('📥 PNG downloaded!');
+                    };
+                    img.src = url;
+                } catch (e) {
+                    showToast('⚠️ Error downloading PNG');
+                    console.error(e);
+                }
+            } else if (canvas) {
+                // QR Code - download canvas as PNG
+                try {
+                    const link = document.createElement('a');
+                    link.download = 'qrcode-' + Date.now() + '.png';
+                    link.href = canvas.toDataURL('image/png');
+                    link.click();
+                    showToast('📥 PNG downloaded!');
+                } catch (e) {
+                    showToast('⚠️ Error downloading PNG');
+                    console.error(e);
+                }
+            } else {
+                showToast('⚠️ Generate a barcode first');
+            }
+        }
+
+        // ─── DOWNLOAD PDF ───
+        function downloadPDF() {
+            const svg = document.getElementById('barcodeSVG');
+            const canvas = document.getElementById('qrCanvas');
+
+            if (!svg && !canvas) {
+                showToast('⚠️ Generate a barcode first');
+                return;
+            }
+
+            try {
+                const { jsPDF } = window.jspdf;
+                const doc = new jsPDF('p', 'mm', 'a4');
+
+                doc.setFillColor(255, 255, 255);
+                doc.rect(0, 0, 210, 297, 'F');
+
+                doc.setFontSize(18);
+                doc.setFont('helvetica', 'bold');
+                doc.text('Barcode Generated by 99toolhub', 105, 30, { align: 'center' });
+
+                doc.setFontSize(10);
+                doc.setFont('helvetica', 'normal');
+                doc.text('Data: ' + (dataInput.value.trim() || 'N/A'), 105, 40, { align: 'center' });
+                doc.text('Format: ' + formatSelect.options[formatSelect.selectedIndex].text, 105, 46, { align: 'center' });
+
+                if (svg) {
+                    // 1D barcode
+                    const svgData = new XMLSerializer().serializeToString(svg);
+                    const svgBlob = new Blob([svgData], { type: 'image/svg+xml;charset=utf-8' });
+                    const url = URL.createObjectURL(svgBlob);
+
+                    const img = new Image();
+                    img.onload = function() {
+                        const imgWidth = 170;
+                        const imgHeight = (img.height / img.width) * imgWidth;
+                        const x = (210 - imgWidth) / 2;
+                        const y = 60;
+                        doc.addImage(img, 'PNG', x, y, imgWidth, imgHeight);
+                        doc.save('barcode-' + Date.now() + '.pdf');
+                        URL.revokeObjectURL(url);
+                        showToast('📄 PDF downloaded!');
+                    };
+                    img.onerror = function() {
+                        showToast('⚠️ Error generating PDF');
+                    };
+                    img.src = url;
+                } else if (canvas) {
+                    // QR Code
+                    const imgData = canvas.toDataURL('image/png');
+                    const imgWidth = 80;
+                    const imgHeight = 80;
+                    const x = (210 - imgWidth) / 2;
+                    const y = 60;
+                    doc.addImage(imgData, 'PNG', x, y, imgWidth, imgHeight);
+                    doc.save('qrcode-' + Date.now() + '.pdf');
+                    showToast('📄 PDF downloaded!');
+                }
+            } catch (e) {
+                showToast('⚠️ Error generating PDF: ' + e.message);
+                console.error(e);
+            }
+        }
+
+        // ─── PRINT ───
+        function printPage() {
+            const svg = document.getElementById('barcodeSVG');
+            const canvas = document.getElementById('qrCanvas');
+            if (!svg && !canvas) {
+                showToast('⚠️ Generate a barcode first');
+                return;
+            }
+            window.print();
+            showToast('🖨️ Print dialog opened.');
+        }
+
+        // ─── SHARE ───
+        function shareResult() {
+            const data = dataInput.value.trim();
+            if (!data) {
+                showToast('⚠️ No data to share');
+                return;
+            }
+
+            const format = formatSelect.options[formatSelect.selectedIndex].text;
+            const shareText =
+                '📊 Barcode Generated – 99toolhub\n' +
+                '─────────────────────────────\n' +
+                'Data: ' + data + '\n' +
+                'Format: ' + format + '\n' +
+                '─────────────────────────────\n' +
+                '🔗 Generated using 99toolhub.com';
+
+            if (navigator.share) {
+                navigator.share({
+                    title: 'Barcode Generated - 99toolhub',
+                    text: shareText,
+                }).catch(err => {
+                    if (err.name !== 'AbortError') {
+                        fallbackShare(shareText);
+                    }
+                });
+            } else {
+                fallbackShare(shareText);
+            }
+        }
+
+        function fallbackShare(text) {
+            if (navigator.clipboard && navigator.clipboard.writeText) {
+                navigator.clipboard.writeText(text).then(() => {
+                    showToast('📋 Barcode info copied to clipboard! Share it anywhere.');
+                }).catch(() => {
+                    showToast('Could not copy. Please copy manually.');
+                });
+            } else {
+                const ta = document.createElement('textarea');
+                ta.value = text;
+                ta.style.position = 'fixed';
+                ta.style.left = '-9999px';
+                ta.style.top = '-9999px';
+                document.body.appendChild(ta);
+                ta.select();
+                try {
+                    document.execCommand('copy');
+                    showToast('📋 Copied to clipboard!');
+                } catch (e) {
+                    prompt('Copy this result:', text);
+                    showToast('📋 Copied (select all & copy).');
+                }
+                document.body.removeChild(ta);
+            }
+        }
+
+        // ─── ENTER KEY SUPPORT ───
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Enter') {
+                const active = document.activeElement;
+                if (active && (active.id === 'barcodeData' ||
+                        active.id === 'barcodeFormat' ||
+                        active.id === 'barcodeWidth' ||
+                        active.id === 'barcodeHeight' ||
+                        active.id === 'barcodeFontSize')) {
+                    e.preventDefault();
+                    generateBarcode();
+                }
+            }
+        });
+
+        // ─── AUTO-GENERATE ON CHANGE ───
+        dataInput.addEventListener('change', generateBarcode);
+        formatSelect.addEventListener('change', generateBarcode);
+        widthInput.addEventListener('change', generateBarcode);
+        heightInput.addEventListener('change', generateBarcode);
+        fontSizeInput.addEventListener('change', generateBarcode);
+
+        // ─── INIT ───
+        setTimeout(generateBarcode, 300);
+
+        console.log('✅ 99toolhub Barcode Generator loaded successfully.');
+    </script>
+
+</body>
+</html>

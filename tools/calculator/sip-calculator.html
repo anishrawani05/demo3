@@ -1,0 +1,1593 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <link rel="icon" type="image/png" href="../../images/favicon.png">
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>SIP Calculator – 99toolhub</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js">
+    </script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js">
+    </script>
+    <style>
+        /* ===== RESET & BASE ===== */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Arial, sans-serif;
+            background: #f0f4f8;
+            color: #0b1e33;
+            line-height: 1.8;
+            padding: 24px;
+        }
+        .app-wrapper {
+            max-width: 1000px;
+            width: 100%;
+            margin: 0 auto;
+            background: #ffffff;
+            border-radius: 32px;
+            padding: 32px 36px 40px;
+            box-shadow: 0 30px 80px rgba(0, 20, 40, 0.08);
+        }
+        .section-divider {
+            border: none;
+            border-top: 2px solid #eef3f7;
+            margin: 40px 0 32px;
+        }
+
+        /* ===== HEADER ===== */
+        .header {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            padding-bottom: 16px;
+            border-bottom: 2px solid #eef3f7;
+        }
+        .header-icon {
+            width: 52px;
+            height: 52px;
+            background: linear-gradient(135deg, #1f2f8f, #5367ff);
+            border-radius: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 26px;
+            box-shadow: 0 6px 20px rgba(31, 47, 143, 0.3);
+            flex-shrink: 0;
+        }
+        .header-text h1 {
+            font-size: 26px;
+            font-weight: 700;
+            letter-spacing: -0.3px;
+        }
+        .header-text h1 span {
+            color: #5367ff;
+        }
+        .header-text p {
+            font-size: 14px;
+            color: #5b6f82;
+        }
+        .live-badge {
+            display: inline-block;
+            background: #e8ecff;
+            color: #1f2f8f;
+            font-size: 11px;
+            font-weight: 600;
+            padding: 2px 14px;
+            border-radius: 20px;
+            margin-top: 2px;
+        }
+
+        /* ===== CALCULATOR ===== */
+        .calculator-section {
+            margin-top: 20px;
+        }
+        .input-group {
+            margin-bottom: 18px;
+        }
+        .input-group label {
+            display: block;
+            font-weight: 700;
+            font-size: 14px;
+            color: #1f2f8f;
+            margin-bottom: 6px;
+        }
+        .input-group label i {
+            margin-right: 8px;
+            color: #5367ff;
+        }
+        .input-group input {
+            width: 100%;
+            padding: 14px 18px;
+            border: 2px solid #d8dcff;
+            border-radius: 12px;
+            font-size: 16px;
+            font-weight: 500;
+            outline: none;
+            background: #fafbff;
+            transition: 0.25s;
+            color: #0b1e33;
+        }
+        .input-group input:focus {
+            border-color: #5367ff;
+            box-shadow: 0 0 0 4px rgba(83, 103, 255, 0.12);
+            background: #fff;
+        }
+
+        /* ===== RESULT GRID ===== */
+        .result-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 14px;
+            margin-top: 24px;
+        }
+        .result-card {
+            background: #f7f8ff;
+            padding: 18px 12px;
+            border-radius: 14px;
+            text-align: center;
+            border: 1px solid #e5e8ff;
+            transition: 0.2s;
+        }
+        .result-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 16px rgba(31, 47, 143, 0.06);
+        }
+        .result-card .label {
+            display: block;
+            color: #777;
+            font-size: 13px;
+            font-weight: 500;
+            margin-bottom: 4px;
+        }
+        .result-card .value {
+            font-size: 22px;
+            font-weight: 700;
+            color: #1f2f8f;
+        }
+        .result-card .value.green {
+            color: #0f7b3a;
+        }
+        .result-card .value.blue {
+            color: #5367ff;
+        }
+        .result-card .value.gold {
+            color: #b8860b;
+        }
+
+        /* ===== CHART ===== */
+        .chart-box {
+            margin-top: 28px;
+            background: #fff;
+            padding: 24px 20px 20px;
+            border-radius: 16px;
+            border: 1px solid #e5e8ff;
+            text-align: center;
+        }
+        .chart-legend {
+            display: flex;
+            justify-content: center;
+            gap: 30px;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+        }
+        .chart-legend-item {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-weight: 600;
+            font-size: 14px;
+            color: #444;
+        }
+        .legend-color {
+            width: 22px;
+            height: 10px;
+            border-radius: 20px;
+        }
+        .legend-color.invested {
+            background: #e8ecff;
+        }
+        .legend-color.returns {
+            background: #5367ff;
+        }
+
+        .donut-wrap {
+            width: 260px;
+            height: 260px;
+            margin: 0 auto;
+            position: relative;
+        }
+        .donut {
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            background: conic-gradient(#5367ff 0deg, #5367ff 0deg, #e8ecff 0deg, #e8ecff 360deg);
+            transition: background 0.9s ease;
+            position: relative;
+        }
+        .donut::after {
+            content: "";
+            position: absolute;
+            width: 58%;
+            height: 58%;
+            background: #fff;
+            border-radius: 50%;
+            top: 21%;
+            left: 21%;
+        }
+        .center-text {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            z-index: 2;
+            text-align: center;
+        }
+        .center-text h3 {
+            font-size: 20px;
+            font-weight: 700;
+            color: #1f2f8f;
+        }
+        .center-text p {
+            font-size: 12px;
+            color: #777;
+            font-weight: 500;
+        }
+
+        /* ===== SUMMARY ===== */
+        .summary-box {
+            margin-top: 24px;
+            background: #f7f8ff;
+            padding: 18px 22px;
+            border-radius: 12px;
+            border: 1px solid #e5e8ff;
+            line-height: 2;
+            color: #333;
+            font-size: 15px;
+        }
+        .summary-box b {
+            color: #1f2f8f;
+        }
+
+        /* ===== ACTION BAR ===== */
+        .action-bar {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-top: 18px;
+            padding-top: 16px;
+            border-top: 2px solid #eef3f7;
+        }
+        .action-btn {
+            padding: 8px 18px;
+            border: 2px solid #e9eef3;
+            border-radius: 40px;
+            background: white;
+            font-weight: 600;
+            font-size: 12px;
+            color: #1e3a5f;
+            cursor: pointer;
+            transition: 0.2s;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+        }
+        .action-btn:hover {
+            border-color: #5367ff;
+            background: #f0f2ff;
+            transform: translateY(-2px);
+        }
+        .action-btn i {
+            font-size: 13px;
+        }
+        .action-btn.pdf-btn {
+            background: #fef2f2;
+            border-color: #fca5a5;
+            color: #991b1b;
+        }
+        .action-btn.pdf-btn:hover {
+            background: #fee2e2;
+        }
+
+        /* ===== CONTENT WRAP ===== */
+        .content-wrap {
+            margin-top: 40px;
+            padding-top: 32px;
+            border-top: 2px solid #eef3f7;
+        }
+        .content-wrap h2 {
+            font-size: 26px;
+            font-weight: 700;
+            color: #0b1e33;
+            margin-top: 34px;
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+        .content-wrap h2:first-of-type {
+            margin-top: 0;
+        }
+        .content-wrap h2 .badge {
+            font-size: 11px;
+            background: #5367ff;
+            color: #fff;
+            padding: 2px 14px;
+            border-radius: 40px;
+            font-weight: 600;
+        }
+        .content-wrap h3 {
+            font-size: 19px;
+            font-weight: 600;
+            color: #1f2f8f;
+            margin-top: 22px;
+            margin-bottom: 8px;
+        }
+        .content-wrap h4 {
+            font-size: 17px;
+            font-weight: 600;
+            color: #1f2f8f;
+            margin-top: 18px;
+            margin-bottom: 6px;
+        }
+        .content-wrap p {
+            font-size: 15.5px;
+            line-height: 1.9;
+            color: #1e3a5f;
+            margin-bottom: 12px;
+        }
+        .content-wrap ul,
+        .content-wrap ol {
+            padding-left: 24px;
+            margin-bottom: 14px;
+        }
+        .content-wrap li {
+            font-size: 15.5px;
+            line-height: 1.9;
+            color: #1e3a5f;
+            margin-bottom: 5px;
+        }
+        .content-wrap li strong {
+            color: #0b1e33;
+        }
+        .content-wrap .formula-box {
+            background: #f0f2ff;
+            border-left: 6px solid #5367ff;
+            padding: 18px 22px;
+            border-radius: 14px;
+            margin: 14px 0 20px;
+            font-size: 15px;
+        }
+        .content-wrap .formula-box .math {
+            font-family: 'Times New Roman', serif;
+            font-size: 19px;
+            font-weight: 700;
+            color: #0b1e33;
+        }
+        .content-wrap .highlight-box {
+            background: #f7f8ff;
+            border-radius: 14px;
+            padding: 18px 22px;
+            border: 1px solid #e5e8ff;
+            margin: 14px 0 20px;
+        }
+        .content-wrap .highlight-box .row {
+            display: flex;
+            justify-content: space-between;
+            padding: 4px 0;
+            border-bottom: 1px solid #eef3f7;
+            font-size: 15px;
+        }
+        .content-wrap .highlight-box .row:last-child {
+            border-bottom: none;
+        }
+        .content-wrap .highlight-box .row .val {
+            font-weight: 700;
+            color: #1f2f8f;
+        }
+
+        .faq-list {
+            margin-top: 8px;
+        }
+        .faq-item {
+            border-bottom: 1px solid #eef3f7;
+            padding: 12px 0;
+            cursor: pointer;
+        }
+        .faq-item:last-child {
+            border-bottom: none;
+        }
+        .faq-q {
+            display: flex;
+            justify-content: space-between;
+            font-weight: 600;
+            font-size: 16px;
+            color: #0b1e33;
+        }
+        .faq-q i {
+            transition: 0.3s;
+        }
+        .faq-item.open .faq-q i {
+            transform: rotate(180deg);
+        }
+        .faq-a {
+            max-height: 0;
+            overflow: hidden;
+            transition: 0.35s ease;
+            opacity: 0;
+            font-size: 15px;
+            color: #2c3e50;
+            line-height: 1.8;
+        }
+        .faq-item.open .faq-a {
+            max-height: 400px;
+            opacity: 1;
+            padding-top: 8px;
+        }
+
+        .glossary-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px 24px;
+            margin: 12px 0 18px;
+        }
+        .glossary-item {
+            display: flex;
+            gap: 8px;
+            font-size: 15px;
+            padding: 4px 0;
+            border-bottom: 1px solid #eef3f7;
+        }
+        .glossary-item .term {
+            font-weight: 700;
+            color: #1f2f8f;
+            min-width: 100px;
+        }
+        .glossary-item .def {
+            color: #1e3a5f;
+        }
+
+        .comparison-table {
+            overflow-x: auto;
+            margin: 16px 0 22px;
+            border-radius: 14px;
+            border: 1px solid #e5e8ff;
+        }
+        .comparison-table table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 14px;
+        }
+        .comparison-table th {
+            background: #1f2f8f;
+            color: #fff;
+            padding: 12px 16px;
+            text-align: left;
+            font-weight: 600;
+        }
+        .comparison-table td {
+            padding: 10px 16px;
+            border-bottom: 1px solid #eef3f7;
+            color: #1e3a5f;
+        }
+        .comparison-table tr:nth-child(even) td {
+            background: #f7f8ff;
+        }
+        .comparison-table tr:last-child td {
+            border-bottom: none;
+        }
+
+        .disclaimer-box {
+            background: #fef3f2;
+            border-left: 6px solid #dc2626;
+            padding: 18px 22px;
+            border-radius: 14px;
+            margin: 14px 0 20px;
+            font-size: 15px;
+            color: #1e3a5f;
+        }
+
+        /* ===== TOAST ===== */
+        .toast {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            background: #0b1e33;
+            color: white;
+            padding: 12px 26px;
+            border-radius: 16px;
+            font-weight: 500;
+            box-shadow: 0 12px 40px rgba(0, 0, 0, 0.2);
+            transform: translateY(120px);
+            opacity: 0;
+            transition: 0.4s ease;
+            z-index: 999;
+            max-width: 400px;
+            font-size: 14px;
+        }
+        .toast.show {
+            transform: translateY(0);
+            opacity: 1;
+        }
+        .toast i {
+            margin-right: 10px;
+        }
+
+        /* ===== FOOTER ===== */
+        .footer {
+            margin-top: 36px;
+            padding-top: 20px;
+            border-top: 2px solid #eef3f7;
+            text-align: center;
+            font-size: 14px;
+            color: #6b85a0;
+        }
+        .footer strong {
+            color: #0b1e33;
+        }
+
+        /* ===== RESPONSIVE ===== */
+        @media (max-width: 700px) {
+            .app-wrapper {
+                padding: 18px 14px;
+                border-radius: 20px;
+            }
+            .result-grid {
+                grid-template-columns: 1fr;
+            }
+            .donut-wrap {
+                width: 220px;
+                height: 220px;
+            }
+            .header-text h1 {
+                font-size: 20px;
+            }
+            .content-wrap h2 {
+                font-size: 21px;
+            }
+            .action-btn {
+                font-size: 11px;
+                padding: 5px 12px;
+            }
+            .glossary-grid {
+                grid-template-columns: 1fr;
+            }
+            .comparison-table table {
+                font-size: 12px;
+            }
+            .comparison-table th,
+            .comparison-table td {
+                padding: 8px 10px;
+            }
+            .header-icon {
+                width: 42px;
+                height: 42px;
+                font-size: 20px;
+            }
+        }
+        @media (max-width: 400px) {
+            .app-wrapper {
+                padding: 10px 8px;
+                border-radius: 14px;
+            }
+            .result-card .value {
+                font-size: 18px;
+            }
+            .donut-wrap {
+                width: 180px;
+                height: 180px;
+            }
+            .center-text h3 {
+                font-size: 16px;
+            }
+            .header-text h1 {
+                font-size: 17px;
+            }
+            .content-wrap h2 {
+                font-size: 18px;
+            }
+            .content-wrap h3 {
+                font-size: 16px;
+            }
+        }
+        @media print {
+            .action-bar,
+            .action-btn {
+                display: none !important;
+            }
+            .app-wrapper {
+                box-shadow: none !important;
+                border: 1px solid #ddd !important;
+                padding: 16px !important;
+            }
+            body {
+                background: #fff !important;
+                padding: 10px !important;
+            }
+            .content-wrap {
+                page-break-inside: avoid;
+            }
+            .faq-item {
+                page-break-inside: avoid;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- ===== TOAST ===== -->
+    <div class="toast" id="toast"><i class="fas fa-check-circle"></i> <span id="toastMsg">Copied!</span></div>
+
+    <!-- ===== MAIN APP ===== -->
+    <div class="app-wrapper" id="appWrapper">
+
+        <!-- ===== HEADER ===== -->
+        <div class="header">
+            <div class="header-icon"><i class="fas fa-chart-line"></i></div>
+            <div class="header-text">
+                <h1>99<span>toolhub</span></h1>
+                <p>SIP Calculator · Plan Your Wealth</p>
+                <span class="live-badge"><i class="fas fa-circle" style="font-size:8px; margin-right:4px; color:#5367ff;"></i> Live Calculator</span>
+            </div>
+        </div>
+
+        <!-- ===== CALCULATOR ===== -->
+        <div class="calculator-section">
+
+            <div style="display:flex; align-items:center; gap:8px; margin-bottom:18px;">
+                <h2 style="font-size:22px; font-weight:700; color:#1f2f8f;"><i class="fas fa-calculator" style="color:#5367ff;"></i> SIP Calculator</h2>
+            </div>
+
+            <div class="input-group">
+                <label><i class="fas fa-rupee-sign"></i> Monthly Investment (₹)</label>
+                <input type="number" id="monthlyInvestment" placeholder="Enter monthly SIP amount" value="5000" />
+            </div>
+
+            <div class="input-group">
+                <label><i class="fas fa-percent"></i> Expected Annual Return (%)</label>
+                <input type="number" id="annualReturn" placeholder="Enter expected return" value="12" step="0.5" />
+            </div>
+
+            <div class="input-group">
+                <label><i class="fas fa-clock"></i> Investment Period (Years)</label>
+                <input type="number" id="years" placeholder="Enter years" value="10" />
+            </div>
+
+            <div class="result-grid">
+                <div class="result-card">
+                    <span class="label">💰 Invested Amount</span>
+                    <div class="value gold" id="investedAmount">₹0</div>
+                </div>
+                <div class="result-card">
+                    <span class="label">📈 Estimated Returns</span>
+                    <div class="value green" id="returns">₹0</div>
+                </div>
+                <div class="result-card">
+                    <span class="label">🏦 Total Value</span>
+                    <div class="value blue" id="totalValue">₹0</div>
+                </div>
+            </div>
+
+            <div class="chart-box">
+                <div class="chart-legend">
+                    <div class="chart-legend-item">
+                        <span class="legend-color invested"></span> Invested Amount
+                    </div>
+                    <div class="chart-legend-item">
+                        <span class="legend-color returns"></span> Returns
+                    </div>
+                </div>
+
+                <div class="donut-wrap">
+                    <div id="donut" class="donut"></div>
+                    <div class="center-text">
+                        <h3 id="centerValue">₹0</h3>
+                        <p>Total Value</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="summary-box" id="summary">
+                Enter SIP details to calculate live result.
+            </div>
+
+            <!-- ===== ACTION BAR ===== -->
+            <div class="action-bar">
+                <button class="action-btn" id="copyBtn"><i class="fas fa-copy"></i> Copy</button>
+                <button class="action-btn" id="resetBtn"><i class="fas fa-undo-alt"></i> Reset</button>
+                <button class="action-btn" id="printBtn"><i class="fas fa-print"></i> Print</button>
+                <button class="action-btn pdf-btn" id="pdfBtn"><i class="fas fa-file-pdf"></i> PDF</button>
+                <button class="action-btn" id="shareBtn"><i class="fas fa-share-alt"></i> Share</button>
+            </div>
+
+        </div>
+
+        <!-- ================================================================
+        CONTENT SECTIONS — 6000+ WORDS
+        ================================================================ -->
+        <div class="content-wrap">
+
+            <!-- 1. About SIP Calculator -->
+            <h2>📖 About SIP Calculator <span class="badge">Overview</span></h2>
+            <p>
+                A <strong>SIP Calculator</strong> is a powerful financial tool designed to help investors estimate
+                the future value of their Systematic Investment Plan (SIP) investments. By inputting the monthly
+                investment amount, expected annual return rate, and investment tenure, you can instantly see the
+                projected maturity amount, total invested capital, and estimated returns. The 99toolhub SIP Calculator
+                goes a step further by providing a visual donut chart that clearly shows the proportion of invested
+                capital versus returns, making it easy to understand the power of compounding at a glance.
+            </p>
+            <p>
+                Whether you are a first-time investor looking to start your wealth-building journey or a seasoned
+                investor evaluating different SIP scenarios, this calculator provides accurate, real-time results
+                to guide your decision-making. It eliminates the need for complex manual calculations and helps you
+                set realistic financial goals.
+            </p>
+
+            <!-- 2. What is SIP -->
+            <h2>📌 What is SIP (Systematic Investment Plan)? <span class="badge">Basics</span></h2>
+            <p>
+                <strong>SIP</strong> stands for <strong>Systematic Investment Plan</strong>. It is a method of
+                investing a fixed amount of money at regular intervals — typically monthly — in a mutual fund scheme.
+                SIP is one of the most popular and disciplined ways of investing in the stock market, especially for
+                retail investors who want to build wealth over time without having to time the market.
+            </p>
+            <p>
+                When you invest through a SIP, you buy units of a mutual fund every month at the prevailing Net Asset
+                Value (NAV). Since the NAV fluctuates with market conditions, you end up buying more units when the
+                market is low and fewer units when the market is high. This strategy, known as <strong>rupee cost
+                averaging</strong>, helps reduce the overall cost of your investment and smooths out market volatility
+                over time.
+            </p>
+            <p>
+                SIPs are offered by most mutual fund houses and can be started with as little as ₹500 per month,
+                making them accessible to almost everyone. They are ideal for salaried individuals, business owners,
+                and anyone looking to build a corpus for long-term goals like retirement, children's education,
+                or buying a home.
+            </p>
+
+            <!-- 3. Why Should You Invest in SIP? -->
+            <h2>💡 Why Should You Invest in SIP? <span class="badge">Benefits</span></h2>
+            <p>
+                Investing through a Systematic Investment Plan offers a range of benefits that make it one of the
+                most attractive investment options for long-term wealth creation:
+            </p>
+            <ul>
+                <li><strong>✔ Disciplined Investing:</strong> SIP instils financial discipline by automating your
+                    investments. A fixed amount is deducted from your bank account every month, ensuring that you
+                    save and invest consistently without missing a month.</li>
+                <li><strong>✔ Rupee Cost Averaging:</strong> By investing a fixed amount regularly, you buy more units
+                    when prices are low and fewer when prices are high. This averages out your purchase cost over time,
+                    reducing the impact of market volatility.</li>
+                <li><strong>✔ Power of Compounding:</strong> The earlier you start investing, the more time your money
+                    has to grow. Compounding allows your returns to generate their own returns, creating a snowball
+                    effect that can significantly multiply your wealth over the long term.</li>
+                <li><strong>✔ Low Entry Barrier:</strong> You can start a SIP with as little as ₹500 per month, making
+                    it accessible to individuals with modest incomes. This democratizes investing and allows everyone
+                    to participate in wealth creation.</li>
+                <li><strong>✔ Flexibility:</strong> You can increase, decrease, pause, or stop your SIP at any time
+                    without any penalty. This flexibility allows you to adjust your investments based on changes in
+                    your financial situation.</li>
+                <li><strong>✔ Professional Management:</strong> Your money is managed by experienced fund managers who
+                    have the expertise to select the right stocks and bonds, helping you achieve better returns than
+                    you might on your own.</li>
+                <li><strong>✔ Tax Benefits:</strong> Investments in Equity Linked Savings Schemes (ELSS) through SIP
+                    qualify for tax deductions under Section 80C of the Income Tax Act, up to ₹1.5 lakh per year.</li>
+            </ul>
+
+            <!-- 4. How to Use the SIP Calculator -->
+            <h2>🛠️ How to Use the SIP Calculator <span class="badge">Guide</span></h2>
+            <p>
+                Using the 99toolhub SIP Calculator is simple and intuitive. Follow these steps to get an accurate
+                projection of your SIP investment:
+            </p>
+            <ol>
+                <li><strong>Enter Monthly Investment:</strong> Input the amount you plan to invest every month.
+                    This is the core parameter that determines your total investment over time.</li>
+                <li><strong>Enter Expected Annual Return:</strong> Specify the annual return rate you expect from your
+                    investment. This is typically based on historical performance of the mutual fund category you are
+                    investing in. For equity funds, a reasonable estimate is 10-15% per annum.</li>
+                <li><strong>Enter Investment Period:</strong> Enter the number of years you plan to continue your SIP.
+                    The longer the period, the greater the impact of compounding on your final corpus.</li>
+                <li><strong>View Results:</strong> As you adjust any input, the calculator instantly updates the
+                    invested amount, estimated returns, total value, and the donut chart. The summary section also
+                    provides a detailed breakdown of your investment.</li>
+            </ol>
+
+            <!-- 5. SIP Calculation Formula -->
+            <h2>🧮 SIP Calculation Formula <span class="badge">Math</span></h2>
+            <p>
+                The SIP Calculator uses the following standard formula to compute the future value of your periodic
+                investments:
+            </p>
+
+            <div class="formula-box">
+                <div class="math">
+                    FV = P × (( (1 + r)<sup>n</sup> - 1 ) / r) × (1 + r)
+                </div>
+                <div style="margin-top:6px;">
+                    Where:
+                    <br /><strong>FV</strong> = Future Value (Maturity Amount)
+                    <br /><strong>P</strong> = Monthly Investment Amount
+                    <br /><strong>r</strong> = Monthly Rate of Return (Annual Return / 12 / 100)
+                    <br /><strong>n</strong> = Total Number of Monthly Installments (Years × 12)
+                </div>
+            </div>
+
+            <p>
+                This formula takes into account the fact that each monthly investment earns returns for a different
+                period — the earlier investments earn returns for longer, while the later investments earn for less
+                time. The <strong>(1 + r)</strong> factor at the end is applied because the investment is made at the
+                <em>beginning</em> of each month (annuity due).
+            </p>
+
+            <!-- 6. How SIP Returns are Calculated -->
+            <h2>📊 How SIP Returns are Calculated <span class="badge">Process</span></h2>
+            <p>
+                SIP returns are calculated using the <strong>compounded annual growth rate (CAGR)</strong> method.
+                Unlike a lump sum investment where the entire amount grows at a fixed rate, SIP returns are more
+                nuanced because each monthly instalment grows for a different number of months.
+            </p>
+            <p>
+                The calculator uses the following logic:
+            </p>
+            <ol>
+                <li>Each monthly investment is treated as a separate lump sum that earns returns for the remaining
+                    number of months until maturity.</li>
+                <li>The future value of each instalment is calculated using the compound interest formula.</li>
+                <li>All the individual future values are summed to give the total maturity amount.</li>
+                <li>The total invested amount is simply the monthly investment multiplied by the number of months.</li>
+                <li>The estimated returns are the difference between the total maturity amount and the total invested
+                    amount.</li>
+            </ol>
+            <p>
+                This approach accurately reflects the real-world behaviour of SIP investments, where each instalment
+                has a different investment horizon.
+            </p>
+
+            <!-- 7. Monthly Investment Explained -->
+            <h2>💰 Monthly Investment Explained <span class="badge">Input</span></h2>
+            <p>
+                The <strong>Monthly Investment</strong> is the fixed amount you commit to invest every month through
+                your SIP. This is the foundation of your investment plan. The amount you choose should be based on
+                your disposable income, financial goals, and risk tolerance.
+            </p>
+            <p>
+                When deciding on your monthly SIP amount, consider the following:
+            </p>
+            <ul>
+                <li><strong>Budget:</strong> Ensure that the SIP amount is well within your monthly budget and does
+                    not strain your cash flow. A good rule of thumb is to invest at least 20-30% of your monthly
+                    surplus income.</li>
+                <li><strong>Goals:</strong> Your SIP amount should be aligned with your financial goals. For example,
+                    if you need ₹50 lakhs for your child's education in 15 years, you can work backwards using the
+                    calculator to determine the required monthly SIP amount.</li>
+                <li><strong>Incremental Increases:</strong> You can increase your SIP amount over time as your income
+                    grows. Many mutual funds allow you to step up your SIP by a certain percentage each year.</li>
+            </ul>
+
+            <!-- 8. Expected Rate of Return Explained -->
+            <h2>📈 Expected Rate of Return Explained <span class="badge">Input</span></h2>
+            <p>
+                The <strong>Expected Annual Return</strong> is the rate of return you anticipate from your investment
+                over the long term. This is a critical input because it directly impacts the final corpus. However,
+                it is important to understand that this is an <em>estimate</em> — actual returns can vary based on
+                market conditions.
+            </p>
+            <p>
+                Here are some general guidelines for expected returns based on the type of mutual fund:
+            </p>
+            <ul>
+                <li><strong>Equity Funds (Large Cap):</strong> 10-12% per annum (historical average)</li>
+                <li><strong>Equity Funds (Mid/Small Cap):</strong> 12-15% per annum (higher risk, higher potential)</li>
+                <li><strong>Hybrid Funds:</strong> 8-10% per annum (balanced risk)</li>
+                <li><strong>Debt Funds:</strong> 6-8% per annum (lower risk, stable returns)</li>
+                <li><strong>ELSS Funds:</strong> 10-14% per annum (tax-saving with equity exposure)</li>
+            </ul>
+            <p>
+                When using the calculator, it is prudent to use a conservative estimate to avoid disappointment.
+                For example, using 12% instead of 15% gives you a more realistic projection and helps you plan
+                your finances more effectively.
+            </p>
+
+            <!-- 9. Investment Duration Explained -->
+            <h2>⏳ Investment Duration Explained <span class="badge">Input</span></h2>
+            <p>
+                The <strong>Investment Duration</strong> is the number of years you plan to continue your SIP.
+                This is one of the most important factors in determining your final corpus because of the
+                <strong>power of compounding</strong>. The longer your money remains invested, the more time it has
+                to grow exponentially.
+            </p>
+            <p>
+                Consider these key points about investment duration:
+            </p>
+            <ul>
+                <li><strong>Short-Term (1-3 years):</strong> Suitable for short-term goals like a vacation or
+                    emergency fund. Returns are modest due to limited compounding.</li>
+                <li><strong>Medium-Term (3-7 years):</strong> Suitable for goals like a car purchase or home
+                    renovation. Compounding starts to show visible results.</li>
+                <li><strong>Long-Term (7+ years):</strong> Ideal for retirement, children's education, and wealth
+                    creation. This is where the power of compounding truly shines.</li>
+                <li><strong>Very Long-Term (15+ years):</strong> The snowball effect of compounding becomes
+                    exponential. A small monthly investment can grow into a substantial corpus over 20-30 years.</li>
+            </ul>
+            <p>
+                The SIP Calculator allows you to experiment with different durations to see how even a few extra
+                years can significantly boost your final corpus.
+            </p>
+
+            <!-- 10. Total Investment vs Estimated Returns -->
+            <h2>📊 Total Investment vs Estimated Returns <span class="badge">Comparison</span></h2>
+            <p>
+                The <strong>Total Investment</strong> is the sum of all your monthly contributions over the investment
+                period. It is simply calculated as: Monthly Investment × Number of Months.
+            </p>
+            <p>
+                The <strong>Estimated Returns</strong> is the profit you earn on your investment, which is the
+                difference between the total maturity value and the total invested amount.
+            </p>
+            <p>
+                The donut chart in the calculator visually represents the proportion of invested capital versus
+                returns. For long-term investments, you will notice that the returns portion (blue) often exceeds
+                the invested portion (light blue), highlighting the power of compounding. This visual representation
+                makes it easy to understand how your money grows over time.
+            </p>
+
+            <!-- 11. Wealth Gained Explained -->
+            <h2>📈 Wealth Gained Explained <span class="badge">Returns</span></h2>
+            <p>
+                <strong>Wealth Gained</strong> is the total profit or return you earn from your SIP investment over
+                the entire duration. It is the difference between the maturity amount and the total amount you invested.
+            </p>
+            <p>
+                For example, if you invested ₹6,00,000 over 10 years (₹5,000/month) and your maturity amount is
+                ₹11,61,695, your wealth gained is ₹5,61,695. This is the "free money" your investment has generated
+                through the power of compounding.
+            </p>
+            <p>
+                The ratio of wealth gained to total invested is a key indicator of the effectiveness of your investment.
+                A higher ratio means your money has worked harder for you, which is typically achieved through longer
+                investment durations and higher rates of return.
+            </p>
+
+            <!-- 12. Power of Compounding in SIP -->
+            <h2>⚡ Power of Compounding in SIP <span class="badge">Magic</span></h2>
+            <p>
+                <strong>Compounding</strong> is the process where your investment returns generate their own returns,
+                creating a snowball effect that can multiply your wealth exponentially over time. Albert Einstein
+                famously called it the "eighth wonder of the world."
+            </p>
+            <p>
+                In the context of SIP, compounding works as follows:
+            </p>
+            <ul>
+                <li>Your monthly investments earn returns in the form of capital appreciation and dividends.</li>
+                <li>These returns are reinvested, and in subsequent periods, they also earn returns.</li>
+                <li>Over time, the growth becomes exponential — the longer you stay invested, the more dramatic the
+                    effect.</li>
+            </ul>
+            <div class="highlight-box">
+                <div style="font-weight:700; margin-bottom:8px;">📌 Example: Power of Compounding</div>
+                <div class="row"><span>Monthly SIP:</span><span class="val">₹5,000</span></div>
+                <div class="row"><span>Annual Return:</span><span class="val">12%</span></div>
+                <div class="row"><span>10 Years:</span><span class="val">₹11.6 Lakhs</span></div>
+                <div class="row"><span>20 Years:</span><span class="val">₹49.9 Lakhs</span></div>
+                <div class="row"><span>30 Years:</span><span class="val">₹1.76 Crores</span></div>
+            </div>
+            <p>
+                As you can see, the same ₹5,000 monthly investment grows to ₹11.6 lakhs in 10 years, but to
+                ₹1.76 crores in 30 years — a dramatic difference that illustrates why starting early is so important.
+            </p>
+
+            <!-- 13. Benefits of SIP Investment -->
+            <h2>✅ Benefits of SIP Investment <span class="badge">Why SIP</span></h2>
+            <ul>
+                <li><strong>📉 Rupee Cost Averaging:</strong> Smooths out market volatility by buying more units
+                    when prices are low and fewer units when prices are high.</li>
+                <li><strong>🧠 Disciplined Saving:</strong> Automates your savings, ensuring you invest consistently
+                    without relying on willpower.</li>
+                <li><strong>💰 Affordable:</strong> Start with as little as ₹500 per month, making it accessible to
+                    everyone.</li>
+                <li><strong>📈 Compounding Power:</strong> The longer you stay invested, the more powerful the
+                    compounding effect.</li>
+                <li><strong>🔄 Flexibility:</strong> Increase, decrease, pause, or stop your SIP at any time.</li>
+                <li><strong>🏦 Professional Management:</strong> Your money is managed by experienced fund managers
+                    who make informed investment decisions.</li>
+                <li><strong>📊 Transparency:</strong> You receive regular statements showing your investments,
+                    holdings, and returns.</li>
+                <li><strong>💵 Tax Benefits:</strong> ELSS SIPs offer tax deductions under Section 80C.</li>
+            </ul>
+
+            <!-- 14. Advantages of Long-Term Investing -->
+            <h2>⏳ Advantages of Long-Term Investing <span class="badge">Patience</span></h2>
+            <p>
+                Long-term investing is the cornerstone of wealth creation. Here are the key advantages:
+            </p>
+            <ul>
+                <li><strong>Exponential Growth:</strong> The power of compounding works best over longer time
+                    horizons, turning small monthly investments into substantial wealth.</li>
+                <li><strong>Reduced Volatility:</strong> Over the long term, market fluctuations even out, and the
+                    overall trend is upward. Short-term dips become insignificant.</li>
+                <li><strong>Emotional Stability:</strong> Long-term investors are less likely to panic during market
+                    corrections because they focus on the big picture rather than short-term noise.</li>
+                <li><strong>Lower Tax Burden:</strong> Long-term capital gains (LTCG) are taxed at a lower rate
+                    compared to short-term gains in many countries.</li>
+                <li><strong>Goal Achievement:</strong> Long-term investing is essential for achieving major life goals
+                    like retirement, children's education, and purchasing a home.</li>
+            </ul>
+
+            <!-- 15. SIP vs Lump Sum Investment -->
+            <h2>⚖️ SIP vs Lump Sum Investment <span class="badge">Comparison</span></h2>
+            <div class="comparison-table">
+                <table>
+                    <thead>
+                        <tr><th>Parameter</th><th>SIP</th><th>Lump Sum</th></tr>
+                    </thead>
+                    <tbody>
+                        <tr><td><strong>Investment Mode</strong></td><td>Periodic (monthly)</td><td>One-time</td></tr>
+                        <tr><td><strong>Risk</strong></td><td>Lower (rupee cost averaging)</td><td>Higher (market timing risk)</td></tr>
+                        <tr><td><strong>Discipline</strong></td><td>High (automated)</td><td>Low (requires self-control)</td></tr>
+                        <tr><td><strong>Accessibility</strong></td><td>₹500/month minimum</td><td>Higher initial amount needed</td></tr>
+                        <tr><td><strong>Market Timing</strong></td><td>Not required</td><td>Critical for optimal returns</td></tr>
+                        <tr><td><strong>Volatility Management</strong></td><td>Automatic (rupee cost averaging)</td><td>Manual (timing the market)</td></tr>
+                        <tr><td><strong>Best For</strong></td><td>Salaried individuals, long-term goals</td><td>Windfall gains, bonus income</td></tr>
+                    </tbody>
+                </table>
+            </div>
+            <p>
+                Both SIP and lump sum investments have their place. SIP is ideal for regular income earners who want
+                to build wealth gradually, while lump sum is suitable for those with a large amount of cash available
+                and who believe the market is at a favourable level.
+            </p>
+
+            <!-- 16. SIP vs Fixed Deposit -->
+            <h2>🏦 SIP vs Fixed Deposit (FD) <span class="badge">Comparison</span></h2>
+            <div class="comparison-table">
+                <table>
+                    <thead>
+                        <tr><th>Parameter</th><th>SIP</th><th>Fixed Deposit</th></tr>
+                    </thead>
+                    <tbody>
+                        <tr><td><strong>Returns</strong></td><td>Market-linked (higher potential)</td><td>Fixed (lower, guaranteed)</td></tr>
+                        <tr><td><strong>Risk</strong></td><td>Market risk (moderate to high)</td><td>Very low (guaranteed)</td></tr>
+                        <tr><td><strong>Liquidity</strong></td><td>High (can redeem anytime)</td><td>Low (penalty for early withdrawal)</td></tr>
+                        <tr><td><strong>Taxation</strong></td><td>LTCG tax (10% above ₹1L)</td><td>Interest taxed as per income slab</td></tr>
+                        <tr><td><strong>Compounding</strong></td><td>Powerful compounding effect</td><td>Simple interest on fixed deposits</td></tr>
+                        <tr><td><strong>Best For</strong></td><td>Wealth creation, long-term goals</td><td>Capital preservation, short-term needs</td></tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- 17. SIP vs Recurring Deposit -->
+            <h2>🏦 SIP vs Recurring Deposit (RD) <span class="badge">Comparison</span></h2>
+            <div class="comparison-table">
+                <table>
+                    <thead>
+                        <tr><th>Parameter</th><th>SIP</th><th>Recurring Deposit</th></tr>
+                    </thead>
+                    <tbody>
+                        <tr><td><strong>Returns</strong></td><td>Market-linked (higher)</td><td>Fixed (lower, guaranteed)</td></tr>
+                        <tr><td><strong>Risk</strong></td><td>Market risk</td><td>Very low</td></tr>
+                        <tr><td><strong>Tenure</strong></td><td>Flexible (no fixed end date)</td><td>Fixed tenure (1-10 years)</td></tr>
+                        <tr><td><strong>Premature Withdrawal</strong></td><td>Allowed without penalty</td><td>Penalty applies</td></tr>
+                        <tr><td><strong>Tax Benefit</strong></td><td>ELSS offers tax deduction</td><td>No tax benefit</td></tr>
+                        <tr><td><strong>Best For</strong></td><td>Wealth creation</td><td>Safe, predictable savings</td></tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- 18. SIP vs PPF -->
+            <h2>🏛️ SIP vs Public Provident Fund (PPF) <span class="badge">Comparison</span></h2>
+            <div class="comparison-table">
+                <table>
+                    <thead>
+                        <tr><th>Parameter</th><th>SIP</th><th>PPF</th></tr>
+                    </thead>
+                    <tbody>
+                        <tr><td><strong>Returns</strong></td><td>Market-linked (10-15% historically)</td><td>Fixed (7-8% currently)</td></tr>
+                        <tr><td><strong>Risk</strong></td><td>Market risk</td><td>Risk-free (government-backed)</td></tr>
+                        <tr><td><strong>Lock-in Period</strong></td><td>No lock-in (ELSS has 3 years)</td><td>15 years (extendable)</td></tr>
+                        <tr><td><strong>Tax Benefit</strong></td><td>ELSS up to ₹1.5L (80C)</td><td>₹1.5L (80C), interest tax-free</td></tr>
+                        <tr><td><strong>Liquidity</strong></td><td>High</td><td>Low (partial withdrawal after 7 years)</td></tr>
+                        <tr><td><strong>Best For</strong></td><td>Wealth creation, flexibility</td><td>Retirement, tax-free returns</td></tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- 19. SIP vs Stocks -->
+            <h2>📈 SIP vs Direct Stocks <span class="badge">Comparison</span></h2>
+            <div class="comparison-table">
+                <table>
+                    <thead>
+                        <tr><th>Parameter</th><th>SIP</th><th>Direct Stocks</th></tr>
+                    </thead>
+                    <tbody>
+                        <tr><td><strong>Risk</strong></td><td>Moderate (diversified)</td><td>High (single company risk)</td></tr>
+                        <tr><td><strong>Expertise Required</strong></td><td>Low</td><td>High (research, analysis)</td></tr>
+                        <tr><td><strong>Diversification</strong></td><td>Automatic (mutual fund portfolio)</td><td>Manual (requires multiple stocks)</td></tr>
+                        <tr><td><strong>Time Commitment</strong></td><td>Low (set and forget)</td><td>High (constant monitoring)</td></tr>
+                        <tr><td><strong>Cost</strong></td><td>Expense ratio (0.5-1.5%)</td><td>Brokerage, STT, DP charges</td></tr>
+                        <tr><td><strong>Best For</strong></td><td>Beginners, passive investors</td><td>Active traders, experienced investors</td></tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- 20. Common SIP Investment Mistakes -->
+            <h2>⚠️ Common SIP Investment Mistakes <span class="badge">Avoid</span></h2>
+            <ul>
+                <li><strong>❌ Stopping SIP During Market Corrections:</strong> Many investors panic and stop their
+                    SIP when markets fall. This is the worst time to stop because you miss out on buying more units
+                    at lower prices.</li>
+                <li><strong>❌ Choosing the Wrong Fund:</strong> Not all mutual funds are suitable for all investors.
+                    Choose a fund that matches your risk profile and investment horizon.</li>
+                <li><strong>❌ Ignoring Fund Performance:</strong> Regularly review your fund's performance and
+                    switch if it consistently underperforms its benchmark.</li>
+                <li><strong>❌ Not Increasing SIP Amount Over Time:</strong> As your income grows, increase your SIP
+                    amount to accelerate your wealth creation.</li>
+                <li><strong>❌ Focusing Only on Past Returns:</strong> Past performance is not a guarantee of future
+                    returns. Look at the fund's consistency, portfolio quality, and fund manager track record.</li>
+                <li><strong>❌ Withdrawing Early:</strong> Premature withdrawal breaks the compounding cycle and
+                    reduces your final corpus significantly.</li>
+                <li><strong>❌ Not Having a Goal:</strong> SIP without a goal is like driving without a destination.
+                    Define your goals and align your SIP accordingly.</li>
+            </ul>
+
+            <!-- 21. Tips to Maximize SIP Returns -->
+            <h2>💎 Tips to Maximize SIP Returns <span class="badge">Strategy</span></h2>
+            <ul>
+                <li><strong>📅 Start Early:</strong> The earlier you start, the more time your money has to compound.
+                    Even a small amount invested early can grow into a large corpus over time.</li>
+                <li><strong>📈 Increase SIP Amount Annually:</strong> Step-up your SIP by 10-15% every year to
+                    accelerate your wealth creation.</li>
+                <li><strong>🔄 Stay Invested for the Long Term:</strong> Aim for at least 7-10 years to experience
+                    the full benefits of compounding.</li>
+                <li><strong>📊 Choose the Right Fund:</strong> Select funds with a consistent track record, strong
+                    portfolio, and experienced fund manager.</li>
+                <li><strong>📉 Don't Stop During Volatility:</strong> Market corrections are buying opportunities.
+                    Continue your SIP to accumulate more units at lower prices.</li>
+                <li><strong>📋 Review Regularly:</strong> Review your fund's performance annually and rebalance if
+                    needed.</li>
+                <li><strong>💼 Diversify:</strong> Spread your investments across different fund categories (large
+                    cap, mid cap, small cap, debt) to manage risk.</li>
+            </ul>
+
+            <!-- 22. Factors That Affect SIP Returns -->
+            <h2>📊 Factors That Affect SIP Returns <span class="badge">Analysis</span></h2>
+            <ul>
+                <li><strong>📈 Market Performance:</strong> The overall market trend directly impacts the NAV of
+                    your mutual fund units. Bull markets boost returns, while bear markets can temporarily reduce them.</li>
+                <li><strong>🏦 Fund Manager Expertise:</strong> A skilled fund manager can identify opportunities and
+                    manage risk effectively, leading to better returns.</li>
+                <li><strong>📊 Fund Category:</strong> Equity funds generally offer higher returns than debt funds,
+                    but with higher risk. Choose based on your risk tolerance.</li>
+                <li><strong>⏳ Investment Duration:</strong> Longer investment periods allow compounding to work its
+                    magic, resulting in higher returns.</li>
+                <li><strong>💰 Expense Ratio:</strong> The annual fee charged by the mutual fund (expense ratio)
+                    reduces your net returns. Choose funds with lower expense ratios.</li>
+                <li><strong>📉 Volatility:</strong> Market volatility affects the NAV and the number of units you
+                    acquire each month. Rupee cost averaging helps mitigate this.</li>
+                <li><strong>💸 Exit Load:</strong> If you redeem your units within a certain period (typically 1 year),
+                    you may pay an exit load, which reduces your returns.</li>
+            </ul>
+
+            <!-- 23. Who Should Invest in SIP? -->
+            <h2>👤 Who Should Invest in SIP? <span class="badge">Target Audience</span></h2>
+            <ul>
+                <li><strong>👨‍💼 Salaried Employees:</strong> SIPs are perfect for salaried individuals who can
+                    invest a fixed amount every month from their salary.</li>
+                <li><strong>👩‍💼 Freelancers & Self-Employed:</strong> If you have irregular income, you can still
+                    invest in SIPs with smaller amounts during good months.</li>
+                <li><strong>👨‍🎓 Young Professionals:</strong> Starting early gives you the advantage of long
+                    compounding periods, even with small amounts.</li>
+                <li><strong>👨‍👩‍👧‍👦 Parents:</strong> SIPs are ideal for building a corpus for children's education
+                    or marriage.</li>
+                <li><strong>👴 Retirees:</strong> Retirees can invest in debt-oriented SIPs for regular income and
+                    capital preservation.</li>
+                <li><strong>💼 Business Owners:</strong> SIPs provide a systematic way to invest surplus business
+                    profits for long-term growth.</li>
+                <li><strong>🧑‍🎓 Students:</strong> Students can start SIPs with small amounts to build a habit of
+                    saving and investing early.</li>
+            </ul>
+
+            <!-- 24. Example SIP Calculations -->
+            <h2>📌 Example SIP Calculations <span class="badge">Demo</span></h2>
+            <p>
+                Let's walk through a few examples to see how the SIP Calculator works in real-world scenarios.
+            </p>
+
+            <div class="highlight-box">
+                <div style="font-weight:700; margin-bottom:8px;">📘 Example 1: ₹5,000/month for 10 Years at 12%</div>
+                <div class="row"><span>Monthly Investment:</span><span class="val">₹5,000</span></div>
+                <div class="row"><span>Annual Return:</span><span class="val">12%</span></div>
+                <div class="row"><span>Period:</span><span class="val">10 Years</span></div>
+                <div class="row"><span>Total Invested:</span><span class="val">₹6,00,000</span></div>
+                <div class="row"><span>Estimated Returns:</span><span class="val">₹5,61,695</span></div>
+                <div class="row"><span>Total Value:</span><span class="val">₹11,61,695</span></div>
+            </div>
+
+            <div class="highlight-box">
+                <div style="font-weight:700; margin-bottom:8px;">📘 Example 2: ₹10,000/month for 15 Years at 15%</div>
+                <div class="row"><span>Monthly Investment:</span><span class="val">₹10,000</span></div>
+                <div class="row"><span>Annual Return:</span><span class="val">15%</span></div>
+                <div class="row"><span>Period:</span><span class="val">15 Years</span></div>
+                <div class="row"><span>Total Invested:</span><span class="val">₹18,00,000</span></div>
+                <div class="row"><span>Estimated Returns:</span><span class="val">₹49,32,000</span></div>
+                <div class="row"><span>Total Value:</span><span class="val">₹67,32,000</span></div>
+            </div>
+
+            <div class="highlight-box">
+                <div style="font-weight:700; margin-bottom:8px;">📘 Example 3: ₹2,000/month for 20 Years at 10%</div>
+                <div class="row"><span>Monthly Investment:</span><span class="val">₹2,000</span></div>
+                <div class="row"><span>Annual Return:</span><span class="val">10%</span></div>
+                <div class="row"><span>Period:</span><span class="val">20 Years</span></div>
+                <div class="row"><span>Total Invested:</span><span class="val">₹4,80,000</span></div>
+                <div class="row"><span>Estimated Returns:</span><span class="val">₹10,53,000</span></div>
+                <div class="row"><span>Total Value:</span><span class="val">₹15,33,000</span></div>
+            </div>
+
+            <!-- 25. FAQ -->
+            <h2>❓ Frequently Asked Questions (FAQs) <span class="badge">FAQ</span></h2>
+            <div class="faq-list">
+                <div class="faq-item">
+                    <div class="faq-q">What is a Systematic Investment Plan (SIP)? <i class="fas fa-chevron-down"></i></div>
+                    <div class="faq-a">A SIP is a method of investing a fixed amount of money at regular intervals
+                        (usually monthly) in a mutual fund scheme. It helps build wealth over time through disciplined
+                        investing and the power of compounding.</div>
+                </div>
+                <div class="faq-item">
+                    <div class="faq-q">What is the minimum amount for a SIP? <i class="fas fa-chevron-down"></i></div>
+                    <div class="faq-a">The minimum amount for a SIP can be as low as ₹500 per month in most mutual
+                        funds. Some funds may have a higher minimum requirement.</div>
+                </div>
+                <div class="faq-item">
+                    <div class="faq-q">Can I stop my SIP anytime? <i class="fas fa-chevron-down"></i></div>
+                    <div class="faq-a">Yes, you can stop or pause your SIP at any time without any penalty. Simply
+                        submit a request to your mutual fund provider or stop the auto-debit mandate.</div>
+                </div>
+                <div class="faq-item">
+                    <div class="faq-q">What is rupee cost averaging? <i class="fas fa-chevron-down"></i></div>
+                    <div class="faq-a">Rupee cost averaging is a strategy where you buy more units when the price is
+                        low and fewer units when the price is high, averaging out your purchase cost over time and
+                        reducing the impact of market volatility.</div>
+                </div>
+                <div class="faq-item">
+                    <div class="faq-q">Is SIP safe? <i class="fas fa-chevron-down"></i></div>
+                    <div class="faq-a">SIPs are subject to market risk, but they are a relatively safe and disciplined
+                        way to invest in the stock market. The risk is mitigated through diversification and rupee
+                        cost averaging.</div>
+                </div>
+                <div class="faq-item">
+                    <div class="faq-q">What is the average return of SIP in India? <i class="fas fa-chevron-down"></i></div>
+                    <div class="faq-a">Historically, equity SIPs in India have delivered average annual returns of
+                        10-15% over the long term (10+ years). Returns vary based on the fund category and market
+                        conditions.</div>
+                </div>
+                <div class="faq-item">
+                    <div class="faq-q">Can I increase my SIP amount? <i class="fas fa-chevron-down"></i></div>
+                    <div class="faq-a">Yes, you can increase your SIP amount through a step-up SIP feature offered
+                        by most mutual funds. You can also start a new SIP with a higher amount.</div>
+                </div>
+                <div class="faq-item">
+                    <div class="faq-q">What is the difference between SIP and mutual fund? <i class="fas fa-chevron-down"></i></div>
+                    <div class="faq-a">A mutual fund is the investment vehicle, while SIP is the method of investing
+                        in that vehicle. You can invest in a mutual fund through a SIP (regular instalments) or as a
+                        lump sum (one-time investment).</div>
+                </div>
+                <div class="faq-item">
+                    <div class="faq-q">Is SIP taxable? <i class="fas fa-chevron-down"></i></div>
+                    <div class="faq-a">SIP investments themselves are not taxable, but the returns are. Long-term
+                        capital gains (holding > 1 year) on equity funds are taxed at 10% above ₹1 lakh. Short-term
+                        gains are taxed at 15%.</div>
+                </div>
+                <div class="faq-item">
+                    <div class="faq-q">Can I do SIP in ELSS? <i class="fas fa-chevron-down"></i></div>
+                    <div class="faq-a">Yes, you can invest in ELSS (Equity Linked Savings Scheme) through SIP. ELSS
+                        offers tax benefits under Section 80C and has a lock-in period of 3 years.</div>
+                </div>
+            </div>
+
+            <!-- 26. SIP Investment Glossary -->
+            <h2>📚 SIP Investment Glossary <span class="badge">Terms</span></h2>
+            <div class="glossary-grid">
+                <div class="glossary-item"><span class="term">NAV</span><span class="def">Net Asset Value — the price of one unit of a mutual fund.</span></div>
+                <div class="glossary-item"><span class="term">AUM</span><span class="def">Assets Under Management — the total market value of all investments held by a fund.</span></div>
+                <div class="glossary-item"><span class="term">Expense Ratio</span><span class="def">The annual fee charged by the fund to manage your money.</span></div>
+                <div class="glossary-item"><span class="term">Exit Load</span><span class="def">A fee charged when you redeem your units within a specified period.</span></div>
+                <div class="glossary-item"><span class="term">CAGR</span><span class="def">Compound Annual Growth Rate — the average annual return over a period.</span></div>
+                <div class="glossary-item"><span class="term">XIRR</span><span class="def">Extended Internal Rate of Return — the true return of SIPs considering cash flow timing.</span></div>
+                <div class="glossary-item"><span class="term">Step-Up SIP</span><span class="def">A SIP that automatically increases the investment amount periodically.</span></div>
+                <div class="glossary-item"><span class="term">ELSS</span><span class="def">Equity Linked Savings Scheme — a tax-saving mutual fund with a 3-year lock-in.</span></div>
+                <div class="glossary-item"><span class="term">Large Cap</span><span class="def">Mutual funds that invest in the top 100 companies by market capitalisation.</span></div>
+                <div class="glossary-item"><span class="term">Mid Cap</span><span class="def">Funds that invest in companies ranked 101-250 by market cap.</span></div>
+                <div class="glossary-item"><span class="term">Small Cap</span><span class="def">Funds investing in companies beyond the top 250 by market cap.</span></div>
+                <div class="glossary-item"><span class="term">Debt Fund</span><span class="def">A fund that invests in fixed-income securities like bonds and treasury bills.</span></div>
+                <div class="glossary-item"><span class="term">Hybrid Fund</span><span class="def">A fund that invests in a mix of equity and debt instruments.</span></div>
+                <div class="glossary-item"><span class="term">Benchmark</span><span class="def">A standard index (like Nifty 50) used to measure the fund's performance.</span></div>
+            </div>
+
+            <!-- 27. Taxation on SIP Investments -->
+            <h2>💰 Taxation on SIP Investments <span class="badge">Tax</span></h2>
+            <p>
+                Understanding the tax implications of your SIP investments is crucial for effective financial planning.
+                Here's a breakdown of how SIPs are taxed in India:
+            </p>
+            <ul>
+                <li><strong>📊 Equity Funds (holding > 1 year):</strong> Long-term capital gains (LTCG) above ₹1 lakh
+                    are taxed at 10% without indexation.</li>
+                <li><strong>📊 Equity Funds (holding ≤ 1 year):</strong> Short-term capital gains (STCG) are taxed at
+                    15%.</li>
+                <li><strong>📊 Debt Funds (holding > 3 years):</strong> LTCG is taxed at 20% with indexation benefit.</li>
+                <li><strong>📊 Debt Funds (holding ≤ 3 years):</strong> STCG is taxed as per the individual's income
+                    tax slab.</li>
+                <li><strong>📊 ELSS Funds:</strong> Investments up to ₹1.5 lakh are eligible for deduction under
+                    Section 80C. LTCG tax applies after 3 years (holding period).</li>
+                <li><strong>📊 Dividend Income:</strong> Dividends from mutual funds are taxed as per the investor's
+                    income slab (taxable in the hands of the investor).</li>
+            </ul>
+            <p>
+                It is advisable to consult a tax professional for personalised tax advice based on your specific
+                financial situation.
+            </p>
+
+            <!-- 28. Risks of SIP Investing -->
+            <h2>⚠️ Risks of SIP Investing <span class="badge">Awareness</span></h2>
+            <p>
+                While SIPs are a relatively safe and disciplined way to invest, they are not without risks. It is
+                important to be aware of these risks before investing:
+            </p>
+            <ul>
+                <li><strong>📉 Market Risk:</strong> The NAV of mutual funds fluctuates with market conditions.
+                    Your investment value can go down in the short term.</li>
+                <li><strong>💹 Liquidity Risk:</strong> In some funds, especially debt funds with long durations,
+                    liquidity may be limited during market stress.</li>
+                <li><strong>🧑‍💼 Fund Manager Risk:</strong> The performance of the fund depends on the skills and
+                    decisions of the fund manager. A change in manager can affect returns.</li>
+                <li><strong>📊 Concentration Risk:</strong> If the fund has a concentrated portfolio, a downturn in
+                    a few holdings can impact the overall performance.</li>
+                <li><strong>💰 Inflation Risk:</strong> If the returns from your SIP do not outpace inflation, your
+                    purchasing power decreases over time.</li>
+                <li><strong>📉 Exit Load Risk:</strong> Redeeming your units before the specified period can result
+                    in an exit load, reducing your returns.</li>
+            </ul>
+
+            <!-- 29. Best Practices for SIP Investors -->
+            <h2>🏆 Best Practices for SIP Investors <span class="badge">Tips</span></h2>
+            <ul>
+                <li><strong>📅 Start Early:</strong> The earlier you start, the more time compounding has to work
+                    its magic.</li>
+                <li><strong>💡 Set Clear Goals:</strong> Define your financial goals (retirement, education, home) and
+                    align your SIP accordingly.</li>
+                <li><strong>📈 Regular Review:</strong> Review your SIP portfolio at least once a year to ensure it
+                    is on track to meet your goals.</li>
+                <li><strong>🔄 Rebalance:</strong> If your asset allocation drifts, rebalance by switching between
+                    equity and debt funds.</li>
+                <li><strong>💰 Increase SIP Amount:</strong> As your income grows, increase your SIP amount to
+                    accelerate wealth creation.</li>
+                <li><strong>📉 Stay Invested:</strong> Avoid the temptation to stop your SIP during market downturns.
+                    This is when rupee cost averaging works best.</li>
+                <li><strong>📊 Diversify:</strong> Spread your investments across different fund categories and
+                    fund houses to reduce risk.</li>
+                <li><strong>🧠 Educate Yourself:</strong> Stay informed about market trends, economic indicators,
+                    and fund performance to make better investment decisions.</li>
+            </ul>
+
+            <!-- 30. Disclaimer -->
+            <h2>⚠️ Disclaimer <span class="badge">Legal</span></h2>
+            <div class="disclaimer-box">
+                <p><strong>Disclaimer:</strong> The SIP Calculator is provided for <strong>educational and illustrative
+                purposes only</strong>. The calculations are based on the inputs provided by you and assume a
+                constant rate of return, which may not reflect actual market conditions. Past performance is not
+                indicative of future returns. Investing in mutual funds involves market risk. Please read the
+                scheme-related documents carefully before investing. The results from this calculator should not be
+                construed as financial advice. Always consult a qualified financial advisor before making any
+                investment decisions. 99toolhub is not liable for any losses incurred based on the use of this
+                calculator.</p>
+            </div>
+
+            <!-- 31. Conclusion -->
+            <h2>🎯 Conclusion <span class="badge">Final</span></h2>
+            <p>
+                The <strong>99toolhub SIP Calculator</strong> is an essential tool for anyone looking to build wealth
+                through systematic investing. By providing instant, accurate projections of your SIP investment, it
+                empowers you to make informed financial decisions and set realistic goals. Whether you are planning
+                for retirement, your children's education, or simply building a corpus for the future, the SIP
+                Calculator gives you the clarity and confidence you need.
+            </p>
+            <p>
+                Investing through SIPs is one of the most effective ways to create long-term wealth. The combination
+                of <strong>rupee cost averaging</strong>, <strong>powerful compounding</strong>, and <strong>financial
+                discipline</strong> makes SIPs a compelling choice for investors of all profiles. With the 99toolhub
+                SIP Calculator, you can experiment with different investment amounts, tenures, and return expectations
+                to find the perfect strategy that aligns with your financial goals.
+            </p>
+            <p>
+                Start using the SIP Calculator today and take the first step towards a financially secure future.
+                Remember, the best time to start investing was yesterday — the next best time is now. Happy investing!
+            </p>
+
+        </div>
+        <!-- end .content-wrap -->
+
+        <!-- ===== FOOTER ===== -->
+        <div class="footer">
+            © 2026 <strong>99toolhub</strong> — SIP Calculator. All rights reserved.
+        </div>
+
+    </div>
+    <!-- end .app-wrapper -->
+
+
+    <!-- ================================================================
+    JAVASCRIPT
+    ================================================================ -->
+    <script>
+        (function() {
+            'use strict';
+
+            // ===== DOM REFS =====
+            const monthlyInput = document.getElementById('monthlyInvestment');
+            const returnInput = document.getElementById('annualReturn');
+            const yearsInput = document.getElementById('years');
+            const investedEl = document.getElementById('investedAmount');
+            const returnsEl = document.getElementById('returns');
+            const totalEl = document.getElementById('totalValue');
+            const centerEl = document.getElementById('centerValue');
+            const donutEl = document.getElementById('donut');
+            const summaryEl = document.getElementById('summary');
+
+            const toast = document.getElementById('toast');
+            const toastMsg = document.getElementById('toastMsg');
+
+            // ===== HELPERS =====
+            function formatINR(num) {
+                return '₹' + Math.round(num).toLocaleString('en-IN');
+            }
+
+            function showToast(msg) {
+                toastMsg.textContent = msg;
+                toast.classList.add('show');
+                clearTimeout(toast._timer);
+                toast._timer = setTimeout(() => toast.classList.remove('show'), 2800);
+            }
+
+            // ===== CALCULATE SIP =====
+            function calculateSIP() {
+                const monthly = parseFloat(monthlyInput.value) || 0;
+                const annualReturn = parseFloat(returnInput.value) || 0;
+                const years = parseFloat(yearsInput.value) || 0;
+
+                if (monthly <= 0 || annualReturn <= 0 || years <= 0) {
+                    investedEl.textContent = '₹0';
+                    returnsEl.textContent = '₹0';
+                    totalEl.textContent = '₹0';
+                    centerEl.textContent = '₹0';
+                    donutEl.style.background = 'conic-gradient(#5367ff 0deg,#5367ff 0deg,#e8ecff 0deg,#e8ecff 360deg)';
+                    summaryEl.innerHTML = 'Enter SIP details to calculate live result.';
+                    return;
+                }
+
+                const months = years * 12;
+                const monthlyRate = annualReturn / 12 / 100;
+
+                // SIP formula: FV = P * (((1+r)^n - 1) / r) * (1+r)
+                const futureValue = monthly * ((Math.pow(1 + monthlyRate, months) - 1) / monthlyRate) * (1 + monthlyRate);
+
+                const invested = monthly * months;
+                const returns = futureValue - invested;
+
+                const returnPercent = (returns / futureValue) * 100;
+                const returnDegree = Math.min((returnPercent / 100) * 360, 359.9);
+
+                investedEl.textContent = formatINR(invested);
+                returnsEl.textContent = formatINR(returns);
+                totalEl.textContent = formatINR(futureValue);
+                centerEl.textContent = formatINR(futureValue);
+
+                donutEl.style.background =
+                    'conic-gradient(#5367ff 0deg,#5367ff ' + returnDegree +
+                    'deg,#e8ecff ' + returnDegree + 'deg,#e8ecff 360deg)';
+
+                summaryEl.innerHTML =
+                    'Monthly SIP: <b>' + formatINR(monthly) + '</b><br>' +
+                    'Expected Return: <b>' + annualReturn + '% yearly</b><br>' +
+                    'Investment Period: <b>' + years + ' years</b><br>' +
+                    'Total Invested: <b>' + formatINR(invested) + '</b><br>' +
+                    'Estimated Returns: <b>' + formatINR(returns) + '</b><br>' +
+                    'Maturity Amount: <b>' + formatINR(futureValue) + '</b>';
+            }
+
+            // ===== ACTION FUNCTIONS =====
+            function copyResult() {
+                const text = document.getElementById('summary').textContent.trim();
+                navigator.clipboard?.writeText(text).then(() => showToast('Copied!')).catch(() => {
+                    const ta = document.createElement('textarea');
+                    ta.value = text;
+                    document.body.appendChild(ta);
+                    ta.select();
+                    document.execCommand('copy');
+                    ta.remove();
+                    showToast('Copied!');
+                });
+            }
+
+            function resetAll() {
+                monthlyInput.value = '5000';
+                returnInput.value = '12';
+                yearsInput.value = '10';
+                calculateSIP();
+                showToast('Reset');
+            }
+
+            function printPage() {
+                window.print();
+            }
+
+            function downloadPDF() {
+                const { jsPDF } = window.jspdf;
+                const doc = new jsPDF();
+                const monthly = parseFloat(monthlyInput.value) || 0;
+                const annualReturn = parseFloat(returnInput.value) || 0;
+                const years = parseFloat(yearsInput.value) || 0;
+                const months = years * 12;
+                const monthlyRate = annualReturn / 12 / 100;
+                const futureValue = monthly * ((Math.pow(1 + monthlyRate, months) - 1) / monthlyRate) * (1 + monthlyRate);
+                const invested = monthly * months;
+                const returns = futureValue - invested;
+
+                doc.setFontSize(20);
+                doc.text('99toolhub SIP Report', 20, 30);
+                doc.setFontSize(12);
+                doc.text(`Date: ${new Date().toLocaleString()}`, 20, 50);
+                doc.text(`Monthly SIP: ₹${monthly.toLocaleString('en-IN')}`, 20, 65);
+                doc.text(`Annual Return: ${annualReturn}%`, 20, 75);
+                doc.text(`Investment Period: ${years} years (${months} months)`, 20, 85);
+                doc.text(`Total Invested: ₹${Math.round(invested).toLocaleString('en-IN')}`, 20, 95);
+                doc.text(`Estimated Returns: ₹${Math.round(returns).toLocaleString('en-IN')}`, 20, 105);
+                doc.text(`Maturity Amount: ₹${Math.round(futureValue).toLocaleString('en-IN')}`, 20, 115);
+                doc.text('— 99toolhub —', 20, 140);
+                doc.save('sip-report.pdf');
+                showToast('PDF downloaded');
+            }
+
+            function shareResult() {
+                const text = document.getElementById('summary').textContent.trim();
+                if (navigator.share) {
+                    navigator.share({ title: 'SIP Calculation', text }).catch(() => {});
+                } else {
+                    navigator.clipboard?.writeText(text).then(() => showToast('Copied to share!')).catch(() => {
+                        prompt('Copy this to share:', text);
+                    });
+                }
+            }
+
+            // ===== EVENT LISTENERS =====
+            monthlyInput.addEventListener('input', calculateSIP);
+            returnInput.addEventListener('input', calculateSIP);
+            yearsInput.addEventListener('input', calculateSIP);
+
+            document.getElementById('copyBtn').addEventListener('click', copyResult);
+            document.getElementById('resetBtn').addEventListener('click', resetAll);
+            document.getElementById('printBtn').addEventListener('click', printPage);
+            document.getElementById('pdfBtn').addEventListener('click', downloadPDF);
+            document.getElementById('shareBtn').addEventListener('click', shareResult);
+
+            // FAQ toggle
+            document.querySelectorAll('.faq-item').forEach(item => {
+                item.querySelector('.faq-q').addEventListener('click', () => {
+                    item.classList.toggle('open');
+                });
+            });
+
+            // ===== INIT =====
+            calculateSIP();
+
+        })();
+    </script>
+
+</body>
+</html>

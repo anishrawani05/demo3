@@ -1,0 +1,760 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+      <link rel="icon" type="image/png" href="../../images/favicon.png">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Contact Us · 99ToolHub</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,400;14..32,500;14..32,600;14..32,700&display=swap" rel="stylesheet" />
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Inter', system-ui, -apple-system, sans-serif;
+      background: #bafce1;
+      color: #1a1924;
+      display: flex;
+      flex-direction: column;
+      min-height: 100vh;
+      padding: 1.5rem;
+    }
+
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+      width: 100%;
+    }
+
+    /* soft pink/purple accents */
+    .badge-pink {
+      background: linear-gradient(135deg, #ffffff 0%, #fde7f0 100%);
+      color: #6d4b7a;
+      font-weight: 600;
+      font-size: 0.8rem;
+      padding: 0.3rem 1rem;
+      border-radius: 40px;
+      display: inline-block;
+      letter-spacing: 0.3px;
+      border: 1px solid rgba(200, 160, 220, 0.2);
+      animation: fadeSlide 0.6s ease;
+    }
+
+    .btn-primary {
+      background: linear-gradient(145deg, #b47bd0, #d97aa6);
+      border: none;
+      color: white;
+      font-weight: 600;
+      padding: 0.9rem 2.2rem;
+      border-radius: 60px;
+      font-size: 1rem;
+      cursor: pointer;
+      transition: all 0.35s cubic-bezier(0.34, 1.56, 0.64, 1);
+      box-shadow: 0 8px 20px rgba(180, 123, 208, 0.25);
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      letter-spacing: 0.3px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .btn-primary::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(145deg, #c084e0, #e882b0);
+      opacity: 0;
+      transition: opacity 0.4s ease;
+      border-radius: 60px;
+    }
+
+    .btn-primary:hover::after {
+      opacity: 1;
+    }
+
+    .btn-primary:hover {
+      transform: translateY(-4px) scale(1.02);
+      box-shadow: 0 18px 35px rgba(180, 123, 208, 0.4);
+    }
+
+    .btn-primary:active {
+      transform: scale(0.96);
+    }
+
+    .btn-outline {
+      background: transparent;
+      border: 1.5px solid #ffffff;
+      color: #3f2e4a;
+      font-weight: 600;
+      padding: 0.7rem 1.8rem;
+      border-radius: 60px;
+      font-size: 0.95rem;
+      cursor: pointer;
+      transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      text-decoration: none;
+    }
+
+    .btn-outline:hover {
+      border-color: #b47bd0;
+      background: #ffffff;
+      transform: translateY(-3px) scale(1.02);
+      box-shadow: 0 12px 24px rgba(180, 123, 208, 0.15);
+    }
+
+    .card {
+      background: #fffbd4;
+      border-radius: 28px;
+      padding: 2rem 2rem;
+      box-shadow: 0 10px 30px -8px rgba(0, 0, 0, 0.04), 0 8px 20px rgba(180, 123, 208, 0.06);
+      transition: box-shadow 0.4s ease, transform 0.25s ease;
+      border: 1px solid rgba(230, 215, 240, 0.25);
+      backdrop-filter: blur(2px);
+    }
+
+    .card:hover {
+      box-shadow: 0 20px 40px -12px rgba(180, 123, 208, 0.15);
+      transform: translateY(-2px);
+    }
+
+    /* hero */
+    .hero {
+      padding: 2rem 0 1.5rem 0;
+      animation: fadeSlide 0.7s ease;
+    }
+
+    .hero h1 {
+      font-size: 3.2rem;
+      font-weight: 700;
+      letter-spacing: -0.02em;
+      margin: 0.5rem 0 0.2rem;
+      animation: fadeSlide 0.9s ease;
+    }
+
+    .hero .sub {
+      font-size: 1.2rem;
+      color: #3d3a4a;
+      max-width: 580px;
+      margin: 0.5rem 0 1.2rem;
+      font-weight: 400;
+      animation: fadeSlide 1.1s ease;
+    }
+
+    /* grid */
+    .contact-grid {
+      display: grid;
+      grid-template-columns: 1.5fr 1fr;
+      gap: 2.5rem;
+      margin: 2.5rem 0 3rem;
+    }
+
+    .form-group {
+      margin-bottom: 1.5rem;
+      animation: fadeSlide 0.6s ease backwards;
+    }
+
+    .form-group:nth-child(1) { animation-delay: 0.05s; }
+    .form-group:nth-child(2) { animation-delay: 0.1s; }
+    .form-group:nth-child(3) { animation-delay: 0.15s; }
+    .form-group:nth-child(4) { animation-delay: 0.2s; }
+    .form-group:nth-child(5) { animation-delay: 0.25s; }
+
+    .form-group label {
+      display: block;
+      font-weight: 500;
+      font-size: 0.9rem;
+      color: #2a2636;
+      margin-bottom: 0.4rem;
+      letter-spacing: -0.2px;
+    }
+
+    .form-group input,
+    .form-group select {
+      width: 100%;
+      padding: 0.8rem 1.2rem;
+      border-radius: 18px;
+      border: 1.5px solid #b4f7c0;
+      background: rgb(252, 188, 235);
+      font-family: 'Inter', sans-serif;
+      font-size: 0.95rem;
+      transition: all 0.3s ease, box-shadow 0.3s ease, transform 0.2s;
+      color: #1a1924;
+      outline: none;
+    }
+
+    .form-group input:focus,
+    .form-group select:focus {
+      border-color: #b47bd0;
+      box-shadow: 0 0 0 5px rgba(180, 123, 208, 0.15), 0 4px 12px rgba(180, 123, 208, 0.05);
+      transform: scale(1.01);
+    }
+
+    .form-group input:hover,
+    .form-group select:hover {
+      border-color: #cdb3dd;
+    }
+
+    /* ===== 3D MESSAGE TEXTAREA ===== */
+    .form-group textarea {
+      width: 100%;
+      min-height: 170px;
+      padding: 1.2rem 1.5rem;
+      border-radius: 20px;
+      border: 1px solid #e8ddf0;
+      background: #f9e1e1;
+      font-family: 'Inter', sans-serif;
+      font-size: 0.98rem;
+      line-height: 1.6;
+      color: #1a1924;
+      outline: none;
+      resize: vertical;
+      transition: all 0.35s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+      
+      /* ——— 3D depth: layered shadows ——— */
+      box-shadow: 
+        0 1px 2px rgba(0, 0, 0, 0.02),
+        0 4px 8px rgba(180, 123, 208, 0.06),
+        0 8px 18px rgba(180, 123, 208, 0.05),
+        inset 0 2px 4px rgba(255, 255, 255, 0.8),
+        inset 0 -2px 4px rgba(180, 123, 208, 0.04);
+      
+      /* subtle gradient highlight (light overlay) */
+      background-image: radial-gradient(circle at 30% 20%, rgba(255, 245, 255, 0.5) 0%, transparent 70%);
+      background-blend-mode: overlay;
+      
+      transform: translateY(0);
+      transition: all 0.35s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+    }
+
+    .form-group textarea:hover {
+      transform: translateY(-2px);
+      border-color: #d4bde6;
+      box-shadow: 
+        0 2px 4px rgba(0, 0, 0, 0.02),
+        0 8px 16px rgba(180, 123, 208, 0.10),
+        0 14px 28px rgba(180, 123, 208, 0.07),
+        inset 0 2px 4px rgba(255, 255, 255, 0.9),
+        inset 0 -2px 6px rgba(180, 123, 208, 0.06);
+    }
+
+    .form-group textarea:focus {
+      transform: translateY(-3px);
+      border-color: #b47bd0;
+      box-shadow: 
+        0 4px 8px rgba(0, 0, 0, 0.02),
+        0 12px 24px rgba(180, 123, 208, 0.16),
+        0 20px 40px rgba(180, 123, 208, 0.10),
+        inset 0 2px 4px rgba(255, 255, 255, 0.9),
+        inset 0 -2px 8px rgba(180, 123, 208, 0.08),
+        0 0 0 4px rgba(180, 123, 208, 0.10);
+      background-image: radial-gradient(circle at 30% 20%, rgba(245, 235, 255, 0.6) 0%, transparent 70%);
+    }
+
+    .form-group textarea::placeholder {
+      color: #a99bb3;
+      font-weight: 400;
+      letter-spacing: 0.2px;
+      opacity: 0.7;
+    }
+
+    /* label with icon */
+    .label-with-icon {
+      display: flex;
+      align-items: center;
+      gap: 0.45rem;
+    }
+
+    .label-with-icon span {
+      font-size: 1.2rem;
+      line-height: 1;
+    }
+
+    .error-text {
+      color: #d25f7a;
+      font-size: 0.8rem;
+      margin-top: 0.3rem;
+      display: none;
+      font-weight: 500;
+      animation: shake 0.4s ease;
+    }
+
+    .error-text.show {
+      display: block;
+    }
+
+    /* success neon */
+    .success-box {
+      background: #0b1a12;
+      border: 2px solid #39ff9b;
+      padding: 1.2rem 1.8rem;
+      border-radius: 20px;
+      color: #b0ffd6;
+      font-weight: 500;
+      display: none;
+      margin: 1rem 0 0.8rem;
+      box-shadow: 0 0 15px rgba(57, 255, 155, 0.3), 0 0 40px rgba(57, 255, 155, 0.1), inset 0 0 12px rgba(57, 255, 155, 0.08);
+      animation: neonPulse 1.6s infinite alternate, popSuccess 0.6s cubic-bezier(0.34, 1.56, 0.64, 1);
+      text-shadow: 0 0 6px rgba(57, 255, 155, 0.5);
+      letter-spacing: 0.2px;
+      transition: all 0.3s ease;
+    }
+
+    .success-box.show {
+      display: block;
+    }
+
+    @keyframes neonPulse {
+      0% { box-shadow: 0 0 12px rgba(57, 255, 155, 0.2), 0 0 30px rgba(57, 255, 155, 0.05), inset 0 0 8px rgba(57, 255, 155, 0.05); }
+      100% { box-shadow: 0 0 24px rgba(57, 255, 155, 0.5), 0 0 60px rgba(57, 255, 155, 0.15), inset 0 0 18px rgba(57, 255, 155, 0.12); }
+    }
+
+    /* info card */
+    .info-card {
+      background: rgb(252, 205, 239);
+      border-radius: 28px;
+      padding: 2rem;
+      box-shadow: 0 10px 30px -8px rgba(0, 0, 0, 0.04);
+      border: 1px solid rgba(200, 180, 215, 0.2);
+      height: fit-content;
+      transition: all 0.3s ease;
+      animation: fadeSlide 0.8s ease;
+    }
+
+    .info-card:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 20px 40px -12px rgba(180, 123, 208, 0.12);
+    }
+
+    .info-card h3 {
+      font-size: 1.4rem;
+      font-weight: 600;
+      margin-bottom: 0.75rem;
+    }
+
+    .info-card .email-link {
+      font-size: 1.1rem;
+      font-weight: 500;
+      color: #6d4b7a;
+      text-decoration: none;
+      border-bottom: 2px solid #e5d4ed;
+      padding-bottom: 0.15rem;
+      display: inline-block;
+      transition: all 0.25s ease;
+    }
+
+    .info-card .email-link:hover {
+      border-bottom-color: #b47bd0;
+      color: #4f2d5e;
+      transform: scale(1.02);
+    }
+
+    .info-card .topic-list {
+      list-style: none;
+      margin-top: 1rem;
+    }
+
+    .info-card .topic-list li {
+      padding: 0.4rem 0;
+      border-bottom: 1px solid #f2ecf5;
+      font-size: 0.95rem;
+      display: flex;
+      align-items: center;
+      gap: 0.4rem;
+      transition: all 0.2s;
+    }
+
+    .info-card .topic-list li::before {
+      content: "•";
+      color: #b47bd0;
+      font-weight: 700;
+      font-size: 1.4rem;
+      line-height: 1;
+    }
+
+    .info-card .topic-list li:hover {
+      padding-left: 6px;
+      color: #2f263b;
+    }
+
+    /* quick help */
+    .quick-help {
+      margin: 3rem 0 2.5rem;
+    }
+
+    .quick-help h2 {
+      animation: fadeSlide 0.7s ease;
+    }
+
+    .quick-help-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1.8rem;
+      margin-top: 1.8rem;
+    }
+
+    .help-card {
+      background: rgb(162, 207, 255);
+      border-radius: 24px;
+      padding: 1.8rem 1.5rem;
+      border: 1px solid #ede6f2;
+      transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+      box-shadow: 0 6px 12px rgba(0, 0, 0, 0.02);
+      animation: fadeSlide 0.6s ease backwards;
+    }
+
+    .help-card:nth-child(1) { animation-delay: 0.1s; }
+    .help-card:nth-child(2) { animation-delay: 0.2s; }
+    .help-card:nth-child(3) { animation-delay: 0.3s; }
+
+    .help-card:hover {
+      transform: translateY(-10px) scale(1.01);
+      border-color: #d7c2e6;
+      box-shadow: 0 24px 40px -16px rgba(180, 123, 208, 0.2);
+    }
+
+    .help-card h4 {
+      font-size: 1.2rem;
+      font-weight: 600;
+      margin-bottom: 0.4rem;
+    }
+
+    .help-card p {
+      color: #444056;
+      font-size: 0.95rem;
+      line-height: 1.5;
+    }
+
+    /* faq cta */
+    .faq-cta {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      align-items: center;
+      background: #d19efa;
+      border-radius: 40px;
+      padding: 1.8rem 2.5rem;
+      margin: 2.5rem 0;
+      border: 1px solid #e5d6ed;
+      transition: all 0.3s ease;
+      animation: fadeSlide 0.9s ease;
+    }
+
+    .faq-cta:hover {
+      box-shadow: 0 12px 30px rgba(180, 123, 208, 0.08);
+    }
+
+    .faq-cta .faq-text h3 {
+      font-size: 1.3rem;
+      font-weight: 600;
+    }
+
+    .faq-cta .faq-text p {
+      color: #3f384a;
+      margin-top: 0.2rem;
+    }
+
+    .privacy-note {
+      font-size: 0.85rem;
+      color: #6b657a;
+      background: #f6f2fa;
+      border-radius: 40px;
+      padding: 0.7rem 1.8rem;
+      display: inline-block;
+      margin: 0.5rem 0 1.8rem;
+      transition: all 0.3s ease;
+      animation: fadeSlide 1s ease;
+    }
+
+    .privacy-note:hover {
+      background: #f0e8f7;
+      transform: scale(1.01);
+    }
+
+    /* neon footer */
+    footer {
+      margin-top: 2.5rem;
+      padding: 1.8rem 0 0.8rem;
+      border-top: 2px solid #b47bd0;
+      text-align: center;
+      color: #b47bd0;
+      font-size: 0.95rem;
+      font-weight: 500;
+      animation: fadeSlide 1.1s ease;
+      text-shadow: 0 0 8px rgba(180, 123, 208, 0.3);
+      box-shadow: 0 -4px 20px rgba(180, 123, 208, 0.08);
+      letter-spacing: 0.5px;
+      transition: all 0.4s ease;
+    }
+
+    footer:hover {
+      color: #9f6bb8;
+      text-shadow: 0 0 20px rgba(180, 123, 208, 0.5);
+      border-top-color: #d597c0;
+      box-shadow: 0 -6px 30px rgba(180, 123, 208, 0.15);
+    }
+
+    /* animations */
+    @keyframes fadeSlide {
+      0% { opacity: 0; transform: translateY(20px); }
+      100% { opacity: 1; transform: translateY(0); }
+    }
+
+    @keyframes shake {
+      0%, 100% { transform: translateX(0); }
+      20% { transform: translateX(-8px); }
+      40% { transform: translateX(8px); }
+      60% { transform: translateX(-4px); }
+      80% { transform: translateX(4px); }
+    }
+
+    @keyframes popSuccess {
+      0% { opacity: 0; transform: scale(0.8); }
+      60% { opacity: 1; transform: scale(1.05); }
+      100% { transform: scale(1); }
+    }
+
+    /* responsive */
+    @media (max-width: 992px) {
+      .contact-grid {
+        grid-template-columns: 1fr;
+        gap: 2rem;
+      }
+      .hero h1 {
+        font-size: 2.8rem;
+      }
+    }
+
+    @media (max-width: 768px) {
+      body {
+        padding: 1rem;
+      }
+      .hero h1 {
+        font-size: 2.4rem;
+      }
+      .quick-help-grid {
+        grid-template-columns: 1fr;
+        gap: 1rem;
+      }
+      .faq-cta {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 1.2rem;
+        padding: 1.8rem;
+      }
+      .card {
+        padding: 1.5rem;
+      }
+      .btn-primary {
+        width: 100%;
+        justify-content: center;
+      }
+      .form-group textarea {
+        min-height: 150px;
+        padding: 1rem 1.2rem;
+      }
+    }
+
+    @media (max-width: 480px) {
+      .hero h1 {
+        font-size: 2rem;
+      }
+      .hero .sub {
+        font-size: 1rem;
+      }
+      .info-card {
+        padding: 1.5rem;
+      }
+      .form-group textarea {
+        min-height: 130px;
+        padding: 0.9rem 1rem;
+        border-radius: 18px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+
+    <!-- HERO -->
+    <section class="hero">
+      <span class="badge-pink">99ToolHub Support</span>
+      <h1>Let's Talk</h1>
+      <p class="sub">Have a question, suggestion or feedback? We're here to help.</p>
+    </section>
+
+    <!-- CONTACT GRID -->
+    <div class="contact-grid">
+      <!-- FORM -->
+      <div class="card">
+        <form id="contactForm" novalidate>
+          <div class="form-group">
+            <label for="fullName">Full Name</label>
+            <input type="text" id="fullName" placeholder="Anish Rawani" required aria-required="true" />
+            <div class="error-text" id="nameError">Please enter your full name.</div>
+          </div>
+          <div class="form-group">
+            <label for="email">Email Address</label>
+            <input type="email" id="email" placeholder="99toolhub@gmail.com" required aria-required="true" />
+            <div class="error-text" id="emailError">Enter a valid email address.</div>
+          </div>
+          <div class="form-group">
+            <label for="queryType">Query Type</label>
+            <select id="queryType">
+              <option value="General Question">General Question</option>
+              <option value="Tool Issue">Tool Issue</option>
+              <option value="Bug Report">Bug Report</option>
+              <option value="Feature Request">Feature Request</option>
+              <option value="Feedback">Feedback</option>
+              <option value="Business Inquiry">Business Inquiry</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label for="subject">Subject</label>
+            <input type="text" id="subject" placeholder="Subject" required aria-required="true" />
+            <div class="error-text" id="subjectError">Please enter a subject.</div>
+          </div>
+
+          <!-- MESSAGE with 3D design & icon -->
+          <div class="form-group">
+            <label for="message" class="label-with-icon">
+              <span>💬</span> Message
+            </label>
+            <textarea id="message" placeholder="Write your message here..." required aria-required="true"></textarea>
+            <div class="error-text" id="messageError">Message cannot be empty.</div>
+          </div>
+
+          <!-- NEON SUCCESS BOX -->
+          <div class="success-box" id="successMsg">
+            ✅ Thanks for contacting 99ToolHub! We'll get back to you as soon as possible.
+          </div>
+
+          <button type="submit" class="btn-primary">Send Message →</button>
+        </form>
+        <div class="privacy-note">🔒 Please do not submit passwords, payment information or other sensitive personal information through this form.</div>
+      </div>
+
+      <!-- CONTACT INFO CARD -->
+      <div class="info-card">
+        <h3>99ToolHub Support</h3>
+        <a href="mailto:support@99toolhub.com" class="email-link">99toolhub@gmail.com</a>
+        <ul class="topic-list">
+          <li>General Questions</li>
+          <li>Tool Problems</li>
+          <li>Bug Reports</li>
+          <li>Feature Requests</li>
+          <li>Feedback</li>
+          <li>Business Inquiries</li>
+        </ul>
+        <div style="margin-top: 1.2rem; font-size: 0.9rem; color: #5d4f6b;">We reply within 24 hours.</div>
+      </div>
+    </div>
+
+    <!-- QUICK HELP -->
+    <section class="quick-help">
+      <h2 style="font-size: 1.8rem; font-weight: 600;">Need Help With Something?</h2>
+      <div class="quick-help-grid">
+        <div class="help-card">
+          <h4>⚠️ Report a Problem</h4>
+          <p>Report broken tools or unexpected errors – we'll fix them fast.</p>
+        </div>
+        <div class="help-card">
+          <h4>💡 Suggest a Feature</h4>
+          <p>Suggest useful tools or improvements to make 99ToolHub better.</p>
+        </div>
+        <div class="help-card">
+          <h4>📣 Share Feedback</h4>
+          <p>Share your experience and suggestions – we love hearing from you.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- FAQ CTA -->
+    <div class="faq-cta">
+      <div class="faq-text">
+        <h3>Looking for a quick answer?</h3>
+        <p>Check our FAQs before contacting us. You may find the answer instantly.</p>
+      </div>
+      <a href="#" class="btn-outline" style="text-decoration: none;">View FAQs →</a>
+    </div>
+
+    <!-- NEON FOOTER -->
+    <footer>
+      © 2026 99ToolHub. All rights reserved.
+    </footer>
+  </div>
+
+  <script>
+    (function() {
+      const form = document.getElementById('contactForm');
+      const fullName = document.getElementById('fullName');
+      const email = document.getElementById('email');
+      const subject = document.getElementById('subject');
+      const message = document.getElementById('message');
+
+      const nameErr = document.getElementById('nameError');
+      const emailErr = document.getElementById('emailError');
+      const subjectErr = document.getElementById('subjectError');
+      const messageErr = document.getElementById('messageError');
+      const successBox = document.getElementById('successMsg');
+
+      const inputs = [fullName, email, subject, message];
+      inputs.forEach(inp => inp.addEventListener('input', function() {
+        successBox.classList.remove('show');
+        const parent = this.closest('.form-group');
+        const err = parent.querySelector('.error-text');
+        if (err) err.classList.remove('show');
+      }));
+
+      form.addEventListener('submit', function(e) {
+        e.preventDefault();
+
+        [nameErr, emailErr, subjectErr, messageErr].forEach(el => el.classList.remove('show'));
+        successBox.classList.remove('show');
+
+        let valid = true;
+
+        if (fullName.value.trim().length < 2) {
+          nameErr.classList.add('show');
+          valid = false;
+        }
+
+        const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        if (!emailPattern.test(email.value.trim())) {
+          emailErr.classList.add('show');
+          valid = false;
+        }
+
+        if (subject.value.trim().length < 1) {
+          subjectErr.classList.add('show');
+          valid = false;
+        }
+
+        if (message.value.trim().length < 5) {
+          messageErr.classList.add('show');
+          valid = false;
+        }
+
+        if (!valid) {
+          const firstError = document.querySelector('.error-text.show');
+          if (firstError) {
+            firstError.closest('.form-group').scrollIntoView({ behavior: 'smooth', block: 'center' });
+          }
+          return;
+        }
+
+        successBox.classList.add('show');
+        form.reset();
+        successBox.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      });
+    })();
+  </script>
+</body>
+</html>

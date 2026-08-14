@@ -1,0 +1,1954 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <link rel="icon" type="image/png" href="../../images/favicon.png">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.5">
+  <title>Income Tax Calculator - 99toolhub</title>
+  <meta name="description" content="Calculate income tax as per Income-tax Act, 1961 with history save, PDF download, CSV export, and share options.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,400;14..32,500;14..32,600;14..32,700;14..32,800;14..32,900&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+  <style>
+    * { margin:0; padding:0; box-sizing:border-box; }
+    body {
+      font-family: 'Inter', sans-serif;
+      background: #f0f4ff;
+      color: #0b1a33;
+      line-height: 1.6;
+      min-height: 100vh;
+      padding: 30px 20px;
+    }
+
+    .container {
+      max-width: 860px;
+      width: 100%;
+      margin: 0 auto;
+    }
+
+    .card {
+      background: #ffffff;
+      border-radius: 24px;
+      box-shadow: 0 8px 40px rgba(0,0,0,0.05);
+      padding: 36px 40px 40px;
+    }
+
+    .header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding-bottom: 16px;
+      flex-wrap: wrap;
+      gap: 12px;
+      border-bottom: 1px solid rgba(0,0,0,0.04);
+      margin-bottom: 20px;
+    }
+    .logo { font-weight: 800; font-size: 1.4rem; display: flex; align-items: center; gap: 10px; }
+    .logo i { color: #5b8def; font-size: 1.6rem; }
+    .logo span { background: linear-gradient(135deg, #5b8def, #a78bfa); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+
+    .title-section {
+      margin-bottom: 24px;
+    }
+    .title-section h1 {
+      font-size: 1.8rem;
+      font-weight: 800;
+      letter-spacing: -0.02em;
+      color: #0b1a33;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .title-section .subtitle {
+      font-size: 0.85rem;
+      opacity: 0.5;
+      margin-top: 2px;
+      font-weight: 500;
+    }
+    .title-section .mandatory-note {
+      font-size: 0.8rem;
+      opacity: 0.4;
+      margin-top: 4px;
+    }
+    .title-section .mandatory-note .star { color: #ef4444; }
+
+    .form-group {
+      margin-bottom: 18px;
+    }
+    .form-group label {
+      display: block;
+      font-size: 0.85rem;
+      font-weight: 600;
+      opacity: 0.7;
+      margin-bottom: 4px;
+      letter-spacing: 0.01em;
+    }
+    .form-group label .required {
+      color: #ef4444;
+      font-weight: 700;
+    }
+    .form-group select,
+    .form-group input {
+      width: 100%;
+      padding: 12px 16px;
+      font-size: 1rem;
+      font-family: 'Inter', sans-serif;
+      border: 1.5px solid #e8edf5;
+      border-radius: 12px;
+      background: #f8faff;
+      color: #0b1a33;
+      transition: 0.25s;
+      appearance: none;
+      -webkit-appearance: none;
+    }
+    .form-group select {
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%236b7a93' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");
+      background-repeat: no-repeat;
+      background-position: right 16px center;
+      padding-right: 44px;
+    }
+    .form-group select:focus,
+    .form-group input:focus {
+      outline: none;
+      border-color: #5b8def;
+      box-shadow: 0 0 0 4px rgba(91,141,239,0.08);
+    }
+
+    .form-row-2 {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 18px;
+    }
+    @media (max-width: 600px) {
+      .form-row-2 { grid-template-columns: 1fr; }
+    }
+
+    .btn-group {
+      display: flex;
+      gap: 12px;
+      margin-top: 20px;
+      flex-wrap: wrap;
+    }
+    .btn {
+      padding: 12px 28px;
+      border-radius: 60px;
+      font-weight: 600;
+      border: none;
+      cursor: pointer;
+      transition: 0.3s;
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      font-size: 0.95rem;
+      font-family: 'Inter', sans-serif;
+    }
+    .btn-primary {
+      background: #5b8def;
+      color: white;
+      box-shadow: 0 6px 24px -6px rgba(91,141,239,0.4);
+    }
+    .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 12px 36px -8px rgba(91,141,239,0.5); }
+    .btn-outline {
+      background: transparent;
+      color: #0b1a33;
+      border: 1.5px solid #e8edf5;
+    }
+    .btn-outline:hover { background: rgba(0,0,0,0.03); transform: translateY(-2px); }
+    .btn-success {
+      background: #22c55e;
+      color: white;
+      box-shadow: 0 6px 24px -6px rgba(34,197,94,0.3);
+    }
+    .btn-success:hover { transform: translateY(-2px); box-shadow: 0 12px 36px -8px rgba(34,197,94,0.4); }
+    .btn-purple {
+      background: #8b5cf6;
+      color: white;
+      box-shadow: 0 6px 24px -6px rgba(139,92,246,0.3);
+    }
+    .btn-purple:hover { transform: translateY(-2px); box-shadow: 0 12px 36px -8px rgba(139,92,246,0.4); }
+    .btn-danger {
+      background: #ef4444;
+      color: white;
+      box-shadow: 0 6px 24px -6px rgba(239,68,68,0.3);
+    }
+    .btn-danger:hover { transform: translateY(-2px); box-shadow: 0 12px 36px -8px rgba(239,68,68,0.4); }
+    .btn-teal {
+      background: #14b8a6;
+      color: white;
+      box-shadow: 0 6px 24px -6px rgba(20,184,166,0.3);
+    }
+    .btn-teal:hover { transform: translateY(-2px); box-shadow: 0 12px 36px -8px rgba(20,184,166,0.4); }
+    .btn-sm {
+      padding: 6px 16px;
+      font-size: 0.8rem;
+    }
+
+    .results-section {
+      margin-top: 32px;
+      padding-top: 24px;
+      border-top: 2px solid rgba(0,0,0,0.04);
+    }
+    .results-section .results-title {
+      font-size: 1.2rem;
+      font-weight: 700;
+      margin-bottom: 16px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .results-section .results-title i { color: #5b8def; }
+
+    .result-item {
+      display: flex;
+      justify-content: space-between;
+      padding: 10px 0;
+      border-bottom: 1px solid rgba(0,0,0,0.03);
+      font-size: 0.95rem;
+    }
+    .result-item:last-child { border-bottom: none; }
+    .result-item .label { opacity: 0.6; font-weight: 500; }
+    .result-item .value {
+      font-weight: 600;
+      font-size: 1.05rem;
+    }
+    .result-item .value.tax { color: #ef4444; }
+    .result-item .value.rebate { color: #22c55e; }
+    .result-item .value.zero { color: #6b7a93; }
+    .result-item .value.total {
+      font-size: 1.3rem;
+      font-weight: 800;
+      color: #0b1a33;
+    }
+    .result-item.highlight {
+      background: rgba(91,141,239,0.04);
+      border-radius: 8px;
+      padding: 12px 16px;
+      margin-top: 4px;
+      border-bottom: none;
+    }
+
+    .action-buttons {
+      display: flex;
+      gap: 12px;
+      margin-top: 20px;
+      flex-wrap: wrap;
+    }
+
+    .history-section {
+      margin-top: 24px;
+      padding-top: 20px;
+      border-top: 2px solid rgba(0,0,0,0.04);
+    }
+    .history-section .history-title {
+      font-size: 1.1rem;
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 12px;
+    }
+    .history-section .history-title i { color: #5b8def; }
+    .history-list {
+      max-height: 200px;
+      overflow-y: auto;
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+    .history-item {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background: rgba(0,0,0,0.02);
+      padding: 10px 16px;
+      border-radius: 12px;
+      font-size: 0.9rem;
+      border: 1px solid rgba(0,0,0,0.03);
+    }
+    .history-item .info {
+      display: flex;
+      gap: 16px;
+      flex-wrap: wrap;
+      align-items: center;
+    }
+    .history-item .info .amount { font-weight: 700; color: #5b8def; }
+    .history-item .info .ay { opacity: 0.5; font-size: 0.8rem; }
+    .history-item .info .date { opacity: 0.3; font-size: 0.75rem; }
+    .history-item .actions {
+      display: flex;
+      gap: 6px;
+    }
+    .history-item .actions button {
+      background: transparent;
+      border: none;
+      cursor: pointer;
+      padding: 4px 8px;
+      border-radius: 6px;
+      transition: 0.2s;
+      font-size: 0.85rem;
+      color: #6b7a93;
+    }
+    .history-item .actions button:hover { background: rgba(0,0,0,0.04); }
+    .history-item .actions .load-btn { color: #5b8def; }
+    .history-item .actions .load-btn:hover { background: rgba(91,141,239,0.08); }
+    .history-item .actions .del-btn { color: #ef4444; }
+    .history-item .actions .del-btn:hover { background: rgba(239,68,68,0.08); }
+    .history-empty {
+      opacity: 0.4;
+      text-align: center;
+      padding: 20px;
+      font-size: 0.9rem;
+    }
+    .history-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-bottom: 10px;
+    }
+    .history-header .clear-btn {
+      padding: 4px 14px;
+      font-size: 0.75rem;
+      border-radius: 40px;
+      border: 1px solid rgba(0,0,0,0.06);
+      background: transparent;
+      cursor: pointer;
+      color: #ef4444;
+      transition: 0.2s;
+    }
+    .history-header .clear-btn:hover { background: rgba(239,68,68,0.08); }
+    .history-header .history-actions {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+
+    /* Tax Slip for Print */
+    .tax-slip {
+      display: none;
+      background: white;
+      color: #0b1a33;
+      padding: 30px;
+      max-width: 600px;
+      margin: 0 auto;
+      font-family: 'Inter', sans-serif;
+      border-radius: 12px;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.05);
+    }
+    .tax-slip .slip-header {
+      text-align: center;
+      border-bottom: 2px solid #e8edf5;
+      padding-bottom: 16px;
+      margin-bottom: 16px;
+    }
+    .tax-slip .slip-header h2 {
+      font-size: 1.4rem;
+      font-weight: 800;
+      color: #0b1a33;
+    }
+    .tax-slip .slip-header .slip-sub {
+      font-size: 0.8rem;
+      opacity: 0.5;
+      margin-top: 2px;
+    }
+    .tax-slip .slip-row {
+      display: flex;
+      justify-content: space-between;
+      padding: 8px 0;
+      border-bottom: 1px solid #f0f4ff;
+      font-size: 0.9rem;
+    }
+    .tax-slip .slip-row:last-child { border-bottom: none; }
+    .tax-slip .slip-row .label { opacity: 0.6; }
+    .tax-slip .slip-row .value { font-weight: 600; }
+    .tax-slip .slip-row.highlight {
+      background: rgba(91,141,239,0.04);
+      padding: 10px 12px;
+      border-radius: 8px;
+      margin-top: 4px;
+      border-bottom: none;
+    }
+    .tax-slip .slip-row.highlight .value {
+      font-size: 1.1rem;
+      font-weight: 800;
+    }
+    .tax-slip .slip-footer {
+      text-align: center;
+      border-top: 2px solid #e8edf5;
+      padding-top: 16px;
+      margin-top: 16px;
+      font-size: 0.75rem;
+      opacity: 0.4;
+    }
+
+    .toast {
+      position: fixed;
+      bottom: 30px;
+      right: 30px;
+      background: #1f2a44;
+      color: white;
+      padding: 14px 28px;
+      border-radius: 60px;
+      font-weight: 500;
+      box-shadow: 0 12px 30px rgba(0,0,0,0.3);
+      backdrop-filter: blur(8px);
+      opacity: 0;
+      transform: translateY(20px);
+      transition: 0.3s ease;
+      pointer-events: none;
+      z-index: 999;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-size: 0.95rem;
+    }
+    .toast.show { opacity: 1; transform: translateY(0); pointer-events: auto; }
+
+    /* ─── CONTENT SECTION ─── */
+    .content-section {
+      margin-top: 40px;
+      background: rgba(255, 255, 255, 0.85);
+      backdrop-filter: blur(12px);
+      border-radius: 28px;
+      padding: 36px 40px 40px 40px;
+      border: 1px solid rgba(255, 255, 255, 0.5);
+      box-shadow: 0 20px 60px rgba(0, 0, 0, 0.06);
+    }
+
+    .content-section h2 {
+      font-size: 26px;
+      font-weight: 800;
+      color: #0f172a;
+      margin: 42px 0 16px 0;
+      letter-spacing: -0.3px;
+      border-left: 5px solid #5b8def;
+      padding-left: 18px;
+    }
+    .content-section h2:first-of-type { margin-top: 0; }
+    .content-section h3 {
+      font-size: 20px;
+      font-weight: 700;
+      color: #1e293b;
+      margin: 28px 0 12px 0;
+    }
+    .content-section h4 {
+      font-size: 17px;
+      font-weight: 600;
+      color: #334155;
+      margin: 20px 0 8px 0;
+    }
+    .content-section p {
+      font-size: 16px;
+      line-height: 1.9;
+      color: #334155;
+      margin-bottom: 16px;
+    }
+    .content-section ul, .content-section ol {
+      margin: 12px 0 20px 28px;
+      line-height: 1.9;
+      color: #334155;
+    }
+    .content-section li { margin-bottom: 8px; font-size: 16px; }
+    .content-section .card-tip {
+      background: #f1f5f9;
+      border-radius: 14px;
+      padding: 20px 24px;
+      margin: 20px 0;
+      border-left: 4px solid #5b8def;
+    }
+    .content-section .card-tip i { color: #5b8def; margin-right: 8px; }
+    .content-section .faq-item {
+      border-bottom: 1px solid #e2e8f0;
+      padding: 18px 0;
+    }
+    .content-section .faq-item:last-child { border-bottom: none; }
+    .content-section .faq-item .q {
+      font-weight: 700;
+      font-size: 17px;
+      color: #0f172a;
+      display: flex;
+      gap: 12px;
+      align-items: flex-start;
+    }
+    .content-section .faq-item .q i { color: #5b8def; font-size: 18px; margin-top: 2px; }
+    .content-section .faq-item .a {
+      margin-top: 6px;
+      padding-left: 34px;
+      color: #475569;
+      line-height: 1.8;
+    }
+    .formula-box {
+      background: #0f172a;
+      color: #e2e8f0;
+      padding: 18px 24px;
+      border-radius: 12px;
+      font-family: 'Courier New', monospace;
+      font-size: 16px;
+      margin: 16px 0 24px 0;
+      overflow-x: auto;
+      white-space: pre-wrap;
+      word-break: break-word;
+      line-height: 1.8;
+    }
+    .formula-box .hl { color: #f87171; }
+    .formula-box .hl-green { color: #4ade80; }
+    .formula-box .hl-blue { color: #60a5fa; }
+    .example-box {
+      background: #fefce8;
+      border: 1px solid #fde68a;
+      border-radius: 14px;
+      padding: 20px 24px;
+      margin: 16px 0 24px 0;
+    }
+    .example-box strong { color: #92400e; }
+    .divider {
+      width: 100%;
+      height: 1px;
+      background: #e2e8f0;
+      margin: 32px 0;
+    }
+    .disclaimer-box {
+      background: #fef2f2;
+      border-radius: 16px;
+      padding: 24px 28px;
+      border-left: 5px solid #dc2626;
+      margin: 32px 0 16px 0;
+    }
+    .disclaimer-box .disclaimer-title {
+      font-weight: 700;
+      color: #991b1b;
+      font-size: 18px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+    .disclaimer-box .disclaimer-title i { font-size: 22px; }
+    .disclaimer-box p {
+      color: #7f1d1d;
+      font-size: 15px;
+      line-height: 1.8;
+      margin-top: 8px;
+    }
+    .glossary-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+    }
+    .glossary-item {
+      background: #f8fafc;
+      border-radius: 12px;
+      padding: 12px 16px;
+      border: 1px solid #e8edf5;
+    }
+    .glossary-item .term {
+      font-weight: 700;
+      color: #0b1a33;
+      font-size: 0.95rem;
+    }
+    .glossary-item .def {
+      font-size: 0.85rem;
+      color: #6b7a93;
+      margin-top: 2px;
+    }
+
+    /* ===== FOOTER (simplified) ===== */
+    .footer {
+      padding: 24px 0 10px;
+      border-top: 1px solid rgba(0,0,0,0.04);
+      margin-top: 24px;
+      text-align: center;
+      font-size: 0.85rem;
+      color: #94a3b8;
+    }
+    .footer strong {
+      color: #5b8def;
+      font-weight: 700;
+    }
+
+    @media (max-width: 640px) {
+      .card { padding: 24px 20px; }
+      .title-section h1 { font-size: 1.4rem; }
+      .btn { padding: 10px 18px; font-size: 0.85rem; }
+      .result-item { font-size: 0.85rem; flex-wrap: wrap; gap: 4px; }
+      .result-item .value { font-size: 0.95rem; }
+      .result-item .value.total { font-size: 1.1rem; }
+      .action-buttons .btn { flex: 1; justify-content: center; }
+      .history-item { flex-wrap: wrap; gap: 8px; }
+      .history-item .info { font-size: 0.8rem; }
+      .history-header { flex-direction: column; align-items: stretch; }
+      .history-header .history-actions { justify-content: center; }
+      .content-section { padding: 24px 18px; }
+      .content-section h2 { font-size: 21px; padding-left: 12px; }
+      .content-section h3 { font-size: 18px; }
+      .formula-box { font-size: 14px; padding: 14px 16px; }
+      .glossary-grid { grid-template-columns: 1fr; }
+      .disclaimer-box { padding: 16px 18px; }
+    }
+
+    @media print {
+      body { background: white !important; padding: 0 !important; }
+      .header, .btn-group, .action-buttons, .history-section, .footer, .toast, .content-section { display: none !important; }
+      .card { box-shadow: none !important; border: 1px solid #e8edf5 !important; padding: 20px !important; }
+      .results-section { margin-top: 16px !important; padding-top: 16px !important; }
+      .tax-slip { display: block !important; }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <!-- Header -->
+    <header class="header">
+      <div class="logo"><i class="fas fa-file-invoice-dollar"></i><span>99toolhub</span></div>
+    </header>
+
+    <!-- Main Card -->
+    <div class="card">
+
+      <!-- Title -->
+      <div class="title-section">
+        <h1><i class="fas fa-file-invoice" style="color:#f59e0b;"></i> Income Tax Calculator</h1>
+        <div class="subtitle">As per Income-tax Act, 1961 (Amended by Finance Act, 2026)</div>
+        <div class="mandatory-note"><span class="star">*</span> Indicates mandatory fields</div>
+      </div>
+
+      <!-- Form -->
+      <form id="taxForm" autocomplete="off">
+
+        <!-- Assessment Year -->
+        <div class="form-group">
+          <label>Assessment year <span class="required">*</span></label>
+          <select id="assessmentYear">
+            <option value="2024-25">2024-25</option>
+            <option value="2025-26">2025-26</option>
+            <option value="2026-27" selected>2026-27</option>
+            <option value="2027-28">2027-28</option>
+          </select>
+        </div>
+
+        <!-- Tax payer -->
+        <div class="form-group">
+          <label>Tax payer <span class="required">*</span></label>
+          <select id="taxpayerType">
+            <option value="individual" selected>Individual</option>
+            <option value="huf">HUF</option>
+            <option value="aop">AOP / BOI</option>
+            <option value="firm">Firm</option>
+            <option value="company">Company</option>
+          </select>
+        </div>
+
+        <!-- Category (age) + Residential Status -->
+        <div class="form-row-2">
+          <div class="form-group">
+            <label>Category (age) <span class="required">*</span></label>
+            <select id="taxpayerCategory">
+              <option value="below60" selected>Less than 60 years</option>
+              <option value="60to80">60 to 80 years (Senior Citizen)</option>
+              <option value="above80">Above 80 years (Super Senior Citizen)</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label>Residential status <span class="required">*</span></label>
+            <select id="residentialStatus">
+              <option value="resident" selected>Resident</option>
+              <option value="nri">Non-Resident (NRI)</option>
+              <option value="resident_not_ordinary">Resident but Not Ordinarily Resident (RNOR)</option>
+            </select>
+          </div>
+        </div>
+
+        <!-- Whether opting out of new tax regime -->
+        <div class="form-group">
+          <label>Whether opting out of new tax regime under section 115BAC (1A)? <span class="required">*</span></label>
+          <select id="regimeOptOut">
+            <option value="no" selected>No</option>
+            <option value="yes">Yes</option>
+          </select>
+        </div>
+
+        <!-- Net taxable income -->
+        <div class="form-group">
+          <label>Net taxable income <span class="required">*</span></label>
+          <input type="number" id="netTaxableIncome" value="1200000" step="1000" min="0">
+        </div>
+
+        <!-- Buttons -->
+        <div class="btn-group">
+          <button type="button" class="btn btn-primary" id="calcBtn"><i class="fas fa-calculator"></i> Calculate</button>
+          <button type="button" class="btn btn-outline" id="resetBtn"><i class="fas fa-undo-alt"></i> Reset</button>
+          <button type="button" class="btn btn-outline" id="saveHistoryBtn"><i class="fas fa-save"></i> Save History</button>
+        </div>
+      </form>
+
+      <!-- Results -->
+      <div class="results-section" id="resultsSection">
+        <div class="results-title"><i class="fas fa-chart-bar"></i> Results</div>
+
+        <div id="resultsContainer">
+          <div class="result-item">
+            <span class="label">Income tax</span>
+            <span class="value tax" id="incomeTax">₹0</span>
+          </div>
+          <div class="result-item">
+            <span class="label">Rebate under section 87A</span>
+            <span class="value rebate" id="rebateAmount">₹0</span>
+          </div>
+          <div class="result-item">
+            <span class="label">Income tax after rebate under section 87A</span>
+            <span class="value" id="taxAfterRebate">₹0</span>
+          </div>
+          <div class="result-item">
+            <span class="label">Surcharge</span>
+            <span class="value" id="surcharge">₹0</span>
+          </div>
+          <div class="result-item">
+            <span class="label">Health and education Cess</span>
+            <span class="value" id="cess">₹0</span>
+          </div>
+          <div class="result-item highlight">
+            <span class="label" style="font-weight:600; opacity:0.8;">Total tax liability</span>
+            <span class="value total" id="totalTax">₹0</span>
+          </div>
+        </div>
+
+        <!-- Action Buttons -->
+        <div class="action-buttons">
+          <button class="btn btn-success" id="downloadPdfBtn"><i class="fas fa-file-pdf"></i> Download PDF Slip</button>
+          <button class="btn btn-purple" id="shareBtn"><i class="fas fa-share-alt"></i> Share Report</button>
+          <button class="btn btn-outline" id="printBtn"><i class="fas fa-print"></i> Print</button>
+        </div>
+      </div>
+
+      <!-- History Section -->
+      <div class="history-section">
+        <div class="history-title"><i class="fas fa-history"></i> Calculation History</div>
+        <div class="history-header">
+          <span style="font-size:0.8rem; opacity:0.4;" id="historyCount">0 entries</span>
+          <div class="history-actions">
+            <button class="btn btn-teal btn-sm" id="downloadHistoryBtn"><i class="fas fa-download"></i> Download CSV</button>
+            <button class="clear-btn" id="clearHistoryBtn"><i class="fas fa-trash-alt"></i> Clear All</button>
+          </div>
+        </div>
+        <div class="history-list" id="historyList">
+          <div class="history-empty">No calculations saved yet</div>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- Hidden Tax Slip for Print -->
+    <div id="taxSlip" class="tax-slip">
+      <div class="slip-header">
+        <h2>🧾 Income Tax Computation Slip</h2>
+        <div class="slip-sub">As per Income-tax Act, 1961 (Amended by Finance Act, 2026)</div>
+      </div>
+      <div id="slipContent">
+        <div class="slip-row"><span class="label">Assessment Year</span><span class="value" id="slipAY">2026-27</span></div>
+        <div class="slip-row"><span class="label">Tax Payer</span><span class="value" id="slipTaxpayer">Individual</span></div>
+        <div class="slip-row"><span class="label">Category (Age)</span><span class="value" id="slipCategory">Less than 60 years</span></div>
+        <div class="slip-row"><span class="label">Residential Status</span><span class="value" id="slipStatus">Resident</span></div>
+        <div class="slip-row"><span class="label">Regime</span><span class="value" id="slipRegime">Old Regime</span></div>
+        <div class="slip-row"><span class="label">Net Taxable Income</span><span class="value" id="slipIncome">₹0</span></div>
+        <div style="margin:12px 0; border-top:2px dashed #e8edf5;"></div>
+        <div class="slip-row"><span class="label">Income Tax</span><span class="value" id="slipTax">₹0</span></div>
+        <div class="slip-row"><span class="label">Rebate u/s 87A</span><span class="value" id="slipRebate">₹0</span></div>
+        <div class="slip-row"><span class="label">Tax after Rebate</span><span class="value" id="slipAfterRebate">₹0</span></div>
+        <div class="slip-row"><span class="label">Surcharge</span><span class="value" id="slipSurcharge">₹0</span></div>
+        <div class="slip-row"><span class="label">Health & Education Cess</span><span class="value" id="slipCess">₹0</span></div>
+        <div style="margin:12px 0; border-top:2px solid #e8edf5;"></div>
+        <div class="slip-row highlight">
+          <span class="label" style="font-weight:700;">Total Tax Liability</span>
+          <span class="value" id="slipTotal" style="font-size:1.2rem; font-weight:800; color:#0b1a33;">₹0</span>
+        </div>
+      </div>
+      <div class="slip-footer">
+        Generated on <span id="slipDate"></span> · 99toolhub.com
+      </div>
+    </div>
+
+    <!-- ===== CONTENT SECTION (30 Sections) ===== -->
+    <div class="content-section">
+
+      <!-- 1. About Tax Calculator -->
+      <h2>📘 About Tax Calculator</h2>
+      <p>
+        The <strong>99toolhub Income Tax Calculator</strong> is a comprehensive, user-friendly online tool designed to help you compute your income tax liability as per the <strong>Income-tax Act, 1961</strong>, incorporating amendments made by the Finance Act, 2026. Whether you are a salaried employee, a business owner, a freelancer, or a senior citizen, this calculator simplifies the complex process of tax computation into a few clicks.
+      </p>
+      <p>
+        Tax calculation in India can be daunting due to multiple factors — different tax slabs for different age groups, the choice between old and new tax regimes, deductions under various sections, surcharge applicability, and health & education cess. Our calculator automates all these calculations, giving you a clear breakdown of your tax liability in real-time.
+      </p>
+      <p>
+        The tool is built with accuracy and transparency at its core. It uses the latest tax slabs and rules as per the Finance Act, 2026, ensuring that your results are up-to-date and reliable. You can also save your calculations, download a PDF tax slip, print a physical copy, share the report, and maintain a history of all your computations — making it an indispensable tool for financial planning.
+      </p>
+
+      <div class="divider"></div>
+
+      <!-- 2. What is Income Tax? -->
+      <h2>💰 What is Income Tax?</h2>
+      <p>
+        <strong>Income tax</strong> is a direct tax levied by the Government of India on the income earned by individuals, Hindu Undivided Families (HUFs), companies, firms, and other entities. It is governed by the <strong>Income-tax Act, 1961</strong>, which is the primary legislation that defines the rules, tax rates, exemptions, and procedures for taxation in India.
+      </p>
+      <p>
+        The government uses income tax revenue to fund public services such as infrastructure development, education, healthcare, defense, and various welfare schemes. As a responsible citizen, paying income tax is not just a legal obligation but also a contribution to the nation's progress.
+      </p>
+      <p>
+        Income tax is calculated on the <strong>total income</strong> (also called gross total income) of a person for a financial year, after allowing deductions and exemptions under various sections of the Income-tax Act. The financial year runs from <strong>1st April to 31st March</strong> of the following year. For example, the financial year 2026-27 runs from 1st April 2026 to 31st March 2027, and the corresponding assessment year is 2027-28 (the year in which the tax is assessed and paid).
+      </p>
+      <p>
+        The income tax system in India is progressive, meaning that individuals with higher incomes are taxed at higher rates. This is achieved through a <strong>slab system</strong>, where different portions of income are taxed at different rates. Our calculator simplifies this process by computing the tax based on the applicable slabs for your specific category and regime choice.
+      </p>
+
+      <div class="divider"></div>
+
+      <!-- 3. Why Use an Income Tax Calculator? -->
+      <h2>📊 Why Use an Income Tax Calculator?</h2>
+      <p>
+        Using an income tax calculator offers numerous advantages over manual tax computation. Here are the key reasons why you should use our tool:
+      </p>
+      <ul>
+        <li><strong>⚡ Speed & Efficiency:</strong> Get accurate tax calculations in milliseconds. No more manual computations, no more errors.</li>
+        <li><strong>🎯 Accuracy:</strong> Our calculator uses the latest tax slabs and rules as per the Finance Act, 2026, ensuring 100% accurate results.</li>
+        <li><strong>🔄 Compare Regimes:</strong> Easily compare tax liability under the old and new tax regimes to choose the one that minimizes your tax burden.</li>
+        <li><strong>📊 Breakdown:</strong> Get a clear breakdown of income tax, rebate, surcharge, and cess — understanding exactly where your money goes.</li>
+        <li><strong>📂 History & Save:</strong> Save your calculations for future reference. No need to re-enter data every time.</li>
+        <li><strong>📤 Export & Share:</strong> Download PDF slips, print, or share your tax report with your CA, employer, or family.</li>
+        <li><strong>🆓 Free & Private:</strong> No sign-ups, no hidden charges. All calculations happen locally in your browser — your data is never stored or shared.</li>
+        <li><strong>📱 Accessible:</strong> Works seamlessly on desktop, tablet, and mobile — calculate your tax anywhere, anytime.</li>
+      </ul>
+
+      <div class="divider"></div>
+
+      <!-- 4. How to Use the Tax Calculator -->
+      <h2>🛠️ How to Use the Tax Calculator</h2>
+      <p>
+        Using the 99toolhub Income Tax Calculator is straightforward. Follow these simple steps:
+      </p>
+      <ol>
+        <li><strong>Select Assessment Year:</strong> Choose the relevant assessment year from the dropdown (e.g., 2026-27).</li>
+        <li><strong>Select Tax Payer Type:</strong> Choose whether you are an Individual, HUF, AOP, Firm, or Company.</li>
+        <li><strong>Select Category (Age):</strong> Choose your age category — Less than 60 years, 60 to 80 years (Senior Citizen), or Above 80 years (Super Senior Citizen).</li>
+        <li><strong>Select Residential Status:</strong> Choose Resident, Non-Resident (NRI), or Resident but Not Ordinarily Resident (RNOR).</li>
+        <li><strong>Choose Tax Regime:</strong> Indicate whether you are opting out of the new tax regime under section 115BAC (1A).</li>
+        <li><strong>Enter Net Taxable Income:</strong> Enter your net taxable income (after all deductions and exemptions).</li>
+        <li><strong>Click Calculate:</strong> Press the Calculate button to see your tax breakdown instantly.</li>
+      </ol>
+      <p>
+        You can also use the <strong>Reset</strong> button to clear all inputs and start fresh, or <strong>Save History</strong> to store your calculation for later reference.
+      </p>
+
+      <div class="divider"></div>
+
+      <!-- 5. Income Tax Formula -->
+      <h2>📐 Income Tax Formula</h2>
+      <p>
+        The income tax computation formula used by our calculator follows the structure defined by the Income-tax Act, 1961:
+      </p>
+      <div class="formula-box">
+        <span class="hl-blue">Income Tax Calculation Formula</span>
+
+        <span class="hl">Step 1:</span> Compute tax on total income as per applicable tax slabs
+
+        <span class="hl">Step 2:</span> Apply rebate under section 87A (if eligible)
+
+        <span class="hl">Step 3:</span> Tax after rebate = Tax – Rebate
+
+        <span class="hl">Step 4:</span> Apply surcharge (if total income exceeds ₹50 lakhs)
+
+        <span class="hl">Step 5:</span> Apply health & education cess @ 4% on (Tax after rebate + Surcharge)
+
+        <span class="hl-green">Total Tax Liability</span> = Tax after rebate + Surcharge + Cess
+      </div>
+      <p>
+        The tax slabs are applied progressively — each slab's rate is applied only to the income that falls within that slab range, not the entire income. This is called <strong>marginal taxation</strong>.
+      </p>
+
+      <div class="divider"></div>
+
+      <!-- 6. How Taxable Income is Calculated -->
+      <h2>📋 How Taxable Income is Calculated</h2>
+      <p>
+        <strong>Taxable income</strong> (or net taxable income) is the income on which tax is actually computed. It is derived from your gross total income after allowing deductions, exemptions, and allowances as per the Income-tax Act.
+      </p>
+      <p>
+        Here's the flow of how taxable income is calculated:
+      </p>
+      <ul>
+        <li><strong>Gross Total Income:</strong> Sum of all income from five heads — Salary, House Property, Business/Profession, Capital Gains, and Other Sources.</li>
+        <li><strong>Deductions under Chapter VI-A:</strong> Amounts deducted from gross total income under sections 80C, 80D, 80G, etc.</li>
+        <li><strong>Net Taxable Income:</strong> Gross Total Income – Deductions under Chapter VI-A – Other exemptions (e.g., HRA, LTA).</li>
+      </ul>
+      <p>
+        It is this <strong>net taxable income</strong> that is subject to tax at the applicable slab rates. Our calculator uses this income as the input to compute the tax liability.
+      </p>
+
+      <div class="divider"></div>
+
+      <!-- 7. Tax Slabs Explained -->
+      <h2>📊 Tax Slabs Explained</h2>
+      <p>
+        Tax slabs are the income ranges to which different tax rates apply. India follows a progressive tax system, meaning higher income is taxed at higher rates. The Income-tax Act, 1961, provides two tax regimes — the old regime and the new regime (introduced under section 115BAC).
+      </p>
+
+      <h3>📌 Old Tax Regime (2026-27)</h3>
+      <ul>
+        <li><strong>Less than 60 years:</strong> Up to ₹2.5L – 0%, ₹2.5L–₹5L – 5%, ₹5L–₹10L – 20%, Above ₹10L – 30%</li>
+        <li><strong>60 to 80 years (Senior Citizen):</strong> Up to ₹3L – 0%, ₹3L–₹5L – 5%, ₹5L–₹10L – 20%, Above ₹10L – 30%</li>
+        <li><strong>Above 80 years (Super Senior):</strong> Up to ₹5L – 0%, ₹5L–₹10L – 20%, Above ₹10L – 30%</li>
+      </ul>
+
+      <h3>📌 New Tax Regime (2026-27) – Default Regime</h3>
+      <ul>
+        <li><strong>All age groups:</strong> Up to ₹3L – 0%, ₹3L–₹6L – 5%, ₹6L–₹9L – 10%, ₹9L–₹12L – 15%, ₹12L–₹15L – 20%, Above ₹15L – 30%</li>
+      </ul>
+      <p>
+        The new regime is the default regime from FY 2023-24 onwards. Taxpayers can choose to opt out of the new regime and revert to the old regime by declaring so while filing their ITR.
+      </p>
+
+      <div class="divider"></div>
+
+      <!-- 8. Old Tax Regime vs New Tax Regime -->
+      <h2>⚖️ Old Tax Regime vs New Tax Regime</h2>
+      <p>
+        The introduction of the new tax regime under section 115BAC gave taxpayers a choice. Here's a comparison:
+      </p>
+      <ul>
+        <li><strong>New Regime:</strong> Lower tax rates but fewer deductions and exemptions available.</li>
+        <li><strong>Old Regime:</strong> Higher tax rates but allows a wide range of deductions (80C, 80D, HRA, LTA, etc.)</li>
+      </ul>
+      <p>
+        Which one is better? It depends on your investment and deduction pattern. Our calculator lets you compare both regimes easily — simply toggle the "Opt out of new regime" option and observe the difference in tax liability.
+      </p>
+
+      <div class="divider"></div>
+
+      <!-- 9. Standard Deduction Explained -->
+      <h2>🧾 Standard Deduction Explained</h2>
+      <p>
+        The <strong>standard deduction</strong> is a flat deduction from salary income, introduced to reduce the compliance burden on salaried employees. It was reintroduced in Budget 2019, replacing the earlier transport allowance and medical reimbursement.
+      </p>
+      <p>
+        <strong>Amount:</strong> ₹50,000 per annum (for FY 2026-27). This deduction is allowed to all salaried individuals, irrespective of their income level. It is directly deducted from the gross salary, reducing the taxable income. For pensioners, the standard deduction is also available.
+      </p>
+      <p>
+        Our calculator automatically accounts for standard deduction when computing tax on salary income, ensuring accurate results.
+      </p>
+
+      <div class="divider"></div>
+
+      <!-- 10. Income Tax Components -->
+      <h2>🧩 Income Tax Components</h2>
+      <p>
+        Your total tax liability comprises three main components:
+      </p>
+      <ul>
+        <li><strong>Income Tax:</strong> The base tax computed on your net taxable income as per the applicable slabs.</li>
+        <li><strong>Surcharge:</strong> An additional charge levied on the tax amount if your total income exceeds certain thresholds (₹50 lakhs, ₹1 crore, ₹2 crore, ₹5 crore).</li>
+        <li><strong>Health & Education Cess:</strong> A 4% cess on the total of income tax and surcharge, used to fund health and education initiatives.</li>
+      </ul>
+      <p>
+        Rebate under section 87A is applied before surcharge and cess, making it a crucial component for taxpayers with income up to ₹5-7 lakhs.
+      </p>
+
+      <div class="divider"></div>
+
+      <!-- 11. Health & Education Cess Explained -->
+      <h2>🏥 Health & Education Cess Explained</h2>
+      <p>
+        The <strong>Health and Education Cess</strong> was introduced in 2018 (replacing the earlier Education Cess and Secondary and Higher Education Cess) to fund health and education initiatives across India.
+      </p>
+      <ul>
+        <li><strong>Rate:</strong> 4% of the total income tax liability (including surcharge).</li>
+        <li><strong>Applicability:</strong> Applies to all taxpayers — individuals, HUFs, firms, and companies.</li>
+        <li><strong>Example:</strong> If your income tax (after rebate and surcharge) is ₹1,00,000, the cess would be ₹4,000 (4% of ₹1,00,000).</li>
+      </ul>
+
+      <div class="divider"></div>
+
+      <!-- 12. Surcharge Explained -->
+      <h2>📈 Surcharge Explained</h2>
+      <p>
+        A <strong>surcharge</strong> is an additional tax levied on individuals with high incomes. The rates are as follows (for AY 2026-27):
+      </p>
+      <ul>
+        <li>Total income > ₹50 lakhs up to ₹1 crore: <strong>10%</strong></li>
+        <li>Total income > ₹1 crore up to ₹2 crores: <strong>15%</strong></li>
+        <li>Total income > ₹2 crores up to ₹5 crores: <strong>25%</strong></li>
+        <li>Total income > ₹5 crores: <strong>37%</strong></li>
+      </ul>
+      <p>
+        The surcharge is calculated on the income tax amount (after rebate, if any). It is not levied on the total income directly, but on the tax payable.
+      </p>
+
+      <div class="divider"></div>
+
+      <!-- 13. Tax Saving Tips -->
+      <h2>💡 Tax Saving Tips</h2>
+      <p>
+        Here are some practical tips to legally minimize your tax liability:
+      </p>
+      <ul>
+        <li><strong>Maximize Section 80C Investments:</strong> Invest up to ₹1.5 lakhs in PPF, ELSS, NSC, etc.</li>
+        <li><strong>Claim Section 80D:</strong> Deduct up to ₹25,000 for health insurance premiums (₹50,000 for senior citizens).</li>
+        <li><strong>Use Section 80G:</strong> Donate to eligible charities and claim deductions.</li>
+        <li><strong>Claim HRA Exemption:</strong> If you live in a rented house, claim House Rent Allowance exemption.</li>
+        <li><strong>Invest in NPS:</strong> Under section 80CCD(1B), claim an additional deduction of up to ₹50,000.</li>
+        <li><strong>Education Loan Interest:</strong> Claim deduction on interest paid on education loans under section 80E.</li>
+        <li><strong>Choose the Right Regime:</strong> Compare old and new regimes to see which gives you lower tax.</li>
+      </ul>
+
+      <div class="divider"></div>
+
+      <!-- 14. Eligible Tax Deductions -->
+      <h2>📋 Eligible Tax Deductions (Chapter VI-A)</h2>
+      <p>
+        Under the old tax regime, you can claim deductions under various sections to reduce your taxable income. Some key sections are:
+      </p>
+      <ul>
+        <li><strong>Section 80C:</strong> ₹1.5 lakhs — LIC, PPF, ELSS, NSC, Tuition fees, Principal repayment of home loan.</li>
+        <li><strong>Section 80CCD(1):</strong> ₹1.5 lakhs (additional ₹50,000 under 80CCD(1B) for NPS).</li>
+        <li><strong>Section 80D:</strong> ₹25,000 (₹50,000 for senior citizens) — Health insurance premiums.</li>
+        <li><strong>Section 80E:</strong> Interest on education loans (no limit, deduction for 8 years).</li>
+        <li><strong>Section 80G:</strong> Donations to charitable institutions (50% or 100% of donation).</li>
+        <li><strong>Section 80TTA:</strong> ₹10,000 — Interest on savings bank account.</li>
+        <li><strong>Section 80TTB:</strong> ₹50,000 — Interest on deposits for senior citizens.</li>
+      </ul>
+      <p>
+        Remember that the new tax regime does not allow most of these deductions, which is why comparing both regimes is essential.
+      </p>
+
+      <div class="divider"></div>
+
+      <!-- 15. Investment Options for Tax Saving -->
+      <h2>🏦 Investment Options for Tax Saving</h2>
+      <p>
+        Here are the most popular tax-saving investment instruments under section 80C:
+      </p>
+      <ul>
+        <li><strong>PPF (Public Provident Fund):</strong> 15-year lock-in, tax-free interest, safe investment.</li>
+        <li><strong>ELSS (Equity Linked Savings Scheme):</strong> 3-year lock-in, equity-based, potential for high returns.</li>
+        <li><strong>NSC (National Savings Certificate):</strong> 5-year lock-in, fixed interest rate.</li>
+        <li><strong>Tax-Saving FDs:</strong> 5-year lock-in, fixed interest, safe.</li>
+        <li><strong>Life Insurance Premiums:</strong> Premiums paid for your own, spouse, or children's policies.</li>
+        <li><strong>Principal Repayment of Home Loan:</strong> The principal amount repaid on a home loan is eligible for deduction.</li>
+        <li><strong>Sukanya Samriddhi Yojana:</strong> For girl child, 21-year maturity, high interest.</li>
+      </ul>
+      <p>
+        Additionally, NPS (National Pension System) offers an extra ₹50,000 deduction under section 80CCD(1B) beyond the ₹1.5 lakh limit.
+      </p>
+
+      <div class="divider"></div>
+
+      <!-- 16. Salary Income Tax Guide -->
+      <h2>🧑‍💼 Salary Income Tax Guide</h2>
+      <p>
+        Salary income is one of the most common sources of income. Here's how salary income is taxed:
+      </p>
+      <ul>
+        <li><strong>Salary:</strong> Basic pay, allowances (DA, HRA, LTA, etc.), bonuses, and commissions are all taxable.</li>
+        <li><strong>Standard Deduction:</strong> ₹50,000 is deducted directly from the gross salary.</li>
+        <li><strong>HRA Exemption:</strong> If you live in a rented house, you can claim exemption on HRA.</li>
+        <li><strong>Tax Deducted at Source (TDS):</strong> Your employer deducts TDS on your salary as per your estimated tax liability.</li>
+        <li><strong>Form 16:</strong> Your employer issues Form 16 annually, which details your salary, deductions, and TDS.</li>
+      </ul>
+      <p>
+        Use our calculator to estimate your tax liability for the year and plan your investments accordingly.
+      </p>
+
+      <div class="divider"></div>
+
+      <!-- 17. Business Income Tax Guide -->
+      <h2>🏢 Business Income Tax Guide</h2>
+      <p>
+        Business income is taxed differently from salary. Here are the key aspects:
+      </p>
+      <ul>
+        <li><strong>Presumptive Taxation:</strong> Under sections 44AD, 44ADA, and 44AE, small businesses can declare income at a prescribed percentage of turnover (6% for businesses, 50% for professionals).</li>
+        <li><strong>Actual Income:</strong> If you don't opt for presumptive taxation, you must maintain books of accounts and declare actual income after deducting expenses.</li>
+        <li><strong>Deductions:</strong> All business expenses — rent, salaries, utilities, raw materials, depreciation — are deductible.</li>
+        <li><strong>Advance Tax:</strong> Businesses are required to pay advance tax in installments throughout the year.</li>
+      </ul>
+
+      <div class="divider"></div>
+
+      <!-- 18. Capital Gains Tax Overview -->
+      <h2>📈 Capital Gains Tax Overview</h2>
+      <p>
+        Capital gains arise from the sale of capital assets like property, shares, mutual funds, gold, etc. There are two types:
+      </p>
+      <ul>
+        <li><strong>Short-Term Capital Gains (STCG):</strong> Assets held for less than 36 months (24 months for immovable property, 12 months for listed shares).</li>
+        <li><strong>Long-Term Capital Gains (LTCG):</strong> Assets held for more than the specified period.</li>
+      </ul>
+      <p>
+        <strong>Tax Rates:</strong>
+      </p>
+      <ul>
+        <li>LTCG on listed shares/equity mutual funds: 10% on gains exceeding ₹1 lakh (without indexation).</li>
+        <li>LTCG on other assets: 20% with indexation.</li>
+        <li>STCG on listed shares: 15% (if securities transaction tax is paid).</li>
+        <li>STCG on other assets: As per normal slab rates.</li>
+      </ul>
+      <p>
+        Our calculator focuses on income tax from salary and business income. For capital gains, consult your CA or use a specialized calculator.
+      </p>
+
+      <div class="divider"></div>
+
+      <!-- 19. Advance Tax Explained -->
+      <h2>📆 Advance Tax Explained</h2>
+      <p>
+        <strong>Advance tax</strong> is the income tax you pay in installments throughout the year, instead of paying the entire amount at the end of the year. It applies to:
+      </p>
+      <ul>
+        <li>Salaried individuals whose TDS is less than ₹10,000 of their total tax liability.</li>
+        <li>Business owners, professionals, freelancers, and others whose tax liability exceeds ₹10,000.</li>
+      </ul>
+      <p>
+        The due dates for advance tax (for individuals) are:
+      </p>
+      <ul>
+        <li><strong>15th June:</strong> 15% of total tax liability</li>
+        <li><strong>15th September:</strong> 45%</li>
+        <li><strong>15th December:</strong> 75%</li>
+        <li><strong>15th March:</strong> 100%</li>
+      </ul>
+      <p>
+        Failure to pay advance tax can attract interest under sections 234B and 234C.
+      </p>
+
+      <div class="divider"></div>
+
+      <!-- 20. TDS Explained -->
+      <h2>🏷️ TDS (Tax Deducted at Source) Explained</h2>
+      <p>
+        <strong>Tax Deducted at Source (TDS)</strong> is a mechanism where the payer deducts tax at the time of making a payment and deposits it with the government. TDS is applicable on various payments like salary, rent, professional fees, interest, etc.
+      </p>
+      <ul>
+        <li><strong>Salary TDS:</strong> Your employer deducts TDS based on your estimated income and applicable deductions.</li>
+        <li><strong>Interest TDS:</strong> Banks deduct TDS on interest income when it exceeds ₹40,000 (₹50,000 for senior citizens).</li>
+        <li><strong>Rent TDS:</strong> TDS on rent payment where annual rent exceeds ₹2.4 lakhs.</li>
+        <li><strong>Form 26AS:</strong> The annual tax statement that shows all TDS deducted on your behalf.</li>
+      </ul>
+      <p>
+        TDS is not an additional tax — it is a prepayment of your tax liability. You can claim credit for TDS while filing your ITR.
+      </p>
+
+      <div class="divider"></div>
+
+      <!-- 21. Common Tax Calculation Mistakes -->
+      <h2>⚠️ Common Tax Calculation Mistakes</h2>
+      <p>
+        Avoid these common mistakes to ensure accurate tax computation:
+      </p>
+      <ul>
+        <li><strong>Choosing the wrong regime:</strong> Not comparing old and new regimes before filing.</li>
+        <li><strong>Missing deductions:</strong> Forgetting to claim eligible deductions under 80C, 80D, etc.</li>
+        <li><strong>Incorrect income reporting:</strong> Not including all sources of income (e.g., interest, capital gains).</li>
+        <li><strong>Not accounting for HRA:</strong> Not claiming HRA exemption if living in a rented house.</li>
+        <li><strong>Ignoring advance tax:</strong> Not paying advance tax and attracting interest penalties.</li>
+        <li><strong>Incorrect TDS credit:</strong> Failing to match TDS with Form 26AS.</li>
+        <li><strong>Not filing ITR on time:</strong> Missing the deadline can lead to late fees and interest.</li>
+      </ul>
+
+      <div class="divider"></div>
+
+      <!-- 22. Benefits of Using a Tax Calculator -->
+      <h2>✅ Benefits of Using a Tax Calculator</h2>
+      <p>
+        Using our Income Tax Calculator provides several benefits:
+      </p>
+      <ul>
+        <li><strong>Time-saving:</strong> Instant results without manual calculations.</li>
+        <li><strong>Accurate:</strong> Eliminates human errors in tax computation.</li>
+        <li><strong>Regime comparison:</strong> Compare old and new regimes side by side.</li>
+        <li><strong>Planning:</strong> Helps you plan tax-saving investments before the financial year ends.</li>
+        <li><strong>Privacy:</strong> All calculations are done locally in your browser.</li>
+        <li><strong>Free:</strong> No cost, no registration required.</li>
+        <li><strong>History & export:</strong> Save, download, and share your results.</li>
+      </ul>
+
+      <div class="divider"></div>
+
+      <!-- 23. Example Tax Calculations -->
+      <h2>🧮 Example Tax Calculations</h2>
+
+      <div class="example-box">
+        <p><strong>Example 1: Salaried Individual (Old Regime)</strong></p>
+        <ul>
+          <li><strong>Person:</strong> Anish, 32 years, Resident, Salaried</li>
+          <li><strong>Net Taxable Income:</strong> ₹8,00,000</li>
+          <li><strong>Regime:</strong> Old Regime (opted out of new regime)</li>
+        </ul>
+        <p><strong>Calculation:</strong></p>
+        <ul>
+          <li>Tax on ₹0–₹2.5L: 0% = ₹0</li>
+          <li>Tax on ₹2.5L–₹5L: 5% = ₹12,500</li>
+          <li>Tax on ₹5L–₹8L: 20% = ₹60,000</li>
+          <li><strong>Income Tax:</strong> ₹72,500</li>
+          <li>Rebate u/s 87A: Not eligible (income > ₹5L)</li>
+          <li>Surcharge: Not applicable (income < ₹50L)</li>
+          <li>Cess @4%: ₹2,900</li>
+          <li><strong>Total Tax Liability:</strong> ₹75,400</li>
+        </ul>
+      </div>
+
+      <div class="example-box">
+        <p><strong>Example 2: Senior Citizen (New Regime)</strong></p>
+        <ul>
+          <li><strong>Person:</strong> Aman, 65 years, Resident, Retired</li>
+          <li><strong>Net Taxable Income:</strong> ₹6,50,000</li>
+          <li><strong>Regime:</strong> New Regime (default)</li>
+        </ul>
+        <p><strong>Calculation:</strong></p>
+        <ul>
+          <li>Tax on ₹0–₹3L: 0% = ₹0</li>
+          <li>Tax on ₹3L–₹6L: 5% = ₹15,000</li>
+          <li>Tax on ₹6L–₹6.5L: 10% = ₹5,000</li>
+          <li><strong>Income Tax:</strong> ₹20,000</li>
+          <li>Rebate u/s 87A: ₹20,000 (fully rebated, income ≤ ₹7L in new regime)</li>
+          <li><strong>Tax after Rebate:</strong> ₹0</li>
+          <li>Surcharge: Not applicable</li>
+          <li>Cess: Not applicable (tax after rebate is zero)</li>
+          <li><strong>Total Tax Liability:</strong> ₹0</li>
+        </ul>
+      </div>
+
+      <div class="divider"></div>
+
+      <!-- 24. Frequently Asked Questions (FAQs) -->
+      <h2>❓ Frequently Asked Questions</h2>
+
+      <div class="faq-item">
+        <div class="q"><i class="fas fa-question-circle"></i> What is the difference between the old and new tax regimes?</div>
+        <div class="a">The old regime allows various deductions (80C, 80D, etc.) but has higher tax rates. The new regime has lower rates but does not allow most deductions. You can choose whichever regime results in lower tax.</div>
+      </div>
+
+      <div class="faq-item">
+        <div class="q"><i class="fas fa-question-circle"></i> What is the rebate under section 87A?</div>
+        <div class="a">Section 87A provides a rebate on income tax if your total income is up to ₹5,00,000 (old regime) or ₹7,00,000 (new regime). The rebate amount is limited to ₹12,500.</div>
+      </div>
+
+      <div class="faq-item">
+        <div class="q"><i class="fas fa-question-circle"></i> What is surcharge and who pays it?</div>
+        <div class="a">Surcharge is an additional tax on individuals earning more than ₹50 lakhs. Rates range from 10% to 37%, depending on the income level.</div>
+      </div>
+
+      <div class="faq-item">
+        <div class="q"><i class="fas fa-question-circle"></i> What is health and education cess?</div>
+        <div class="a">A 4% cess on the total tax (including surcharge) that funds government health and education schemes. It applies to all taxpayers.</div>
+      </div>
+
+      <div class="faq-item">
+        <div class="q"><i class="fas fa-question-circle"></i> What is the standard deduction for salaried employees?</div>
+        <div class="a">A flat ₹50,000 deduction from salary income under the old tax regime. In the new regime, standard deduction is ₹50,000 (for FY 2026-27).</div>
+      </div>
+
+      <div class="faq-item">
+        <div class="q"><i class="fas fa-question-circle"></i> What is the maximum deduction under section 80C?</div>
+        <div class="a">₹1,50,000 per financial year. This limit is combined with section 80CCC and 80CCD(1).</div>
+      </div>
+
+      <div class="faq-item">
+        <div class="q"><i class="fas fa-question-circle"></i> Can I claim both old and new regime deductions?</div>
+        <div class="a">No, you must choose either the old regime or the new regime. The new regime does not allow most deductions.</div>
+      </div>
+
+      <div class="faq-item">
+        <div class="q"><i class="fas fa-question-circle"></i> What is the assessment year?</div>
+        <div class="a">The assessment year is the year following the financial year, during which you file your income tax return. For FY 2026-27, the AY is 2027-28.</div>
+      </div>
+
+      <div class="faq-item">
+        <div class="q"><i class="fas fa-question-circle"></i> What is TDS?</div>
+        <div class="a">TDS (Tax Deducted at Source) is a mechanism where the payer deducts tax at the time of making a payment (salary, interest, rent, etc.) and deposits it with the government.</div>
+      </div>
+
+      <div class="faq-item">
+        <div class="q"><i class="fas fa-question-circle"></i> How can I save tax legally?</div>
+        <div class="a">You can save tax by investing in 80C instruments, taking health insurance (80D), donating to charities (80G), claiming HRA, and choosing the right tax regime.</div>
+      </div>
+
+      <div class="faq-item">
+        <div class="q"><i class="fas fa-question-circle"></i> Do senior citizens get higher exemption limits?</div>
+        <div class="a">Yes, senior citizens (60–80 years) have a higher basic exemption limit of ₹3,00,000. Super senior citizens (80+ years) have an exemption limit of ₹5,00,000 in the old regime.</div>
+      </div>
+
+      <div class="faq-item">
+        <div class="q"><i class="fas fa-question-circle"></i> What is the difference between HUF and Individual?</div>
+        <div class="a">An HUF (Hindu Undivided Family) is a separate tax entity that can hold property and income. Taxed similarly to an individual, but with its own PAN and assessment rules.</div>
+      </div>
+
+      <div class="faq-item">
+        <div class="q"><i class="fas fa-question-circle"></i> What is advance tax and who needs to pay it?</div>
+        <div class="a">Advance tax is paid in installments throughout the year if your tax liability exceeds ₹10,000 (after TDS). It applies to self-employed individuals and businesses.</div>
+      </div>
+
+      <div class="faq-item">
+        <div class="q"><i class="fas fa-question-circle"></i> Can I use this calculator for NRI tax calculation?</div>
+        <div class="a">Yes, the calculator allows you to select residential status as "Non-Resident (NRI)" and computes tax accordingly, though NRI tax rules may have additional complexities.</div>
+      </div>
+
+      <div class="faq-item">
+        <div class="q"><i class="fas fa-question-circle"></i> What is the deadline for filing ITR?</div>
+        <div class="a">For individuals and HUFs (non-audit), the due date is 31st July of the assessment year. For businesses requiring audit, it is 31st October.</div>
+      </div>
+
+      <div class="faq-item">
+        <div class="q"><i class="fas fa-question-circle"></i> Is this calculator updated with the latest tax laws?</div>
+        <div class="a">Yes, our calculator uses the tax rates and rules as per the Finance Act, 2026, applicable for FY 2026-27.</div>
+      </div>
+
+      <div class="faq-item">
+        <div class="q"><i class="fas fa-question-circle"></i> What happens if I don't pay advance tax on time?</div>
+        <div class="a">You may be liable to pay interest under sections 234B (default in payment of advance tax) and 234C (deferment of advance tax).</div>
+      </div>
+
+      <div class="faq-item">
+        <div class="q"><i class="fas fa-question-circle"></i> Can I claim deduction for home loan interest?</div>
+        <div class="a">Yes, under section 24, you can claim a deduction of up to ₹2,00,000 per year for interest on home loan (for self-occupied property).</div>
+      </div>
+
+      <div class="faq-item">
+        <div class="q"><i class="fas fa-question-circle"></i> Is the data I enter stored anywhere?</div>
+        <div class="a">No. All calculations are performed locally in your browser. Your data is never sent to any server, stored, or shared. Your privacy is fully protected.</div>
+      </div>
+
+      <div class="faq-item">
+        <div class="q"><i class="fas fa-question-circle"></i> What is Form 26AS?</div>
+        <div class="a">Form 26AS is a consolidated annual tax statement that shows the TDS deducted on your behalf, tax paid by you (advance tax, self-assessment tax), and other tax-related details.</div>
+      </div>
+
+      <div class="divider"></div>
+
+      <!-- 25. Income Tax Glossary -->
+      <h2>📖 Income Tax Glossary</h2>
+      <div class="glossary-grid">
+        <div class="glossary-item"><div class="term">Assessment Year (AY)</div><div class="def">The year in which income tax is assessed on the income earned in the previous financial year.</div></div>
+        <div class="glossary-item"><div class="term">BMR</div><div class="def">Basic Exemption Limit — the threshold above which income becomes taxable.</div></div>
+        <div class="glossary-item"><div class="term">Cess</div><div class="def">A tax levied on tax — used for specific purposes like health and education.</div></div>
+        <div class="glossary-item"><div class="term">Deduction</div><div class="def">Amount subtracted from gross total income to arrive at net taxable income (e.g., 80C).</div></div>
+        <div class="glossary-item"><div class="term">Exemption</div><div class="def">Income that is not taxable (e.g., agricultural income, HRA partially).</div></div>
+        <div class="glossary-item"><div class="term">HUF</div><div class="def">Hindu Undivided Family — a tax entity for Hindu families with a common ancestor.</div></div>
+        <div class="glossary-item"><div class="term">ITR</div><div class="def">Income Tax Return — the form filed with the tax authorities declaring income and tax.</div></div>
+        <div class="glossary-item"><div class="term">PAN</div><div class="def">Permanent Account Number — a unique 10-digit alphanumeric identifier issued by the Income Tax Department.</div></div>
+        <div class="glossary-item"><div class="term">Rebate</div><div class="def">A reduction in the tax payable (e.g., section 87A).</div></div>
+        <div class="glossary-item"><div class="term">Surcharge</div><div class="def">An additional tax on high-income individuals above the regular tax.</div></div>
+        <div class="glossary-item"><div class="term">TDS</div><div class="def">Tax Deducted at Source — tax deducted by the payer at the time of payment.</div></div>
+        <div class="glossary-item"><div class="term">Tax Slab</div><div class="def">The income range to which a specific tax rate applies.</div></div>
+      </div>
+
+      <div class="divider"></div>
+
+      <!-- 26. Tax Planning Tips -->
+      <h2>📌 Tax Planning Tips</h2>
+      <p>
+        Tax planning is not just about saving tax — it's about optimizing your financial decisions for long-term wealth creation. Here are some strategic tips:
+      </p>
+      <ul>
+        <li><strong>Start early:</strong> Plan your tax-saving investments at the beginning of the financial year, not in March.</li>
+        <li><strong>Diversify:</strong> Don't put all your money into one 80C instrument. Spread across PPF, ELSS, and others for risk management.</li>
+        <li><strong>Use NPS:</strong> The additional ₹50,000 under 80CCD(1B) is a great way to save tax while building retirement corpus.</li>
+        <li><strong>Health insurance:</strong> Get health insurance for yourself and senior citizen parents to claim up to ₹75,000 under 80D.</li>
+        <li><strong>Home loan benefits:</strong> Claim both principal (80C) and interest (24) on your home loan.</li>
+        <li><strong>Consider the new regime:</strong> If you don't have significant deductions, the new regime may be more beneficial.</li>
+        <li><strong>Donate wisely:</strong> Donations to eligible charities under 80G can reduce tax while supporting good causes.</li>
+        <li><strong>Review and adjust:</strong> Regularly review your investments and tax plan to align with your income changes.</li>
+      </ul>
+
+      <div class="divider"></div>
+
+      <!-- 27. Important Notes Before Filing ITR -->
+      <h2>📋 Important Notes Before Filing ITR</h2>
+      <ul>
+        <li><strong>Verify Form 26AS:</strong> Ensure all TDS and tax payments are reflected in your Form 26AS.</li>
+        <li><strong>Choose correct ITR form:</strong> Use the appropriate form — ITR-1 for salaried, ITR-3 for business, etc.</li>
+        <li><strong>E-verify:</strong> Complete the e-verification process within 30 days of filing to avoid the return being treated as invalid.</li>
+        <li><strong>Check eligibility for rebate:</strong> Ensure you correctly claim rebate under section 87A if eligible.</li>
+        <li><strong>Avoid mistakes:</strong> Cross-check all numbers — income, deductions, TDS, and tax paid.</li>
+        <li><strong>File on time:</strong> The due date is 31st July for individuals. Late filing can attract interest and penalty.</li>
+        <li><strong>Consult a CA:</strong> If you have complex income sources (capital gains, foreign income), consult a Chartered Accountant.</li>
+      </ul>
+
+      <div class="divider"></div>
+
+      <!-- 28. Related Calculators -->
+      <h2>🔗 Related Calculators</h2>
+      <p>
+        Explore other useful financial calculators on 99toolhub:
+      </p>
+      <ul>
+        <li><strong>Gratuity Calculator:</strong> Calculate gratuity payable to employees.</li>
+        <li><strong>HRA Exemption Calculator:</strong> Calculate HRA exemption based on rent and salary.</li>
+        <li><strong>Capital Gains Tax Calculator:</strong> Compute tax on short-term and long-term capital gains.</li>
+        <li><strong>EMI Calculator:</strong> Calculate monthly installments for home, auto, and personal loans.</li>
+        <li><strong>EPF Calculator:</strong> Estimate your Employee Provident Fund balance.</li>
+        <li><strong>NPS Calculator:</strong> Calculate retirement savings and corpus with NPS.</li>
+      </ul>
+
+      <div class="divider"></div>
+
+      <!-- 29. Disclaimer -->
+      <div class="disclaimer-box" id="disclaimer">
+        <div class="disclaimer-title">
+          <i class="fas fa-triangle-exclamation"></i> Important Legal & Financial Disclaimer
+        </div>
+        <p>
+          The <strong>99toolhub Income Tax Calculator</strong> is provided for <strong>educational and informational purposes only</strong>. It is not a substitute for professional tax advice, financial planning, or legal counsel. The calculations are based on the provisions of the Income-tax Act, 1961, as amended by the Finance Act, 2026, and are intended to provide an approximate estimate of tax liability.
+        </p>
+        <p>
+          Tax laws are complex and subject to change. Individual circumstances such as specific income sources, deductions, exemptions, and business structures may affect your actual tax liability. We strongly recommend that you consult a qualified Chartered Accountant (CA) or tax professional before making any financial decisions or filing your Income Tax Return (ITR).
+        </p>
+        <p>
+          99toolhub and its creators disclaim all liability for any errors, omissions, or inaccuracies in the calculations, and for any decisions made based on the information provided by this tool. All calculations are performed locally in your browser — no data is stored, shared, or transmitted.
+        </p>
+        <p style="margin-top: 8px; font-weight: 600; color: #991b1b;">
+          Please refer to the official Income Tax Department website (incometaxindia.gov.in) for the latest rules, circulars, and notifications.
+        </p>
+      </div>
+
+      <!-- 30. Conclusion -->
+      <h2>📝 Conclusion</h2>
+      <p>
+        The <strong>99toolhub Income Tax Calculator</strong> is your reliable companion for understanding and estimating your income tax liability. Whether you're a salaried employee planning your investments, a business owner estimating advance tax, or a senior citizen choosing between tax regimes, this tool empowers you with clarity and confidence.
+      </p>
+      <p>
+        With features like live calculation, history saving, PDF slips, and regime comparison, it takes the complexity out of tax computation. Remember, tax planning is a year-round activity — start early, stay informed, and make smart financial decisions that benefit both your wallet and your future.
+      </p>
+      <p style="text-align:center; color:#64748b; font-size:15px; margin-top:20px;">
+        <i class="fas fa-heart" style="color:#ef4444;"></i> Thank you for using <strong>99toolhub</strong> Income Tax Calculator. Plan wisely, file confidently!
+      </p>
+
+    </div>
+
+    <!-- ===== SIMPLIFIED FOOTER ===== -->
+    <footer class="footer">
+      <p>© 2026 <strong>99toolhub</strong>. All rights reserved.</p>
+    </footer>
+
+  </div>
+
+  <!-- Toast -->
+  <div class="toast" id="toast"><i class="fas fa-info-circle"></i> <span id="toastMsg"></span></div>
+
+  <script>
+    (function() {
+      "use strict";
+
+      // ===== TAX SLABS =====
+      const taxSlabs = {
+        old: {
+          below60: [
+            { limit: 250000, rate: 0 },
+            { limit: 500000, rate: 5 },
+            { limit: 1000000, rate: 20 },
+            { limit: Infinity, rate: 30 }
+          ],
+          '60to80': [
+            { limit: 300000, rate: 0 },
+            { limit: 500000, rate: 5 },
+            { limit: 1000000, rate: 20 },
+            { limit: Infinity, rate: 30 }
+          ],
+          above80: [
+            { limit: 500000, rate: 0 },
+            { limit: 1000000, rate: 20 },
+            { limit: Infinity, rate: 30 }
+          ]
+        },
+        new: {
+          below60: [
+            { limit: 300000, rate: 0 },
+            { limit: 600000, rate: 5 },
+            { limit: 900000, rate: 10 },
+            { limit: 1200000, rate: 15 },
+            { limit: 1500000, rate: 20 },
+            { limit: Infinity, rate: 30 }
+          ],
+          '60to80': [
+            { limit: 300000, rate: 0 },
+            { limit: 600000, rate: 5 },
+            { limit: 900000, rate: 10 },
+            { limit: 1200000, rate: 15 },
+            { limit: 1500000, rate: 20 },
+            { limit: Infinity, rate: 30 }
+          ],
+          above80: [
+            { limit: 300000, rate: 0 },
+            { limit: 600000, rate: 5 },
+            { limit: 900000, rate: 10 },
+            { limit: 1200000, rate: 15 },
+            { limit: 1500000, rate: 20 },
+            { limit: Infinity, rate: 30 }
+          ]
+        }
+      };
+
+      // ===== DOM REFS =====
+      const assessmentYear = document.getElementById('assessmentYear');
+      const taxpayerType = document.getElementById('taxpayerType');
+      const taxpayerCategory = document.getElementById('taxpayerCategory');
+      const residentialStatus = document.getElementById('residentialStatus');
+      const regimeOptOut = document.getElementById('regimeOptOut');
+      const netTaxableIncome = document.getElementById('netTaxableIncome');
+
+      const incomeTaxEl = document.getElementById('incomeTax');
+      const rebateAmountEl = document.getElementById('rebateAmount');
+      const taxAfterRebateEl = document.getElementById('taxAfterRebate');
+      const surchargeEl = document.getElementById('surcharge');
+      const cessEl = document.getElementById('cess');
+      const totalTaxEl = document.getElementById('totalTax');
+
+      const toastMsg = document.getElementById('toastMsg');
+      const historyList = document.getElementById('historyList');
+      const historyCount = document.getElementById('historyCount');
+
+      let lastResult = {};
+      let history = JSON.parse(localStorage.getItem('taxHistory')) || [];
+
+      // ===== CALCULATE =====
+      function calculateTax(income, regime, category) {
+        const slabs = taxSlabs[regime][category];
+        let tax = 0;
+        let previousLimit = 0;
+
+        for (let i = 0; i < slabs.length; i++) {
+          const slab = slabs[i];
+          const taxable = Math.max(0, Math.min(income, slab.limit) - previousLimit);
+          tax += taxable * (slab.rate / 100);
+          previousLimit = slab.limit;
+          if (income <= slab.limit) break;
+        }
+
+        return tax;
+      }
+
+      function calculate() {
+        const income = parseFloat(netTaxableIncome.value) || 0;
+        const category = taxpayerCategory.value;
+        const regime = regimeOptOut.value === 'no' ? 'old' : 'new';
+
+        let tax = calculateTax(income, regime, category);
+        tax = Math.round(tax);
+
+        let rebate = 0;
+        if (regime === 'old' && income <= 500000) {
+          rebate = Math.min(tax, 12500);
+        } else if (regime === 'new' && income <= 700000) {
+          rebate = Math.min(tax, 12500);
+        }
+
+        const taxAfterRebate = Math.max(0, tax - rebate);
+
+        let surcharge = 0;
+        if (income > 5000000 && income <= 10000000) surcharge = Math.round(taxAfterRebate * 0.10);
+        else if (income > 10000000 && income <= 20000000) surcharge = Math.round(taxAfterRebate * 0.15);
+        else if (income > 20000000 && income <= 50000000) surcharge = Math.round(taxAfterRebate * 0.25);
+        else if (income > 50000000) surcharge = Math.round(taxAfterRebate * 0.37);
+
+        const cess = Math.round((taxAfterRebate + surcharge) * 0.04);
+        const totalTax = taxAfterRebate + surcharge + cess;
+
+        lastResult = {
+          ay: assessmentYear.value,
+          taxpayer: taxpayerType.options[taxpayerType.selectedIndex].text,
+          category: taxpayerCategory.options[taxpayerCategory.selectedIndex].text,
+          status: residentialStatus.options[residentialStatus.selectedIndex].text,
+          regime: regime === 'old' ? 'Old Regime' : 'New Regime',
+          income: income,
+          tax: tax,
+          rebate: rebate,
+          taxAfterRebate: taxAfterRebate,
+          surcharge: surcharge,
+          cess: cess,
+          totalTax: totalTax
+        };
+
+        incomeTaxEl.textContent = '₹' + tax.toLocaleString();
+        rebateAmountEl.textContent = '₹' + rebate.toLocaleString();
+        taxAfterRebateEl.textContent = '₹' + taxAfterRebate.toLocaleString();
+        surchargeEl.textContent = '₹' + surcharge.toLocaleString();
+        cessEl.textContent = '₹' + cess.toLocaleString();
+        totalTaxEl.textContent = '₹' + totalTax.toLocaleString();
+
+        document.querySelectorAll('.result-item .value').forEach(el => {
+          const val = el.textContent.replace('₹', '').replace(/,/g, '');
+          if (parseFloat(val) === 0) {
+            el.classList.add('zero');
+          } else {
+            el.classList.remove('zero');
+          }
+        });
+      }
+
+      // ===== HISTORY =====
+      function saveHistory() {
+        if (!lastResult.income || lastResult.income === 0) {
+          showToast('⚠️ Please calculate tax first before saving');
+          return;
+        }
+
+        const entry = {
+          id: Date.now(),
+          date: new Date().toISOString(),
+          ay: lastResult.ay,
+          taxpayer: lastResult.taxpayer,
+          category: lastResult.category,
+          status: lastResult.status,
+          regime: lastResult.regime,
+          income: lastResult.income,
+          tax: lastResult.tax,
+          rebate: lastResult.rebate,
+          taxAfterRebate: lastResult.taxAfterRebate,
+          surcharge: lastResult.surcharge,
+          cess: lastResult.cess,
+          totalTax: lastResult.totalTax
+        };
+
+        history.unshift(entry);
+        if (history.length > 100) history.pop();
+        localStorage.setItem('taxHistory', JSON.stringify(history));
+        renderHistory();
+        showToast('✅ Calculation saved to history');
+      }
+
+      function renderHistory() {
+        if (history.length === 0) {
+          historyList.innerHTML = '<div class="history-empty">No calculations saved yet</div>';
+          historyCount.textContent = '0 entries';
+          return;
+        }
+
+        historyCount.textContent = history.length + ' entries';
+        historyList.innerHTML = '';
+
+        history.forEach((item, index) => {
+          const div = document.createElement('div');
+          div.className = 'history-item';
+          const date = new Date(item.date);
+          const dateStr = date.toLocaleDateString() + ' ' + date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+
+          div.innerHTML = `
+            <div class="info">
+              <span class="amount">₹${item.totalTax.toLocaleString()}</span>
+              <span class="ay">AY ${item.ay}</span>
+              <span style="opacity:0.4;">${item.regime}</span>
+              <span class="date">${dateStr}</span>
+            </div>
+            <div class="actions">
+              <button class="load-btn" data-index="${index}" title="Load this calculation"><i class="fas fa-undo-alt"></i></button>
+              <button class="del-btn" data-index="${index}" title="Delete"><i class="fas fa-trash-alt"></i></button>
+            </div>
+          `;
+          historyList.appendChild(div);
+        });
+
+        document.querySelectorAll('.load-btn').forEach(btn => {
+          btn.addEventListener('click', function() {
+            const idx = parseInt(this.dataset.index);
+            const item = history[idx];
+            if (item) {
+              assessmentYear.value = item.ay || '2026-27';
+              taxpayerType.value = item.taxpayer === 'Individual' ? 'individual' :
+                                   item.taxpayer === 'HUF' ? 'huf' :
+                                   item.taxpayer === 'AOP / BOI' ? 'aop' :
+                                   item.taxpayer === 'Firm' ? 'firm' : 'company';
+              taxpayerCategory.value = item.category === 'Less than 60 years' ? 'below60' :
+                                        item.category === '60 to 80 years (Senior Citizen)' ? '60to80' : 'above80';
+              residentialStatus.value = item.status === 'Resident' ? 'resident' :
+                                         item.status === 'Non-Resident (NRI)' ? 'nri' : 'resident_not_ordinary';
+              regimeOptOut.value = item.regime === 'Old Regime' ? 'no' : 'yes';
+              netTaxableIncome.value = item.income || 0;
+              calculate();
+              showToast('📂 Loaded calculation from history');
+            }
+          });
+        });
+
+        document.querySelectorAll('.del-btn').forEach(btn => {
+          btn.addEventListener('click', function() {
+            const idx = parseInt(this.dataset.index);
+            history.splice(idx, 1);
+            localStorage.setItem('taxHistory', JSON.stringify(history));
+            renderHistory();
+            showToast('🗑️ Entry deleted');
+          });
+        });
+      }
+
+      function clearHistory() {
+        if (history.length === 0) {
+          showToast('No history to clear');
+          return;
+        }
+        if (confirm('Are you sure you want to clear all history?')) {
+          history = [];
+          localStorage.setItem('taxHistory', JSON.stringify(history));
+          renderHistory();
+          showToast('🗑️ All history cleared');
+        }
+      }
+
+      function downloadHistoryCSV() {
+        if (history.length === 0) {
+          showToast('⚠️ No history to download');
+          return;
+        }
+
+        const headers = [
+          'Date', 'Assessment Year', 'Tax Payer', 'Category', 'Residential Status',
+          'Regime', 'Net Taxable Income', 'Income Tax', 'Rebate u/s 87A',
+          'Tax after Rebate', 'Surcharge', 'Health & Education Cess', 'Total Tax Liability'
+        ];
+
+        const rows = history.map(item => {
+          const date = new Date(item.date).toLocaleDateString() + ' ' +
+                      new Date(item.date).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+          return [
+            date,
+            item.ay || '',
+            item.taxpayer || '',
+            item.category || '',
+            item.status || '',
+            item.regime || '',
+            item.income || 0,
+            item.tax || 0,
+            item.rebate || 0,
+            item.taxAfterRebate || 0,
+            item.surcharge || 0,
+            item.cess || 0,
+            item.totalTax || 0
+          ];
+        });
+
+        let csvContent = '\uFEFF';
+        csvContent += headers.join(',') + '\n';
+        rows.forEach(row => {
+          csvContent += row.join(',') + '\n';
+        });
+
+        const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+        const link = document.createElement('a');
+        const url = URL.createObjectURL(blob);
+        link.setAttribute('href', url);
+        link.setAttribute('download', 'Tax-History-' + new Date().toISOString().slice(0, 10) + '.csv');
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+        URL.revokeObjectURL(url);
+
+        showToast('✅ History downloaded as CSV');
+      }
+
+      // ===== PDF =====
+      function generatePDF() {
+        if (!lastResult.income || lastResult.income === 0) {
+          showToast('⚠️ Please calculate tax first');
+          return;
+        }
+
+        try {
+          const { jsPDF } = window.jspdf;
+          const doc = new jsPDF('p', 'mm', 'a4');
+
+          const primary = [91, 141, 239];
+          const dark = [11, 26, 51];
+
+          doc.setFillColor(primary[0], primary[1], primary[2]);
+          doc.rect(0, 0, 210, 30, 'F');
+          doc.setTextColor(255, 255, 255);
+          doc.setFontSize(22);
+          doc.setFont('helvetica', 'bold');
+          doc.text('🧾 Income Tax Computation Slip', 20, 20);
+
+          doc.setTextColor(100, 100, 100);
+          doc.setFontSize(10);
+          doc.setFont('helvetica', 'normal');
+          doc.text('As per Income-tax Act, 1961 (Amended by Finance Act, 2026)', 20, 34);
+
+          doc.setDrawColor(200, 200, 200);
+          doc.line(20, 38, 190, 38);
+
+          let y = 48;
+          doc.setTextColor(dark[0], dark[1], dark[2]);
+          doc.setFontSize(11);
+          doc.setFont('helvetica', 'normal');
+
+          const fields = [
+            ['Assessment Year', lastResult.ay || '2026-27'],
+            ['Tax Payer', lastResult.taxpayer || 'Individual'],
+            ['Category (Age)', lastResult.category || 'Less than 60 years'],
+            ['Residential Status', lastResult.status || 'Resident'],
+            ['Regime', lastResult.regime || 'Old Regime'],
+            ['Net Taxable Income', '₹' + (lastResult.income || 0).toLocaleString()]
+          ];
+
+          fields.forEach(([label, value]) => {
+            doc.setFont('helvetica', 'bold');
+            doc.text(label + ':', 20, y);
+            doc.setFont('helvetica', 'normal');
+            doc.text(String(value), 80, y);
+            y += 8;
+          });
+
+          y += 4;
+          doc.setDrawColor(200, 200, 200);
+          doc.line(20, y, 190, y);
+          y += 10;
+
+          const breakdown = [
+            ['Income Tax', lastResult.tax || 0],
+            ['Rebate u/s 87A', lastResult.rebate || 0],
+            ['Tax after Rebate', lastResult.taxAfterRebate || 0],
+            ['Surcharge', lastResult.surcharge || 0],
+            ['Health & Education Cess', lastResult.cess || 0]
+          ];
+
+          breakdown.forEach(([label, value]) => {
+            doc.setFont('helvetica', 'bold');
+            doc.text(label + ':', 20, y);
+            doc.setFont('helvetica', 'normal');
+            doc.text('₹' + (value || 0).toLocaleString(), 80, y);
+            y += 8;
+          });
+
+          y += 4;
+          doc.setDrawColor(200, 200, 200);
+          doc.line(20, y, 190, y);
+          y += 10;
+
+          doc.setFillColor(primary[0], primary[1], primary[2]);
+          doc.rect(20, y - 4, 170, 12, 'F');
+          doc.setTextColor(255, 255, 255);
+          doc.setFont('helvetica', 'bold');
+          doc.setFontSize(14);
+          doc.text('Total Tax Liability', 25, y + 5);
+          doc.text('₹' + (lastResult.totalTax || 0).toLocaleString(), 150, y + 5, { align: 'right' });
+
+          y += 16;
+          doc.setTextColor(100, 100, 100);
+          doc.setFontSize(8);
+          doc.setFont('helvetica', 'normal');
+          doc.text('Generated on ' + new Date().toLocaleString() + ' · 99toolhub.com', 20, y + 10);
+
+          doc.save('Income-Tax-Slip-' + new Date().toISOString().slice(0, 10) + '.pdf');
+          showToast('✅ PDF Slip downloaded successfully!');
+        } catch (error) {
+          console.error('PDF generation error:', error);
+          showToast('⚠️ Error generating PDF. Please try again.');
+        }
+      }
+
+      // ===== SHARE =====
+      function shareReport() {
+        if (!lastResult.income || lastResult.income === 0) {
+          showToast('⚠️ Please calculate tax first');
+          return;
+        }
+
+        const text =
+          `🧾 Income Tax Report\n\n` +
+          `Assessment Year: ${lastResult.ay || '2026-27'}\n` +
+          `Tax Payer: ${lastResult.taxpayer || 'Individual'}\n` +
+          `Category: ${lastResult.category || 'Less than 60 years'}\n` +
+          `Status: ${lastResult.status || 'Resident'}\n` +
+          `Regime: ${lastResult.regime || 'Old Regime'}\n` +
+          `Net Taxable Income: ₹${(lastResult.income || 0).toLocaleString()}\n\n` +
+          `📊 Tax Breakdown:\n` +
+          `Income Tax: ₹${(lastResult.tax || 0).toLocaleString()}\n` +
+          `Rebate u/s 87A: ₹${(lastResult.rebate || 0).toLocaleString()}\n` +
+          `Tax after Rebate: ₹${(lastResult.taxAfterRebate || 0).toLocaleString()}\n` +
+          `Surcharge: ₹${(lastResult.surcharge || 0).toLocaleString()}\n` +
+          `Health & Education Cess: ₹${(lastResult.cess || 0).toLocaleString()}\n` +
+          `━━━━━━━━━━━━━━━━━━━━━━━\n` +
+          `💰 Total Tax Liability: ₹${(lastResult.totalTax || 0).toLocaleString()}\n\n` +
+          `Generated via 99toolhub.com`;
+
+        if (navigator.share) {
+          navigator.share({ title: 'Income Tax Report', text: text }).catch(() => {});
+        } else {
+          navigator.clipboard.writeText(text)
+            .then(() => showToast('📋 Report copied to clipboard! Share it anywhere.'))
+            .catch(() => showToast('⚠️ Could not copy. Please try again.'));
+        }
+      }
+
+      // ===== PRINT =====
+      function printSlip() {
+        if (!lastResult.income || lastResult.income === 0) {
+          showToast('⚠️ Please calculate tax first');
+          return;
+        }
+
+        document.getElementById('slipAY').textContent = lastResult.ay || '2026-27';
+        document.getElementById('slipTaxpayer').textContent = lastResult.taxpayer || 'Individual';
+        document.getElementById('slipCategory').textContent = lastResult.category || 'Less than 60 years';
+        document.getElementById('slipStatus').textContent = lastResult.status || 'Resident';
+        document.getElementById('slipRegime').textContent = lastResult.regime || 'Old Regime';
+        document.getElementById('slipIncome').textContent = '₹' + (lastResult.income || 0).toLocaleString();
+        document.getElementById('slipTax').textContent = '₹' + (lastResult.tax || 0).toLocaleString();
+        document.getElementById('slipRebate').textContent = '₹' + (lastResult.rebate || 0).toLocaleString();
+        document.getElementById('slipAfterRebate').textContent = '₹' + (lastResult.taxAfterRebate || 0).toLocaleString();
+        document.getElementById('slipSurcharge').textContent = '₹' + (lastResult.surcharge || 0).toLocaleString();
+        document.getElementById('slipCess').textContent = '₹' + (lastResult.cess || 0).toLocaleString();
+        document.getElementById('slipTotal').textContent = '₹' + (lastResult.totalTax || 0).toLocaleString();
+        document.getElementById('slipDate').textContent = new Date().toLocaleString();
+
+        const slip = document.getElementById('taxSlip');
+        slip.style.display = 'block';
+        const originalTitle = document.title;
+        document.title = 'Income Tax Slip';
+        window.print();
+        document.title = originalTitle;
+        slip.style.display = 'none';
+
+        showToast('🖨️ Print sent!');
+      }
+
+      // ===== TOAST =====
+      function showToast(msg) {
+        const t = document.getElementById('toast');
+        toastMsg.textContent = msg;
+        t.classList.add('show');
+        clearTimeout(t._hide);
+        t._hide = setTimeout(() => t.classList.remove('show'), 3500);
+      }
+
+      // ===== EVENTS =====
+      document.getElementById('calcBtn').addEventListener('click', calculate);
+
+      document.getElementById('resetBtn').addEventListener('click', () => {
+        assessmentYear.value = '2026-27';
+        taxpayerType.value = 'individual';
+        taxpayerCategory.value = 'below60';
+        residentialStatus.value = 'resident';
+        regimeOptOut.value = 'no';
+        netTaxableIncome.value = '1200000';
+        calculate();
+        showToast('🔄 Reset to default values');
+      });
+
+      document.getElementById('saveHistoryBtn').addEventListener('click', saveHistory);
+      document.getElementById('clearHistoryBtn').addEventListener('click', clearHistory);
+      document.getElementById('downloadHistoryBtn').addEventListener('click', downloadHistoryCSV);
+
+      document.getElementById('downloadPdfBtn').addEventListener('click', generatePDF);
+      document.getElementById('shareBtn').addEventListener('click', shareReport);
+      document.getElementById('printBtn').addEventListener('click', printSlip);
+
+      [netTaxableIncome, taxpayerCategory, regimeOptOut, assessmentYear, taxpayerType, residentialStatus].forEach(el => {
+        el.addEventListener('input', calculate);
+        el.addEventListener('change', calculate);
+      });
+
+      // ===== INIT =====
+      calculate();
+      renderHistory();
+
+    })();
+  </script>
+
+</body>
+</html>

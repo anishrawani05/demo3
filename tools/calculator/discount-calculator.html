@@ -1,0 +1,1108 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <link rel="icon" type="image/png" href="../../images/favicon.png">
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Discount Calculator – 99toolhub</title>
+
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" />
+
+    <style>
+        /* ─── Reset & Base ─── */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Arial, sans-serif;
+        }
+
+        body {
+            background: #f0f4f9;
+            display: flex;
+            justify-content: center;
+            padding: 30px 20px;
+            min-height: 100vh;
+            color: #1e293b;
+        }
+
+        .page-wrapper {
+            max-width: 820px;
+            width: 100%;
+        }
+
+        /* ─── Brand Bar ─── */
+        .brand-bar {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 12px;
+            margin-bottom: 20px;
+            padding: 0 6px;
+        }
+
+        .brand-bar .logo {
+            font-size: 24px;
+            font-weight: 800;
+            color: #0f172a;
+            letter-spacing: -0.5px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .brand-bar .logo i {
+            color: #2563eb;
+            font-size: 28px;
+        }
+
+        .brand-bar .logo span {
+            background: linear-gradient(135deg, #2563eb, #7c3aed);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .brand-bar .tagline {
+            font-size: 14px;
+            color: #64748b;
+            font-weight: 500;
+            background: #f1f5f9;
+            padding: 6px 18px;
+            border-radius: 30px;
+            border: 1px solid #e2e8f0;
+        }
+
+        /* ─── Container ─── */
+        .container {
+            background: #ffffff;
+            width: 100%;
+            padding: 32px 30px;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.08);
+            margin-bottom: 40px;
+            transition: box-shadow 0.2s;
+        }
+
+        .container:hover {
+            box-shadow: 0 24px 72px rgba(0, 0, 0, 0.12);
+        }
+
+        .calc-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 12px;
+            margin-bottom: 24px;
+        }
+
+        .calc-header h2 {
+            font-size: 26px;
+            font-weight: 700;
+            color: #0f172a;
+            letter-spacing: -0.4px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .calc-header h2 i {
+            color: #2563eb;
+            font-size: 28px;
+        }
+
+        .badge-live {
+            background: #dcfce7;
+            color: #15803d;
+            font-size: 13px;
+            font-weight: 600;
+            padding: 6px 16px;
+            border-radius: 30px;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            letter-spacing: 0.2px;
+        }
+
+        .badge-live i {
+            font-size: 10px;
+            color: #22c55e;
+        }
+
+        /* ─── Inputs ─── */
+        .input-group {
+            margin-bottom: 18px;
+        }
+
+        .input-group label {
+            display: block;
+            margin-bottom: 6px;
+            font-weight: 600;
+            font-size: 14px;
+            color: #334155;
+            letter-spacing: 0.2px;
+        }
+
+        .input-group label i {
+            margin-right: 6px;
+            color: #2563eb;
+            width: 18px;
+        }
+
+        .input-group input {
+            width: 100%;
+            padding: 13px 16px;
+            border: 1.5px solid #e2e8f0;
+            border-radius: 12px;
+            font-size: 16px;
+            background: #fafcff;
+            transition: border 0.2s, box-shadow 0.2s;
+            outline: none;
+            color: #0f172a;
+        }
+
+        .input-group input:focus {
+            border-color: #2563eb;
+            box-shadow: 0 0 0 4px rgba(37, 99, 235, 0.12);
+            background: #ffffff;
+        }
+
+        .input-group input::placeholder {
+            color: #94a3b8;
+            font-weight: 400;
+        }
+
+        .input-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 16px;
+        }
+
+        /* ─── Buttons ─── */
+        .btn-group {
+            display: flex;
+            gap: 12px;
+            margin-top: 8px;
+            flex-wrap: wrap;
+        }
+
+        .btn {
+            flex: 1;
+            min-width: 100px;
+            padding: 14px 18px;
+            border: none;
+            border-radius: 12px;
+            font-size: 15px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+
+        .btn-primary {
+            background: #2563eb;
+            color: #fff;
+        }
+        .btn-primary:hover {
+            background: #1d4ed8;
+            transform: translateY(-1px);
+            box-shadow: 0 8px 24px rgba(37, 99, 235, 0.30);
+        }
+
+        .btn-danger {
+            background: #ef4444;
+            color: #fff;
+        }
+        .btn-danger:hover {
+            background: #dc2626;
+            transform: translateY(-1px);
+            box-shadow: 0 8px 24px rgba(239, 68, 68, 0.30);
+        }
+
+        .btn-outline {
+            background: #f1f5f9;
+            color: #1e293b;
+            border: 1.5px solid #e2e8f0;
+        }
+        .btn-outline:hover {
+            background: #e2e8f0;
+            transform: translateY(-1px);
+        }
+
+        .btn-success {
+            background: #22c55e;
+            color: #fff;
+        }
+        .btn-success:hover {
+            background: #16a34a;
+            transform: translateY(-1px);
+            box-shadow: 0 8px 24px rgba(34, 197, 94, 0.30);
+        }
+
+        .btn-purple {
+            background: #8b5cf6;
+            color: #fff;
+        }
+        .btn-purple:hover {
+            background: #7c3aed;
+            transform: translateY(-1px);
+            box-shadow: 0 8px 24px rgba(139, 92, 246, 0.30);
+        }
+
+        .btn-amber {
+            background: #f59e0b;
+            color: #fff;
+        }
+        .btn-amber:hover {
+            background: #d97706;
+            transform: translateY(-1px);
+            box-shadow: 0 8px 24px rgba(245, 158, 11, 0.30);
+        }
+
+        .btn-cyan {
+            background: #06b6d4;
+            color: #fff;
+        }
+        .btn-cyan:hover {
+            background: #0891b2;
+            transform: translateY(-1px);
+            box-shadow: 0 8px 24px rgba(6, 182, 212, 0.30);
+        }
+
+        /* ─── Result Box ─── */
+        .result {
+            margin-top: 28px;
+            background: #f8fafc;
+            padding: 22px 24px;
+            border-radius: 16px;
+            border: 1px solid #eef2f6;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px 32px;
+            transition: all 0.2s;
+        }
+
+        .result p {
+            margin: 4px 0;
+            font-size: 15px;
+            color: #334155;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 6px 0;
+            border-bottom: 1px dashed #e2e8f0;
+        }
+
+        .result p:last-child {
+            border-bottom: none;
+        }
+
+        .result p strong {
+            color: #0f172a;
+            font-weight: 700;
+            font-size: 16px;
+            min-width: 80px;
+            text-align: right;
+        }
+
+        .result p .label {
+            color: #64748b;
+            font-weight: 500;
+        }
+
+        .result .full-row {
+            grid-column: 1 / -1;
+        }
+
+        .result .save-row {
+            background: #dcfce7;
+            border-radius: 10px;
+            padding: 8px 14px;
+            grid-column: 1 / -1;
+            border-bottom: none !important;
+        }
+
+        .result .save-row strong {
+            color: #15803d;
+            font-size: 20px;
+        }
+
+        /* ─── Action Bar ─── */
+        .action-bar {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-top: 18px;
+            padding-top: 18px;
+            border-top: 1px solid #eef2f6;
+        }
+
+        .action-bar .btn {
+            flex: 0 1 auto;
+            min-width: auto;
+            padding: 10px 18px;
+            font-size: 14px;
+        }
+
+        .action-bar .btn i {
+            font-size: 15px;
+        }
+
+        /* ─── Toast ─── */
+        .toast {
+            position: fixed;
+            bottom: 30px;
+            left: 50%;
+            transform: translateX(-50%) translateY(80px);
+            background: #0f172a;
+            color: #fff;
+            padding: 14px 28px;
+            border-radius: 14px;
+            font-weight: 500;
+            font-size: 15px;
+            opacity: 0;
+            transition: all 0.4s cubic-bezier(0.22, 1, 0.36, 1);
+            pointer-events: none;
+            z-index: 999;
+            box-shadow: 0 12px 40px rgba(0, 0, 0, 0.25);
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .toast.show {
+            opacity: 1;
+            transform: translateX(-50%) translateY(0);
+        }
+
+        .toast i {
+            font-size: 20px;
+        }
+
+        /* ─── Footer ─── */
+        .site-footer {
+            text-align: center;
+            padding: 24px 0 10px 0;
+            color: #94a3b8;
+            font-size: 14px;
+            border-top: 1px solid #e2e8f0;
+            margin-top: 20px;
+        }
+
+        .site-footer strong {
+            color: #2563eb;
+            font-weight: 700;
+        }
+
+        .site-footer .heart {
+            color: #ef4444;
+        }
+
+        /* ─── Content Sections ─── */
+        .content-section {
+            margin-top: 48px;
+        }
+
+        .content-section h2 {
+            font-size: 26px;
+            font-weight: 700;
+            color: #0f172a;
+            margin: 40px 0 16px 0;
+            letter-spacing: -0.3px;
+            border-left: 5px solid #2563eb;
+            padding-left: 18px;
+        }
+
+        .content-section h3 {
+            font-size: 20px;
+            font-weight: 700;
+            color: #1e293b;
+            margin: 28px 0 12px 0;
+        }
+
+        .content-section h4 {
+            font-size: 17px;
+            font-weight: 600;
+            color: #334155;
+            margin: 20px 0 8px 0;
+        }
+
+        .content-section p {
+            font-size: 16px;
+            line-height: 1.8;
+            color: #334155;
+            margin-bottom: 16px;
+        }
+
+        .content-section ul,
+        .content-section ol {
+            margin: 12px 0 20px 28px;
+            line-height: 1.8;
+            color: #334155;
+        }
+
+        .content-section li {
+            margin-bottom: 8px;
+            font-size: 16px;
+        }
+
+        .content-section .card-tip {
+            background: #f1f5f9;
+            border-radius: 14px;
+            padding: 20px 24px;
+            margin: 20px 0;
+            border-left: 4px solid #2563eb;
+        }
+
+        .content-section .card-tip i {
+            color: #2563eb;
+            margin-right: 8px;
+        }
+
+        .content-section .faq-item {
+            border-bottom: 1px solid #e2e8f0;
+            padding: 18px 0;
+        }
+
+        .content-section .faq-item:last-child {
+            border-bottom: none;
+        }
+
+        .content-section .faq-item .q {
+            font-weight: 700;
+            font-size: 17px;
+            color: #0f172a;
+            display: flex;
+            gap: 12px;
+            align-items: flex-start;
+        }
+
+        .content-section .faq-item .q i {
+            color: #2563eb;
+            font-size: 18px;
+            margin-top: 2px;
+        }
+
+        .content-section .faq-item .a {
+            margin-top: 6px;
+            padding-left: 34px;
+            color: #475569;
+            line-height: 1.8;
+        }
+
+        .formula-box {
+            background: #0f172a;
+            color: #e2e8f0;
+            padding: 18px 24px;
+            border-radius: 12px;
+            font-family: 'Courier New', monospace;
+            font-size: 17px;
+            margin: 16px 0 24px 0;
+            overflow-x: auto;
+            white-space: pre-wrap;
+            word-break: break-word;
+        }
+
+        .formula-box .hl {
+            color: #60a5fa;
+        }
+
+        .formula-box .hl-green {
+            color: #4ade80;
+        }
+
+        .example-box {
+            background: #fefce8;
+            border: 1px solid #fde68a;
+            border-radius: 14px;
+            padding: 20px 24px;
+            margin: 16px 0 24px 0;
+        }
+
+        .example-box strong {
+            color: #92400e;
+        }
+
+        .divider {
+            width: 100%;
+            height: 1px;
+            background: #e2e8f0;
+            margin: 32px 0;
+        }
+
+        /* ─── Responsive ─── */
+        @media (max-width: 640px) {
+            .container {
+                padding: 20px 16px;
+            }
+            .input-row {
+                grid-template-columns: 1fr;
+                gap: 0;
+            }
+            .result {
+                grid-template-columns: 1fr;
+                padding: 16px;
+                gap: 4px;
+            }
+            .result p {
+                font-size: 14px;
+                flex-wrap: wrap;
+            }
+            .result p strong {
+                min-width: 60px;
+                font-size: 14px;
+            }
+            .calc-header h2 {
+                font-size: 20px;
+            }
+            .btn-group {
+                flex-direction: column;
+            }
+            .btn {
+                width: 100%;
+                justify-content: center;
+            }
+            .action-bar {
+                flex-direction: column;
+            }
+            .action-bar .btn {
+                width: 100%;
+                justify-content: center;
+            }
+            .content-section h2 {
+                font-size: 21px;
+                padding-left: 12px;
+            }
+            .content-section h3 {
+                font-size: 18px;
+            }
+            .toast {
+                width: 90%;
+                font-size: 14px;
+                padding: 12px 18px;
+            }
+            .formula-box {
+                font-size: 14px;
+                padding: 14px 16px;
+            }
+            .brand-bar .logo {
+                font-size: 20px;
+            }
+            .brand-bar .tagline {
+                font-size: 12px;
+                padding: 4px 12px;
+            }
+        }
+
+        @media print {
+            .btn,
+            .action-bar,
+            .badge-live,
+            .brand-bar .tagline {
+                display: none !important;
+            }
+            .container {
+                box-shadow: none !important;
+                border: 1px solid #ddd;
+            }
+            body {
+                background: #fff;
+                padding: 10px;
+            }
+            .result {
+                background: #f9f9f9 !important;
+            }
+            .content-section h2 {
+                page-break-after: avoid;
+            }
+            .brand-bar .logo {
+                font-size: 18px !important;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="page-wrapper">
+
+        <!-- ─── BRAND BAR ─── -->
+        <div class="brand-bar">
+            <div class="logo">
+                <i class="fas fa-cubes"></i>
+                <span>99toolhub</span>
+            </div>
+            <span class="tagline"><i class="fas fa-bolt" style="color:#f59e0b;"></i> Free Online Tools</span>
+        </div>
+
+        <!-- ─── TOAST ─── -->
+        <div id="toast" class="toast">
+            <i class="fas fa-check-circle" style="color:#4ade80;"></i>
+            <span id="toastMsg">Copied!</span>
+        </div>
+
+        <!-- ─── CALCULATOR CARD ─── -->
+        <div class="container" id="calcContainer">
+
+            <div class="calc-header">
+                <h2><i class="fas fa-calculator"></i> Discount Calculator</h2>
+                <span class="badge-live"><i class="fas fa-circle"></i> Live</span>
+            </div>
+
+            <!-- Inputs -->
+            <div class="input-group">
+                <label><i class="fas fa-tag"></i> Original Price (₹)</label>
+                <input type="number" id="price" placeholder="e.g. 1999" step="0.01" min="0" />
+            </div>
+
+            <div class="input-row">
+                <div class="input-group">
+                    <label><i class="fas fa-percent"></i> Discount (%)</label>
+                    <input type="number" id="discount" placeholder="e.g. 25" step="0.1" min="0" max="100" />
+                </div>
+                <div class="input-group">
+                    <label><i class="fas fa-receipt"></i> Tax (%) – Optional</label>
+                    <input type="number" id="tax" placeholder="e.g. 12" step="0.1" min="0" />
+                </div>
+            </div>
+
+            <!-- Buttons -->
+            <div class="btn-group">
+                <button class="btn btn-primary" onclick="calculate()"><i class="fas fa-equals"></i> Calculate</button>
+                <button class="btn btn-danger" onclick="resetForm()"><i class="fas fa-undo-alt"></i> Reset</button>
+            </div>
+
+            <!-- Result -->
+            <div class="result" id="resultBox">
+                <p><span class="label"><i class="fas fa-tags" style="color:#2563eb;"></i> Discount Amt</span> <strong id="discountAmount">₹0.00</strong></p>
+                <p><span class="label"><i class="fas fa-arrow-right" style="color:#2563eb;"></i> After Discount</span> <strong id="afterDiscount">₹0.00</strong></p>
+                <p><span class="label"><i class="fas fa-coins" style="color:#f59e0b;"></i> Tax Amount</span> <strong id="taxAmount">₹0.00</strong></p>
+                <p><span class="label"><i class="fas fa-flag-checkered" style="color:#2563eb;"></i> Final Price</span> <strong id="finalPrice">₹0.00</strong></p>
+                <p class="save-row full-row"><span class="label"><i class="fas fa-piggy-bank" style="color:#15803d;"></i> 🎉 You Save</span> <strong id="saveAmount">₹0.00</strong></p>
+            </div>
+
+            <!-- Action Bar -->
+            <div class="action-bar">
+                <button class="btn btn-outline" onclick="copyResult()"><i class="fas fa-copy"></i> Copy</button>
+                <button class="btn btn-outline" onclick="window.print()"><i class="fas fa-print"></i> Print</button>
+                <button class="btn btn-purple" onclick="downloadPDF()"><i class="fas fa-file-pdf"></i> PDF</button>
+                <button class="btn btn-amber" onclick="shareResult()"><i class="fas fa-share-alt"></i> Share</button>
+                <button class="btn btn-cyan" onclick="downloadResult()"><i class="fas fa-download"></i> Download</button>
+            </div>
+
+        </div>
+
+        <!-- ─── CONTENT SECTIONS ─── -->
+        <div class="content-section">
+
+            <h2>📘 About Discount Calculator</h2>
+            <p>
+                The <strong>Discount Calculator</strong> from <strong>99toolhub</strong> is a free, smart, and user-friendly online tool designed to help you instantly compute the final price of any product after applying a discount and optional tax. Whether you are a shopper looking for the best deal, a business owner preparing invoices, or a student learning percentage math, this calculator does the heavy lifting for you in seconds.
+            </p>
+            <p>
+                Unlike many other tools, our calculator not only shows you the discounted price but also breaks down the <strong>discount amount</strong>, <strong>price after discount</strong>, <strong>tax amount</strong> (if any), and the <strong>final payable amount</strong>. It also highlights exactly <strong>how much you save</strong> – a feature that helps you make smarter purchasing decisions.
+            </p>
+            <p>
+                The interface is clean, responsive, and works seamlessly on desktops, tablets, and mobile phones. With <strong>live calculation</strong>, you don't even need to click a button – the results update as you type. Plus, you can <strong>copy</strong> the results, <strong>print</strong> them, <strong>download a PDF</strong>, <strong>share</strong> them, or <strong>download</strong> them as a text file. All of this makes it the perfect companion for everyday shopping, budgeting, and financial planning.
+            </p>
+            <div class="card-tip">
+                <i class="fas fa-lightbulb"></i> <strong>Pro Tip:</strong> Use the "Tax (%)" field to include VAT, GST, or sales tax. Leave it at 0 if tax is not applicable.
+            </div>
+
+            <div class="divider"></div>
+
+            <h2>💰 What is a Discount?</h2>
+            <p>
+                A <strong>discount</strong> is a reduction in the original price of a product or service. It is typically expressed as a percentage (%) of the original price. Discounts are offered by retailers and brands to attract customers, clear old inventory, reward loyalty, or boost sales during festive seasons.
+            </p>
+            <ul>
+                <li><strong>Seasonal / Festive Discounts:</strong> Offered during holidays, Diwali, Black Friday, New Year, etc.</li>
+                <li><strong>Clearance / End-of-Season Discounts:</strong> To sell off remaining stock before new collections arrive.</li>
+                <li><strong>Volume / Bulk Discounts:</strong> Reduced prices when you buy in large quantities.</li>
+                <li><strong>Membership / Loyalty Discounts:</strong> Exclusive deals for members or repeat customers.</li>
+                <li><strong>Cashback / Promo Codes:</strong> Indirect discounts where you get money back or a code gives you a percentage off.</li>
+            </ul>
+            <p>
+                Understanding how discounts work is essential for <strong>budget-conscious shoppers</strong>. A 50% discount on a ₹10,000 item saves you ₹5,000, while the same percentage on a ₹1,000 item saves only ₹500. This is why calculating the actual discount amount in rupees is more meaningful than just looking at the percentage.
+            </p>
+
+            <div class="divider"></div>
+
+            <h2>🛠️ How to Use the Calculator</h2>
+            <ol>
+                <li><strong>Enter the Original Price:</strong> Type the full price of the product in ₹ (Indian Rupees). You can enter whole numbers or decimals (e.g., 1999.50).</li>
+                <li><strong>Enter the Discount Percentage:</strong> Type the discount rate offered (e.g., 25 for 25%). The value can be between 0 and 100.</li>
+                <li><strong>(Optional) Enter Tax Percentage:</strong> If your purchase includes VAT, GST, or sales tax, enter the rate here. Otherwise, leave it as 0.</li>
+            </ol>
+            <p>
+                The results update <strong>live</strong> as you type, showing you: <strong>Discount Amount</strong>, <strong>Price After Discount</strong>, <strong>Tax Amount</strong>, <strong>Final Price</strong>, and <strong>You Save</strong>.
+            </p>
+
+            <div class="divider"></div>
+
+            <h2>📐 Discount Formula</h2>
+            <div class="formula-box">
+                <span class="hl">Discount Amount</span> = Original Price × (Discount % / 100)
+                <span class="hl">Price After Discount</span> = Original Price – Discount Amount
+                <span class="hl">Tax Amount</span> = Price After Discount × (Tax % / 100)
+                <span class="hl">Final Price</span> = Price After Discount + Tax Amount
+                <span class="hl-green">You Save</span> = Discount Amount
+            </div>
+
+            <div class="divider"></div>
+
+            <h2>🧮 Example Calculation</h2>
+            <div class="example-box">
+                <p><strong>Scenario:</strong> You want to buy a pair of premium headphones originally priced at <strong>₹8,999</strong>. The store offers a <strong>22% discount</strong>. Additionally, a <strong>12% GST</strong> is applicable on the discounted price.</p>
+                <p><strong>Discount Amount:</strong> ₹8,999 × 0.22 = <strong>₹1,979.78</strong></p>
+                <p><strong>Price After Discount:</strong> ₹8,999 – ₹1,979.78 = <strong>₹7,019.22</strong></p>
+                <p><strong>Tax Amount:</strong> ₹7,019.22 × 0.12 = <strong>₹842.31</strong></p>
+                <p><strong>Final Price:</strong> ₹7,019.22 + ₹842.31 = <strong>₹7,861.53</strong></p>
+                <p><strong>You Save:</strong> <strong>₹1,979.78</strong></p>
+                <p style="margin-top:12px; background:#f1f5f9; padding:12px 16px; border-radius:8px;">
+                    <i class="fas fa-check-circle" style="color:#22c55e;"></i> <strong>Result:</strong> You pay <strong>₹7,861.53</strong> instead of ₹8,999, saving <strong>₹1,979.78</strong>.
+                </p>
+            </div>
+
+            <div class="divider"></div>
+
+            <h2>✅ Benefits of Using a Discount Calculator</h2>
+            <ul>
+                <li><strong>⚡ Speed &amp; Efficiency:</strong> Get accurate results in milliseconds.</li>
+                <li><strong>🎯 100% Accuracy:</strong> Eliminate human errors.</li>
+                <li><strong>🧠 Better Decision Making:</strong> Compare different offers and choose the best one.</li>
+                <li><strong>📊 Transparent Pricing:</strong> Full breakdown of discount, tax, and final price.</li>
+                <li><strong>📱 On-the-Go Use:</strong> Works on mobile, tablet, and desktop.</li>
+                <li><strong>📤 Shareable Results:</strong> Copy, print, PDF, share, and download options.</li>
+                <li><strong>🆓 Completely Free:</strong> No subscriptions, no sign-ups.</li>
+            </ul>
+
+            <div class="divider"></div>
+
+            <h2>💡 Tips to Save Money While Shopping</h2>
+            <h3>1. Always Compare the Final Price</h3>
+            <p>Don't just look at the discount percentage. Use our calculator to find the <strong>final price</strong> after discount and tax.</p>
+
+            <h3>2. Stack Discounts When Possible</h3>
+            <p>Combine store discounts with coupon codes and cashback. Use the calculator to apply discounts sequentially.</p>
+
+            <h3>3. Time Your Purchases</h3>
+            <p>Festive sales, end-of-season clearances, and flash sales are the best times to buy.</p>
+
+            <h3>4. Use Price Tracking Tools</h3>
+            <p>Combine the discount calculator with price tracking apps that notify you when an item drops to your target price.</p>
+
+            <h3>5. Factor in Shipping &amp; Handling</h3>
+            <p>Include shipping costs to see if it's still a good deal.</p>
+
+            <h3>6. Set a Maximum Budget</h3>
+            <p>Decide the <strong>maximum amount</strong> you're willing to pay and work backwards to find the discount % you need.</p>
+
+            <h3>7. Don't Fall for "Fake" Discounts</h3>
+            <p>Check the market price across platforms. Our calculator helps you verify if the discount is genuine.</p>
+
+            <div class="card-tip">
+                <i class="fas fa-gem" style="color:#8b5cf6;"></i> <strong>Golden Rule:</strong> A discount only saves you money if you were going to buy the item anyway.
+            </div>
+
+            <div class="divider"></div>
+
+            <h2>❓ Frequently Asked Questions (FAQ)</h2>
+
+            <div class="faq-item">
+                <div class="q"><i class="fas fa-question-circle"></i> What is the difference between discount and tax?</div>
+                <div class="a"><strong>Discount</strong> is a reduction applied to the original price. <strong>Tax</strong> is an additional charge levied by the government. Tax is calculated on the <em>discounted price</em>, not the original price.</div>
+            </div>
+
+            <div class="faq-item">
+                <div class="q"><i class="fas fa-question-circle"></i> Can I use this calculator for any currency?</div>
+                <div class="a">Absolutely! The formulas work with any currency. Simply treat the input as your local currency.</div>
+            </div>
+
+            <div class="faq-item">
+                <div class="q"><i class="fas fa-question-circle"></i> Why is tax calculated on the discounted price?</div>
+                <div class="a">In most tax systems (including GST in India), tax is levied on the <strong>transaction value</strong> – the price actually paid after discounts.</div>
+            </div>
+
+            <div class="faq-item">
+                <div class="q"><i class="fas fa-question-circle"></i> Is the calculator accurate for decimal percentages?</div>
+                <div class="a">Yes! You can enter discount and tax rates with decimals (e.g., 22.5%, 7.75%). The calculator handles floating-point arithmetic with precision.</div>
+            </div>
+
+            <div class="faq-item">
+                <div class="q"><i class="fas fa-question-circle"></i> Can I calculate multiple discounts at once?</div>
+                <div class="a">The current version applies a <strong>single discount</strong> and a <strong>single tax</strong>. For multiple discounts, apply them sequentially.</div>
+            </div>
+
+            <div class="faq-item">
+                <div class="q"><i class="fas fa-question-circle"></i> How do I download the results?</div>
+                <div class="a">Click the <strong>Download</strong> button in the action bar. It will save a .txt file with all calculation details.</div>
+            </div>
+
+            <div class="faq-item">
+                <div class="q"><i class="fas fa-question-circle"></i> Is my data stored or shared?</div>
+                <div class="a"><strong>No.</strong> The calculator runs entirely in your browser. No data is sent to any server, stored, or shared. 100% private.</div>
+            </div>
+
+            <div class="faq-item">
+                <div class="q"><i class="fas fa-question-circle"></i> Can I use this calculator offline?</div>
+                <div class="a">Yes! Once the page is loaded, the JavaScript runs locally. You can save the HTML file and use it offline.</div>
+            </div>
+
+            <div class="divider"></div>
+
+            <p style="text-align:center; color:#64748b; font-size:15px; margin:40px 0 20px 0;">
+                <i class="fas fa-heart" style="color:#ef4444;"></i> Thank you for using <strong>99toolhub</strong> Discount Calculator. Happy saving!
+            </p>
+
+        </div>
+
+        <!-- ─── FOOTER ─── -->
+        <div class="site-footer">
+            <p>
+                <i class="fas fa-cubes" style="color:#2563eb;"></i>
+                <strong>99toolhub</strong> &bull; Free Online Tools &bull;
+                <span class="heart">❤️</span> Made with precision
+            </p>
+            <p style="font-size:13px; margin-top:4px; color:#cbd5e1;">
+                &copy; 2026 99toolhub &bull; All rights reserved
+            </p>
+        </div>
+
+    </div>
+
+    <script>
+        // ─── DOM refs ───
+        const priceInput = document.getElementById('price');
+        const discountInput = document.getElementById('discount');
+        const taxInput = document.getElementById('tax');
+
+        const discountAmountEl = document.getElementById('discountAmount');
+        const afterDiscountEl = document.getElementById('afterDiscount');
+        const taxAmountEl = document.getElementById('taxAmount');
+        const finalPriceEl = document.getElementById('finalPrice');
+        const saveAmountEl = document.getElementById('saveAmount');
+
+        const toast = document.getElementById('toast');
+        const toastMsg = document.getElementById('toastMsg');
+
+        let toastTimer = null;
+
+        // ─── Core Calculate ───
+        function calculate() {
+            const price = parseFloat(priceInput.value);
+            const discount = parseFloat(discountInput.value);
+            const tax = parseFloat(taxInput.value) || 0;
+
+            if (isNaN(price) || price < 0) {
+                updateDisplay(0, 0, 0, 0, 0);
+                return;
+            }
+
+            const discountRate = (isNaN(discount) || discount < 0) ? 0 : Math.min(discount, 100);
+            const discountAmount = (price * discountRate) / 100;
+            const afterDiscount = price - discountAmount;
+            const taxRate = (isNaN(tax) || tax < 0) ? 0 : tax;
+            const taxAmount = (afterDiscount * taxRate) / 100;
+            const finalPrice = afterDiscount + taxAmount;
+
+            updateDisplay(discountAmount, afterDiscount, taxAmount, finalPrice, discountAmount);
+        }
+
+        function updateDisplay(discountAmt, afterDisc, taxAmt, finalPr, saveAmt) {
+            discountAmountEl.textContent = '₹' + discountAmt.toFixed(2);
+            afterDiscountEl.textContent = '₹' + afterDisc.toFixed(2);
+            taxAmountEl.textContent = '₹' + taxAmt.toFixed(2);
+            finalPriceEl.textContent = '₹' + finalPr.toFixed(2);
+            saveAmountEl.textContent = '₹' + saveAmt.toFixed(2);
+        }
+
+        // ─── Live Calculation ───
+        function liveCalculate() { calculate(); }
+
+        priceInput.addEventListener('input', liveCalculate);
+        discountInput.addEventListener('input', liveCalculate);
+        taxInput.addEventListener('input', liveCalculate);
+
+        priceInput.addEventListener('blur', liveCalculate);
+        discountInput.addEventListener('blur', liveCalculate);
+        taxInput.addEventListener('blur', liveCalculate);
+
+        // ─── Reset ───
+        function resetForm() {
+            priceInput.value = '';
+            discountInput.value = '';
+            taxInput.value = '';
+            updateDisplay(0, 0, 0, 0, 0);
+            showToast('🔄 Reset complete');
+        }
+
+        // ─── Get Result Data ───
+        function getResultData() {
+            const price = parseFloat(priceInput.value) || 0;
+            const discount = parseFloat(discountInput.value) || 0;
+            const tax = parseFloat(taxInput.value) || 0;
+            const discountAmt = (price * discount) / 100;
+            const afterDisc = price - discountAmt;
+            const taxAmt = (afterDisc * tax) / 100;
+            const finalPr = afterDisc + taxAmt;
+            return { price, discount, tax, discountAmt, afterDisc, taxAmt, finalPr };
+        }
+
+        // ─── Copy Result ───
+        function copyResult() {
+            const d = getResultData();
+            const lines = [
+                '📊 99toolhub – Discount Calculator Result',
+                '─────────────────────────────────────────',
+                'Original Price:  ₹' + d.price.toFixed(2),
+                'Discount:        ' + d.discount + '%',
+                'Tax:             ' + d.tax + '%',
+                '─────────────────────────────────────────',
+                'Discount Amount: ₹' + d.discountAmt.toFixed(2),
+                'After Discount:  ₹' + d.afterDisc.toFixed(2),
+                'Tax Amount:      ₹' + d.taxAmt.toFixed(2),
+                'Final Price:     ₹' + d.finalPr.toFixed(2),
+                'You Save:        ₹' + d.discountAmt.toFixed(2),
+                '─────────────────────────────────────────',
+                '🔗 99toolhub.com – Free Online Tools'
+            ];
+            const text = lines.join('\n');
+
+            if (navigator.clipboard && navigator.clipboard.writeText) {
+                navigator.clipboard.writeText(text).then(() => {
+                    showToast('📋 Copied to clipboard!');
+                }).catch(() => { fallbackCopy(text); });
+            } else {
+                fallbackCopy(text);
+            }
+        }
+
+        function fallbackCopy(text) {
+            const ta = document.createElement('textarea');
+            ta.value = text;
+            ta.style.position = 'fixed';
+            ta.style.opacity = '0';
+            document.body.appendChild(ta);
+            ta.select();
+            try {
+                document.execCommand('copy');
+                showToast('📋 Copied!');
+            } catch (e) {
+                showToast('❌ Could not copy. Please copy manually.');
+            }
+            document.body.removeChild(ta);
+        }
+
+        // ─── Share Result ───
+        function shareResult() {
+            const d = getResultData();
+            const shareText =
+                `🛍️ 99toolhub Discount Calculator\nOriginal: ₹${d.price.toFixed(2)}\nDiscount: ${d.discount}%\nFinal Price: ₹${d.finalPr.toFixed(2)}\nYou Save: ₹${d.discountAmt.toFixed(2)}\n\n🔗 99toolhub.com`;
+
+            if (navigator.share) {
+                navigator.share({
+                    title: 'Discount Calculator Result – 99toolhub',
+                    text: shareText,
+                }).catch(() => {});
+            } else {
+                if (navigator.clipboard && navigator.clipboard.writeText) {
+                    navigator.clipboard.writeText(shareText).then(() => {
+                        showToast('📤 Share text copied to clipboard!');
+                    }).catch(() => {
+                        showToast('📤 Please copy the result manually.');
+                    });
+                } else {
+                    showToast('📤 Please copy the result manually.');
+                }
+            }
+        }
+
+        // ─── Download PDF ───
+        function downloadPDF() {
+            showToast('📄 Choose "Save as PDF" in the print dialog');
+            setTimeout(() => { window.print(); }, 400);
+        }
+
+        // ─── DOWNLOAD RESULT as .txt ───
+        function downloadResult() {
+            const d = getResultData();
+
+            const lines = [
+                '╔═══════════════════════════════════════════╗',
+                '║   99toolhub – Discount Calculator Result  ║',
+                '╚═══════════════════════════════════════════╝',
+                '',
+                '  Original Price   :  ₹' + d.price.toFixed(2),
+                '  Discount         :  ' + d.discount + '%',
+                '  Tax              :  ' + d.tax + '%',
+                '',
+                '  ──── Calculation Breakdown ────',
+                '  Discount Amount  :  ₹' + d.discountAmt.toFixed(2),
+                '  After Discount   :  ₹' + d.afterDisc.toFixed(2),
+                '  Tax Amount       :  ₹' + d.taxAmt.toFixed(2),
+                '  Final Price      :  ₹' + d.finalPr.toFixed(2),
+                '  You Save         :  ₹' + d.discountAmt.toFixed(2),
+                '',
+                '  ──── Summary ────',
+                '  You pay ₹' + d.finalPr.toFixed(2) + ' instead of ₹' + d.price.toFixed(2) +
+                ', saving ₹' + d.discountAmt.toFixed(2) + '.',
+                '',
+                '─────────────────────────────────────────────',
+                '  🔗 99toolhub.com – Free Online Tools',
+                '  📅 ' + new Date().toLocaleString(),
+                '─────────────────────────────────────────────'
+            ];
+
+            const text = lines.join('\n');
+            const blob = new Blob([text], { type: 'text/plain;charset=utf-8' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'discount-calculator-result-99toolhub.txt';
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            URL.revokeObjectURL(url);
+
+            showToast('📥 Result downloaded as .txt file!');
+        }
+
+        // ─── Toast ───
+        function showToast(msg) {
+            toastMsg.textContent = msg;
+            toast.classList.add('show');
+            clearTimeout(toastTimer);
+            toastTimer = setTimeout(() => {
+                toast.classList.remove('show');
+            }, 2800);
+        }
+
+        // ─── Init ───
+        calculate();
+
+        window.addEventListener('load', function() {
+            if (priceInput.value || discountInput.value || taxInput.value) {
+                calculate();
+            }
+        });
+
+        document.querySelectorAll('input').forEach(inp => {
+            inp.addEventListener('keydown', function(e) {
+                if (e.key === 'Enter') {
+                    calculate();
+                }
+            });
+        });
+
+        console.log('✅ 99toolhub – Discount Calculator loaded successfully.');
+    </script>
+
+</body>
+</html>

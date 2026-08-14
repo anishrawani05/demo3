@@ -1,0 +1,1396 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <link rel="icon" type="image/png" href="../../images/favicon.png">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Crop Image Tool – 99toolhub</title>
+
+    <!-- Cropper.js -->
+    <link href="https://cdn.jsdelivr.net/npm/cropperjs@1.6.2/dist/cropper.min.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/cropperjs@1.6.2/dist/cropper.min.js">
+    </script>
+    <!-- jsPDF -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js">
+    </script>
+
+    <style>
+        /* ===== ROOT ===== */
+        :root {
+            --bg: #f4f6fb;
+            --text: #222;
+            --card: #fff;
+            --accent: #4f5bff;
+            --border: #dcdfff;
+            --shadow: 0 4px 20px rgba(0, 0, 0, 0.06);
+            --radius: 12px;
+            --transition: 0.25s ease;
+        }
+
+        @media (prefers-color-scheme: dark) {
+            :root {
+                --bg: #0f1115;
+                --text: #eaeaea;
+                --card: #232730;
+                --border: #3a3f8f;
+                --shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+            }
+        }
+
+        /* ===== RESET ===== */
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            min-height: 100vh;
+            padding: 20px 12px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        /* ===== CONTAINER ===== */
+        .container {
+            max-width: 900px;
+            width: 100%;
+            background: var(--card);
+            border-radius: var(--radius);
+            padding: 24px 22px;
+            box-shadow: var(--shadow);
+            border: 1px solid var(--border);
+        }
+
+        /* ===== HEADER ===== */
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 12px;
+            margin-bottom: 20px;
+        }
+
+        .header h1 {
+            font-size: 26px;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .header h1 span {
+            background: var(--accent);
+            color: #fff;
+            padding: 0 12px;
+            border-radius: 8px;
+            font-size: 22px;
+            line-height: 1.4;
+        }
+
+        .badge {
+            font-size: 12px;
+            background: rgba(79, 91, 255, 0.08);
+            color: var(--accent);
+            padding: 4px 14px;
+            border-radius: 30px;
+            border: 1px solid var(--border);
+            font-weight: 500;
+        }
+
+        /* ===== UPLOAD ZONE ===== */
+        .upload-zone {
+            border: 2px dashed var(--border);
+            border-radius: var(--radius);
+            padding: 32px 20px;
+            text-align: center;
+            cursor: pointer;
+            transition: var(--transition);
+            background: rgba(255, 255, 255, 0.02);
+            margin-bottom: 20px;
+        }
+
+        .upload-zone:hover {
+            border-color: var(--accent);
+            background: rgba(79, 91, 255, 0.03);
+        }
+
+        .upload-zone.dragover {
+            border-color: var(--accent);
+            background: rgba(79, 91, 255, 0.06);
+        }
+
+        .upload-zone .icon {
+            font-size: 42px;
+            display: block;
+            margin-bottom: 2px;
+        }
+
+        .upload-zone p {
+            color: rgba(128, 128, 128, 0.6);
+            font-size: 14px;
+        }
+
+        .upload-zone .formats {
+            font-size: 11px;
+            color: rgba(128, 128, 128, 0.3);
+            margin: 4px 0 10px;
+        }
+
+        .upload-zone .btn-group {
+            display: flex;
+            gap: 10px;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        .upload-zone .btn-group .btn {
+            padding: 8px 20px;
+            border-radius: 30px;
+            border: none;
+            font-weight: 500;
+            font-size: 13px;
+            cursor: pointer;
+            background: rgba(0, 0, 0, 0.04);
+            color: var(--text);
+            border: 1px solid var(--border);
+            transition: var(--transition);
+        }
+
+        .upload-zone .btn-group .btn:hover {
+            background: rgba(79, 91, 255, 0.08);
+            border-color: var(--accent);
+        }
+
+        .upload-zone .btn-group .btn-primary {
+            background: var(--accent);
+            color: #fff;
+            border-color: var(--accent);
+        }
+
+        .upload-zone .btn-group .btn-primary:hover {
+            background: #3a46e0;
+        }
+
+        #fileInput {
+            display: none;
+        }
+
+        #fileInfo {
+            margin-top: 8px;
+            font-size: 13px;
+            color: rgba(128, 128, 128, 0.7);
+        }
+
+        /* ===== CROP TOOLBAR ===== */
+        .crop-toolbar {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin: 16px 0 12px;
+            align-items: center;
+        }
+
+        .crop-toolbar .label {
+            font-size: 13px;
+            font-weight: 600;
+            color: rgba(128, 128, 128, 0.6);
+            margin-right: 4px;
+        }
+
+        .crop-toolbar .btn {
+            padding: 6px 16px;
+            border-radius: 30px;
+            border: 1px solid var(--border);
+            background: transparent;
+            color: var(--text);
+            font-size: 12px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        .crop-toolbar .btn:hover {
+            background: rgba(79, 91, 255, 0.06);
+        }
+
+        .crop-toolbar .btn.active {
+            background: var(--accent);
+            color: #fff;
+            border-color: var(--accent);
+        }
+
+        .crop-toolbar .btn-rotate {
+            background: rgba(255, 200, 0, 0.08);
+            border-color: rgba(255, 200, 0, 0.2);
+            color: #cc9900;
+        }
+
+        .crop-toolbar .btn-rotate:hover {
+            background: rgba(255, 200, 0, 0.15);
+        }
+
+        /* ===== CROP CONTAINER ===== */
+        .crop-wrapper {
+            display: none;
+            position: relative;
+            background: rgba(0, 0, 0, 0.04);
+            border-radius: var(--radius);
+            overflow: hidden;
+            min-height: 280px;
+        }
+
+        .crop-wrapper.visible {
+            display: block;
+        }
+
+        .crop-wrapper img {
+            max-width: 100%;
+            display: block;
+        }
+
+        /* Cropper overrides */
+        .cropper-container {
+            max-height: 520px;
+        }
+
+        /* ===== ACTION ROW ===== */
+        .action-row {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px;
+            margin-top: 16px;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .action-row .left {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
+        .action-row .right {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
+        .action-row .btn {
+            padding: 10px 22px;
+            border-radius: 30px;
+            border: none;
+            font-weight: 600;
+            font-size: 13px;
+            cursor: pointer;
+            transition: var(--transition);
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            background: rgba(0, 0, 0, 0.04);
+            color: var(--text);
+            border: 1px solid var(--border);
+        }
+
+        .action-row .btn:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.06);
+        }
+
+        .action-row .btn-success {
+            background: #10b981;
+            color: #fff;
+            border-color: #10b981;
+        }
+
+        .action-row .btn-success:hover {
+            background: #059669;
+        }
+
+        .action-row .btn-primary {
+            background: var(--accent);
+            color: #fff;
+            border-color: var(--accent);
+        }
+
+        .action-row .btn-primary:hover {
+            background: #3a46e0;
+        }
+
+        .action-row .btn-outline {
+            background: transparent;
+        }
+
+        .action-row .btn:disabled {
+            opacity: 0.4;
+            cursor: not-allowed;
+            transform: none !important;
+        }
+
+        /* ===== PREVIEW ===== */
+        .preview-box {
+            display: none;
+            margin-top: 18px;
+            padding: 16px;
+            background: rgba(0, 0, 0, 0.02);
+            border-radius: var(--radius);
+            border: 1px solid var(--border);
+            text-align: center;
+        }
+
+        .preview-box.visible {
+            display: block;
+        }
+
+        .preview-box img {
+            max-width: 100%;
+            max-height: 400px;
+            border-radius: 6px;
+            background: repeating-conic-gradient(rgba(128, 128, 128, 0.05) 0% 25%, transparent 0% 50%) 0 0 / 20px 20px;
+        }
+
+        .preview-box .info-row {
+            display: flex;
+            justify-content: center;
+            gap: 24px;
+            flex-wrap: wrap;
+            margin: 10px 0 0;
+            font-size: 13px;
+            color: rgba(128, 128, 128, 0.6);
+        }
+
+        .preview-box .info-row .val {
+            font-weight: 600;
+            color: var(--text);
+        }
+
+        /* ===== DOWNLOAD BUTTONS & STATUS ===== */
+        .download-format-btn {
+            min-width: 80px;
+            justify-content: center;
+            padding: 8px 16px !important;
+        }
+
+        .download-format-btn:active {
+            transform: scale(0.92);
+        }
+
+        .download-status {
+            margin-top: 10px;
+            font-size: 15px;
+            font-weight: 600;
+            color: #10b981;
+            display: none;
+            animation: fadeInUp 0.4s ease forwards;
+        }
+
+        .download-status.visible {
+            display: block;
+        }
+
+        @keyframes fadeInUp {
+            0% {
+                opacity: 0;
+                transform: translateY(12px);
+            }
+            100% {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* ===== CONTENT SECTIONS ===== */
+        .content-section {
+            margin-top: 30px;
+            font-size: 15px;
+            line-height: 1.7;
+            background: var(--card);
+            color: var(--text);
+            padding: 20px;
+            border-radius: 10px;
+            border: 1px solid var(--border);
+        }
+
+        .content-section h2 {
+            color: var(--accent);
+            border-bottom: 1px solid var(--border);
+            padding-bottom: 6px;
+            margin-bottom: 12px;
+            font-size: 22px;
+        }
+
+        .content-section h3 {
+            margin-top: 1.2em;
+            color: var(--text);
+            font-size: 17px;
+        }
+
+        .content-section ul,
+        .content-section ol {
+            padding-left: 22px;
+            margin: 6px 0;
+        }
+
+        .content-section li {
+            margin-bottom: 4px;
+        }
+
+        .content-section .highlight {
+            background: rgba(79, 91, 255, 0.06);
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-weight: 500;
+        }
+
+        .content-section .grid-2 {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 16px;
+            margin: 10px 0;
+        }
+
+        .content-section .feature-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr;
+            gap: 12px;
+            margin: 10px 0;
+        }
+
+        .content-section .feature-item {
+            background: rgba(79, 91, 255, 0.04);
+            border-radius: 8px;
+            padding: 12px 14px;
+            border: 1px solid var(--border);
+            text-align: center;
+        }
+
+        .content-section .feature-item .icon {
+            font-size: 24px;
+            display: block;
+            margin-bottom: 4px;
+        }
+
+        .content-section .feature-item .title {
+            font-weight: 600;
+            font-size: 13px;
+        }
+
+        .content-section .feature-item .desc {
+            font-size: 12px;
+            opacity: 0.7;
+        }
+
+        .content-section .ratio-table {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 6px 20px;
+            margin: 8px 0;
+            font-size: 14px;
+        }
+
+        .content-section .ratio-table .row {
+            display: flex;
+            justify-content: space-between;
+            padding: 4px 0;
+            border-bottom: 1px solid rgba(128, 128, 128, 0.06);
+        }
+
+        .content-section .ratio-table .row .label {
+            font-weight: 500;
+        }
+
+        .content-section .ratio-table .row .value {
+            color: var(--accent);
+        }
+
+        @media (max-width: 600px) {
+            .content-section .grid-2 {
+                grid-template-columns: 1fr;
+            }
+            .content-section .feature-grid {
+                grid-template-columns: 1fr 1fr;
+            }
+            .content-section .ratio-table {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @media (max-width: 400px) {
+            .content-section .feature-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        /* ===== RESPONSIVE ===== */
+        @media (max-width: 600px) {
+            .container {
+                padding: 16px 12px;
+            }
+
+            .header h1 {
+                font-size: 20px;
+            }
+
+            .header h1 span {
+                font-size: 18px;
+                padding: 0 10px;
+            }
+
+            .upload-zone {
+                padding: 20px 12px;
+            }
+
+            .upload-zone .icon {
+                font-size: 32px;
+            }
+
+            .action-row {
+                flex-direction: column;
+                align-items: stretch;
+            }
+
+            .action-row .left,
+            .action-row .right {
+                justify-content: center;
+            }
+
+            .action-row .btn {
+                font-size: 12px;
+                padding: 8px 16px;
+            }
+
+            .crop-toolbar .btn {
+                font-size: 11px;
+                padding: 4px 12px;
+            }
+
+            .crop-wrapper {
+                min-height: 200px;
+            }
+
+            .cropper-container {
+                max-height: 360px;
+            }
+
+            .content-section {
+                padding: 14px 12px;
+            }
+
+            .download-format-btn {
+                min-width: 60px;
+                font-size: 12px;
+                padding: 6px 12px !important;
+            }
+        }
+
+        @media (max-width: 400px) {
+            .crop-toolbar .label {
+                display: none;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="container">
+
+        <!-- ===== HEADER ===== -->
+        <div class="header">
+            <h1><span>✂️</span> Crop Tool</h1>
+            <span class="badge">Free · No Upload</span>
+        </div>
+
+        <!-- ===== UPLOAD ZONE ===== -->
+        <div class="upload-zone" id="uploadZone">
+            <span class="icon">📤</span>
+            <p>Drop your image here or click to browse</p>
+            <div class="formats">JPG · PNG · WEBP · GIF · BMP · TIFF · SVG</div>
+            <div class="btn-group">
+                <button class="btn btn-primary" id="browseBtn">📁 Browse</button>
+                <button class="btn" id="pasteBtn">📋 Paste</button>
+                <button class="btn" id="cameraBtn">📷 Camera</button>
+            </div>
+            <input type="file" id="fileInput" accept="image/*">
+            <p id="fileInfo"></p>
+        </div>
+
+        <!-- ===== CROP TOOLBAR ===== -->
+        <div class="crop-toolbar" id="cropToolbar" style="display:none;">
+            <span class="label">Ratio:</span>
+            <button class="btn active" data-ratio="free">Free</button>
+            <button class="btn" data-ratio="1:1">1:1</button>
+            <button class="btn" data-ratio="4:3">4:3</button>
+            <button class="btn" data-ratio="16:9">16:9</button>
+            <button class="btn" data-ratio="3:2">3:2</button>
+            <button class="btn" data-ratio="21:9">21:9</button>
+            <button class="btn btn-rotate" id="rotateBtn">↻ Rotate</button>
+            <button class="btn" id="resetCropBtn">⟲ Reset</button>
+        </div>
+
+        <!-- ===== CROP WRAPPER ===== -->
+        <div class="crop-wrapper" id="cropWrapper">
+            <img id="cropImage" src="" alt="Image to crop">
+        </div>
+
+        <!-- ===== ACTION ROW ===== -->
+        <div class="action-row" id="actionRow" style="display:none;">
+            <div class="left">
+                <button class="btn btn-primary" id="cropBtn">✂️ Crop & Download</button>
+                <button class="btn btn-outline" id="previewBtn">👁️ Preview</button>
+            </div>
+            <div class="right">
+                <button class="btn btn-outline" id="shareBtn">📤 Share</button>
+                <button class="btn btn-outline" id="copyBtn">📋 Copy</button>
+                <button class="btn btn-outline" id="printBtn">🖨 Print</button>
+                <button class="btn btn-outline" id="resetBtn">↩ Reset</button>
+            </div>
+        </div>
+
+        <!-- ===== PREVIEW ===== -->
+        <div class="preview-box" id="previewBox">
+            <p style="font-weight:600;margin-bottom:6px;">✅ Cropped Preview</p>
+            <img id="previewImg" src="" alt="Cropped preview">
+            <div class="info-row">
+                <span>Dimensions: <span class="val" id="previewDims">—</span></span>
+                <span>Size: <span class="val" id="previewSize">—</span> KB</span>
+            </div>
+
+            <!-- ===== DOWNLOAD BUTTONS ===== -->
+            <div style="display:flex; flex-wrap:wrap; gap:8px; justify-content:center; margin-top:12px;">
+                <button class="btn btn-success download-format-btn" data-format="png">⬇ PNG</button>
+                <button class="btn btn-success download-format-btn" data-format="jpg">⬇ JPG</button>
+                <button class="btn btn-success download-format-btn" data-format="webp">⬇ WEBP</button>
+                <button class="btn btn-success download-format-btn" data-format="pdf">⬇ PDF</button>
+            </div>
+            <div class="download-status" id="downloadStatus"></div>
+        </div>
+
+        <!-- ============================================================ -->
+        <!-- ===== CONTENT SECTION – About Image Crop ===== -->
+        <!-- ============================================================ -->
+        <div class="content-section">
+
+            <h2>📖 About Image Crop</h2>
+            <p>
+                <strong>Image cropping</strong> is the process of removing unwanted outer areas from an image to improve framing,
+                change the aspect ratio, or focus on a specific subject. Unlike resizing, which scales the entire image,
+                cropping physically removes pixels, allowing you to <span class="highlight">recompose</span> and
+                <span class="highlight">reframe</span> your photos.
+            </p>
+            <p>
+                Our <strong>Crop Tool</strong> lets you crop images with precision using preset aspect ratios or freehand
+                selection. It's designed for both professional designers and everyday users who need to quickly crop
+                images for documents, social media, or print.
+            </p>
+
+            <!-- ===== Popular Aspect Ratios ===== -->
+            <h3>📐 Popular Aspect Ratios</h3>
+            <p>Aspect ratio is the proportional relationship between width and height. Here are the most commonly used ratios:</p>
+
+            <div class="ratio-table">
+                <div class="row"><span class="label">1:1 (Square)</span><span class="value">Instagram posts, profile pictures, thumbnails</span></div>
+                <div class="row"><span class="label">4:3</span><span class="value">Standard digital photos, tablets, presentations</span></div>
+                <div class="row"><span class="label">16:9 (Widescreen)</span><span class="value">YouTube videos, TV, computer monitors, banners</span></div>
+                <div class="row"><span class="label">3:2</span><span class="value">Classic 35mm film, DSLR photos, prints</span></div>
+                <div class="row"><span class="label">21:9 (Ultrawide)</span><span class="value">Cinematic photos, ultrawide monitors, movie posters</span></div>
+                <div class="row"><span class="label">9:16 (Vertical)</span><span class="value">Instagram Stories, TikTok, Reels, mobile posters</span></div>
+                <div class="row"><span class="label">5:4</span><span class="value">Large format prints, 8×10 photos</span></div>
+                <div class="row"><span class="label">3:1 (Panoramic)</span><span class="value">Panoramic landscapes, wide banners</span></div>
+            </div>
+
+            <!-- ===== Where Can You Use Cropped Images? ===== -->
+            <h3>📍 Where Can You Use Cropped Images?</h3>
+            <div class="grid-2">
+                <div>
+                    <h4 style="margin:0;font-size:1em;color:var(--accent);">📱 Social Media</h4>
+                    <ul>
+                        <li><strong>Instagram:</strong> 1:1 posts, 9:16 Stories</li>
+                        <li><strong>Facebook:</strong> 16:9 cover photos, 1:1 profile pics</li>
+                        <li><strong>YouTube:</strong> 16:9 thumbnails and banners</li>
+                        <li><strong>LinkedIn:</strong> 1:1 profile photos, 16:9 banners</li>
+                        <li><strong>TikTok:</strong> 9:16 vertical videos</li>
+                        <li><strong>Pinterest:</strong> 2:3 vertical pins</li>
+                    </ul>
+                </div>
+                <div>
+                    <h4 style="margin:0;font-size:1em;color:var(--accent);">📄 Documents & IDs</h4>
+                    <ul>
+                        <li><strong>Passport Photos:</strong> 2×2 inches (600×600 px)</li>
+                        <li><strong>PAN Card:</strong> 200×200 px</li>
+                        <li><strong>Voter ID:</strong> 200×200 px</li>
+                        <li><strong>Signature:</strong> 300×100 px (3:1)</li>
+                        <li><strong>Aadhaar:</strong> 200×200 px</li>
+                        <li><strong>Resume Photos:</strong> 1:1 or 4:3</li>
+                    </ul>
+                </div>
+                <div>
+                    <h4 style="margin:0;font-size:1em;color:var(--accent);">🖼️ Design & Media</h4>
+                    <ul>
+                        <li>Website hero images and banners</li>
+                        <li>Presentation slides (16:9 or 4:3)</li>
+                        <li>Product photography</li>
+                        <li>Email newsletter headers</li>
+                        <li>Print materials (flyers, posters)</li>
+                        <li>Photo books and albums</li>
+                    </ul>
+                </div>
+                <div>
+                    <h4 style="margin:0;font-size:1em;color:var(--accent);">💼 Professional Use</h4>
+                    <ul>
+                        <li>E-commerce product images</li>
+                        <li>Real estate property photos</li>
+                        <li>Corporate headshots</li>
+                        <li>Event photography</li>
+                        <li>Portfolio images</li>
+                        <li>Magazine and editorial layouts</li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- ===== Features ===== -->
+            <h3>✨ Features</h3>
+            <div class="feature-grid">
+                <div class="feature-item">
+                    <span class="icon">📥</span>
+                    <div class="title">Multiple Upload Methods</div>
+                    <div class="desc">Browse, drag & drop, paste (Ctrl+V), or camera capture</div>
+                </div>
+                <div class="feature-item">
+                    <span class="icon">📐</span>
+                    <div class="title">Preset Aspect Ratios</div>
+                    <div class="desc">Free, 1:1, 4:3, 16:9, 3:2, 21:9 — one-click selection</div>
+                </div>
+                <div class="feature-item">
+                    <span class="icon">🔄</span>
+                    <div class="title">Rotate & Reset</div>
+                    <div class="desc">Rotate 90° clockwise and reset crop with one click</div>
+                </div>
+                <div class="feature-item">
+                    <span class="icon">👁️</span>
+                    <div class="title">Live Preview</div>
+                    <div class="desc">See dimensions and file size before downloading</div>
+                </div>
+                <div class="feature-item">
+                    <span class="icon">📤</span>
+                    <div class="title">Share & Copy</div>
+                    <div class="desc">Share via Web Share API or copy to clipboard</div>
+                </div>
+                <div class="feature-item">
+                    <span class="icon">🖨️</span>
+                    <div class="title">Print Directly</div>
+                    <div class="desc">Print cropped images without saving first</div>
+                </div>
+                <div class="feature-item">
+                    <span class="icon">🔒</span>
+                    <div class="title">Privacy First</div>
+                    <div class="desc">All processing happens in your browser — no uploads</div>
+                </div>
+                <div class="feature-item">
+                    <span class="icon">⚡</span>
+                    <div class="title">Fast & Free</div>
+                    <div class="desc">No watermarks, no limits, completely free</div>
+                </div>
+                <div class="feature-item">
+                    <span class="icon">⌨️</span>
+                    <div class="title">Keyboard Shortcuts</div>
+                    <div class="desc">Ctrl+Enter to crop, R to reset crop area</div>
+                </div>
+                <div class="feature-item">
+                    <span class="icon">⬇️</span>
+                    <div class="title">Multiple Formats</div>
+                    <div class="desc">Download as PNG, JPG, WEBP, or PDF</div>
+                </div>
+                <div class="feature-item">
+                    <span class="icon">🎨</span>
+                    <div class="title">Animated Feedback</div>
+                    <div class="desc">Smooth download animation & status updates</div>
+                </div>
+            </div>
+
+            <!-- ===== Tips for Best Results ===== -->
+            <h3>💡 Tips for Best Results</h3>
+            <ul>
+                <li><strong>Start with high resolution:</strong> Always use the highest quality source image available.</li>
+                <li><strong>Know your output:</strong> Understand the required dimensions or aspect ratio before cropping.</li>
+                <li><strong>Use the rule of thirds:</strong> Position your subject off-center for more interesting compositions.</li>
+                <li><strong>Don't over-crop:</strong> Leave some breathing room around the subject for better framing.</li>
+                <li><strong>Check the preview:</strong> Always preview before downloading to ensure the crop looks right.</li>
+                <li><strong>Save as PNG:</strong> PNG preserves quality and supports transparency for graphics.</li>
+                <li><strong>Use JPG for photos:</strong> JPG offers smaller file sizes with minimal quality loss.</li>
+                <li><strong>Consider the final use:</strong> Social media, printing, and web all have different requirements.</li>
+            </ul>
+
+            <!-- ===== Why Use an Image Cropper? ===== -->
+            <h3>❓ Why Use an Image Cropper?</h3>
+            <ul>
+                <li><strong>Remove distractions:</strong> Cut out unwanted objects or busy backgrounds.</li>
+                <li><strong>Improve composition:</strong> Apply photography composition rules for better visuals.</li>
+                <li><strong>Meet size requirements:</strong> Crop to exact dimensions for documents and forms.</li>
+                <li><strong>Save storage space:</strong> Remove unnecessary pixels to reduce file size.</li>
+                <li><strong>Focus on the subject:</strong> Bring attention to the most important part of the image.</li>
+                <li><strong>Create consistency:</strong> Crop multiple images to the same aspect ratio for a uniform look.</li>
+                <li><strong>No software needed:</strong> Our tool works in your browser with no installation required.</li>
+            </ul>
+
+            <!-- ===== Available Actions ===== -->
+            <h3>🎯 Available Actions</h3>
+            <ul>
+                <li><strong>Upload:</strong> Browse, drag & drop, paste from clipboard, or capture from camera.</li>
+                <li><strong>Crop:</strong> Select from preset aspect ratios or crop freely.</li>
+                <li><strong>Rotate:</strong> Rotate the image 90° clockwise for proper orientation.</li>
+                <li><strong>Reset:</strong> Reset the crop selection to its original position.</li>
+                <li><strong>Preview:</strong> View the cropped result with dimensions and file size.</li>
+                <li><strong>Download:</strong> Save the cropped image as PNG, JPG, WEBP, or PDF.</li>
+                <li><strong>Share:</strong> Share the cropped image via native sharing (mobile/desktop).</li>
+                <li><strong>Copy:</strong> Copy the cropped image to your clipboard.</li>
+                <li><strong>Print:</strong> Print the cropped image directly from your browser.</li>
+                <li><strong>Reset All:</strong> Clear everything and start over with a new image.</li>
+            </ul>
+
+            <!-- ===== Disclaimer ===== -->
+            <h3>⚠️ Disclaimer</h3>
+            <p>
+                This tool is provided <strong>"as is"</strong> without warranty of any kind. While we strive for accuracy,
+                we cannot guarantee that the cropped image will exactly meet your specific requirements. Users are
+                <strong>solely responsible</strong> for verifying that the output meets their needs before submission
+                to any official entity, platform, or publication. All processing is done locally in your browser —
+                no images are uploaded to any server.
+            </p>
+
+            <!-- ===== Conclusion ===== -->
+            <h3>🏁 Conclusion</h3>
+            <p>
+                The <strong>Crop Tool</strong> on <strong>99toolhub</strong> is a fast, free, and privacy-focused solution
+                for all your image cropping needs. Whether you're preparing photos for social media, documents like PAN
+                Card and Passport, or professional design projects, this tool gives you the control you need without
+                any software installation or uploads.
+            </p>
+            <p>
+                With support for multiple aspect ratios, rotate, preview, share, copy, and print — it's everything
+                you need in one place. Try it now and experience the easiest way to crop images online.
+            </p>
+            <p style="margin-top:8px; font-weight:500; color:var(--accent);">
+                ✂️ Start cropping your images today — fast, free, and secure.
+            </p>
+
+        </div> <!-- end .content-section -->
+
+    </div> <!-- end .container -->
+
+    <!-- ============================================================ -->
+    <!-- JAVASCRIPT                                                   -->
+    <!-- ============================================================ -->
+    <script>
+        (function() {
+            'use strict';
+
+            // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+            // DOM REFS
+            // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+            const uploadZone = document.getElementById('uploadZone');
+            const fileInput = document.getElementById('fileInput');
+            const browseBtn = document.getElementById('browseBtn');
+            const pasteBtn = document.getElementById('pasteBtn');
+            const cameraBtn = document.getElementById('cameraBtn');
+            const fileInfo = document.getElementById('fileInfo');
+            const cropWrapper = document.getElementById('cropWrapper');
+            const cropImage = document.getElementById('cropImage');
+            const cropToolbar = document.getElementById('cropToolbar');
+            const actionRow = document.getElementById('actionRow');
+            const cropBtn = document.getElementById('cropBtn');
+            const previewBtn = document.getElementById('previewBtn');
+            const previewBox = document.getElementById('previewBox');
+            const previewImg = document.getElementById('previewImg');
+            const previewDims = document.getElementById('previewDims');
+            const previewSize = document.getElementById('previewSize');
+            const shareBtn = document.getElementById('shareBtn');
+            const copyBtn = document.getElementById('copyBtn');
+            const printBtn = document.getElementById('printBtn');
+            const resetBtn = document.getElementById('resetBtn');
+            const rotateBtn = document.getElementById('rotateBtn');
+            const resetCropBtn = document.getElementById('resetCropBtn');
+            const ratioBtns = document.querySelectorAll('[data-ratio]');
+            const downloadFormatBtns = document.querySelectorAll('.download-format-btn');
+            const downloadStatus = document.getElementById('downloadStatus');
+
+            // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+            // STATE
+            // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+            let cropper = null;
+            let currentFile = null;
+            let fileName = 'image';
+            let originalImageSrc = null;
+            let croppedBlob = null;
+            let croppedDataUrl = null;
+            let croppedCanvasData = null; // Store canvas for direct manipulation
+
+            // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+            // CROPPER INIT
+            // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+            function initCropper(src) {
+                cropWrapper.classList.add('visible');
+                cropToolbar.style.display = 'flex';
+                actionRow.style.display = 'flex';
+                cropImage.src = src;
+
+                if (cropper) {
+                    cropper.destroy();
+                    cropper = null;
+                }
+
+                cropper = new Cropper(cropImage, {
+                    viewMode: 1,
+                    autoCropArea: 0.8,
+                    responsive: true,
+                    background: false,
+                    checkOrientation: false,
+                });
+
+                // Hide preview
+                previewBox.classList.remove('visible');
+                croppedBlob = null;
+                croppedDataUrl = null;
+                croppedCanvasData = null;
+                downloadStatus.classList.remove('visible');
+            }
+
+            function getCroppedCanvas() {
+                if (!cropper) return null;
+                return cropper.getCroppedCanvas({
+                    imageSmoothingQuality: 'high',
+                });
+            }
+
+            // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+            // RATIO BUTTONS
+            // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+            ratioBtns.forEach(btn => {
+                btn.addEventListener('click', function() {
+                    ratioBtns.forEach(b => b.classList.remove('active'));
+                    this.classList.add('active');
+
+                    const ratio = this.dataset.ratio;
+                    if (!cropper) return;
+
+                    if (ratio === 'free') {
+                        cropper.setAspectRatio(NaN);
+                    } else {
+                        const parts = ratio.split(':');
+                        const w = parseFloat(parts[0]);
+                        const h = parseFloat(parts[1]);
+                        cropper.setAspectRatio(w / h);
+                    }
+                });
+            });
+
+            // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+            // ROTATE
+            // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+            rotateBtn.addEventListener('click', () => {
+                if (!cropper) return;
+                cropper.rotate(90);
+            });
+
+            // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+            // RESET CROP
+            // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+            resetCropBtn.addEventListener('click', () => {
+                if (!cropper) return;
+                cropper.reset();
+                ratioBtns.forEach(b => b.classList.remove('active'));
+                document.querySelector('[data-ratio="free"]').classList.add('active');
+                cropper.setAspectRatio(NaN);
+            });
+
+            // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+            // UPLOAD
+            // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+            function loadFile(file) {
+                if (!file || !file.type.startsWith('image/')) {
+                    fileInfo.textContent = '⚠️ Please select a valid image.';
+                    return;
+                }
+
+                const maxSize = 20 * 1024 * 1024; // 20MB
+                if (file.size > maxSize) {
+                    fileInfo.textContent = '⚠️ Image must be under 20MB.';
+                    return;
+                }
+
+                currentFile = file;
+                fileName = file.name.replace(/\.[^.]+$/, '') || 'image';
+                fileInfo.textContent = `📄 ${file.name} (${Math.round(file.size / 1024)} KB)`;
+
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    originalImageSrc = e.target.result;
+                    initCropper(originalImageSrc);
+                };
+                reader.readAsDataURL(file);
+            }
+
+            // ─── Browse ───
+            browseBtn.addEventListener('click', (e) => {
+                e.stopPropagation();
+                fileInput.click();
+            });
+
+            fileInput.addEventListener('change', () => {
+                if (fileInput.files.length) {
+                    loadFile(fileInput.files[0]);
+                }
+                fileInput.value = '';
+            });
+
+            // ─── Drag & Drop ───
+            uploadZone.addEventListener('dragover', (e) => {
+                e.preventDefault();
+                uploadZone.classList.add('dragover');
+            });
+
+            uploadZone.addEventListener('dragleave', () => {
+                uploadZone.classList.remove('dragover');
+            });
+
+            uploadZone.addEventListener('drop', (e) => {
+                e.preventDefault();
+                uploadZone.classList.remove('dragover');
+                if (e.dataTransfer.files.length) {
+                    loadFile(e.dataTransfer.files[0]);
+                }
+            });
+
+            uploadZone.addEventListener('click', () => fileInput.click());
+
+            // ─── Paste ───
+            pasteBtn.addEventListener('click', async () => {
+                try {
+                    const items = await navigator.clipboard.read();
+                    for (const item of items) {
+                        if (item.type.startsWith('image/')) {
+                            const blob = await item.getType(item.type);
+                            const file = new File([blob], 'pasted-image.' + blob.type.split('/')[1], { type: blob
+                                    .type });
+                            loadFile(file);
+                            return;
+                        }
+                    }
+                    fileInfo.textContent = '⚠️ No image found in clipboard.';
+                } catch {
+                    fileInfo.textContent = '⚠️ Unable to read clipboard.';
+                }
+            });
+
+            // ─── Camera ───
+            cameraBtn.addEventListener('click', async () => {
+                try {
+                    const stream = await navigator.mediaDevices.getUserMedia({
+                        video: { facingMode: 'user' },
+                        audio: false
+                    });
+
+                    const video = document.createElement('video');
+                    video.srcObject = stream;
+                    video.play();
+
+                    const canvas = document.createElement('canvas');
+                    const ctx = canvas.getContext('2d');
+
+                    const snap = () => {
+                        canvas.width = video.videoWidth || 640;
+                        canvas.height = video.videoHeight || 480;
+                        ctx.drawImage(video, 0, 0);
+                        stream.getTracks().forEach(t => t.stop());
+
+                        canvas.toBlob((blob) => {
+                            if (!blob) {
+                                fileInfo.textContent = '⚠️ Capture failed.';
+                                return;
+                            }
+                            const file = new File([blob], 'camera-capture.jpg', { type: 'image/jpeg' });
+                            loadFile(file);
+                        }, 'image/jpeg', 0.92);
+                    };
+
+                    if (video.readyState >= 2) {
+                        snap();
+                    } else {
+                        video.onloadeddata = snap;
+                    }
+
+                    // Fallback
+                    setTimeout(() => {
+                        if (stream.active) snap();
+                    }, 4000);
+
+                } catch {
+                    fileInfo.textContent = '⚠️ Camera access denied.';
+                }
+            });
+
+            // ─── Global Paste ───
+            document.addEventListener('paste', (e) => {
+                const items = e.clipboardData?.items;
+                if (!items) return;
+                for (const item of items) {
+                    if (item.type.startsWith('image/')) {
+                        const file = item.getAsFile();
+                        if (file) loadFile(file);
+                        return;
+                    }
+                }
+            });
+
+            // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+            // CROP & PREVIEW
+            // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+            function handleCropAndPreview(shouldDownload = false) {
+                if (!cropper) {
+                    alert('Please upload an image first.');
+                    return;
+                }
+
+                const canvas = getCroppedCanvas();
+                if (!canvas) {
+                    alert('Failed to crop image.');
+                    return;
+                }
+
+                // Store canvas data for downloads
+                croppedCanvasData = canvas;
+
+                // Show preview
+                const dataUrl = canvas.toDataURL('image/png');
+                previewImg.src = dataUrl;
+                previewDims.textContent = `${canvas.width} × ${canvas.height}`;
+
+                // Get blob size
+                canvas.toBlob((blob) => {
+                    if (blob) {
+                        previewSize.textContent = (blob.size / 1024).toFixed(1);
+                        croppedBlob = blob;
+                        croppedDataUrl = dataUrl;
+                    }
+                }, 'image/png');
+
+                previewBox.classList.add('visible');
+                downloadStatus.classList.remove('visible');
+
+                if (shouldDownload) {
+                    // Auto-download as PNG if user clicks "Crop & Download"
+                    downloadCropped(canvas, 'png');
+                }
+            }
+
+            // Crop & Download button
+            cropBtn.addEventListener('click', () => {
+                handleCropAndPreview(true);
+            });
+
+            // Preview button
+            previewBtn.addEventListener('click', () => {
+                handleCropAndPreview(false);
+            });
+
+            // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+            // DOWNLOAD LOGIC
+            // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+            function downloadCropped(canvas, format) {
+                if (!canvas) {
+                    alert('Please crop an image first.');
+                    return;
+                }
+
+                let mimeType, extension, quality = 0.92;
+                let fileNameBase = fileName || 'image';
+
+                switch (format) {
+                    case 'png':
+                        mimeType = 'image/png';
+                        extension = 'png';
+                        break;
+                    case 'jpg':
+                        mimeType = 'image/jpeg';
+                        extension = 'jpg';
+                        break;
+                    case 'webp':
+                        mimeType = 'image/webp';
+                        extension = 'webp';
+                        break;
+                    case 'pdf':
+                        // Handle PDF
+                        try {
+                            const { jsPDF } = window.jspdf;
+                            const imgData = canvas.toDataURL('image/png');
+                            // Use exact pixel dimensions for high quality
+                            const pdf = new jsPDF('p', 'px', [canvas.width, canvas.height]);
+                            pdf.addImage(imgData, 'PNG', 0, 0, canvas.width, canvas.height);
+                            pdf.save(`${fileNameBase}-cropped.pdf`);
+                            showDownloadStatus('PDF');
+                        } catch (e) {
+                            alert('PDF generation failed. Please check the console.');
+                            console.error(e);
+                        }
+                        return;
+                    default:
+                        return;
+                }
+
+                canvas.toBlob((blob) => {
+                    if (!blob) {
+                        alert('Export failed.');
+                        return;
+                    }
+                    const link = document.createElement('a');
+                    link.download = `${fileNameBase}-cropped.${extension}`;
+                    link.href = URL.createObjectURL(blob);
+                    document.body.appendChild(link);
+                    link.click();
+                    document.body.removeChild(link);
+                    setTimeout(() => URL.revokeObjectURL(link.href), 3000);
+                    showDownloadStatus(format.toUpperCase());
+                }, mimeType, quality);
+            }
+
+            function showDownloadStatus(format) {
+                downloadStatus.textContent = `✅ ${format} downloaded successfully!`;
+                downloadStatus.classList.remove('visible');
+                // Trigger reflow for animation restart
+                void downloadStatus.offsetWidth;
+                downloadStatus.classList.add('visible');
+
+                // Auto-hide after 4 seconds
+                clearTimeout(window.downloadStatusTimeout);
+                window.downloadStatusTimeout = setTimeout(() => {
+                    downloadStatus.classList.remove('visible');
+                }, 4000);
+            }
+
+            // ─── Download Format Button Listeners ───
+            downloadFormatBtns.forEach(btn => {
+                btn.addEventListener('click', function() {
+                    const format = this.dataset.format;
+                    if (!croppedCanvasData) {
+                        alert('Please crop an image first (use Preview or Crop & Download).');
+                        return;
+                    }
+                    downloadCropped(croppedCanvasData, format);
+                });
+            });
+
+            // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+            // SHARE, COPY, PRINT
+            // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+            shareBtn.addEventListener('click', async () => {
+                if (!croppedBlob) {
+                    alert('Please crop an image first.');
+                    return;
+                }
+
+                const file = new File([croppedBlob], `${fileName}-cropped.png`, { type: 'image/png' });
+
+                if (navigator.share) {
+                    try {
+                        await navigator.share({ title: 'Cropped Image', files: [file] });
+                    } catch (e) {
+                        if (e.name !== 'AbortError') alert('Share cancelled.');
+                    }
+                } else {
+                    try {
+                        await navigator.clipboard.write([new ClipboardItem({ 'image/png': croppedBlob })]);
+                        alert('Image copied to clipboard!');
+                    } catch {
+                        alert('Share not supported. Use Download instead.');
+                    }
+                }
+            });
+
+            copyBtn.addEventListener('click', async () => {
+                if (!croppedBlob) {
+                    alert('Please crop an image first.');
+                    return;
+                }
+
+                try {
+                    await navigator.clipboard.write([new ClipboardItem({ 'image/png': croppedBlob })]);
+                    alert('Image copied to clipboard!');
+                } catch {
+                    alert('Copy failed.');
+                }
+            });
+
+            printBtn.addEventListener('click', () => {
+                if (!croppedDataUrl) {
+                    alert('Please crop an image first.');
+                    return;
+                }
+
+                const win = window.open(croppedDataUrl, '_blank');
+                if (!win) {
+                    alert('Please allow popups.');
+                    return;
+                }
+                win.onload = () => {
+                    win.print();
+                };
+            });
+
+            // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+            // RESET
+            // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+            resetBtn.addEventListener('click', () => {
+                if (cropper) {
+                    cropper.destroy();
+                    cropper = null;
+                }
+
+                cropWrapper.classList.remove('visible');
+                cropToolbar.style.display = 'none';
+                actionRow.style.display = 'none';
+                previewBox.classList.remove('visible');
+                cropImage.src = '';
+                fileInfo.textContent = '📂 Upload an image to crop.';
+                currentFile = null;
+                croppedBlob = null;
+                croppedDataUrl = null;
+                croppedCanvasData = null;
+                fileInput.value = '';
+                downloadStatus.classList.remove('visible');
+                ratioBtns.forEach(b => b.classList.remove('active'));
+                document.querySelector('[data-ratio="free"]').classList.add('active');
+            });
+
+            // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+            // KEYBOARD SHORTCUTS
+            // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+            document.addEventListener('keydown', (e) => {
+                // Ctrl+Enter to crop
+                if (e.ctrlKey && e.key === 'Enter') {
+                    e.preventDefault();
+                    cropBtn.click();
+                }
+                // R to reset crop
+                if (e.key === 'r' && !e.ctrlKey && !e.metaKey) {
+                    if (cropper) resetCropBtn.click();
+                }
+            });
+
+            // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+            // INIT
+            // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+            fileInfo.textContent = '📂 Upload an image to start cropping.';
+            console.log('✂️ Crop Tool loaded successfully.');
+
+        })();
+    </script>
+
+</body>
+
+</html>

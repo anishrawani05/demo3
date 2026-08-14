@@ -1,0 +1,2149 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <link rel="icon" type="image/png" href="../../images/favicon.png">
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.5" />
+    <title>Circle Crop Image – 99toolhub</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,400;14..32,500;14..32,600;14..32,700;14..32,800;14..32,900&display=swap" rel="stylesheet" />
+    <style>
+        /* ===== RESET & BASE ===== */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: #f8fafc;
+            color: #0f172a;
+            line-height: 1.7;
+            padding: 20px;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+        }
+
+        .app-wrapper {
+            max-width: 1200px;
+            width: 100%;
+            margin: 0 auto;
+        }
+
+        /* ===== BRAND BAR ===== */
+        .brand-bar {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 12px;
+            padding: 0 4px 20px 4px;
+        }
+
+        .brand-bar .logo {
+            font-weight: 800;
+            font-size: 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            color: #0f172a;
+        }
+
+        .brand-bar .logo i {
+            color: #10b981;
+            font-size: 1.7rem;
+        }
+
+        .brand-bar .logo span {
+            background: linear-gradient(135deg, #059669, #10b981);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .brand-bar .tagline {
+            font-size: 13px;
+            color: #64748b;
+            font-weight: 500;
+            background: #f1f5f9;
+            padding: 6px 18px;
+            border-radius: 30px;
+            border: 1px solid #e2e8f0;
+        }
+
+        .brand-bar .tagline i {
+            color: #10b981;
+        }
+
+        /* ===== CARDS ===== */
+        .card {
+            background: #ffffff;
+            border-radius: 24px;
+            border: 1px solid #e2e8f0;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04);
+            padding: 28px 30px 32px;
+            margin-bottom: 24px;
+        }
+
+        .card-title {
+            font-size: 28px;
+            font-weight: 900;
+            color: #0f172a;
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            margin-bottom: 4px;
+        }
+
+        .card-title i {
+            color: #10b981;
+        }
+
+        .card-sub {
+            color: #64748b;
+            font-size: 15px;
+            margin-bottom: 24px;
+        }
+
+        /* ===== GRID ===== */
+        .grid-2 {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 28px;
+            align-items: start;
+        }
+
+        @media (max-width: 1024px) {
+            .grid-2 {
+                grid-template-columns: 1fr;
+                gap: 24px;
+            }
+        }
+
+        /* ===== UPLOAD ZONE ===== */
+        .upload-zone {
+            border: 2.5px dashed #e2e8f0;
+            border-radius: 20px;
+            padding: 40px 20px;
+            text-align: center;
+            background: #f8fafc;
+            transition: 0.3s;
+            cursor: pointer;
+            position: relative;
+            min-height: 200px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .upload-zone.dragover {
+            border-color: #10b981;
+            background: #f0fdf4;
+        }
+
+        .upload-zone .upload-icon {
+            font-size: 3.5rem;
+            color: #94a3b8;
+            margin-bottom: 12px;
+        }
+
+        .upload-zone .upload-text {
+            font-weight: 600;
+            font-size: 1.1rem;
+            color: #0f172a;
+        }
+
+        .upload-zone .upload-sub {
+            font-size: 0.9rem;
+            color: #94a3b8;
+            margin-top: 4px;
+        }
+
+        .upload-zone .upload-hint {
+            font-size: 0.75rem;
+            color: #94a3b8;
+            margin-top: 8px;
+        }
+
+        .upload-zone input[type="file"] {
+            display: none;
+        }
+
+        .upload-zone .uploaded-preview {
+            max-width: 100%;
+            max-height: 200px;
+            border-radius: 12px;
+            object-fit: contain;
+            display: none;
+        }
+
+        .upload-zone .uploaded-preview.show {
+            display: block;
+        }
+
+        .upload-zone .file-name {
+            font-size: 13px;
+            font-weight: 600;
+            color: #0f172a;
+            margin-top: 8px;
+            display: none;
+        }
+
+        .upload-zone .file-name.show {
+            display: block;
+        }
+
+        .upload-zone .remove-file-btn {
+            position: absolute;
+            top: 12px;
+            right: 16px;
+            background: #ef4444;
+            color: white;
+            border: none;
+            border-radius: 50%;
+            width: 32px;
+            height: 32px;
+            font-size: 16px;
+            cursor: pointer;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            transition: 0.2s;
+        }
+
+        .upload-zone .remove-file-btn:hover {
+            background: #dc2626;
+            transform: scale(1.05);
+        }
+
+        .upload-zone .remove-file-btn.show {
+            display: flex;
+        }
+
+        /* ===== CIRCLE CROP CANVAS ===== */
+        .crop-area {
+            position: relative;
+            width: 100%;
+            max-width: 480px;
+            margin: 0 auto;
+            aspect-ratio: 1 / 1;
+            background: #f1f5f9;
+            border-radius: 50%;
+            overflow: hidden;
+            border: 3px solid #e2e8f0;
+            touch-action: none;
+            user-select: none;
+            -webkit-user-select: none;
+            cursor: grab;
+        }
+
+        .crop-area:active {
+            cursor: grabbing;
+        }
+
+        .crop-area canvas {
+            width: 100%;
+            height: 100%;
+            display: block;
+            touch-action: none;
+        }
+
+        .crop-area .crop-overlay-circle {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            pointer-events: none;
+            box-shadow: inset 0 0 0 3px #10b981, 0 0 0 100vmax rgba(0, 0, 0, 0.35);
+        }
+
+        .crop-area .crop-guide-grid {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            border-radius: 50%;
+            overflow: hidden;
+        }
+
+        .crop-area .crop-guide-grid .guide-line {
+            position: absolute;
+            background: rgba(255, 255, 255, 0.15);
+        }
+
+        .crop-area .crop-guide-grid .guide-line.h {
+            left: 0;
+            right: 0;
+            height: 1px;
+        }
+
+        .crop-area .crop-guide-grid .guide-line.h-1 {
+            top: 33.33%;
+        }
+        .crop-area .crop-guide-grid .guide-line.h-2 {
+            top: 66.66%;
+        }
+
+        .crop-area .crop-guide-grid .guide-line.v {
+            top: 0;
+            bottom: 0;
+            width: 1px;
+        }
+
+        .crop-area .crop-guide-grid .guide-line.v-1 {
+            left: 33.33%;
+        }
+        .crop-area .crop-guide-grid .guide-line.v-2 {
+            left: 66.66%;
+        }
+
+        /* ===== CONTROLS ===== */
+        .controls-section {
+            padding: 18px 0 0 0;
+        }
+
+        .controls-section .control-group {
+            margin-bottom: 16px;
+        }
+
+        .controls-section .control-group label {
+            display: block;
+            font-size: 12px;
+            font-weight: 600;
+            color: #475569;
+            text-transform: uppercase;
+            letter-spacing: 0.3px;
+            margin-bottom: 4px;
+        }
+
+        .controls-section .control-group label i {
+            color: #10b981;
+            margin-right: 4px;
+        }
+
+        .controls-section .control-group input[type="range"] {
+            width: 100%;
+            height: 6px;
+            -webkit-appearance: none;
+            appearance: none;
+            background: #e2e8f0;
+            border-radius: 10px;
+            outline: none;
+            transition: 0.2s;
+        }
+
+        .controls-section .control-group input[type="range"]::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            appearance: none;
+            width: 18px;
+            height: 18px;
+            border-radius: 50%;
+            background: #10b981;
+            cursor: pointer;
+            border: 2px solid white;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .controls-section .control-group input[type="range"]::-moz-range-thumb {
+            width: 18px;
+            height: 18px;
+            border-radius: 50%;
+            background: #10b981;
+            cursor: pointer;
+            border: 2px solid white;
+        }
+
+        .controls-section .control-group .range-value {
+            font-weight: 700;
+            color: #0f172a;
+            font-size: 14px;
+            min-width: 40px;
+            display: inline-block;
+            text-align: right;
+        }
+
+        .controls-section .control-group .range-row {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .controls-section .control-group .range-row input[type="range"] {
+            flex: 1;
+        }
+
+        .controls-section .reset-pos-btn {
+            padding: 6px 16px;
+            border-radius: 30px;
+            border: 1.5px solid #e2e8f0;
+            background: #ffffff;
+            color: #0f172a;
+            font-weight: 600;
+            font-size: 12px;
+            cursor: pointer;
+            transition: 0.2s;
+            font-family: 'Inter', sans-serif;
+        }
+
+        .controls-section .reset-pos-btn:hover {
+            background: #f1f5f9;
+            border-color: #cbd5e1;
+        }
+
+        /* ===== ACTION BUTTONS ===== */
+        .action-bar {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-top: 16px;
+            padding-top: 16px;
+            border-top: 1px solid #e2e8f0;
+        }
+
+        .action-btn {
+            padding: 8px 20px;
+            border-radius: 40px;
+            border: 1.5px solid #e2e8f0;
+            background: #ffffff;
+            color: #0f172a;
+            font-weight: 600;
+            font-size: 12px;
+            cursor: pointer;
+            transition: 0.25s;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            font-family: 'Inter', sans-serif;
+        }
+
+        .action-btn:hover {
+            background: #f1f5f9;
+            border-color: #cbd5e1;
+            transform: translateY(-2px);
+        }
+
+        .action-btn.primary {
+            background: #10b981;
+            color: #ffffff;
+            border-color: #10b981;
+        }
+
+        .action-btn.primary:hover {
+            background: #059669;
+            border-color: #059669;
+        }
+
+        .action-btn i {
+            font-size: 13px;
+        }
+
+        .action-btn.danger {
+            border-color: #fca5a5;
+            color: #dc2626;
+        }
+
+        .action-btn.danger:hover {
+            background: #fef2f2;
+            border-color: #f87171;
+        }
+
+        .action-btn.success {
+            background: #dcfce7;
+            border-color: #86d9b6;
+            color: #065f46;
+        }
+
+        .action-btn.success:hover {
+            background: #bbf7d0;
+        }
+
+        /* ===== DOWNLOAD OPTIONS ===== */
+        .download-options {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-top: 4px;
+        }
+
+        .download-options .btn-sm {
+            padding: 6px 16px;
+            border-radius: 30px;
+            border: 1.5px solid #e2e8f0;
+            background: #ffffff;
+            font-weight: 600;
+            font-size: 12px;
+            color: #0f172a;
+            cursor: pointer;
+            transition: 0.2s;
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+            font-family: 'Inter', sans-serif;
+        }
+
+        .download-options .btn-sm:hover {
+            background: #f1f5f9;
+            border-color: #cbd5e1;
+        }
+
+        .download-options .btn-sm i {
+            color: #10b981;
+        }
+
+        /* ===== PREVIEW SECTION ===== */
+        .preview-section {
+            margin-top: 18px;
+            padding-top: 16px;
+            border-top: 1px solid #e2e8f0;
+        }
+
+        .preview-section .preview-title {
+            font-weight: 700;
+            font-size: 14px;
+            color: #0f172a;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-bottom: 10px;
+        }
+
+        .preview-section .preview-title i {
+            color: #10b981;
+        }
+
+        .preview-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 20px;
+            flex-wrap: wrap;
+        }
+
+        .preview-container .preview-box {
+            width: 120px;
+            height: 120px;
+            border-radius: 50%;
+            border: 3px solid #e2e8f0;
+            overflow: hidden;
+            background: #f1f5f9;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .preview-container .preview-box img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .preview-container .preview-box .empty-preview {
+            color: #94a3b8;
+            font-size: 12px;
+            text-align: center;
+        }
+
+        .preview-container .preview-info {
+            font-size: 13px;
+            color: #64748b;
+        }
+
+        .preview-container .preview-info strong {
+            color: #0f172a;
+        }
+
+        /* ===== TOAST ===== */
+        .toast {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            background: #0f172a;
+            color: #f8fafc;
+            padding: 12px 24px;
+            border-radius: 16px;
+            font-weight: 500;
+            box-shadow: 0 12px 40px rgba(0, 0, 0, 0.08);
+            border: 1px solid #e2e8f0;
+            opacity: 0;
+            transform: translateY(20px);
+            transition: 0.4s ease;
+            pointer-events: none;
+            z-index: 999;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 14px;
+            font-family: 'Inter', sans-serif;
+        }
+
+        .toast.show {
+            opacity: 1;
+            transform: translateY(0);
+            pointer-events: auto;
+        }
+
+        .toast i {
+            color: #10b981;
+        }
+
+        /* ===== CONTENT SECTIONS ===== */
+        .content-section {
+            padding: 28px 30px 32px;
+        }
+
+        .content-section h2 {
+            font-size: 26px;
+            font-weight: 800;
+            color: #0f172a;
+            margin-top: 40px;
+            margin-bottom: 14px;
+            border-left: 5px solid #10b981;
+            padding-left: 18px;
+        }
+
+        .content-section h2:first-of-type {
+            margin-top: 0;
+        }
+
+        .content-section h3 {
+            font-size: 19px;
+            font-weight: 700;
+            color: #0f172a;
+            margin-top: 28px;
+            margin-bottom: 10px;
+        }
+
+        .content-section h4 {
+            font-size: 17px;
+            font-weight: 600;
+            color: #0f172a;
+            margin-top: 20px;
+            margin-bottom: 8px;
+        }
+
+        .content-section p {
+            font-size: 15px;
+            line-height: 1.9;
+            color: #334155;
+            margin-bottom: 14px;
+        }
+
+        .content-section ul,
+        .content-section ol {
+            margin: 10px 0 18px 28px;
+            line-height: 1.9;
+            color: #334155;
+        }
+
+        .content-section li {
+            font-size: 15px;
+            margin-bottom: 6px;
+        }
+
+        .content-section li strong {
+            color: #0f172a;
+        }
+
+        .content-section .highlight-box {
+            background: #f0fdf4;
+            border-radius: 14px;
+            padding: 18px 22px;
+            border: 1px solid #bbf7d0;
+            margin: 16px 0 22px;
+        }
+
+        .content-section .highlight-box .row {
+            display: flex;
+            justify-content: space-between;
+            padding: 4px 0;
+            border-bottom: 1px solid #dcfce7;
+            font-size: 14px;
+        }
+
+        .content-section .highlight-box .row:last-child {
+            border-bottom: none;
+        }
+
+        .content-section .highlight-box .row .val {
+            font-weight: 700;
+            color: #0f172a;
+        }
+
+        .content-section .social-sizes-table {
+            overflow-x: auto;
+            margin: 16px 0 22px;
+        }
+
+        .content-section .social-sizes-table table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 14px;
+        }
+
+        .content-section .social-sizes-table th {
+            text-align: left;
+            padding: 10px 14px;
+            font-weight: 700;
+            color: #475569;
+            text-transform: uppercase;
+            font-size: 11px;
+            letter-spacing: 0.3px;
+            border-bottom: 2px solid #e2e8f0;
+            background: #f8fafc;
+        }
+
+        .content-section .social-sizes-table td {
+            padding: 10px 14px;
+            color: #0f172a;
+            border-bottom: 1px solid #f1f5f9;
+        }
+
+        .content-section .social-sizes-table tr:hover td {
+            background: #f8fafc;
+        }
+
+        /* ===== FAQ ===== */
+        .faq-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px 24px;
+            margin-top: 4px;
+        }
+
+        @media (max-width: 700px) {
+            .faq-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .faq-item {
+            border-bottom: 1px solid #f1f5f9;
+            padding: 12px 0;
+            cursor: pointer;
+        }
+
+        .faq-item .faq-q {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-weight: 600;
+            color: #0f172a;
+            font-size: 15px;
+        }
+
+        .faq-item .faq-q i {
+            color: #94a3b8;
+            transition: 0.3s;
+        }
+
+        .faq-item.open .faq-q i {
+            transform: rotate(180deg);
+        }
+
+        .faq-item .faq-a {
+            max-height: 0;
+            overflow: hidden;
+            transition: 0.35s ease;
+            opacity: 0;
+            font-size: 14px;
+            color: #475569;
+            line-height: 1.8;
+            padding-top: 0;
+        }
+
+        .faq-item.open .faq-a {
+            max-height: 400px;
+            opacity: 1;
+            padding-top: 8px;
+        }
+
+        /* ===== RELATED TOOLS ===== */
+        .related-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(170px, 1fr));
+            gap: 14px;
+            margin: 14px 0 18px;
+        }
+
+        .related-card {
+            background: #f8fafc;
+            border-radius: 14px;
+            padding: 16px 14px;
+            text-align: center;
+            border: 1px solid #e2e8f0;
+            transition: 0.2s;
+            text-decoration: none;
+            color: inherit;
+        }
+
+        .related-card:hover {
+            transform: translateY(-3px);
+            border-color: #10b981;
+            box-shadow: 0 4px 16px rgba(0, 0, 0, 0.04);
+        }
+
+        .related-card i {
+            font-size: 28px;
+            color: #10b981;
+            margin-bottom: 4px;
+        }
+
+        .related-card h4 {
+            font-size: 14px;
+            font-weight: 600;
+            color: #0f172a;
+        }
+
+        .related-card p {
+            font-size: 12px;
+            color: #64748b;
+            margin-top: 2px;
+        }
+
+        /* ===== DISCLAIMER ===== */
+        .disclaimer-box {
+            margin-top: 0;
+            padding: 16px 20px;
+            border-radius: 12px;
+            background: #fef2f2;
+            border-left: 4px solid #ef4444;
+        }
+
+        .disclaimer-box .d-title {
+            font-weight: 700;
+            color: #991b1b;
+            font-size: 15px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .disclaimer-box .d-title i {
+            font-size: 18px;
+        }
+
+        .disclaimer-box p {
+            color: #7f1d1d;
+            font-size: 14px;
+            line-height: 1.8;
+            margin-top: 2px;
+        }
+
+        /* ===== FOOTER ===== */
+        .footer {
+            text-align: center;
+            padding: 24px 0 10px;
+            color: #94a3b8;
+            font-size: 14px;
+            border-top: 1px solid #e2e8f0;
+            margin-top: 12px;
+        }
+
+        .footer strong {
+            color: #10b981;
+        }
+
+        /* ===== RESPONSIVE ===== */
+        @media (max-width: 700px) {
+            body {
+                padding: 12px;
+            }
+
+            .card {
+                padding: 20px 16px 24px;
+            }
+
+            .card-title {
+                font-size: 22px;
+            }
+
+            .brand-bar .logo {
+                font-size: 1.2rem;
+            }
+
+            .brand-bar .tagline {
+                font-size: 11px;
+                padding: 4px 12px;
+            }
+
+            .upload-zone {
+                padding: 24px 16px;
+                min-height: 150px;
+            }
+
+            .upload-zone .upload-icon {
+                font-size: 2.5rem;
+            }
+
+            .crop-area {
+                max-width: 100%;
+            }
+
+            .action-btn {
+                font-size: 11px;
+                padding: 6px 14px;
+            }
+
+            .controls-section .control-group .range-row input[type="range"] {
+                flex: 1;
+            }
+
+            .preview-container {
+                flex-direction: column;
+                align-items: center;
+            }
+
+            .download-options .btn-sm {
+                font-size: 11px;
+                padding: 4px 12px;
+            }
+
+            .controls-section .reset-pos-btn {
+                font-size: 11px;
+                padding: 4px 12px;
+            }
+
+            .content-section {
+                padding: 20px 16px 24px;
+            }
+
+            .content-section h2 {
+                font-size: 21px;
+                padding-left: 12px;
+            }
+
+            .content-section h3 {
+                font-size: 17px;
+            }
+
+            .social-sizes-table table {
+                font-size: 12px;
+            }
+
+            .social-sizes-table th,
+            .social-sizes-table td {
+                padding: 8px 10px;
+            }
+
+            .faq-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @media (max-width: 400px) {
+            .card-title {
+                font-size: 18px;
+            }
+
+            .upload-zone .upload-text {
+                font-size: 0.95rem;
+            }
+
+            .crop-area {
+                max-width: 100%;
+            }
+
+            .action-bar {
+                gap: 4px;
+            }
+
+            .action-btn {
+                font-size: 10px;
+                padding: 4px 10px;
+            }
+
+            .related-grid {
+                grid-template-columns: 1fr 1fr;
+            }
+        }
+
+        /* ===== PRINT ===== */
+        @media print {
+            .no-print {
+                display: none !important;
+            }
+
+            body {
+                background: #ffffff !important;
+                padding: 10px !important;
+            }
+
+            .card {
+                border: 1px solid #e2e8f0 !important;
+                box-shadow: none !important;
+            }
+
+            .brand-bar .logo span {
+                -webkit-text-fill-color: #0f172a !important;
+            }
+
+            .content-section {
+                page-break-inside: avoid;
+            }
+
+            .faq-item {
+                page-break-inside: avoid;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="app-wrapper">
+
+        <!-- ===== BRAND BAR ===== -->
+        <div class="brand-bar no-print">
+            <div class="logo">
+                <i class="fas fa-crop-alt"></i>
+                <span>99toolhub</span>
+            </div>
+            <span class="tagline"><i class="fas fa-bolt"></i> Circle Crop Image</span>
+        </div>
+
+        <!-- ===== MAIN TOOL CARD ===== -->
+        <div class="card">
+
+            <div class="card-title">
+                <i class="fas fa-circle"></i> Circle Crop Image
+            </div>
+            <div class="card-sub">Upload an image, adjust the crop area, and download a perfect circular PNG with transparent background</div>
+
+            <!-- ===== GRID ===== -->
+            <div class="grid-2">
+
+                <!-- ===== LEFT: UPLOAD & CONTROLS ===== -->
+                <div>
+
+                    <!-- Upload Zone -->
+                    <div class="upload-zone" id="uploadZone">
+                        <div class="upload-icon"><i class="fas fa-cloud-upload-alt"></i></div>
+                        <div class="upload-text">Drop an image here, or <strong>click to browse</strong></div>
+                        <div class="upload-sub">Supports JPG, PNG, WEBP, GIF</div>
+                        <div class="upload-hint">Max file size: 20MB</div>
+                        <img class="uploaded-preview" id="uploadedPreview" alt="Uploaded preview" />
+                        <div class="file-name" id="fileName">image.jpg</div>
+                        <button class="remove-file-btn" id="removeFileBtn">&times;</button>
+                        <input type="file" id="fileInput" accept="image/*" />
+                    </div>
+
+                    <!-- Controls -->
+                    <div class="controls-section" id="controlsSection" style="display:none;">
+                        <div class="control-group">
+                            <label><i class="fas fa-search-plus"></i> Zoom</label>
+                            <div class="range-row">
+                                <input type="range" id="zoomSlider" min="50" max="300" value="100" />
+                                <span class="range-value" id="zoomValue">100%</span>
+                            </div>
+                        </div>
+
+                        <div class="control-group">
+                            <label><i class="fas fa-arrows-alt"></i> Position</label>
+                            <div style="display:flex; gap:8px; flex-wrap:wrap;">
+                                <button class="reset-pos-btn" id="resetPosBtn"><i class="fas fa-undo-alt"></i> Reset Position</button>
+                                <button class="reset-pos-btn" id="resetZoomBtn"><i class="fas fa-search"></i> Reset Zoom</button>
+                            </div>
+                            <div style="font-size:12px; color:#94a3b8; margin-top:4px;">
+                                <i class="fas fa-mouse-pointer"></i> Drag image to reposition
+                            </div>
+                        </div>
+
+                        <div class="action-bar" style="border-top-color:#e2e8f0;">
+                            <button class="action-btn primary" id="applyCropBtn"><i class="fas fa-check"></i> Apply Crop</button>
+                            <button class="action-btn success" id="downloadBtn"><i class="fas fa-download"></i> Download</button>
+                            <button class="action-btn" id="resetAllBtn"><i class="fas fa-undo-alt"></i> Reset</button>
+                        </div>
+
+                        <div class="download-options">
+                            <button class="btn-sm" id="downloadPng"><i class="fas fa-image"></i> PNG</button>
+                            <button class="btn-sm" id="downloadJpg"><i class="fas fa-file-image"></i> JPG</button>
+                            <button class="btn-sm" id="downloadSvg"><i class="fas fa-vector-square"></i> SVG</button>
+                            <button class="btn-sm" id="copyBtn"><i class="fas fa-copy"></i> Copy</button>
+                            <button class="btn-sm" id="shareBtn"><i class="fas fa-share-alt"></i> Share</button>
+                        </div>
+                    </div>
+
+                </div>
+
+                <!-- ===== RIGHT: CIRCLE CROP CANVAS ===== -->
+                <div>
+
+                    <div style="text-align:center; margin-bottom:6px; font-size:13px; color:#64748b;">
+                        <i class="fas fa-mouse-pointer"></i> Drag to reposition &bull; <i class="fas fa-search-plus"></i> Zoom to adjust
+                    </div>
+
+                    <div class="crop-area" id="cropArea">
+                        <canvas id="cropCanvas"></canvas>
+                        <div class="crop-overlay-circle"></div>
+                        <div class="crop-guide-grid">
+                            <div class="guide-line h h-1"></div>
+                            <div class="guide-line h h-2"></div>
+                            <div class="guide-line v v-1"></div>
+                            <div class="guide-line v v-2"></div>
+                        </div>
+                    </div>
+
+                    <!-- ===== PREVIEW ===== -->
+                    <div class="preview-section" id="previewSection" style="display:none;">
+                        <div class="preview-title"><i class="fas fa-eye"></i> Preview</div>
+                        <div class="preview-container">
+                            <div class="preview-box">
+                                <img id="previewImage" src="" alt="Circle cropped preview" style="display:none;" />
+                                <div class="empty-preview" id="emptyPreview">No crop yet</div>
+                            </div>
+                            <div class="preview-info">
+                                <div><strong>Size:</strong> <span id="previewSize">—</span></div>
+                                <div><strong>Format:</strong> <span id="previewFormat">—</span></div>
+                                <div style="margin-top:4px; font-size:12px; color:#94a3b8;">
+                                    <i class="fas fa-circle" style="color:#10b981;"></i> Transparent background
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+        <!-- ================================================================
+        CONTENT SECTION — All 27+ Topics
+        ================================================================ -->
+        <div class="card content-section">
+
+            <!-- 1. What is Circle Crop Image? -->
+            <h2>1. What is Circle Crop Image?</h2>
+            <p>
+                <strong>Circle crop image</strong> is a photo editing technique that cuts an image into a perfect circular shape, removing the rectangular corners and creating a smooth, rounded frame. Unlike traditional rectangular cropping, circle cropping produces a clean, modern look that is widely used for <strong>profile pictures, logos, avatars, and social media images</strong>.
+            </p>
+            <p>
+                The 99toolhub Circle Crop Image tool allows you to upload any image, adjust the position and zoom, and instantly generate a perfectly circular crop with a <strong>transparent background</strong>. This makes it ideal for creating professional-looking profile photos, brand logos, and social media graphics that stand out.
+            </p>
+            <p>
+                Circle cropping is particularly popular because the human eye is naturally drawn to circular shapes. A circular profile picture looks more polished, modern, and professional compared to a standard rectangular crop. It also works seamlessly across all social media platforms, which often use circular avatars.
+            </p>
+
+            <!-- 2. Why Use a Circle Image Cropper? -->
+            <h2>2. Why Use a Circle Image Cropper?</h2>
+            <ul>
+                <li><strong>📱 Social Media Ready:</strong> Most social media platforms (Instagram, Facebook, WhatsApp, LinkedIn) use circular profile pictures. A circle cropper ensures your image fits perfectly.</li>
+                <li><strong>🎨 Professional Look:</strong> Circular images look more polished and modern than rectangular ones, making them ideal for business profiles and branding.</li>
+                <li><strong>🔄 Versatility:</strong> Circle crops work for profile pictures, logos, product images, and creative designs.</li>
+                <li><strong>✨ Focus on Subject:</strong> The circular shape naturally draws attention to the center of the image, highlighting the main subject.</li>
+                <li><strong>🔲 Transparent Background:</strong> Our tool produces PNGs with transparent backgrounds, making them easy to place on any design or website.</li>
+                <li><strong>⚡ Fast & Free:</strong> No software installation needed — crop your images instantly in your browser.</li>
+                <li><strong>🔒 Private:</strong> All processing happens locally — your images never leave your device.</li>
+            </ul>
+
+            <!-- 3. How Circle Crop Works -->
+            <h2>3. How Circle Crop Works</h2>
+            <p>
+                The 99toolhub Circle Crop Image tool uses a simple yet powerful process to create perfect circular images:
+            </p>
+            <ol>
+                <li><strong>Upload:</strong> Drag and drop or click to select an image from your device.</li>
+                <li><strong>Preview:</strong> Your image appears inside a circular crop area with a guide grid for alignment.</li>
+                <li><strong>Adjust:</strong> <strong>Drag</strong> the image to reposition it within the circle. Use the <strong>Zoom</strong> slider to scale the image in or out for the perfect fit.</li>
+                <li><strong>Apply Crop:</strong> Click "Apply Crop" to generate the final circular image with a transparent background.</li>
+                <li><strong>Download:</strong> Save your cropped image as PNG (with transparency), JPG, or SVG.</li>
+            </ol>
+            <p>
+                The tool uses a circular mask that clips the image to a perfect circle, preserving the original quality while removing everything outside the circle. The result is a clean, professional circular image ready for any use.
+            </p>
+
+            <!-- 4. Benefits of Circular Image Cropping -->
+            <h2>4. Benefits of Circular Image Cropping</h2>
+            <ul>
+                <li><strong>🎯 Better Focus:</strong> The circular shape eliminates distracting backgrounds and draws attention to the subject.</li>
+                <li><strong>📱 Platform Compatibility:</strong> Perfect for social media profile pictures, app icons, and avatars.</li>
+                <li><strong>🎨 Design Flexibility:</strong> Circular images can be placed on any background color or pattern.</li>
+                <li><strong>🔄 Uniform Shape:</strong> All circular images have the same aspect ratio, making them easy to arrange in galleries and grids.</li>
+                <li><strong>💡 Brand Recognition:</strong> Circular logos and profile pictures are more recognizable and memorable.</li>
+                <li><strong>⚡ Quick Editing:</strong> No complex software required — crop your image in seconds.</li>
+                <li><strong>🔒 Privacy:</strong> All processing is done client-side, so your images stay private.</li>
+            </ul>
+
+            <!-- 5. Best Uses of Circle Cropped Images -->
+            <h2>5. Best Uses of Circle Cropped Images</h2>
+            <ul>
+                <li><strong>👤 Profile Pictures:</strong> Social media profiles, business cards, email signatures.</li>
+                <li><strong>🏢 Logos:</strong> Brand logos, app icons, favicons.</li>
+                <li><strong>🎨 Avatars:</strong> Gaming avatars, forum profiles, chat applications.</li>
+                <li><strong>📱 App Icons:</strong> Mobile app icons, browser extensions.</li>
+                <li><strong>🖼️ Product Images:</strong> E-commerce product thumbnails, badge designs.</li>
+                <li><strong>📋 Team Photos:</strong> Company team pages, employee directories.</li>
+                <li><strong>🎉 Event Images:</strong> Event badges, speaker photos, attendee lists.</li>
+                <li><strong>📧 Email Signatures:</strong> Professional email signatures with circular photos.</li>
+            </ul>
+
+            <!-- 6. Profile Picture Crop Guide -->
+            <h2>6. Profile Picture Crop Guide</h2>
+            <p>
+                When cropping a profile picture, the goal is to have the subject's face centered and properly framed within the circle. Here are some tips:
+            </p>
+            <ul>
+                <li><strong>Center the Face:</strong> Position the eyes roughly in the upper third of the circle.</li>
+                <li><strong>Leave Some Space:</strong> Don't crop too tightly — leave a small margin around the head.</li>
+                <li><strong>Check the Background:</strong> A clean, uncluttered background works best for profile pictures.</li>
+                <li><strong>Use High Resolution:</strong> The tool preserves quality, but starting with a high-resolution image gives the best results.</li>
+                <li><strong>Test Different Positions:</strong> Use the drag feature to try different framings before applying the crop.</li>
+            </ul>
+
+            <!-- 7. Social Media Profile Image Sizes -->
+            <h2>7. Social Media Profile Image Sizes</h2>
+            <p>
+                Different social media platforms have different recommended sizes for profile images. Here's a quick reference guide:
+            </p>
+
+            <div class="social-sizes-table">
+                <table>
+                    <thead>
+                        <tr><th>Platform</th><th>Recommended Size</th><th>Display Size</th><th>Best Format</th></tr>
+                    </thead>
+                    <tbody>
+                        <tr><td><strong>Instagram</strong></td><td>320 × 320 px</td><td>110 × 110 px</td><td>PNG (transparent)</td></tr>
+                        <tr><td><strong>Facebook</strong></td><td>170 × 170 px</td><td>128 × 128 px</td><td>PNG (transparent)</td></tr>
+                        <tr><td><strong>WhatsApp</strong></td><td>640 × 640 px</td><td>192 × 192 px</td><td>PNG (transparent)</td></tr>
+                        <tr><td><strong>LinkedIn</strong></td><td>400 × 400 px</td><td>300 × 300 px</td><td>PNG (transparent)</td></tr>
+                        <tr><td><strong>YouTube</strong></td><td>800 × 800 px</td><td>98 × 98 px</td><td>PNG (transparent)</td></tr>
+                        <tr><td><strong>Twitter/X</strong></td><td>400 × 400 px</td><td>200 × 200 px</td><td>PNG (transparent)</td></tr>
+                        <tr><td><strong>Discord</strong></td><td>512 × 512 px</td><td>128 × 128 px</td><td>PNG (transparent)</td></tr>
+                        <tr><td><strong>Telegram</strong></td><td>512 × 512 px</td><td>200 × 200 px</td><td>PNG (transparent)</td></tr>
+                    </tbody>
+                </table>
+            </div>
+            <p>
+                The 99toolhub Circle Crop Image tool generates high-resolution circular images that work perfectly across all platforms. The PNG format with transparent background is recommended for the best results.
+            </p>
+
+            <!-- 8. WhatsApp DP Circle Crop -->
+            <h2>8. WhatsApp DP Circle Crop</h2>
+            <p>
+                WhatsApp displays profile pictures (DPs) in a circular format. To get the best WhatsApp DP:
+            </p>
+            <ul>
+                <li>Use a <strong>square image</strong> with the subject centered.</li>
+                <li>Recommended size: <strong>640 × 640 pixels</strong>.</li>
+                <li>Use the <strong>zoom</strong> feature to frame the face perfectly within the circle.</li>
+                <li>Export as <strong>PNG</strong> with a transparent background for the cleanest look.</li>
+                <li>Ensure good lighting and a clear background for the best visual impact.</li>
+            </ul>
+
+            <!-- 9. Instagram Profile Photo Crop -->
+            <h2>9. Instagram Profile Photo Crop</h2>
+            <p>
+                Instagram profile photos appear in a circular crop. For the best results:
+            </p>
+            <ul>
+                <li>Use a <strong>square image</strong> with the subject centered.</li>
+                <li>Recommended size: <strong>320 × 320 pixels</strong> or larger.</li>
+                <li>Position the face in the center of the crop area.</li>
+                <li>Use the <strong>zoom</strong> to adjust the size of the subject within the circle.</li>
+                <li>Export as <strong>PNG</strong> with a transparent background for versatility.</li>
+            </ul>
+
+            <!-- 10. Facebook Profile Picture Crop -->
+            <h2>10. Facebook Profile Picture Crop</h2>
+            <p>
+                Facebook displays profile pictures in a circular format. For the best Facebook profile picture:
+            </p>
+            <ul>
+                <li>Recommended size: <strong>170 × 170 pixels</strong> (or larger).</li>
+                <li>Center the face and leave some space around the head.</li>
+                <li>Use the <strong>drag</strong> feature to fine-tune the position.</li>
+                <li>Export as <strong>PNG</strong> with transparent background for a professional look.</li>
+                <li>Avoid busy backgrounds — a clean, solid color or blurred background works best.</li>
+            </ul>
+
+            <!-- 11. YouTube Channel Logo Crop -->
+            <h2>11. YouTube Channel Logo Crop</h2>
+            <p>
+                YouTube channel logos are displayed in a circular format. For the best YouTube logo:
+            </p>
+            <ul>
+                <li>Recommended size: <strong>800 × 800 pixels</strong>.</li>
+                <li>Center the logo or subject within the circle.</li>
+                <li>Use the <strong>zoom</strong> to ensure the logo fills the circle appropriately.</li>
+                <li>Export as <strong>PNG</strong> with a transparent background.</li>
+                <li>Ensure the logo is high-contrast and clearly visible at small sizes.</li>
+            </ul>
+
+            <!-- 12. LinkedIn Profile Photo Crop -->
+            <h2>12. LinkedIn Profile Photo Crop</h2>
+            <p>
+                LinkedIn uses circular profile photos. For a professional LinkedIn profile picture:
+            </p>
+            <ul>
+                <li>Recommended size: <strong>400 × 400 pixels</strong>.</li>
+                <li>Use a professional headshot with the face centered.</li>
+                <li>Position the eyes roughly in the upper third of the circle.</li>
+                <li>Export as <strong>PNG</strong> with a transparent background.</li>
+                <li>Wear professional attire and use a clean, neutral background.</li>
+            </ul>
+
+            <!-- 13. Discord Avatar Crop -->
+            <h2>13. Discord Avatar Crop</h2>
+            <p>
+                Discord avatars are displayed in a circular format. For the best Discord avatar:
+            </p>
+            <ul>
+                <li>Recommended size: <strong>512 × 512 pixels</strong>.</li>
+                <li>Center the subject within the circle.</li>
+                <li>Use the <strong>zoom</strong> to frame the subject perfectly.</li>
+                <li>Export as <strong>PNG</strong> with a transparent background.</li>
+                <li>Choose a distinctive image that represents your personality or brand.</li>
+            </ul>
+
+            <!-- 14. Telegram Profile Photo Crop -->
+            <h2>14. Telegram Profile Photo Crop</h2>
+            <p>
+                Telegram profile photos appear in a circular crop. For the best Telegram profile photo:
+            </p>
+            <ul>
+                <li>Recommended size: <strong>512 × 512 pixels</strong>.</li>
+                <li>Center the face and leave some space around the head.</li>
+                <li>Use the <strong>drag</strong> feature to adjust positioning.</li>
+                <li>Export as <strong>PNG</strong> with a transparent background.</li>
+                <li>Use a clear, well-lit photo for the best results.</li>
+            </ul>
+
+            <!-- 15. Circular Logo Cropping -->
+            <h2>15. Circular Logo Cropping</h2>
+            <p>
+                Circular logos are popular for brands, apps, and websites. For the best circular logo:
+            </p>
+            <ul>
+                <li>Start with a <strong>square image</strong> with the logo centered.</li>
+                <li>Use the <strong>zoom</strong> to ensure the logo fills the circle appropriately.</li>
+                <li>Ensure the logo is <strong>high-contrast</strong> and clearly visible.</li>
+                <li>Export as <strong>PNG</strong> with a transparent background for versatility.</li>
+                <li>Test the logo at different sizes to ensure it remains legible.</li>
+            </ul>
+
+            <!-- 16. Transparent Circle PNG -->
+            <h2>16. Transparent Circle PNG</h2>
+            <p>
+                The 99toolhub Circle Crop Image tool exports your cropped image as a <strong>PNG with a transparent background</strong>. This is the most versatile format because:
+            </p>
+            <ul>
+                <li>It can be placed on any background color or pattern.</li>
+                <li>It works seamlessly with design software and websites.</li>
+                <li>It maintains the highest quality with lossless compression.</li>
+                <li>It supports transparency, making it ideal for logos and profile pictures.</li>
+            </ul>
+            <p>
+                The transparent background is achieved by rendering the image inside a circular mask and discarding everything outside the circle. The result is a clean, professional circular image ready for any use.
+            </p>
+
+            <!-- 17. Circle Crop with Background Color -->
+            <h2>17. Circle Crop with Background Color</h2>
+            <p>
+                While the 99toolhub Circle Crop Image tool exports with a transparent background by default, you can easily add a background color to your cropped image using any image editor. This is useful when:
+            </p>
+            <ul>
+                <li>You need a specific background color for your design.</li>
+                <li>You want to match the background of a website or document.</li>
+                <li>You prefer a solid background over transparency.</li>
+            </ul>
+            <p>
+                To add a background color, simply open the exported PNG in any image editor (like Paint, Photoshop, or online tools), add a new layer behind the image, and fill it with your desired color.
+            </p>
+
+            <!-- 18. Circle Crop with Transparent Background -->
+            <h2>18. Circle Crop with Transparent Background</h2>
+            <p>
+                The 99toolhub Circle Crop Image tool <strong>automatically exports with a transparent background</strong>. This is the default and recommended output because:
+            </p>
+            <ul>
+                <li>It gives you the most flexibility for using the image in different contexts.</li>
+                <li>It preserves the quality of the original image.</li>
+                <li>It's the preferred format for profile pictures, logos, and avatars.</li>
+                <li>It works seamlessly with all social media platforms.</li>
+            </ul>
+            <p>
+                The transparent background is achieved by rendering the image inside a circular mask and discarding everything outside the circle. The result is a clean, professional circular image ready for any use.
+            </p>
+
+            <!-- 19. Crop Image Without Losing Quality -->
+            <h2>19. Crop Image Without Losing Quality</h2>
+            <p>
+                The 99toolhub Circle Crop Image tool is designed to preserve the original quality of your image. Here's how:
+            </p>
+            <ul>
+                <li><strong>Lossless Processing:</strong> The tool uses canvas-based rendering that doesn't compress or degrade the image.</li>
+                <li><strong>High Resolution:</strong> The cropped image retains the original resolution of the source image.</li>
+                <li><strong>PNG Format:</strong> PNG uses lossless compression, preserving every pixel of the original image.</li>
+                <li><strong>No Re-compression:</strong> The tool does not re-compress the image during processing.</li>
+            </ul>
+            <p>
+                For the best quality, always start with a high-resolution source image. The tool will preserve that quality throughout the cropping process.
+            </p>
+
+            <!-- 20. Best Image Formats (PNG, JPG, WEBP) -->
+            <h2>20. Best Image Formats (PNG, JPG, WEBP)</h2>
+            <p>
+                The 99toolhub Circle Crop Image tool supports downloading in three formats: PNG, JPG, and SVG. Here's when to use each:
+            </p>
+            <ul>
+                <li><strong>PNG:</strong> Best for <strong>transparent backgrounds</strong>, logos, and profile pictures. Lossless compression preserves quality.</li>
+                <li><strong>JPG:</strong> Best for <strong>photos and images</strong> where file size is important. Good quality with smaller file size.</li>
+                <li><strong>SVG:</strong> Best for <strong>vector graphics and logos</strong>. Scalable without losing quality. Ideal for web use.</li>
+            </ul>
+            <p>
+                For most social media profile pictures and logo uses, <strong>PNG</strong> is the recommended format due to its transparency support and lossless quality.
+            </p>
+
+            <!-- 21. Image Quality Tips -->
+            <h2>21. Image Quality Tips</h2>
+            <ul>
+                <li><strong>Start High Resolution:</strong> Use the highest resolution source image available for the best results.</li>
+                <li><strong>Use PNG for Transparency:</strong> PNG is the best format for images with transparent backgrounds.</li>
+                <li><strong>Check Lighting:</strong> Well-lit images crop better and look more professional.</li>
+                <li><strong>Avoid Compression:</strong> Don't compress the image before cropping — compress after cropping if needed.</li>
+                <li><strong>Match the Platform:</strong> Check the recommended size for the platform you're using and crop accordingly.</li>
+                <li><strong>Keep It Simple:</strong> A clean, focused subject works best for circular crops.</li>
+            </ul>
+
+            <!-- 22. Common Circle Crop Mistakes -->
+            <h2>22. Common Circle Crop Mistakes</h2>
+            <ul>
+                <li><strong>❌ Subject Off-Center:</strong> The most common mistake is not centering the subject within the circle.</li>
+                <li><strong>❌ Too Tight Crop:</strong> Cropping too closely to the subject can make the image feel cramped.</li>
+                <li><strong>❌ Low Resolution:</strong> Using a low-resolution source image results in a blurry crop.</li>
+                <li><strong>❌ Not Checking the Background:</strong> A busy background can distract from the subject.</li>
+                <li><strong>❌ Wrong Format:</strong> Using JPG instead of PNG for transparent backgrounds.</li>
+                <li><strong>❌ Forgetting to Zoom:</strong> Not using the zoom feature to properly frame the subject.</li>
+                <li><strong>❌ Not Testing on Different Devices:</strong> Always test your circular image on different screens.</li>
+            </ul>
+
+            <!-- 23. How to Get Perfect Circular Crops -->
+            <h2>23. How to Get Perfect Circular Crops</h2>
+            <ul>
+                <li><strong>✅ Center the Subject:</strong> Use the drag feature to position the subject perfectly in the center.</li>
+                <li><strong>✅ Use the Grid:</strong> The guide grid helps you align the subject using the rule of thirds.</li>
+                <li><strong>✅ Adjust Zoom:</strong> Use the zoom slider to make the subject fill the circle appropriately.</li>
+                <li><strong>✅ Preview Before Download:</strong> Always check the preview before downloading.</li>
+                <li><strong>✅ Use High Resolution:</strong> Start with the highest resolution image available.</li>
+                <li><strong>✅ Export as PNG:</strong> PNG preserves quality and supports transparent backgrounds.</li>
+                <li><strong>✅ Check on Different Screens:</strong> Test the image on different devices to ensure it looks good everywhere.</li>
+            </ul>
+
+            <!-- 24. Supported Image Formats -->
+            <h2>24. Supported Image Formats</h2>
+            <p>
+                The 99toolhub Circle Crop Image tool supports the following input formats:
+            </p>
+            <ul>
+                <li><strong>JPG / JPEG:</strong> The most common format for photos and web images.</li>
+                <li><strong>PNG:</strong> Supports transparency and lossless compression.</li>
+                <li><strong>WEBP:</strong> Modern format with superior compression and quality.</li>
+                <li><strong>GIF:</strong> Supports animation and transparency (first frame used).</li>
+            </ul>
+            <p>
+                For output, the tool supports <strong>PNG</strong> (with transparency), <strong>JPG</strong>, and <strong>SVG</strong> (vector format).
+            </p>
+
+            <!-- 25. Privacy & Security -->
+            <h2>25. Privacy & Security</h2>
+            <p>
+                Your privacy is our priority. Here's why the 99toolhub Circle Crop Image tool is 100% secure:
+            </p>
+            <ul>
+                <li><strong>🔒 Client-Side Processing:</strong> All image processing happens locally in your browser. No files are uploaded to any server.</li>
+                <li><strong>🛡️ No Data Storage:</strong> We don't store, save, or share your images or any data.</li>
+                <li><strong>🚫 No Tracking:</strong> We don't track your activity or collect any personal data.</li>
+                <li><strong>🔐 Encrypted Connection:</strong> The page is served over HTTPS for secure delivery.</li>
+                <li><strong>✅ No Watermarks:</strong> Your images are clean and professional — no logos or watermarks added.</li>
+            </ul>
+            <p>
+                You can use the tool with complete confidence that your images remain private and secure.
+            </p>
+
+            <!-- 26. FAQ -->
+            <h2>26. Frequently Asked Questions (FAQ)</h2>
+
+            <div class="faq-grid">
+                <div class="faq-item">
+                    <div class="faq-q">What is a circle crop image? <i class="fas fa-chevron-down"></i></div>
+                    <div class="faq-a">A circle crop image is an image that has been cut into a perfect circular shape, removing the rectangular corners. It's commonly used for profile pictures, logos, and avatars.</div>
+                </div>
+                <div class="faq-item">
+                    <div class="faq-q">How do I circle crop an image? <i class="fas fa-chevron-down"></i></div>
+                    <div class="faq-a">Upload your image to the 99toolhub Circle Crop Image tool, adjust the position and zoom using drag and the zoom slider, then click "Apply Crop" and download your circular image.</div>
+                </div>
+                <div class="faq-item">
+                    <div class="faq-q">What format should I use for a profile picture? <i class="fas fa-chevron-down"></i></div>
+                    <div class="faq-a">PNG is the best format for profile pictures because it supports transparent backgrounds and lossless quality. JPG is a good alternative if file size is a concern.</div>
+                </div>
+                <div class="faq-item">
+                    <div class="faq-q">Does the tool support transparent backgrounds? <i class="fas fa-chevron-down"></i></div>
+                    <div class="faq-a">Yes! The 99toolhub Circle Crop Image tool automatically exports with a transparent background when you download as PNG.</div>
+                </div>
+                <div class="faq-item">
+                    <div class="faq-q">What image formats can I upload? <i class="fas fa-chevron-down"></i></div>
+                    <div class="faq-a">You can upload JPG, JPEG, PNG, WEBP, and GIF images. The tool supports all common image formats.</div>
+                </div>
+                <div class="faq-item">
+                    <div class="faq-q">Is my image stored anywhere? <i class="fas fa-chevron-down"></i></div>
+                    <div class="faq-a">No. All processing happens locally in your browser. Your images are never uploaded to any server or stored anywhere.</div>
+                </div>
+                <div class="faq-item">
+                    <div class="faq-q">What is the maximum file size? <i class="fas fa-chevron-down"></i></div>
+                    <div class="faq-a">The maximum file size is 20MB. For larger files, we recommend compressing them before uploading.</div>
+                </div>
+                <div class="faq-item">
+                    <div class="faq-q">Can I crop an image into a circle on my phone? <i class="fas fa-chevron-down"></i></div>
+                    <div class="faq-a">Yes! The 99toolhub Circle Crop Image tool is fully responsive and works on all devices, including phones and tablets.</div>
+                </div>
+                <div class="faq-item">
+                    <div class="faq-q">What's the difference between PNG, JPG, and SVG? <i class="fas fa-chevron-down"></i></div>
+                    <div class="faq-a">PNG supports transparency and lossless quality, JPG is smaller in size but doesn't support transparency, and SVG is a vector format that scales without losing quality.</div>
+                </div>
+                <div class="faq-item">
+                    <div class="faq-q">Is this tool free? <i class="fas fa-chevron-down"></i></div>
+                    <div class="faq-a">Yes! The 99toolhub Circle Crop Image tool is completely free to use. No registration, no hidden charges.</div>
+                </div>
+            </div>
+
+            <!-- 27. Related Image Tools -->
+            <h2>27. Related Image Tools</h2>
+            <div class="related-grid">
+                <a href="#" class="related-card">
+                    <i class="fas fa-crop"></i>
+                    <h4>Image Cropper</h4>
+                    <p>Free crop any image</p>
+                </a>
+                <a href="#" class="related-card">
+                    <i class="fas fa-vector-square"></i>
+                    <h4>Image Resizer</h4>
+                    <p>Resize images online</p>
+                </a>
+                <a href="#" class="related-card">
+                    <i class="fas fa-exchange-alt"></i>
+                    <h4>Image Converter</h4>
+                    <p>Convert image formats</p>
+                </a>
+                <a href="#" class="related-card">
+                    <i class="fas fa-compress-arrows-alt"></i>
+                    <h4>Image Compressor</h4>
+                    <p>Compress images</p>
+                </a>
+                <a href="#" class="related-card">
+                    <i class="fas fa-rotate"></i>
+                    <h4>Image Rotator</h4>
+                    <p>Rotate images freely</p>
+                </a>
+                <a href="#" class="related-card">
+                    <i class="fas fa-palette"></i>
+                    <h4>Background Remover</h4>
+                    <p>Remove image backgrounds</p>
+                </a>
+            </div>
+
+            <!-- 28. Disclaimer -->
+            <h2>28. Disclaimer</h2>
+            <div class="disclaimer-box" style="margin-top:0;">
+                <div class="d-title"><i class="fas fa-triangle-exclamation"></i> Disclaimer</div>
+                <p>
+                    This Circle Crop Image tool is provided for <strong>informational and personal use purposes only</strong>.
+                    All image processing is done locally in your browser — no data is uploaded to any server. Your privacy is fully protected.
+                    99toolhub is not responsible for any misuse or damages arising from the use of this tool. Always verify the output before using it in production or legal environments.
+                </p>
+                <p style="margin-top:6px;">
+                    The tool is designed to work with common image formats and sizes. For best results, use high-resolution images and follow the tips and guidelines provided in this documentation.
+                </p>
+            </div>
+
+            <!-- 29. Conclusion -->
+            <h2>29. Conclusion</h2>
+            <p>
+                The <strong>99toolhub Circle Crop Image</strong> tool is the easiest and fastest way to create perfect circular images with transparent backgrounds. Whether you need a professional profile picture, a brand logo, or a social media avatar, this tool delivers high-quality results in seconds.
+            </p>
+            <p>
+                With features like <strong>drag-to-position, zoom control, and multiple download formats</strong> (PNG, JPG, SVG), you have complete control over the final result. And with <strong>client-side processing</strong>, your images stay private and secure.
+            </p>
+            <p>
+                Start using the 99toolhub Circle Crop Image tool today and create beautiful circular images for all your needs. Remember to follow the tips and guidelines in this guide for the best results. Happy cropping!
+            </p>
+
+        </div>
+
+        <!-- ===== DISCLAIMER CARD ===== -->
+        <div class="card no-print">
+            <div class="disclaimer-box" style="margin-top:0;">
+                <div class="d-title"><i class="fas fa-triangle-exclamation"></i> Privacy & Security Note</div>
+                <p>
+                    All image processing is done <strong>entirely in your browser</strong>. No images are uploaded to any server, stored, or shared. Your data stays on your device. The 99toolhub Circle Crop Image tool is 100% private and secure.
+                </p>
+            </div>
+        </div>
+
+        <!-- ===== FOOTER ===== -->
+        <div class="footer no-print">
+            <p>
+                <i class="fas fa-crop-alt" style="color:#10b981;"></i>
+                <strong>99toolhub</strong> &bull; Circle Crop Image &bull;
+                <span style="color:#10b981;">♥</span> Made with care
+            </p>
+            <p style="font-size:13px; margin-top:2px; color:#94a3b8;">
+                &copy; 2026 99toolhub &bull; All rights reserved
+            </p>
+        </div>
+
+    </div>
+
+    <!-- ===== TOAST ===== -->
+    <div class="toast no-print" id="toast"><i class="fas fa-check-circle"></i> <span id="toastMsg">Done!</span></div>
+
+
+    <!-- ================================================================
+    JAVASCRIPT
+    ================================================================ -->
+    <script>
+        (function() {
+            'use strict';
+
+            // ─── DOM REFS ───
+            const uploadZone = document.getElementById('uploadZone');
+            const fileInput = document.getElementById('fileInput');
+            const uploadedPreview = document.getElementById('uploadedPreview');
+            const fileName = document.getElementById('fileName');
+            const removeFileBtn = document.getElementById('removeFileBtn');
+            const controlsSection = document.getElementById('controlsSection');
+            const cropArea = document.getElementById('cropArea');
+            const canvas = document.getElementById('cropCanvas');
+            const ctx = canvas.getContext('2d');
+            const zoomSlider = document.getElementById('zoomSlider');
+            const zoomValue = document.getElementById('zoomValue');
+            const resetPosBtn = document.getElementById('resetPosBtn');
+            const resetZoomBtn = document.getElementById('resetZoomBtn');
+            const applyCropBtn = document.getElementById('applyCropBtn');
+            const downloadBtn = document.getElementById('downloadBtn');
+            const resetAllBtn = document.getElementById('resetAllBtn');
+            const previewImage = document.getElementById('previewImage');
+            const emptyPreview = document.getElementById('emptyPreview');
+            const previewSize = document.getElementById('previewSize');
+            const previewFormat = document.getElementById('previewFormat');
+            const previewSection = document.getElementById('previewSection');
+            const downloadPng = document.getElementById('downloadPng');
+            const downloadJpg = document.getElementById('downloadJpg');
+            const downloadSvg = document.getElementById('downloadSvg');
+            const copyBtn = document.getElementById('copyBtn');
+            const shareBtn = document.getElementById('shareBtn');
+
+            const toast = document.getElementById('toast');
+            const toastMsg = document.getElementById('toastMsg');
+
+            // ─── STATE ───
+            let sourceImage = null;
+            let canvasWidth = 0;
+            let canvasHeight = 0;
+            let imgX = 0;
+            let imgY = 0;
+            let imgScale = 1;
+            let isDragging = false;
+            let dragStartX = 0;
+            let dragStartY = 0;
+            let imgStartX = 0;
+            let imgStartY = 0;
+            let croppedDataURL = null;
+            let isImageLoaded = false;
+
+            const CIRCLE_RADIUS_RATIO = 0.45;
+
+            // ─── TOAST ───
+            function showToast(msg) {
+                toastMsg.textContent = msg;
+                toast.classList.add('show');
+                clearTimeout(toast._timer);
+                toast._timer = setTimeout(() => toast.classList.remove('show'), 3000);
+            }
+
+            // ─── INIT CANVAS ───
+            function initCanvas() {
+                const rect = cropArea.getBoundingClientRect();
+                const size = Math.min(rect.width - 4, 480);
+                canvas.width = size;
+                canvas.height = size;
+                canvasWidth = size;
+                canvasHeight = size;
+                canvas.style.width = size + 'px';
+                canvas.style.height = size + 'px';
+            }
+
+            // ─── DRAW CIRCLE CROP ───
+            function drawCircleCrop() {
+                if (!sourceImage) {
+                    ctx.clearRect(0, 0, canvasWidth, canvasHeight);
+                    ctx.fillStyle = '#f1f5f9';
+                    ctx.fillRect(0, 0, canvasWidth, canvasHeight);
+                    ctx.fillStyle = '#94a3b8';
+                    ctx.font = '16px Inter, sans-serif';
+                    ctx.textAlign = 'center';
+                    ctx.textBaseline = 'middle';
+                    ctx.fillText('Upload an image', canvasWidth / 2, canvasHeight / 2);
+                    return;
+                }
+
+                ctx.clearRect(0, 0, canvasWidth, canvasHeight);
+
+                const imgW = sourceImage.width;
+                const imgH = sourceImage.height;
+                const scaledW = imgW * imgScale;
+                const scaledH = imgH * imgScale;
+                const drawX = imgX - scaledW / 2;
+                const drawY = imgY - scaledH / 2;
+
+                ctx.save();
+                ctx.beginPath();
+                ctx.arc(canvasWidth / 2, canvasHeight / 2, canvasWidth * CIRCLE_RADIUS_RATIO, 0, Math.PI * 2);
+                ctx.closePath();
+                ctx.clip();
+
+                ctx.drawImage(sourceImage, drawX, drawY, scaledW, scaledH);
+
+                ctx.restore();
+
+                ctx.beginPath();
+                ctx.arc(canvasWidth / 2, canvasHeight / 2, canvasWidth * CIRCLE_RADIUS_RATIO, 0, Math.PI * 2);
+                ctx.strokeStyle = 'rgba(16, 185, 129, 0.3)';
+                ctx.lineWidth = 2;
+                ctx.stroke();
+            }
+
+            // ─── UPDATE POSITION ───
+            function updatePosition(clientX, clientY) {
+                const rect = cropArea.getBoundingClientRect();
+                const scaleX = canvasWidth / rect.width;
+                const scaleY = canvasHeight / rect.height;
+
+                const dx = (clientX - dragStartX) * scaleX;
+                const dy = (clientY - dragStartY) * scaleY;
+
+                imgX = imgStartX + dx;
+                imgY = imgStartY + dy;
+
+                drawCircleCrop();
+            }
+
+            // ─── LOAD IMAGE ───
+            function loadImage(file) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    const img = new Image();
+                    img.onload = function() {
+                        sourceImage = img;
+                        isImageLoaded = true;
+
+                        const imgW = img.width;
+                        const imgH = img.height;
+                        const canvasSize = canvasWidth;
+                        const scale = Math.min(canvasSize / imgW, canvasSize / imgH) * 0.7;
+                        imgScale = scale;
+                        imgX = canvasSize / 2;
+                        imgY = canvasSize / 2;
+
+                        uploadedPreview.src = e.target.result;
+                        uploadedPreview.classList.add('show');
+                        fileName.textContent = file.name;
+                        fileName.classList.add('show');
+                        removeFileBtn.classList.add('show');
+                        controlsSection.style.display = 'block';
+                        previewSection.style.display = 'block';
+                        emptyPreview.style.display = 'none';
+
+                        zoomSlider.value = 100;
+                        zoomValue.textContent = '100%';
+
+                        drawCircleCrop();
+                        showToast('✅ Image uploaded: ' + file.name);
+                    };
+                    img.src = e.target.result;
+                };
+                reader.readAsDataURL(file);
+            }
+
+            // ─── APPLY CROP ───
+            function applyCrop() {
+                if (!sourceImage) {
+                    showToast('⚠️ Please upload an image first');
+                    return;
+                }
+
+                const size = canvasWidth;
+                const radius = size * CIRCLE_RADIUS_RATIO;
+
+                const resultCanvas = document.createElement('canvas');
+                const resultSize = Math.round(radius * 2);
+                resultCanvas.width = resultSize;
+                resultCanvas.height = resultSize;
+                const rctx = resultCanvas.getContext('2d');
+
+                rctx.clearRect(0, 0, resultSize, resultSize);
+
+                const imgW = sourceImage.width;
+                const imgH = sourceImage.height;
+                const scaledW = imgW * imgScale;
+                const scaledH = imgH * imgScale;
+                const drawX = (resultSize / 2) - (imgX - (canvasWidth / 2) + scaledW / 2);
+                const drawY = (resultSize / 2) - (imgY - (canvasHeight / 2) + scaledH / 2);
+
+                rctx.save();
+                rctx.beginPath();
+                rctx.arc(resultSize / 2, resultSize / 2, radius, 0, Math.PI * 2);
+                rctx.closePath();
+                rctx.clip();
+
+                const imgDrawX = (resultSize / 2) - (imgX - (canvasWidth / 2) + scaledW / 2);
+                const imgDrawY = (resultSize / 2) - (imgY - (canvasHeight / 2) + scaledH / 2);
+                rctx.drawImage(sourceImage, imgDrawX, imgDrawY, scaledW, scaledH);
+
+                rctx.restore();
+
+                rctx.beginPath();
+                rctx.arc(resultSize / 2, resultSize / 2, radius - 1, 0, Math.PI * 2);
+                rctx.strokeStyle = 'rgba(16, 185, 129, 0.2)';
+                rctx.lineWidth = 1.5;
+                rctx.stroke();
+
+                croppedDataURL = resultCanvas.toDataURL('image/png');
+
+                previewImage.src = croppedDataURL;
+                previewImage.style.display = 'block';
+                previewSize.textContent = resultSize + '×' + resultSize + ' px';
+                previewFormat.textContent = 'PNG (transparent)';
+
+                showToast('✅ Circle crop applied!');
+            }
+
+            // ─── DOWNLOAD ───
+            function downloadImage(type) {
+                if (!croppedDataURL) {
+                    showToast('⚠️ Please apply crop first');
+                    return;
+                }
+
+                let mimeType = 'image/png';
+                let ext = 'png';
+                let quality = 0.92;
+
+                if (type === 'jpg') {
+                    mimeType = 'image/jpeg';
+                    ext = 'jpg';
+                    quality = 0.92;
+                } else if (type === 'svg') {
+                    const img = new Image();
+                    img.onload = function() {
+                        const size = img.width;
+                        const svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+                        svg.setAttribute('width', size);
+                        svg.setAttribute('height', size);
+                        svg.setAttribute('viewBox', '0 0 ' + size + ' ' + size);
+                        const defs = document.createElementNS('http://www.w3.org/2000/svg', 'defs');
+                        const clip = document.createElementNS('http://www.w3.org/2000/svg', 'clipPath');
+                        clip.setAttribute('id', 'circleClip');
+                        const circle = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
+                        circle.setAttribute('cx', size / 2);
+                        circle.setAttribute('cy', size / 2);
+                        circle.setAttribute('r', size / 2);
+                        clip.appendChild(circle);
+                        defs.appendChild(clip);
+                        svg.appendChild(defs);
+                        const imageEl = document.createElementNS('http://www.w3.org/2000/svg', 'image');
+                        imageEl.setAttribute('href', croppedDataURL);
+                        imageEl.setAttribute('width', size);
+                        imageEl.setAttribute('height', size);
+                        imageEl.setAttribute('clip-path', 'url(#circleClip)');
+                        svg.appendChild(imageEl);
+                        const svgStr = new XMLSerializer().serializeToString(svg);
+                        const blob = new Blob([svgStr], { type: 'image/svg+xml' });
+                        const link = document.createElement('a');
+                        link.download = 'circle-crop-99toolhub.svg';
+                        link.href = URL.createObjectURL(blob);
+                        link.click();
+                        URL.revokeObjectURL(link.href);
+                        showToast('📥 SVG downloaded');
+                    };
+                    img.src = croppedDataURL;
+                    return;
+                }
+
+                const link = document.createElement('a');
+                link.download = 'circle-crop-99toolhub.' + ext;
+                link.href = croppedDataURL;
+                link.click();
+                showToast('📥 ' + ext.toUpperCase() + ' downloaded');
+            }
+
+            // ─── COPY ───
+            function copyImage() {
+                if (!croppedDataURL) {
+                    showToast('⚠️ Please apply crop first');
+                    return;
+                }
+
+                const img = new Image();
+                img.onload = function() {
+                    const c = document.createElement('canvas');
+                    c.width = img.width;
+                    c.height = img.height;
+                    const cx = c.getContext('2d');
+                    cx.drawImage(img, 0, 0);
+                    c.toBlob(function(blob) {
+                        navigator.clipboard?.write([
+                            new ClipboardItem({ 'image/png': blob })
+                        ]).then(() => {
+                            showToast('📋 Image copied to clipboard!');
+                        }).catch(() => {
+                            showToast('⚠️ Copy failed. Try downloading instead.');
+                        });
+                    });
+                };
+                img.src = croppedDataURL;
+            }
+
+            // ─── SHARE ───
+            function shareImage() {
+                if (!croppedDataURL) {
+                    showToast('⚠️ Please apply crop first');
+                    return;
+                }
+
+                const img = new Image();
+                img.onload = function() {
+                    const c = document.createElement('canvas');
+                    c.width = img.width;
+                    c.height = img.height;
+                    const cx = c.getContext('2d');
+                    cx.drawImage(img, 0, 0);
+                    c.toBlob(function(blob) {
+                        if (navigator.share) {
+                            const file = new File([blob], 'circle-crop.png', { type: 'image/png' });
+                            navigator.share({
+                                title: 'Circle Crop Image',
+                                files: [file]
+                            }).catch(() => {});
+                        } else {
+                            showToast('📤 Share not supported on this device');
+                        }
+                    });
+                };
+                img.src = croppedDataURL;
+            }
+
+            // ─── RESET POSITION ───
+            function resetPosition() {
+                if (!sourceImage) return;
+                imgX = canvasWidth / 2;
+                imgY = canvasHeight / 2;
+                drawCircleCrop();
+                showToast('🔄 Position reset');
+            }
+
+            // ─── RESET ZOOM ───
+            function resetZoom() {
+                if (!sourceImage) return;
+                const canvasSize = canvasWidth;
+                const imgW = sourceImage.width;
+                const imgH = sourceImage.height;
+                imgScale = Math.min(canvasSize / imgW, canvasSize / imgH) * 0.7;
+                zoomSlider.value = Math.round(imgScale / (Math.min(canvasSize / imgW, canvasSize / imgH) * 0.7) * 100);
+                zoomValue.textContent = Math.round(zoomSlider.value) + '%';
+                drawCircleCrop();
+                showToast('🔍 Zoom reset');
+            }
+
+            // ─── RESET ALL ───
+            function resetAll() {
+                sourceImage = null;
+                isImageLoaded = false;
+                croppedDataURL = null;
+                imgX = 0;
+                imgY = 0;
+                imgScale = 1;
+                uploadedPreview.classList.remove('show');
+                uploadedPreview.src = '';
+                fileName.classList.remove('show');
+                removeFileBtn.classList.remove('show');
+                controlsSection.style.display = 'none';
+                previewSection.style.display = 'none';
+                previewImage.style.display = 'none';
+                previewImage.src = '';
+                emptyPreview.style.display = 'flex';
+                fileInput.value = '';
+                zoomSlider.value = 100;
+                zoomValue.textContent = '100%';
+                drawCircleCrop();
+                showToast('🔄 Reset complete');
+            }
+
+            // ─── EVENT BINDINGS ───
+
+            // Upload
+            uploadZone.addEventListener('click', () => fileInput.click());
+
+            uploadZone.addEventListener('dragover', (e) => {
+                e.preventDefault();
+                uploadZone.classList.add('dragover');
+            });
+
+            uploadZone.addEventListener('dragleave', () => {
+                uploadZone.classList.remove('dragover');
+            });
+
+            uploadZone.addEventListener('drop', (e) => {
+                e.preventDefault();
+                uploadZone.classList.remove('dragover');
+                if (e.dataTransfer.files.length) {
+                    loadImage(e.dataTransfer.files[0]);
+                }
+            });
+
+            fileInput.addEventListener('change', function() {
+                if (this.files.length) {
+                    loadImage(this.files[0]);
+                }
+                this.value = '';
+            });
+
+            removeFileBtn.addEventListener('click', (e) => {
+                e.stopPropagation();
+                resetAll();
+            });
+
+            // Canvas drag
+            cropArea.addEventListener('mousedown', function(e) {
+                if (!sourceImage) return;
+                isDragging = true;
+                const rect = this.getBoundingClientRect();
+                dragStartX = e.clientX;
+                dragStartY = e.clientY;
+                imgStartX = imgX;
+                imgStartY = imgY;
+                this.style.cursor = 'grabbing';
+                e.preventDefault();
+            });
+
+            document.addEventListener('mousemove', function(e) {
+                if (!isDragging) return;
+                updatePosition(e.clientX, e.clientY);
+                e.preventDefault();
+            });
+
+            document.addEventListener('mouseup', function() {
+                if (isDragging) {
+                    isDragging = false;
+                    cropArea.style.cursor = 'grab';
+                }
+            });
+
+            // Touch support
+            let touchStartX = 0,
+                touchStartY = 0,
+                touchImgStartX = 0,
+                touchImgStartY = 0;
+            let isTouching = false;
+
+            cropArea.addEventListener('touchstart', function(e) {
+                if (!sourceImage) return;
+                const touch = e.touches[0];
+                if (!touch) return;
+                isTouching = true;
+                touchStartX = touch.clientX;
+                touchStartY = touch.clientY;
+                touchImgStartX = imgX;
+                touchImgStartY = imgY;
+                e.preventDefault();
+            }, { passive: false });
+
+            document.addEventListener('touchmove', function(e) {
+                if (!isTouching) return;
+                const touch = e.touches[0];
+                if (!touch) return;
+                const rect = cropArea.getBoundingClientRect();
+                const scaleX = canvasWidth / rect.width;
+                const scaleY = canvasHeight / rect.height;
+                const dx = (touch.clientX - touchStartX) * scaleX;
+                const dy = (touch.clientY - touchStartY) * scaleY;
+                imgX = touchImgStartX + dx;
+                imgY = touchImgStartY + dy;
+                drawCircleCrop();
+                e.preventDefault();
+            }, { passive: false });
+
+            document.addEventListener('touchend', function() {
+                isTouching = false;
+            });
+
+            // Zoom
+            zoomSlider.addEventListener('input', function() {
+                const val = parseFloat(this.value);
+                zoomValue.textContent = Math.round(val) + '%';
+                if (sourceImage) {
+                    const baseScale = Math.min(canvasWidth / sourceImage.width, canvasHeight / sourceImage.height) *
+                    0.7;
+                    imgScale = baseScale * (val / 100);
+                    drawCircleCrop();
+                }
+            });
+
+            // Buttons
+            resetPosBtn.addEventListener('click', resetPosition);
+            resetZoomBtn.addEventListener('click', resetZoom);
+            applyCropBtn.addEventListener('click', applyCrop);
+            downloadBtn.addEventListener('click', () => downloadImage('png'));
+            resetAllBtn.addEventListener('click', resetAll);
+
+            downloadPng.addEventListener('click', () => downloadImage('png'));
+            downloadJpg.addEventListener('click', () => downloadImage('jpg'));
+            downloadSvg.addEventListener('click', () => downloadImage('svg'));
+            copyBtn.addEventListener('click', copyImage);
+            shareBtn.addEventListener('click', shareImage);
+
+            // ─── FAQ TOGGLE ───
+            document.querySelectorAll('.faq-item').forEach(item => {
+                item.addEventListener('click', function() {
+                    this.classList.toggle('open');
+                });
+            });
+
+            // ─── INIT ───
+            initCanvas();
+            drawCircleCrop();
+
+            let resizeTimer;
+            window.addEventListener('resize', function() {
+                clearTimeout(resizeTimer);
+                resizeTimer = setTimeout(() => {
+                    const oldWidth = canvasWidth;
+                    initCanvas();
+                    if (sourceImage) {
+                        const ratio = canvasWidth / oldWidth;
+                        imgX *= ratio;
+                        imgY *= ratio;
+                        imgScale *= ratio;
+                        drawCircleCrop();
+                    } else {
+                        drawCircleCrop();
+                    }
+                }, 250);
+            });
+
+            console.log('✅ 99toolhub Circle Crop Image loaded.');
+            console.log('🔄 Drag to reposition, zoom to adjust, download as PNG with transparent background.');
+
+        })();
+    </script>
+
+</body>
+</html>

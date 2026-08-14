@@ -1,0 +1,2112 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <link rel="icon" type="image/png" href="../../images/favicon.png">
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>QR Code Generator – 99toolhub</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js">
+    </script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js">
+    </script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+    <style>
+        /* ===== RESET & BASE ===== */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Arial, sans-serif;
+            background: #f0f4f8;
+            color: #0b1e33;
+            line-height: 1.8;
+            padding: 24px;
+        }
+        .app-wrapper {
+            max-width: 1100px;
+            width: 100%;
+            margin: 0 auto;
+            background: #ffffff;
+            border-radius: 32px;
+            padding: 32px 36px 40px;
+            box-shadow: 0 30px 80px rgba(0, 20, 40, 0.08);
+        }
+
+        /* ===== HEADER ===== */
+        .header {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            padding-bottom: 16px;
+            border-bottom: 2px solid #eef3f7;
+        }
+        .header-icon {
+            width: 52px;
+            height: 52px;
+            background: linear-gradient(135deg, #1f2f8f, #5367ff);
+            border-radius: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 26px;
+            box-shadow: 0 6px 20px rgba(31, 47, 143, 0.3);
+            flex-shrink: 0;
+        }
+        .header-text h1 {
+            font-size: 26px;
+            font-weight: 700;
+            letter-spacing: -0.3px;
+        }
+        .header-text h1 span {
+            color: #5367ff;
+        }
+        .header-text p {
+            font-size: 14px;
+            color: #5b6f82;
+        }
+        .live-badge {
+            display: inline-block;
+            background: #e8ecff;
+            color: #1f2f8f;
+            font-size: 11px;
+            font-weight: 600;
+            padding: 2px 14px;
+            border-radius: 20px;
+            margin-top: 2px;
+        }
+
+        /* ===== TOOL SECTION ===== */
+        .tool-section {
+            margin-top: 20px;
+        }
+
+        /* QR Type Selector */
+        .qr-type-selector {
+            margin-bottom: 20px;
+        }
+        .qr-type-selector label {
+            display: block;
+            font-weight: 700;
+            font-size: 14px;
+            color: #1f2f8f;
+            margin-bottom: 8px;
+        }
+        .qr-type-selector label i {
+            margin-right: 8px;
+            color: #5367ff;
+        }
+        .qr-type-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+            gap: 6px;
+        }
+        .qr-type-btn {
+            padding: 8px 12px;
+            border: 2px solid #d8dcff;
+            border-radius: 10px;
+            background: #fafbff;
+            font-size: 12px;
+            font-weight: 600;
+            color: #1f2f8f;
+            cursor: pointer;
+            transition: 0.2s;
+            text-align: center;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
+        }
+        .qr-type-btn:hover {
+            border-color: #5367ff;
+            background: #f0f2ff;
+        }
+        .qr-type-btn.active {
+            background: #1f2f8f;
+            color: white;
+            border-color: #1f2f8f;
+        }
+        .qr-type-btn.active i {
+            color: white;
+        }
+        .qr-type-btn i {
+            font-size: 14px;
+            color: #5367ff;
+        }
+        @media (max-width: 700px) {
+            .qr-type-grid {
+                grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+            }
+            .qr-type-btn {
+                font-size: 11px;
+                padding: 6px 8px;
+            }
+        }
+
+        /* Input Fields */
+        .input-group {
+            margin-bottom: 16px;
+        }
+        .input-group label {
+            display: block;
+            font-weight: 600;
+            font-size: 13px;
+            color: #1f2f8f;
+            margin-bottom: 4px;
+        }
+        .input-group label i {
+            margin-right: 6px;
+            color: #5367ff;
+        }
+        .input-group input,
+        .input-group textarea,
+        .input-group select {
+            width: 100%;
+            padding: 12px 16px;
+            border: 2px solid #d8dcff;
+            border-radius: 10px;
+            font-size: 15px;
+            font-weight: 500;
+            outline: none;
+            background: #fafbff;
+            transition: 0.25s;
+            color: #0b1e33;
+            font-family: inherit;
+        }
+        .input-group input:focus,
+        .input-group textarea:focus,
+        .input-group select:focus {
+            border-color: #5367ff;
+            box-shadow: 0 0 0 4px rgba(83, 103, 255, 0.10);
+            background: #fff;
+        }
+        .input-group textarea {
+            resize: vertical;
+            min-height: 60px;
+        }
+        .input-group input::placeholder,
+        .input-group textarea::placeholder {
+            color: #9aafc2;
+            font-weight: 400;
+        }
+        .input-group .hint {
+            font-size: 12px;
+            color: #9aafc2;
+            margin-top: 3px;
+        }
+        .input-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 16px;
+        }
+        @media (max-width: 600px) {
+            .input-row {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .btn {
+            padding: 12px 28px;
+            border: none;
+            border-radius: 12px;
+            font-weight: 700;
+            font-size: 15px;
+            cursor: pointer;
+            transition: 0.25s;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .btn-primary {
+            background: #1f2f8f;
+            color: white;
+            box-shadow: 0 4px 14px rgba(31, 47, 143, 0.25);
+        }
+        .btn-primary:hover {
+            background: #16206b;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(31, 47, 143, 0.35);
+        }
+        .btn-secondary {
+            background: #e8ecff;
+            color: #1f2f8f;
+        }
+        .btn-secondary:hover {
+            background: #d0d6ff;
+            transform: translateY(-2px);
+        }
+        .btn-success {
+            background: #0f7b3a;
+            color: white;
+        }
+        .btn-success:hover {
+            background: #0b652f;
+            transform: translateY(-2px);
+        }
+        .btn-danger {
+            background: #dc2626;
+            color: white;
+        }
+        .btn-danger:hover {
+            background: #b91c1c;
+            transform: translateY(-2px);
+        }
+        .btn-outline {
+            background: transparent;
+            border: 2px solid #d8dcff;
+            color: #1f2f8f;
+        }
+        .btn-outline:hover {
+            border-color: #5367ff;
+            background: #f0f2ff;
+            transform: translateY(-2px);
+        }
+
+        .btn-group {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-top: 16px;
+        }
+
+        /* ===== QR DISPLAY ===== */
+        .qr-display-area {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 28px;
+            margin-top: 28px;
+            padding: 24px;
+            background: #fafbff;
+            border-radius: 18px;
+            border: 2px solid #e5e8ff;
+            align-items: start;
+        }
+        @media (max-width: 700px) {
+            .qr-display-area {
+                grid-template-columns: 1fr;
+                padding: 16px;
+            }
+        }
+
+        .qr-preview {
+            text-align: center;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 260px;
+        }
+        .qr-preview .placeholder {
+            color: #9aafc2;
+            font-size: 16px;
+            font-weight: 500;
+        }
+        .qr-preview .placeholder i {
+            font-size: 48px;
+            display: block;
+            margin-bottom: 12px;
+            color: #d8dcff;
+        }
+        .qr-preview #qrcode {
+            display: inline-block;
+            padding: 16px;
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.04);
+        }
+        .qr-preview #qrcode canvas,
+        .qr-preview #qrcode img {
+            display: block !important;
+            margin: 0 auto;
+        }
+
+        .qr-info {
+            padding: 4px 0;
+        }
+        .qr-info .info-title {
+            font-weight: 700;
+            font-size: 16px;
+            color: #1f2f8f;
+            margin-bottom: 12px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .qr-info .info-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 8px 0;
+            border-bottom: 1px solid #eef3f7;
+            font-size: 14px;
+        }
+        .qr-info .info-item:last-child {
+            border-bottom: none;
+        }
+        .qr-info .info-item .label {
+            color: #6b85a0;
+            font-weight: 500;
+        }
+        .qr-info .info-item .value {
+            font-weight: 600;
+            color: #0b1e33;
+            text-align: right;
+            word-break: break-all;
+            max-width: 60%;
+        }
+
+        .qr-info .info-actions {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-top: 14px;
+        }
+        .qr-info .info-actions .action-btn {
+            padding: 6px 14px;
+            border: 2px solid #e9eef3;
+            border-radius: 40px;
+            background: white;
+            font-weight: 600;
+            font-size: 11px;
+            color: #1e3a5f;
+            cursor: pointer;
+            transition: 0.2s;
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+        }
+        .qr-info .info-actions .action-btn:hover {
+            border-color: #5367ff;
+            background: #f0f2ff;
+            transform: translateY(-2px);
+        }
+        .qr-info .info-actions .action-btn i {
+            font-size: 12px;
+        }
+        .qr-info .info-actions .action-btn.pdf-btn {
+            background: #fef2f2;
+            border-color: #fca5a5;
+            color: #991b1b;
+        }
+        .qr-info .info-actions .action-btn.pdf-btn:hover {
+            background: #fee2e2;
+        }
+
+        /* ===== TOAST ===== */
+        .toast {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            background: #0b1e33;
+            color: white;
+            padding: 12px 26px;
+            border-radius: 16px;
+            font-weight: 500;
+            box-shadow: 0 12px 40px rgba(0, 0, 0, 0.2);
+            transform: translateY(120px);
+            opacity: 0;
+            transition: 0.4s ease;
+            z-index: 999;
+            max-width: 400px;
+            font-size: 14px;
+        }
+        .toast.show {
+            transform: translateY(0);
+            opacity: 1;
+        }
+        .toast i {
+            margin-right: 10px;
+        }
+
+        /* ===== CONTENT WRAP ===== */
+        .content-wrap {
+            margin-top: 40px;
+            padding-top: 32px;
+            border-top: 2px solid #eef3f7;
+        }
+        .content-wrap h2 {
+            font-size: 26px;
+            font-weight: 700;
+            color: #0b1e33;
+            margin-top: 34px;
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+        .content-wrap h2:first-of-type {
+            margin-top: 0;
+        }
+        .content-wrap h2 .badge {
+            font-size: 11px;
+            background: #5367ff;
+            color: #fff;
+            padding: 2px 14px;
+            border-radius: 40px;
+            font-weight: 600;
+        }
+        .content-wrap h3 {
+            font-size: 19px;
+            font-weight: 600;
+            color: #1f2f8f;
+            margin-top: 22px;
+            margin-bottom: 8px;
+        }
+        .content-wrap p {
+            font-size: 15.5px;
+            line-height: 1.9;
+            color: #1e3a5f;
+            margin-bottom: 12px;
+        }
+        .content-wrap ul,
+        .content-wrap ol {
+            padding-left: 24px;
+            margin-bottom: 14px;
+        }
+        .content-wrap li {
+            font-size: 15.5px;
+            line-height: 1.9;
+            color: #1e3a5f;
+            margin-bottom: 5px;
+        }
+        .content-wrap li strong {
+            color: #0b1e33;
+        }
+        .content-wrap .highlight-box {
+            background: #f7f8ff;
+            border-radius: 14px;
+            padding: 18px 22px;
+            border: 1px solid #e5e8ff;
+            margin: 14px 0 20px;
+        }
+        .content-wrap .highlight-box .row {
+            display: flex;
+            justify-content: space-between;
+            padding: 4px 0;
+            border-bottom: 1px solid #eef3f7;
+            font-size: 15px;
+        }
+        .content-wrap .highlight-box .row:last-child {
+            border-bottom: none;
+        }
+        .content-wrap .highlight-box .row .val {
+            font-weight: 700;
+            color: #1f2f8f;
+        }
+
+        .faq-list {
+            margin-top: 8px;
+        }
+        .faq-item {
+            border-bottom: 1px solid #eef3f7;
+            padding: 12px 0;
+            cursor: pointer;
+        }
+        .faq-item:last-child {
+            border-bottom: none;
+        }
+        .faq-q {
+            display: flex;
+            justify-content: space-between;
+            font-weight: 600;
+            font-size: 16px;
+            color: #0b1e33;
+        }
+        .faq-q i {
+            transition: 0.3s;
+        }
+        .faq-item.open .faq-q i {
+            transform: rotate(180deg);
+        }
+        .faq-a {
+            max-height: 0;
+            overflow: hidden;
+            transition: 0.35s ease;
+            opacity: 0;
+            font-size: 15px;
+            color: #2c3e50;
+            line-height: 1.8;
+        }
+        .faq-item.open .faq-a {
+            max-height: 400px;
+            opacity: 1;
+            padding-top: 8px;
+        }
+
+        .disclaimer-box {
+            background: #fef3f2;
+            border-left: 6px solid #dc2626;
+            padding: 18px 22px;
+            border-radius: 14px;
+            margin: 14px 0 20px;
+            font-size: 15px;
+            color: #1e3a5f;
+        }
+
+        .related-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(170px, 1fr));
+            gap: 14px;
+            margin: 14px 0 20px;
+        }
+        .related-card {
+            background: #f7f8ff;
+            border-radius: 14px;
+            padding: 16px;
+            text-align: center;
+            border: 1px solid #e5e8ff;
+            transition: 0.2s;
+            text-decoration: none;
+            color: inherit;
+        }
+        .related-card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 6px 20px rgba(31, 47, 143, 0.06);
+            border-color: #5367ff;
+        }
+        .related-card i {
+            font-size: 28px;
+            color: #5367ff;
+            margin-bottom: 6px;
+        }
+        .related-card h4 {
+            font-size: 15px;
+            font-weight: 600;
+            color: #0b1e33;
+        }
+        .related-card p {
+            font-size: 12px;
+            color: #777;
+            margin-top: 2px;
+        }
+
+        .use-cases-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 14px;
+            margin: 14px 0 20px;
+        }
+        .use-case-card {
+            background: #f7f8ff;
+            border-radius: 14px;
+            padding: 16px 18px;
+            border: 1px solid #e5e8ff;
+            text-align: center;
+            transition: 0.2s;
+        }
+        .use-case-card:hover {
+            transform: translateY(-3px);
+            border-color: #5367ff;
+            box-shadow: 0 4px 16px rgba(31, 47, 143, 0.06);
+        }
+        .use-case-card i {
+            font-size: 28px;
+            color: #5367ff;
+            margin-bottom: 6px;
+        }
+        .use-case-card h4 {
+            font-size: 15px;
+            font-weight: 600;
+            color: #0b1e33;
+        }
+        .use-case-card p {
+            font-size: 13px;
+            color: #777;
+            margin-top: 2px;
+        }
+
+        .comparison-table {
+            overflow-x: auto;
+            margin: 16px 0 22px;
+            border-radius: 14px;
+            border: 1px solid #e5e8ff;
+        }
+        .comparison-table table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 14px;
+        }
+        .comparison-table th {
+            background: #1f2f8f;
+            color: #fff;
+            padding: 12px 16px;
+            text-align: left;
+            font-weight: 600;
+        }
+        .comparison-table td {
+            padding: 10px 16px;
+            border-bottom: 1px solid #eef3f7;
+            color: #1e3a5f;
+        }
+        .comparison-table tr:nth-child(even) td {
+            background: #f7f8ff;
+        }
+        .comparison-table tr:last-child td {
+            border-bottom: none;
+        }
+
+        /* ===== FOOTER ===== */
+        .footer {
+            margin-top: 36px;
+            padding-top: 20px;
+            border-top: 2px solid #eef3f7;
+            text-align: center;
+            font-size: 14px;
+            color: #6b85a0;
+        }
+        .footer strong {
+            color: #0b1e33;
+        }
+
+        /* ===== RESPONSIVE ===== */
+        @media (max-width: 700px) {
+            .app-wrapper {
+                padding: 18px 14px;
+                border-radius: 20px;
+            }
+            .header-text h1 {
+                font-size: 20px;
+            }
+            .content-wrap h2 {
+                font-size: 21px;
+            }
+            .btn {
+                font-size: 13px;
+                padding: 10px 20px;
+            }
+            .header-icon {
+                width: 42px;
+                height: 42px;
+                font-size: 20px;
+            }
+            .qr-display-area {
+                padding: 16px;
+            }
+            .qr-info .info-item {
+                font-size: 13px;
+            }
+        }
+        @media (max-width: 400px) {
+            .app-wrapper {
+                padding: 10px 8px;
+                border-radius: 14px;
+            }
+            .header-text h1 {
+                font-size: 17px;
+            }
+            .content-wrap h2 {
+                font-size: 18px;
+            }
+            .qr-type-btn {
+                font-size: 10px;
+                padding: 4px 6px;
+            }
+            .qr-type-grid {
+                grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+            }
+        }
+        @media print {
+            .action-btn,
+            .btn-group,
+            .info-actions {
+                display: none !important;
+            }
+            .app-wrapper {
+                box-shadow: none !important;
+                border: 1px solid #ddd !important;
+                padding: 16px !important;
+            }
+            body {
+                background: #fff !important;
+                padding: 10px !important;
+            }
+            .content-wrap {
+                page-break-inside: avoid;
+            }
+            .faq-item {
+                page-break-inside: avoid;
+            }
+            .qr-display-area {
+                border-color: #ddd !important;
+                background: #fff !important;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- ===== TOAST ===== -->
+    <div class="toast" id="toast"><i class="fas fa-check-circle"></i> <span id="toastMsg">Copied!</span></div>
+
+    <!-- ===== MAIN APP ===== -->
+    <div class="app-wrapper" id="appWrapper">
+
+        <!-- ===== HEADER ===== -->
+        <div class="header">
+            <div class="header-icon"><i class="fas fa-qrcode"></i></div>
+            <div class="header-text">
+                <h1>99<span>toolhub</span></h1>
+                <p>QR Code Generator · 20+ Types</p>
+                <span class="live-badge"><i class="fas fa-circle" style="font-size:8px; margin-right:4px; color:#5367ff;"></i> Live Generator</span>
+            </div>
+        </div>
+
+        <!-- ===== TOOL ===== -->
+        <div class="tool-section">
+
+            <div style="display:flex; align-items:center; gap:8px; margin-bottom:18px;">
+                <h2 style="font-size:22px; font-weight:700; color:#1f2f8f;"><i class="fas fa-qrcode" style="color:#5367ff;"></i> QR Code Generator</h2>
+            </div>
+
+            <!-- QR Type Selector -->
+            <div class="qr-type-selector">
+                <label><i class="fas fa-tag"></i> Select QR Code Type</label>
+                <div class="qr-type-grid" id="qrTypeGrid">
+                    <button class="qr-type-btn active" data-type="text"><i class="fas fa-font"></i> Text</button>
+                    <button class="qr-type-btn" data-type="url"><i class="fas fa-link"></i> URL</button>
+                    <button class="qr-type-btn" data-type="email"><i class="fas fa-envelope"></i> Email</button>
+                    <button class="qr-type-btn" data-type="phone"><i class="fas fa-phone"></i> Phone</button>
+                    <button class="qr-type-btn" data-type="sms"><i class="fas fa-sms"></i> SMS</button>
+                    <button class="qr-type-btn" data-type="whatsapp"><i class="fab fa-whatsapp"></i> WhatsApp</button>
+                    <button class="qr-type-btn" data-type="wifi"><i class="fas fa-wifi"></i> Wi-Fi</button>
+                    <button class="qr-type-btn" data-type="vcard"><i class="fas fa-address-card"></i> vCard</button>
+                    <button class="qr-type-btn" data-type="location"><i class="fas fa-map-marker-alt"></i> Location</button>
+                    <button class="qr-type-btn" data-type="event"><i class="fas fa-calendar-alt"></i> Event</button>
+                    <button class="qr-type-btn" data-type="social"><i class="fas fa-share-alt"></i> Social</button>
+                    <button class="qr-type-btn" data-type="upi"><i class="fas fa-credit-card"></i> UPI</button>
+                    <button class="qr-type-btn" data-type="youtube"><i class="fab fa-youtube"></i> YouTube</button>
+                    <button class="qr-type-btn" data-type="instagram"><i class="fab fa-instagram"></i> Instagram</button>
+                    <button class="qr-type-btn" data-type="facebook"><i class="fab fa-facebook"></i> Facebook</button>
+                    <button class="qr-type-btn" data-type="twitter"><i class="fab fa-x-twitter"></i> X (Twitter)</button>
+                    <button class="qr-type-btn" data-type="linkedin"><i class="fab fa-linkedin"></i> LinkedIn</button>
+                    <button class="qr-type-btn" data-type="filelink"><i class="fas fa-file-pdf"></i> PDF/File Link</button>
+                    <button class="qr-type-btn" data-type="appdownload"><i class="fas fa-download"></i> App Download</button>
+                    <button class="qr-type-btn" data-type="custom"><i class="fas fa-pen-fancy"></i> Custom</button>
+                </div>
+            </div>
+
+            <!-- Dynamic Input Fields -->
+            <div id="inputFields">
+                <!-- Populated by JS -->
+            </div>
+
+            <div class="btn-group">
+                <button class="btn btn-primary" id="generateBtn"><i class="fas fa-qrcode"></i> Generate QR Code</button>
+                <button class="btn btn-secondary" id="resetBtn"><i class="fas fa-undo-alt"></i> Reset</button>
+            </div>
+
+            <!-- ===== QR DISPLAY AREA ===== -->
+            <div class="qr-display-area" id="qrDisplayArea">
+                <!-- Left: QR Preview -->
+                <div class="qr-preview" id="qrPreview">
+                    <div class="placeholder" id="placeholder">
+                        <i class="fas fa-qrcode"></i>
+                        Enter details above and click <strong>Generate</strong>
+                    </div>
+                    <div id="qrcode" style="display:none;"></div>
+                </div>
+
+                <!-- Right: QR Info -->
+                <div class="qr-info" id="qrInfo">
+                    <div class="info-title"><i class="fas fa-info-circle"></i> QR Information</div>
+                    <div class="info-item"><span class="label">📌 QR Type</span><span class="value" id="infoType">—</span></div>
+                    <div class="info-item"><span class="label">📏 Data Length</span><span class="value" id="infoLength">—</span></div>
+                    <div class="info-item"><span class="label">📐 Image Size</span><span class="value" id="infoSize">—</span></div>
+                    <div class="info-item" id="infoDataRow" style="display:none;"><span class="label">📄 Data</span><span class="value" id="infoData" style="font-size:12px; max-width:70%; word-break:break-all;">—</span></div>
+
+                    <div class="info-actions" id="infoActions">
+                        <button class="action-btn" id="downloadPNG"><i class="fas fa-image"></i> PNG</button>
+                        <button class="action-btn" id="downloadSVG"><i class="fas fa-vector-square"></i> SVG</button>
+                        <button class="action-btn" id="downloadJPG"><i class="fas fa-file-image"></i> JPG</button>
+                        <button class="action-btn" id="printQR"><i class="fas fa-print"></i> Print</button>
+                        <button class="action-btn" id="copyImage"><i class="fas fa-copy"></i> Copy Image</button>
+                        <button class="action-btn" id="copyLink"><i class="fas fa-link"></i> Copy Link</button>
+                        <button class="action-btn" id="shareQR"><i class="fas fa-share-alt"></i> Share</button>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+        <!-- ================================================================
+        CONTENT SECTIONS — 5000+ WORDS
+        ================================================================ -->
+        <div class="content-wrap">
+
+            <!-- 1. About QR Code Generator -->
+            <h2>📖 About QR Code Generator <span class="badge">Overview</span></h2>
+            <p>
+                A <strong>QR Code Generator</strong> is a powerful tool that creates Quick Response (QR) codes —
+                two-dimensional barcodes that can store various types of data and be scanned by smartphones. The
+                <strong>99toolhub QR Code Generator</strong> is a comprehensive, free, and secure solution that
+                supports over 20 different QR code types, including URLs, text, emails, phone numbers, Wi-Fi
+                credentials, vCards, UPI payments, social media profiles, and much more.
+            </p>
+            <p>
+                QR codes have revolutionised how we share information. From contactless menus in restaurants to
+                digital business cards, from payment systems to authentication, QR codes are everywhere. The
+                99toolhub QR Code Generator makes it effortless to create custom QR codes for any purpose, with
+                instant generation, live preview, and multiple download options.
+            </p>
+            <p>
+                All data is processed <strong>locally in your browser</strong> — nothing is stored on any server,
+                ensuring your privacy and security. Whether you're a business owner, marketer, educator, or individual,
+                this tool is designed to meet all your QR code needs.
+            </p>
+
+            <!-- 2. What is a QR Code? -->
+            <h2>📌 What is a QR Code? <span class="badge">Basics</span></h2>
+            <p>
+                <strong>QR Code</strong> stands for <strong>Quick Response Code</strong>. It is a type of
+                two-dimensional barcode that was first developed in 1994 by Denso Wave, a Japanese automotive
+                components company. Unlike traditional barcodes, which store data linearly, QR codes store data
+                both horizontally and vertically, allowing them to hold significantly more information.
+            </p>
+            <p>
+                A QR code consists of black squares arranged on a white grid, with three distinctive square patterns
+                in the corners that help scanners detect and orient the code. The data encoded can be text, a URL,
+                contact information (vCard), phone number, email, SMS, Wi-Fi credentials, geographic coordinates,
+                or even app store links. When scanned by a smartphone camera, the QR code decodes the information
+                and triggers the appropriate action.
+            </p>
+            <p>
+                QR codes are incredibly versatile and can be printed on any surface, displayed on digital screens,
+                or embedded in documents. Their ability to store up to 4,296 alphanumeric characters makes them
+                suitable for a wide range of applications.
+            </p>
+
+            <!-- 3. History of QR Codes -->
+            <h2>📜 History of QR Codes <span class="badge">Evolution</span></h2>
+            <p>
+                The QR code was invented in 1994 by Masahiro Hara, a developer at the Japanese company Denso Wave,
+                a subsidiary of Toyota. The original purpose was to track automotive parts during manufacturing.
+                The traditional barcodes used at the time could only store up to 20 characters, which was insufficient
+                for tracking complex components. Hara and his team developed a new type of barcode that could store
+                more data and be scanned quickly — thus the Quick Response code was born.
+            </p>
+            <p>
+                Initially, QR codes were used exclusively in the automotive industry. However, their potential was
+                soon recognised across various sectors. In the early 2000s, QR codes began to appear in advertising
+                and marketing. The widespread adoption of smartphones with built-in cameras accelerated their
+                popularity, as users could now scan QR codes without specialised equipment.
+            </p>
+            <p>
+                In 2020, the COVID-19 pandemic further propelled QR codes into the mainstream as businesses adopted
+                contactless solutions — digital menus, contactless payments, health check-ins, and more. Today,
+                QR codes are an integral part of our digital infrastructure, used in retail, hospitality, education,
+                healthcare, and countless other industries.
+            </p>
+
+            <!-- 4. How QR Codes Work -->
+            <h2>⚙️ How QR Codes Work <span class="badge">Technology</span></h2>
+            <p>
+                At a technical level, QR codes encode data using a grid of black and white modules (pixels). The
+                pattern of these modules represents binary data that can be decoded by a scanner. Here's a simplified
+                breakdown of how they work:
+            </p>
+            <ul>
+                <li><strong>Data Encoding:</strong> The input data (text, URL, etc.) is converted into a binary
+                    format using a specific character encoding (such as UTF-8).</li>
+                <li><strong>Error Correction:</strong> Reed-Solomon error correction codes are added to the data,
+                    allowing the QR code to be read even if it's partially damaged or obscured.</li>
+                <li><strong>Module Placement:</strong> The data bits are placed onto a grid of modules (squares)
+                    in a specific pattern, along with the three corner alignment patterns that help scanners
+                    orient the code.</li>
+                <li><strong>Quiet Zone:</strong> A blank margin around the QR code ensures that scanners can
+                    distinguish the code from its background.</li>
+                <li><strong>Scanning & Decoding:</strong> A scanner (smartphone camera) captures the QR code image,
+                    identifies the corner patterns, reads the data bits, corrects any errors, and outputs the
+                    decoded information.</li>
+            </ul>
+            <p>
+                The entire process happens in milliseconds, which is why QR codes are so effective for instant
+                information sharing. The 99toolhub QR Code Generator handles all the complex encoding and error
+                correction automatically, so you don't have to worry about the technical details.
+            </p>
+
+            <!-- 5. How to Use the QR Code Generator -->
+            <h2>🛠️ How to Use the QR Code Generator <span class="badge">Guide</span></h2>
+            <ol>
+                <li><strong>Select QR Type:</strong> Choose from 20+ QR code types (Text, URL, Email, Phone, SMS,
+                    WhatsApp, Wi-Fi, vCard, Location, Event, Social, UPI, YouTube, Instagram, Facebook, X/Twitter,
+                    LinkedIn, PDF/File Link, App Download, Custom).</li>
+                <li><strong>Enter Data:</strong> Fill in the required fields for your selected QR type. The input
+                    fields will update dynamically based on your selection.</li>
+                <li><strong>Generate:</strong> Click the <strong>"Generate QR Code"</strong> button to create your QR code.</li>
+                <li><strong>Preview:</strong> The QR code appears instantly in the preview area with a live preview.</li>
+                <li><strong>View Info:</strong> The QR Information panel shows the QR type, data length, image size,
+                    and the encoded data.</li>
+                <li><strong>Download:</strong> Use the action buttons to download as PNG, SVG, or JPG, print the QR
+                    code, copy the image to your clipboard, copy the data link, or share it.</li>
+                <li><strong>Reset:</strong> The <strong>"Reset"</strong> button clears all fields and the QR code
+                    display.</li>
+            </ol>
+
+            <!-- 6. Types of QR Codes -->
+            <h2>📊 Types of QR Codes <span class="badge">Variants</span></h2>
+            <p>
+                The 99toolhub QR Code Generator supports 20+ QR code types, each designed for a specific use case.
+                Here's a detailed overview of each type:
+            </p>
+
+            <div class="use-cases-grid">
+                <div class="use-case-card"><i class="fas fa-font"></i><h4>Text QR</h4><p>Encode plain text messages.</p></div>
+                <div class="use-case-card"><i class="fas fa-link"></i><h4>URL QR</h4><p>Share website links.</p></div>
+                <div class="use-case-card"><i class="fas fa-envelope"></i><h4>Email QR</h4><p>Pre-compose emails with subject & body.</p></div>
+                <div class="use-case-card"><i class="fas fa-phone"></i><h4>Phone QR</h4><p>Encode phone numbers for one-tap calling.</p></div>
+                <div class="use-case-card"><i class="fas fa-sms"></i><h4>SMS QR</h4><p>Pre-compose text messages.</p></div>
+                <div class="use-case-card"><i class="fab fa-whatsapp"></i><h4>WhatsApp QR</h4><p>Start WhatsApp chats instantly.</p></div>
+                <div class="use-case-card"><i class="fas fa-wifi"></i><h4>Wi-Fi QR</h4><p>Share Wi-Fi credentials for easy connection.</p></div>
+                <div class="use-case-card"><i class="fas fa-address-card"></i><h4>vCard QR</h4><p>Share digital business cards.</p></div>
+                <div class="use-case-card"><i class="fas fa-map-marker-alt"></i><h4>Location QR</h4><p>Share Google Maps locations.</p></div>
+                <div class="use-case-card"><i class="fas fa-calendar-alt"></i><h4>Event QR</h4><p>Create calendar events.</p></div>
+                <div class="use-case-card"><i class="fas fa-share-alt"></i><h4>Social QR</h4><p>Share social media profiles.</p></div>
+                <div class="use-case-card"><i class="fas fa-credit-card"></i><h4>UPI QR</h4><p>Instant UPI payments (India).</p></div>
+                <div class="use-case-card"><i class="fab fa-youtube"></i><h4>YouTube QR</h4><p>Share YouTube channels/videos.</p></div>
+                <div class="use-case-card"><i class="fab fa-instagram"></i><h4>Instagram QR</h4><p>Share Instagram profiles.</p></div>
+                <div class="use-case-card"><i class="fab fa-facebook"></i><h4>Facebook QR</h4><p>Share Facebook pages/profiles.</p></div>
+                <div class="use-case-card"><i class="fab fa-x-twitter"></i><h4>X/Twitter QR</h4><p>Share X (Twitter) profiles.</p></div>
+                <div class="use-case-card"><i class="fab fa-linkedin"></i><h4>LinkedIn QR</h4><p>Share LinkedIn profiles.</p></div>
+                <div class="use-case-card"><i class="fas fa-file-pdf"></i><h4>PDF/File Link QR</h4><p>Share file download links.</p></div>
+                <div class="use-case-card"><i class="fas fa-download"></i><h4>App Download QR</h4><p>Link to app store downloads.</p></div>
+                <div class="use-case-card"><i class="fas fa-pen-fancy"></i><h4>Custom QR</h4><p>Any custom text or data.</p></div>
+            </div>
+
+            <!-- 7. Static vs Dynamic QR Codes -->
+            <h2>⚖️ Static vs Dynamic QR Codes <span class="badge">Comparison</span></h2>
+            <div class="comparison-table">
+                <table>
+                    <thead>
+                        <tr><th>Parameter</th><th>Static QR Code</th><th>Dynamic QR Code</th></tr>
+                    </thead>
+                    <tbody>
+                        <tr><td><strong>Data</strong></td><td>Fixed, cannot be changed</td><td>Can be updated anytime</td></tr>
+                        <tr><td><strong>Tracking</strong></td><td>No scan tracking</td><td>Scan analytics available</td></tr>
+                        <tr><td><strong>Cost</strong></td><td>Free</td><td>Usually paid</td></tr>
+                        <tr><td><strong>URL</strong></td><td>Direct link to data</td><td>Redirect URL</td></tr>
+                        <tr><td><strong>Use Case</strong></td><td>Simple, one-time use</td><td>Campaigns, marketing</td></tr>
+                        <tr><td><strong>99toolhub Support</strong></td><td>✅ Yes (all types)</td><td>❌ Not currently</td></tr>
+                    </tbody>
+                </table>
+            </div>
+            <p>
+                The 99toolhub QR Code Generator creates <strong>static QR codes</strong> — once generated, the data
+                cannot be changed. For most personal and business uses, static QR codes are perfectly sufficient.
+                They are free, reliable, and work with all scanners.
+            </p>
+
+            <!-- 8. QR Code Structure Explained -->
+            <h2>🧩 QR Code Structure Explained <span class="badge">Anatomy</span></h2>
+            <ul>
+                <li><strong>Finder Patterns:</strong> The three large squares in the corners that help scanners
+                    detect and orient the QR code.</li>
+                <li><strong>Alignment Patterns:</strong> Smaller squares that help scanners correct distortion.</li>
+                <li><strong>Timing Patterns:</strong> Alternating black and white modules that help determine the
+                    grid size.</li>
+                <li><strong>Format Information:</strong> Data about the error correction level and mask pattern used.</li>
+                <li><strong>Data Modules:</strong> The actual encoded data bits.</li>
+                <li><strong>Error Correction Modules:</strong> Reed-Solomon error correction codes that allow
+                    the QR code to be read even if damaged.</li>
+                <li><strong>Quiet Zone:</strong> The blank margin around the QR code that helps scanners distinguish
+                    it from the background.</li>
+            </ul>
+
+            <!-- 9. Error Correction Levels Explained -->
+            <h2>🛡️ Error Correction Levels Explained <span class="badge">Reliability</span></h2>
+            <p>
+                QR codes include error correction to ensure they can be read even if partially damaged or obscured.
+                There are four levels:
+            </p>
+            <ul>
+                <li><strong>L (Low) – 7%:</strong> Can recover up to 7% of lost data. Best for clear, undamaged surfaces.</li>
+                <li><strong>M (Medium) – 15%:</strong> Can recover up to 15% of lost data. Standard for most applications.</li>
+                <li><strong>Q (Quartile) – 25%:</strong> Can recover up to 25% of lost data. Good for printed materials
+                    that may get damaged.</li>
+                <li><strong>H (High) – 30%:</strong> Can recover up to 30% of lost data. Recommended for critical
+                    applications where damage is likely.</li>
+            </ul>
+            <p>
+                The 99toolhub QR Code Generator uses <strong>H (High)</strong> error correction by default, ensuring
+                your QR codes are as robust and reliable as possible.
+            </p>
+
+            <!-- 10. Benefits of QR Codes -->
+            <h2>✅ Benefits of QR Codes <span class="badge">Why QR</span></h2>
+            <ul>
+                <li><strong>⚡ Instant Access:</strong> Users can access information immediately by scanning the code.</li>
+                <li><strong>📱 No App Required:</strong> Most modern smartphones have built-in QR code scanners.</li>
+                <li><strong>💰 Cost-Effective:</strong> Creating and printing QR codes is inexpensive.</li>
+                <li><strong>🌍 Universal:</strong> QR codes are a global standard and work across all countries.</li>
+                <li><strong>📊 High Capacity:</strong> Can store up to 4,296 alphanumeric characters.</li>
+                <li><strong>🔒 Error Correction:</strong> QR codes can be read even if partially damaged.</li>
+                <li><strong>♻️ Eco-Friendly:</strong> Reduces the need for printed materials.</li>
+                <li><strong>🔄 Versatile:</strong> Encode URLs, text, contacts, Wi-Fi, payments, and more.</li>
+            </ul>
+
+            <!-- 11. Business Uses of QR Codes -->
+            <h2>🏢 Business Uses of QR Codes <span class="badge">Commercial</span></h2>
+            <ul>
+                <li><strong>Product Packaging:</strong> Share product information, usage guides, and promotional offers.</li>
+                <li><strong>Business Cards:</strong> Digital business cards with vCard QR codes.</li>
+                <li><strong>Restaurant Menus:</strong> Contactless digital menus for dine-in and takeaway.</li>
+                <li><strong>In-Store Promotions:</strong> Direct customers to special offers and loyalty programs.</li>
+                <li><strong>Event Ticketing:</strong> Digital tickets for events, concerts, and conferences.</li>
+                <li><strong>Payment Systems:</strong> UPI and other digital payment QR codes.</li>
+                <li><strong>Customer Feedback:</strong> Quick links to surveys and feedback forms.</li>
+                <li><strong>Contactless Check-in:</strong> Health and safety check-in systems.</li>
+            </ul>
+
+            <!-- 12. Personal Uses of QR Codes -->
+            <h2>👤 Personal Uses of QR Codes <span class="badge">Individual</span></h2>
+            <ul>
+                <li><strong>Personal Websites:</strong> Share your portfolio, blog, or personal website.</li>
+                <li><strong>Social Media Profiles:</strong> Link to your Instagram, Facebook, LinkedIn, and more.</li>
+                <li><strong>Wi-Fi Sharing:</strong> Let guests connect to your Wi-Fi without typing passwords.</li>
+                <li><strong>Digital Business Cards:</strong> Share your contact details with a simple scan.</li>
+                <li><strong>Wedding Invitations:</strong> Link to wedding websites, gift registries, and RSVP pages.</li>
+                <li><strong>Travel Itineraries:</strong> Share flight details, hotel reservations, and tour information.</li>
+                <li><strong>Art & Creative Work:</strong> Link to your creative portfolio or online gallery.</li>
+                <li><strong>Event Planning:</strong> Share event details, schedules, and maps.</li>
+            </ul>
+
+            <!-- 13. QR Codes for Payments (UPI) -->
+            <h2>💳 QR Codes for Payments (UPI) <span class="badge">India</span></h2>
+            <p>
+                The <strong>Unified Payments Interface (UPI)</strong> is a real-time payment system developed by the
+                National Payments Corporation of India (NPCI). UPI QR codes have become ubiquitous across India,
+                enabling instant peer-to-peer and merchant payments.
+            </p>
+            <p>
+                The 99toolhub QR Code Generator supports <strong>UPI QR codes</strong> with the following format:
+            </p>
+            <div class="highlight-box">
+                <div style="font-weight:700; margin-bottom:6px;">📌 UPI QR Code Format</div>
+                <div class="row"><span>UPI ID:</span><span class="val">your@upi</span></div>
+                <div class="row"><span>Payee Name:</span><span class="val">Your Name</span></div>
+                <div class="row"><span>Amount (Optional):</span><span class="val">₹100.00</span></div>
+                <div class="row"><span>Transaction Note:</span><span class="val">Payment for services</span></div>
+            </div>
+            <p>
+                When scanned, the QR code opens the user's UPI app (Google Pay, PhonePe, Paytm, etc.) with the
+                payee details pre-filled, making payments fast and frictionless.
+            </p>
+
+            <!-- 14. QR Codes for Websites -->
+            <h2>🌐 QR Codes for Websites <span class="badge">URL</span></h2>
+            <p>
+                URL QR codes are among the most common use cases. They allow users to access a website by simply
+                scanning the code, eliminating the need to type long URLs. The 99toolhub QR Code Generator makes
+                it easy to create URL QR codes for:
+            </p>
+            <ul>
+                <li><strong>Landing Pages:</strong> Direct users to specific marketing or sales pages.</li>
+                <li><strong>Blog Posts:</strong> Share your latest articles with readers.</li>
+                <li><strong>E-commerce:</strong> Link to product pages, special offers, and checkout.</li>
+                <li><strong>Portfolios:</strong> Showcase your work with a link to your portfolio.</li>
+                <li><strong>Event Pages:</strong> Share event details, registration, and schedules.</li>
+                <li><strong>Business Profiles:</strong> Link to your Google Business Profile or other directories.</li>
+            </ul>
+
+            <!-- 15. QR Codes for Wi-Fi Sharing -->
+            <h2>📶 QR Codes for Wi-Fi Sharing <span class="badge">Connect</span></h2>
+            <p>
+                Wi-Fi QR codes allow users to connect to a Wi-Fi network instantly without typing the password.
+                This is especially useful in homes, cafes, hotels, and offices. The format is:
+            </p>
+            <div class="highlight-box">
+                <div style="font-weight:700; margin-bottom:6px;">📌 Wi-Fi QR Code Format</div>
+                <div class="row"><span>SSID (Network Name):</span><span class="val">MyWiFi</span></div>
+                <div class="row"><span>Password:</span><span class="val">securepassword</span></div>
+                <div class="row"><span>Security Type:</span><span class="val">WPA/WPA2</span></div>
+            </div>
+            <p>
+                When scanned, the user's device automatically connects to the Wi-Fi network without any additional
+                steps. This is a huge convenience for guests and visitors.
+            </p>
+
+            <!-- 16. QR Codes for Contact Sharing -->
+            <h2>📇 QR Codes for Contact Sharing <span class="badge">vCard</span></h2>
+            <p>
+                vCard QR codes encode contact information in the vCard format, which is compatible with most
+                smartphone address books. When scanned, the user can save the contact directly to their phone.
+            </p>
+            <p>
+                The 99toolhub QR Code Generator supports vCard QR codes with fields including:
+            </p>
+            <ul>
+                <li><strong>Full Name:</strong> First and last name</li>
+                <li><strong>Phone Number:</strong> Primary contact number</li>
+                <li><strong>Email Address:</strong> Primary email</li>
+                <li><strong>Company:</strong> Organisation or company name</li>
+                <li><strong>Job Title:</strong> Position or role</li>
+                <li><strong>Website:</strong> Personal or company website</li>
+                <li><strong>Address:</strong> Physical address</li>
+                <li><strong>Note:</strong> Additional notes or information</li>
+            </ul>
+
+            <!-- 17. QR Codes for Social Media -->
+            <h2>📱 QR Codes for Social Media <span class="badge">Connect</span></h2>
+            <p>
+                Social media QR codes make it easy for people to connect with you on various platforms. The
+                99toolhub QR Code Generator supports QR codes for:
+            </p>
+            <ul>
+                <li><strong>Instagram:</strong> Share your Instagram profile or a specific post.</li>
+                <li><strong>Facebook:</strong> Link to your Facebook page or profile.</li>
+                <li><strong>X (Twitter):</strong> Share your X/Twitter profile.</li>
+                <li><strong>LinkedIn:</strong> Connect with your LinkedIn profile.</li>
+                <li><strong>YouTube:</strong> Share your YouTube channel or a specific video.</li>
+                <li><strong>WhatsApp:</strong> Start a WhatsApp chat with your number.</li>
+            </ul>
+            <p>
+                These QR codes are perfect for business cards, email signatures, and marketing materials.
+            </p>
+
+            <!-- 18. QR Codes for Marketing -->
+            <h2>📢 QR Codes for Marketing <span class="badge">Promotion</span></h2>
+            <p>
+                QR codes have become an essential tool for digital marketing. They bridge the gap between offline
+                and online media, making it easy to track engagement and measure campaign effectiveness.
+            </p>
+            <ul>
+                <li><strong>Print Advertising:</strong> QR codes in magazines, newspapers, and billboards.</li>
+                <li><strong>Product Packaging:</strong> Enhance product packaging with interactive content.</li>
+                <li><strong>Direct Mail:</strong> Add QR codes to postcards, flyers, and catalogs.</li>
+                <li><strong>Trade Shows:</strong> Digital brochures and product information at events.</li>
+                <li><strong>Retail Displays:</strong> In-store promotions and product demos.</li>
+                <li><strong>Email Campaigns:</strong> QR codes in email newsletters for special offers.</li>
+            </ul>
+
+            <!-- 19. QR Code Security Tips -->
+            <h2>🔒 QR Code Security Tips <span class="badge">Safety</span></h2>
+            <ul>
+                <li><strong>Verify the Source:</strong> Only scan QR codes from trusted sources.</li>
+                <li><strong>Check the URL:</strong> Before scanning, preview the encoded URL if possible.</li>
+                <li><strong>Avoid Suspicious Codes:</strong> Don't scan QR codes in unexpected places or from
+                    unknown senders.</li>
+                <li><strong>Use a Secure Scanner:</strong> Use a reputable QR code scanner that checks for
+                    malicious links.</li>
+                <li><strong>Keep Apps Updated:</strong> Ensure your QR scanner and operating system are up to date.</li>
+                <li><strong>Be Cautious with Personal Information:</strong> Don't enter sensitive information
+                    after scanning a QR code unless you're sure it's legitimate.</li>
+            </ul>
+
+            <!-- 20. Common QR Code Mistakes -->
+            <h2>⚠️ Common QR Code Mistakes <span class="badge">Avoid</span></h2>
+            <ul>
+                <li><strong>❌ Not Testing:</strong> Always test your QR code before printing or distributing it.</li>
+                <li><strong>❌ Too Small:</strong> Ensure your QR code is large enough to be scanned easily.</li>
+                <li><strong>❌ Poor Contrast:</strong> Maintain high contrast between the QR code and the background.</li>
+                <li><strong>❌ No Quiet Zone:</strong> Leave enough blank space around the QR code.</li>
+                <li><strong>❌ Damaged Codes:</strong> Avoid printing QR codes on surfaces where they can be damaged.</li>
+                <li><strong>❌ Incorrect Data:</strong> Double-check the data you're encoding.</li>
+                <li><strong>❌ Not Considering Context:</strong> Place QR codes where they can be easily scanned.</li>
+            </ul>
+
+            <!-- 21. Best Practices for QR Codes -->
+            <h2>🏆 Best Practices for QR Codes <span class="badge">Tips</span></h2>
+            <ul>
+                <li><strong>📏 Optimal Size:</strong> Ensure your QR code is at least 2.5 cm × 2.5 cm for print materials.</li>
+                <li><strong>🎨 High Contrast:</strong> Use dark modules on a light background for best readability.</li>
+                <li><strong>📐 Maintain Quiet Zone:</strong> Leave at least 4 modules of blank space around the QR code.</li>
+                <li><strong>📱 Test on Multiple Devices:</strong> Test your QR code on different smartphones and scanners.</li>
+                <li><strong>📊 Track Performance:</strong> Use dynamic QR codes or analytics to track scans.</li>
+                <li><strong>🔄 Keep It Simple:</strong> Short URLs and clean data work best.</li>
+                <li><strong>📦 Provide Context:</strong> Tell users what they'll get when they scan the QR code.</li>
+            </ul>
+
+            <!-- 22. Example QR Code Use Cases -->
+            <h2>📌 Example QR Code Use Cases <span class="badge">Scenarios</span></h2>
+
+            <div class="highlight-box">
+                <div style="font-weight:700; margin-bottom:6px;">📘 Example 1: Restaurant Digital Menu</div>
+                <div class="row"><span>QR Type:</span><span class="val">URL</span></div>
+                <div class="row"><span>Data:</span><span class="val">https://menu.restaurant.com</span></div>
+                <div class="row"><span>Use:</span><span class="val">Customers scan to view the menu on their phones.</span></div>
+            </div>
+
+            <div class="highlight-box">
+                <div style="font-weight:700; margin-bottom:6px;">📘 Example 2: Business Card vCard</div>
+                <div class="row"><span>QR Type:</span><span class="val">vCard</span></div>
+                <div class="row"><span>Data:</span><span class="val">Name, Phone, Email, Company, Website</span></div>
+                <div class="row"><span>Use:</span><span class="val">Scan to save contact directly to phone.</span></div>
+            </div>
+
+            <div class="highlight-box">
+                <div style="font-weight:700; margin-bottom:6px;">📘 Example 3: Wi-Fi Sharing at a Coffee Shop</div>
+                <div class="row"><span>QR Type:</span><span class="val">Wi-Fi</span></div>
+                <div class="row"><span>Data:</span><span class="val">SSID: CoffeeShopWiFi, Password: secure123</span></div>
+                <div class="row"><span>Use:</span><span class="val">Customers scan to connect instantly.</span></div>
+            </div>
+
+            <div class="highlight-box">
+                <div style="font-weight:700; margin-bottom:6px;">📘 Example 4: UPI Payment for a Small Business</div>
+                <div class="row"><span>QR Type:</span><span class="val">UPI</span></div>
+                <div class="row"><span>Data:</span><span class="val">UPI ID: shop@upi, Payee: Shop Name</span></div>
+                <div class="row"><span>Use:</span><span class="val">Customers scan to pay instantly via UPI.</span></div>
+            </div>
+
+            <!-- 23. FAQ -->
+            <h2>❓ Frequently Asked Questions (FAQs) <span class="badge">FAQ</span></h2>
+            <div class="faq-list">
+                <div class="faq-item">
+                    <div class="faq-q">What is a QR code? <i class="fas fa-chevron-down"></i></div>
+                    <div class="faq-a">A QR code (Quick Response code) is a two-dimensional barcode that can store various types of information, including URLs, text, contact details, and more. It can be scanned by smartphones to instantly access the encoded data.</div>
+                </div>
+                <div class="faq-item">
+                    <div class="faq-q">How do I scan a QR code? <i class="fas fa-chevron-down"></i></div>
+                    <div class="faq-a">Most modern smartphones have a built-in QR code scanner in the camera app. Simply open your camera, point it at the QR code, and a notification will appear with the encoded information. You can also use dedicated QR code scanning apps.</div>
+                </div>
+                <div class="faq-item">
+                    <div class="faq-q">Is the QR Code Generator free? <i class="fas fa-chevron-down"></i></div>
+                    <div class="faq-a">Yes, the 99toolhub QR Code Generator is completely free to use. There are no hidden charges, no sign-up requirements, and no limits on how many QR codes you can generate.</div>
+                </div>
+                <div class="faq-item">
+                    <div class="faq-q">Can I download the QR code? <i class="fas fa-chevron-down"></i></div>
+                    <div class="faq-a">Yes, you can download your generated QR code as PNG, SVG, or JPG using the download buttons. You can also print it directly or copy it to your clipboard.</div>
+                </div>
+                <div class="faq-item">
+                    <div class="faq-q">What types of data can I encode? <i class="fas fa-chevron-down"></i></div>
+                    <div class="faq-a">You can encode URLs, plain text, phone numbers, email addresses, Wi-Fi credentials, SMS messages, contact details (vCard), geographic coordinates, UPI payment details, social media profiles, and more — 20+ types in total.</div>
+                </div>
+                <div class="faq-item">
+                    <div class="faq-q">Is my data stored anywhere? <i class="fas fa-chevron-down"></i></div>
+                    <div class="faq-a">No. All data is processed locally in your browser. Nothing is sent to any server or stored anywhere. Your privacy is fully protected.</div>
+                </div>
+                <div class="faq-item">
+                    <div class="faq-q">What is the difference between static and dynamic QR codes? <i class="fas fa-chevron-down"></i></div>
+                    <div class="faq-a">Static QR codes contain fixed data that cannot be changed. Dynamic QR codes use a redirect URL that can be updated anytime. The 99toolhub QR Code Generator creates static QR codes, which are free and work with all scanners.</div>
+                </div>
+                <div class="faq-item">
+                    <div class="faq-q">What is the maximum data capacity of a QR code? <i class="fas fa-chevron-down"></i></div>
+                    <div class="faq-a">A standard QR code can store up to 4,296 alphanumeric characters, 7,089 numeric characters, or 2,953 bytes of binary data, making it suitable for most practical applications.</div>
+                </div>
+                <div class="faq-item">
+                    <div class="faq-q">What is error correction in QR codes? <i class="fas fa-chevron-down"></i></div>
+                    <div class="faq-a">Error correction allows QR codes to be read even if they are partially damaged or obscured. The QR code standard has four levels: L (7%), M (15%), Q (25%), and H (30%). The 99toolhub QR Code Generator uses H (High) error correction for maximum reliability.</div>
+                </div>
+                <div class="faq-item">
+                    <div class="faq-q">Can I use QR codes for payments? <i class="fas fa-chevron-down"></i></div>
+                    <div class="faq-a">Yes, the 99toolhub QR Code Generator supports UPI payment QR codes for India. You can encode your UPI ID and payee name to receive instant payments from customers.</div>
+                </div>
+            </div>
+
+            <!-- 24. Related Tools -->
+            <h2>🔗 Related Tools <span class="badge">Explore</span></h2>
+            <div class="related-grid">
+                <a href="#" class="related-card">
+                    <i class="fas fa-calculator"></i>
+                    <h4>EMI Calculator</h4>
+                    <p>Calculate loan EMIs instantly</p>
+                </a>
+                <a href="#" class="related-card">
+                    <i class="fas fa-percent"></i>
+                    <h4>GST Calculator</h4>
+                    <p>Compute GST inclusive/exclusive</p>
+                </a>
+                <a href="#" class="related-card">
+                    <i class="fas fa-home"></i>
+                    <h4>Rent Calculator</h4>
+                    <p>Estimate rental costs</p>
+                </a>
+                <a href="#" class="related-card">
+                    <i class="fas fa-exchange-alt"></i>
+                    <h4>Currency Converter</h4>
+                    <p>Live exchange rates</p>
+                </a>
+                <a href="#" class="related-card">
+                    <i class="fas fa-chart-line"></i>
+                    <h4>SIP Calculator</h4>
+                    <p>Plan your mutual fund investments</p>
+                </a>
+            </div>
+
+            <!-- 25. Disclaimer -->
+            <h2>⚠️ Disclaimer <span class="badge">Legal</span></h2>
+            <div class="disclaimer-box">
+                <p><strong>Disclaimer:</strong> The QR Code Generator is provided for <strong>educational and
+                informational purposes only</strong>. The tool generates QR codes based on the input provided by you.
+                While we strive to ensure accuracy and reliability, we do not guarantee that the generated QR codes
+                will be scannable by all devices or applications. 99toolhub is not responsible for any misuse,
+                misrepresentation, or damages arising from the use of this tool. Always test your QR codes before
+                printing or distributing them. Use at your own risk.</p>
+            </div>
+
+            <!-- 26. Conclusion -->
+            <h2>🎯 Conclusion <span class="badge">Final</span></h2>
+            <p>
+                The <strong>99toolhub QR Code Generator</strong> is the most comprehensive free QR code solution
+                available, supporting over 20 different QR code types with a clean, intuitive interface. Whether
+                you need a simple URL QR code, a vCard for your business card, a UPI payment code, or a Wi-Fi
+                sharing QR code, this tool has you covered.
+            </p>
+            <p>
+                With features like live preview, multiple download formats (PNG, SVG, JPG), print capability,
+                copy to clipboard, and share functionality, you have everything you need to create and distribute
+                QR codes effectively. The detailed QR information panel provides transparency about your QR code's
+                type, data length, and image size.
+            </p>
+            <p>
+                Best of all, the 99toolhub QR Code Generator is <strong>completely free</strong>, requires no
+                sign-up, and processes all data locally in your browser for maximum privacy. Start generating your
+                QR codes today and unlock the power of instant, contactless information sharing!
+            </p>
+
+        </div>
+        <!-- end .content-wrap -->
+
+        <!-- ===== FOOTER ===== -->
+        <div class="footer">
+            © 2026 <strong>99toolhub</strong> — QR Code Generator. All rights reserved.
+        </div>
+
+    </div>
+    <!-- end .app-wrapper -->
+
+
+    <!-- ================================================================
+    JAVASCRIPT
+    ================================================================ -->
+    <script>
+        (function() {
+            'use strict';
+
+            // ============================================================
+            //  QR TYPE CONFIGURATION
+            // ============================================================
+            const QR_TYPES = {
+                text: {
+                    label: 'Text',
+                    icon: 'fa-font',
+                    fields: [{ id: 'text', label: 'Text to Encode', type: 'textarea', placeholder: 'Enter any text...' }],
+                    build: (data) => data.text || ''
+                },
+                url: {
+                    label: 'URL',
+                    icon: 'fa-link',
+                    fields: [{ id: 'url', label: 'Website URL', type: 'input', placeholder: 'https://example.com' }],
+                    build: (data) => data.url || ''
+                },
+                email: {
+                    label: 'Email',
+                    icon: 'fa-envelope',
+                    fields: [
+                        { id: 'email', label: 'Email Address', type: 'input', placeholder: 'you@example.com' },
+                        { id: 'subject', label: 'Subject (Optional)', type: 'input', placeholder: 'Hello!' },
+                        { id: 'body', label: 'Message (Optional)', type: 'textarea', placeholder: 'Your message here...' }
+                    ],
+                    build: (data) => {
+                        let str = 'mailto:' + (data.email || '');
+                        let params = [];
+                        if (data.subject) params.push('subject=' + encodeURIComponent(data.subject));
+                        if (data.body) params.push('body=' + encodeURIComponent(data.body));
+                        if (params.length) str += '?' + params.join('&');
+                        return str;
+                    }
+                },
+                phone: {
+                    label: 'Phone',
+                    icon: 'fa-phone',
+                    fields: [{ id: 'phone', label: 'Phone Number', type: 'input', placeholder: '+91 9876543210' }],
+                    build: (data) => 'tel:' + (data.phone || '').replace(/\s/g, '')
+                },
+                sms: {
+                    label: 'SMS',
+                    icon: 'fa-sms',
+                    fields: [
+                        { id: 'sms_number', label: 'Phone Number', type: 'input', placeholder: '+91 9876543210' },
+                        { id: 'sms_message', label: 'Message', type: 'textarea', placeholder: 'Your message...' }
+                    ],
+                    build: (data) => {
+                        let str = 'sms:' + (data.sms_number || '').replace(/\s/g, '');
+                        if (data.sms_message) str += '?body=' + encodeURIComponent(data.sms_message);
+                        return str;
+                    }
+                },
+                whatsapp: {
+                    label: 'WhatsApp',
+                    icon: 'fab fa-whatsapp',
+                    fields: [
+                        { id: 'wa_number', label: 'Phone Number', type: 'input', placeholder: '+91 9876543210' },
+                        { id: 'wa_message', label: 'Message (Optional)', type: 'textarea', placeholder: 'Hello!' }
+                    ],
+                    build: (data) => {
+                        let str = 'https://wa.me/' + (data.wa_number || '').replace(/[^0-9+]/g, '');
+                        if (data.wa_message) str += '?text=' + encodeURIComponent(data.wa_message);
+                        return str;
+                    }
+                },
+                wifi: {
+                    label: 'Wi-Fi',
+                    icon: 'fa-wifi',
+                    fields: [
+                        { id: 'wifi_ssid', label: 'Network Name (SSID)', type: 'input', placeholder: 'MyWiFi' },
+                        { id: 'wifi_password', label: 'Password', type: 'input', placeholder: 'password123' },
+                        { id: 'wifi_security', label: 'Security Type', type: 'select', options: ['WPA/WPA2', 'WEP',
+                                'nopass'
+                            ] }
+                    ],
+                    build: (data) => {
+                        const sec = data.wifi_security === 'nopass' ? 'nopass' : data.wifi_security || 'WPA/WPA2';
+                        return 'WIFI:T:' + sec + ';S:' + (data.wifi_ssid || '') + ';P:' + (data.wifi_password || '') +
+                            ';;';
+                    }
+                },
+                vcard: {
+                    label: 'vCard',
+                    icon: 'fa-address-card',
+                    fields: [
+                        { id: 'vc_name', label: 'Full Name', type: 'input', placeholder: 'John Doe' },
+                        { id: 'vc_phone', label: 'Phone', type: 'input', placeholder: '+91 9876543210' },
+                        { id: 'vc_email', label: 'Email', type: 'input', placeholder: 'john@example.com' },
+                        { id: 'vc_company', label: 'Company (Optional)', type: 'input', placeholder: 'Company Name' },
+                        { id: 'vc_title', label: 'Job Title (Optional)', type: 'input', placeholder: 'CEO' },
+                        { id: 'vc_website', label: 'Website (Optional)', type: 'input', placeholder: 'https://example.com' },
+                        { id: 'vc_address', label: 'Address (Optional)', type: 'input', placeholder: '123 Street, City' },
+                        { id: 'vc_note', label: 'Note (Optional)', type: 'textarea', placeholder: 'Additional info...' }
+                    ],
+                    build: (data) => {
+                        let vcard = 'BEGIN:VCARD\nVERSION:3.0\n';
+                        if (data.vc_name) vcard += 'FN:' + data.vc_name + '\nN:' + data.vc_name + ';;;\n';
+                        if (data.vc_phone) vcard += 'TEL:' + data.vc_phone + '\n';
+                        if (data.vc_email) vcard += 'EMAIL:' + data.vc_email + '\n';
+                        if (data.vc_company) vcard += 'ORG:' + data.vc_company + '\n';
+                        if (data.vc_title) vcard += 'TITLE:' + data.vc_title + '\n';
+                        if (data.vc_website) vcard += 'URL:' + data.vc_website + '\n';
+                        if (data.vc_address) vcard += 'ADR:;;' + data.vc_address + ';;;\n';
+                        if (data.vc_note) vcard += 'NOTE:' + data.vc_note + '\n';
+                        vcard += 'END:VCARD';
+                        return vcard;
+                    }
+                },
+                location: {
+                    label: 'Location',
+                    icon: 'fa-map-marker-alt',
+                    fields: [
+                        { id: 'loc_lat', label: 'Latitude', type: 'input', placeholder: '28.6139' },
+                        { id: 'loc_lng', label: 'Longitude', type: 'input', placeholder: '77.2090' },
+                        { id: 'loc_zoom', label: 'Zoom Level (Optional)', type: 'input', placeholder: '15' }
+                    ],
+                    build: (data) => {
+                        const lat = data.loc_lat || '0';
+                        const lng = data.loc_lng || '0';
+                        const zoom = data.loc_zoom || '15';
+                        return 'https://www.google.com/maps?q=' + lat + ',' + lng + '&z=' + zoom;
+                    }
+                },
+                event: {
+                    label: 'Event',
+                    icon: 'fa-calendar-alt',
+                    fields: [
+                        { id: 'ev_title', label: 'Event Title', type: 'input', placeholder: 'Conference 2026' },
+                        { id: 'ev_date', label: 'Date', type: 'input', placeholder: '2026-12-25' },
+                        { id: 'ev_time', label: 'Time (Optional)', type: 'input', placeholder: '10:00 AM' },
+                        { id: 'ev_location', label: 'Location (Optional)', type: 'input', placeholder: 'Venue Name' },
+                        { id: 'ev_desc', label: 'Description (Optional)', type: 'textarea', placeholder: 'Event details...' }
+                    ],
+                    build: (data) => {
+                        let str = 'BEGIN:VEVENT\n';
+                        if (data.ev_title) str += 'SUMMARY:' + data.ev_title + '\n';
+                        if (data.ev_date) {
+                            const d = data.ev_date.replace(/-/g, '');
+                            str += 'DTSTART:' + d + '\n';
+                            str += 'DTEND:' + d + '\n';
+                        }
+                        if (data.ev_location) str += 'LOCATION:' + data.ev_location + '\n';
+                        if (data.ev_desc) str += 'DESCRIPTION:' + data.ev_desc + '\n';
+                        str += 'END:VEVENT';
+                        return str;
+                    }
+                },
+                social: {
+                    label: 'Social Media',
+                    icon: 'fa-share-alt',
+                    fields: [
+                        { id: 'social_platform', label: 'Platform', type: 'select', options: ['Instagram', 'Facebook',
+                                'X (Twitter)', 'LinkedIn', 'YouTube', 'TikTok', 'Pinterest'
+                            ] },
+                        { id: 'social_username', label: 'Username or Profile URL', type: 'input',
+                            placeholder: '@username or https://...' }
+                    ],
+                    build: (data) => {
+                        let url = data.social_username || '';
+                        if (url && !url.startsWith('http')) {
+                            const platform = (data.social_platform || '').toLowerCase();
+                            const clean = url.replace(/^@/, '');
+                            switch (platform) {
+                                case 'instagram':
+                                    url = 'https://instagram.com/' + clean;
+                                    break;
+                                case 'facebook':
+                                    url = 'https://facebook.com/' + clean;
+                                    break;
+                                case 'x (twitter)':
+                                    url = 'https://x.com/' + clean;
+                                    break;
+                                case 'linkedin':
+                                    url = 'https://linkedin.com/in/' + clean;
+                                    break;
+                                case 'youtube':
+                                    url = 'https://youtube.com/@' + clean;
+                                    break;
+                                default:
+                                    url = 'https://' + clean;
+                            }
+                        }
+                        return url || '';
+                    }
+                },
+                upi: {
+                    label: 'UPI Payment',
+                    icon: 'fa-credit-card',
+                    fields: [
+                        { id: 'upi_id', label: 'UPI ID (e.g., name@upi)', type: 'input', placeholder: 'your@upi' },
+                        { id: 'upi_name', label: 'Payee Name', type: 'input', placeholder: 'Your Name' },
+                        { id: 'upi_amount', label: 'Amount (Optional)', type: 'input', placeholder: '100.00' },
+                        { id: 'upi_note', label: 'Transaction Note (Optional)', type: 'input',
+                            placeholder: 'Payment for...' }
+                    ],
+                    build: (data) => {
+                        let str = 'upi://pay?pa=' + encodeURIComponent(data.upi_id || '');
+                        if (data.upi_name) str += '&pn=' + encodeURIComponent(data.upi_name);
+                        if (data.upi_amount) str += '&am=' + encodeURIComponent(data.upi_amount);
+                        if (data.upi_note) str += '&tn=' + encodeURIComponent(data.upi_note);
+                        return str;
+                    }
+                },
+                youtube: {
+                    label: 'YouTube',
+                    icon: 'fab fa-youtube',
+                    fields: [
+                        { id: 'yt_handle', label: 'Channel Handle or Video URL', type: 'input',
+                            placeholder: '@channel or https://youtube.com/watch?v=...' }
+                    ],
+                    build: (data) => {
+                        let url = data.yt_handle || '';
+                        if (url && !url.startsWith('http')) {
+                            const clean = url.replace(/^@/, '');
+                            url = 'https://youtube.com/@' + clean;
+                        }
+                        return url;
+                    }
+                },
+                instagram: {
+                    label: 'Instagram',
+                    icon: 'fab fa-instagram',
+                    fields: [
+                        { id: 'ig_handle', label: 'Username or Profile URL', type: 'input',
+                            placeholder: '@username or https://instagram.com/...' }
+                    ],
+                    build: (data) => {
+                        let url = data.ig_handle || '';
+                        if (url && !url.startsWith('http')) {
+                            const clean = url.replace(/^@/, '');
+                            url = 'https://instagram.com/' + clean;
+                        }
+                        return url;
+                    }
+                },
+                facebook: {
+                    label: 'Facebook',
+                    icon: 'fab fa-facebook',
+                    fields: [
+                        { id: 'fb_handle', label: 'Profile/Page URL or Username', type: 'input',
+                            placeholder: 'username or https://facebook.com/...' }
+                    ],
+                    build: (data) => {
+                        let url = data.fb_handle || '';
+                        if (url && !url.startsWith('http')) {
+                            url = 'https://facebook.com/' + url.replace(/^@/, '');
+                        }
+                        return url;
+                    }
+                },
+                twitter: {
+                    label: 'X (Twitter)',
+                    icon: 'fab fa-x-twitter',
+                    fields: [
+                        { id: 'tw_handle', label: 'Username or Profile URL', type: 'input',
+                            placeholder: '@username or https://x.com/...' }
+                    ],
+                    build: (data) => {
+                        let url = data.tw_handle || '';
+                        if (url && !url.startsWith('http')) {
+                            const clean = url.replace(/^@/, '');
+                            url = 'https://x.com/' + clean;
+                        }
+                        return url;
+                    }
+                },
+                linkedin: {
+                    label: 'LinkedIn',
+                    icon: 'fab fa-linkedin',
+                    fields: [
+                        { id: 'li_handle', label: 'Profile URL or Username', type: 'input',
+                            placeholder: 'username or https://linkedin.com/in/...' }
+                    ],
+                    build: (data) => {
+                        let url = data.li_handle || '';
+                        if (url && !url.startsWith('http')) {
+                            url = 'https://linkedin.com/in/' + url.replace(/^@/, '');
+                        }
+                        return url;
+                    }
+                },
+                filelink: {
+                    label: 'PDF/File Link',
+                    icon: 'fa-file-pdf',
+                    fields: [
+                        { id: 'file_url', label: 'File Download URL', type: 'input',
+                            placeholder: 'https://example.com/file.pdf' },
+                        { id: 'file_name', label: 'File Name (Optional)', type: 'input', placeholder: 'document.pdf' }
+                    ],
+                    build: (data) => data.file_url || ''
+                },
+                appdownload: {
+                    label: 'App Download',
+                    icon: 'fa-download',
+                    fields: [
+                        { id: 'app_store', label: 'App Store URL (iOS)', type: 'input',
+                            placeholder: 'https://apps.apple.com/...' },
+                        { id: 'app_play', label: 'Play Store URL (Android)', type: 'input',
+                            placeholder: 'https://play.google.com/...' },
+                        { id: 'app_website', label: 'Website (Optional)', type: 'input', placeholder: 'https://...' }
+                    ],
+                    build: (data) => {
+                        // Build a landing page or choose the first available
+                        return data.app_store || data.app_play || data.app_website || '';
+                    }
+                },
+                custom: {
+                    label: 'Custom',
+                    icon: 'fa-pen-fancy',
+                    fields: [{ id: 'custom_data', label: 'Custom Data', type: 'textarea',
+                            placeholder: 'Enter any custom data to encode...' }],
+                    build: (data) => data.custom_data || ''
+                }
+            };
+
+            // ============================================================
+            //  DOM REFS
+            // ============================================================
+            const inputFieldsContainer = document.getElementById('inputFields');
+            const qrContainer = document.getElementById('qrcode');
+            const placeholder = document.getElementById('placeholder');
+            const generateBtn = document.getElementById('generateBtn');
+            const resetBtn = document.getElementById('resetBtn');
+            const qrTypeButtons = document.querySelectorAll('.qr-type-btn');
+
+            const infoType = document.getElementById('infoType');
+            const infoLength = document.getElementById('infoLength');
+            const infoSize = document.getElementById('infoSize');
+            const infoData = document.getElementById('infoData');
+            const infoDataRow = document.getElementById('infoDataRow');
+
+            const downloadPNG = document.getElementById('downloadPNG');
+            const downloadSVG = document.getElementById('downloadSVG');
+            const downloadJPG = document.getElementById('downloadJPG');
+            const printQR = document.getElementById('printQR');
+            const copyImage = document.getElementById('copyImage');
+            const copyLink = document.getElementById('copyLink');
+            const shareQR = document.getElementById('shareQR');
+
+            const toast = document.getElementById('toast');
+            const toastMsg = document.getElementById('toastMsg');
+
+            let qrCodeInstance = null;
+            let currentType = 'text';
+            let currentData = '';
+            let currentQrData = '';
+            let currentCanvas = null;
+
+            // ============================================================
+            //  HELPERS
+            // ============================================================
+            function showToast(msg) {
+                toastMsg.textContent = msg;
+                toast.classList.add('show');
+                clearTimeout(toast._timer);
+                toast._timer = setTimeout(() => toast.classList.remove('show'), 2800);
+            }
+
+            function getQRTypeLabel(type) {
+                return QR_TYPES[type]?.label || type;
+            }
+
+            function getDataLength(str) {
+                if (!str) return 0;
+                return str.length;
+            }
+
+            // ============================================================
+            //  RENDER INPUT FIELDS
+            // ============================================================
+            function renderInputs(type) {
+                const config = QR_TYPES[type];
+                if (!config) return;
+
+                inputFieldsContainer.innerHTML = '';
+                let html = '';
+
+                config.fields.forEach(f => {
+                    html += `<div class="input-group">`;
+                    html += `<label><i class="fas ${f.icon || 'fa-pencil-alt'}"></i> ${f.label}</label>`;
+
+                    if (f.type === 'textarea') {
+                        html += `<textarea id="field_${f.id}" placeholder="${f.placeholder || ''}"></textarea>`;
+                    } else if (f.type === 'select' && f.options) {
+                        html += `<select id="field_${f.id}">`;
+                        f.options.forEach(opt => {
+                            html += `<option value="${opt}">${opt}</option>`;
+                        });
+                        html += `</select>`;
+                    } else {
+                        html += `<input type="text" id="field_${f.id}" placeholder="${f.placeholder || ''}" />`;
+                    }
+
+                    html += `</div>`;
+                });
+
+                inputFieldsContainer.innerHTML = html;
+            }
+
+            // ============================================================
+            //  COLLECT FIELD DATA
+            // ============================================================
+            function collectData(type) {
+                const config = QR_TYPES[type];
+                const data = {};
+                config.fields.forEach(f => {
+                    const el = document.getElementById('field_' + f.id);
+                    if (el) data[f.id] = el.value || '';
+                });
+                return data;
+            }
+
+            // ============================================================
+            //  GENERATE QR
+            // ============================================================
+            function generateQR() {
+                const data = collectData(currentType);
+                const config = QR_TYPES[currentType];
+                const qrData = config.build(data);
+
+                if (!qrData || qrData.trim() === '') {
+                    showToast('⚠️ Please fill in the required fields');
+                    return;
+                }
+
+                currentQrData = qrData;
+                currentData = qrData;
+
+                // Clear previous
+                qrContainer.innerHTML = '';
+                qrContainer.style.display = 'block';
+                placeholder.style.display = 'none';
+
+                try {
+                    qrCodeInstance = new QRCode(qrContainer, {
+                        text: qrData,
+                        width: 220,
+                        height: 220,
+                        colorDark: '#1f2f8f',
+                        colorLight: '#ffffff',
+                        correctLevel: QRCode.CorrectLevel.H
+                    });
+
+                    // Update info
+                    infoType.textContent = getQRTypeLabel(currentType);
+                    infoLength.textContent = getDataLength(qrData) + ' characters';
+                    const canvas = qrContainer.querySelector('canvas');
+                    if (canvas) {
+                        infoSize.textContent = canvas.width + ' × ' + canvas.height + ' px';
+                        currentCanvas = canvas;
+                    }
+                    infoData.textContent = qrData.length > 60 ? qrData.substring(0, 60) + '...' : qrData;
+                    infoDataRow.style.display = 'flex';
+
+                    showToast('✅ QR Code generated successfully!');
+
+                } catch (err) {
+                    showToast('❌ Error: ' + err.message);
+                    qrContainer.style.display = 'none';
+                    placeholder.style.display = 'flex';
+                }
+            }
+
+            // ============================================================
+            //  RESET
+            // ============================================================
+            function resetAll() {
+                const config = QR_TYPES[currentType];
+                config.fields.forEach(f => {
+                    const el = document.getElementById('field_' + f.id);
+                    if (el) el.value = '';
+                });
+                qrContainer.innerHTML = '';
+                qrContainer.style.display = 'none';
+                placeholder.style.display = 'flex';
+                infoType.textContent = '—';
+                infoLength.textContent = '—';
+                infoSize.textContent = '—';
+                infoData.textContent = '—';
+                infoDataRow.style.display = 'none';
+                qrCodeInstance = null;
+                currentCanvas = null;
+                currentQrData = '';
+                showToast('🔄 Reset');
+            }
+
+            // ============================================================
+            //  DOWNLOAD FUNCTIONS
+            // ============================================================
+            function getCanvas() {
+                const canvas = qrContainer.querySelector('canvas');
+                if (!canvas) {
+                    showToast('⚠️ Generate a QR code first');
+                    return null;
+                }
+                return canvas;
+            }
+
+            function downloadPNGImage() {
+                const canvas = getCanvas();
+                if (!canvas) return;
+                const padding = 20;
+                const size = canvas.width + padding * 2;
+                const newCanvas = document.createElement('canvas');
+                newCanvas.width = size;
+                newCanvas.height = size;
+                const ctx = newCanvas.getContext('2d');
+                ctx.fillStyle = '#ffffff';
+                ctx.fillRect(0, 0, size, size);
+                ctx.drawImage(canvas, padding, padding);
+                ctx.fillStyle = '#9aafc2';
+                ctx.font = '10px Inter, Arial, sans-serif';
+                ctx.textAlign = 'center';
+                ctx.fillText('Generated with 99toolhub', size / 2, size - 6);
+                const link = document.createElement('a');
+                link.download = 'qrcode-99toolhub.png';
+                link.href = newCanvas.toDataURL('image/png');
+                link.click();
+                showToast('📥 PNG downloaded');
+            }
+
+            function downloadSVGImage() {
+                const canvas = getCanvas();
+                if (!canvas) return;
+                // Convert canvas to SVG using data URL
+                const dataUrl = canvas.toDataURL('image/png');
+                const img = new Image();
+                img.onload = function() {
+                    const svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+                    svg.setAttribute('width', canvas.width + 40);
+                    svg.setAttribute('height', canvas.height + 40);
+                    svg.setAttribute('viewBox', '0 0 ' + (canvas.width + 40) + ' ' + (canvas.height + 40));
+                    const rect = document.createElementNS('http://www.w3.org/2000/svg', 'rect');
+                    rect.setAttribute('width', '100%');
+                    rect.setAttribute('height', '100%');
+                    rect.setAttribute('fill', 'white');
+                    svg.appendChild(rect);
+                    const foreign = document.createElementNS('http://www.w3.org/2000/svg', 'foreignObject');
+                    foreign.setAttribute('width', canvas.width + 20);
+                    foreign.setAttribute('height', canvas.height + 20);
+                    foreign.setAttribute('x', '10');
+                    foreign.setAttribute('y', '10');
+                    const div = document.createElement('div');
+                    div.innerHTML =
+                        `<img src="${dataUrl}" width="${canvas.width}" height="${canvas.height}" style="display:block; margin:10px;" />`;
+                    foreign.appendChild(div);
+                    svg.appendChild(foreign);
+                    // Add text
+                    const text = document.createElementNS('http://www.w3.org/2000/svg', 'text');
+                    text.setAttribute('x', (canvas.width + 40) / 2);
+                    text.setAttribute('y', canvas.height + 34);
+                    text.setAttribute('text-anchor', 'middle');
+                    text.setAttribute('font-size', '10');
+                    text.setAttribute('font-family', 'Inter, Arial, sans-serif');
+                    text.setAttribute('fill', '#9aafc2');
+                    text.textContent = 'Generated with 99toolhub';
+                    svg.appendChild(text);
+                    const svgStr = new XMLSerializer().serializeToString(svg);
+                    const blob = new Blob([svgStr], { type: 'image/svg+xml' });
+                    const link = document.createElement('a');
+                    link.download = 'qrcode-99toolhub.svg';
+                    link.href = URL.createObjectURL(blob);
+                    link.click();
+                    URL.revokeObjectURL(link.href);
+                    showToast('📥 SVG downloaded');
+                };
+                img.src = dataUrl;
+            }
+
+            function downloadJPGImage() {
+                const canvas = getCanvas();
+                if (!canvas) return;
+                const padding = 20;
+                const size = canvas.width + padding * 2;
+                const newCanvas = document.createElement('canvas');
+                newCanvas.width = size;
+                newCanvas.height = size;
+                const ctx = newCanvas.getContext('2d');
+                ctx.fillStyle = '#ffffff';
+                ctx.fillRect(0, 0, size, size);
+                ctx.drawImage(canvas, padding, padding);
+                const link = document.createElement('a');
+                link.download = 'qrcode-99toolhub.jpg';
+                link.href = newCanvas.toDataURL('image/jpeg', 0.92);
+                link.click();
+                showToast('📥 JPG downloaded');
+            }
+
+            function printQRCode() {
+                const canvas = getCanvas();
+                if (!canvas) return;
+                window.print();
+            }
+
+            function copyQRImage() {
+                const canvas = getCanvas();
+                if (!canvas) return;
+                canvas.toBlob(function(blob) {
+                    navigator.clipboard?.write([
+                        new ClipboardItem({ 'image/png': blob })
+                    ]).then(() => {
+                        showToast('📋 QR code image copied to clipboard!');
+                    }).catch(() => {
+                        showToast('⚠️ Copy failed. Try downloading instead.');
+                    });
+                });
+            }
+
+            function copyQRDataLink() {
+                if (!currentQrData) {
+                    showToast('⚠️ Generate a QR code first');
+                    return;
+                }
+                navigator.clipboard?.writeText(currentQrData)
+                    .then(() => showToast('📋 Data copied to clipboard!'))
+                    .catch(() => {
+                        const ta = document.createElement('textarea');
+                        ta.value = currentQrData;
+                        document.body.appendChild(ta);
+                        ta.select();
+                        document.execCommand('copy');
+                        ta.remove();
+                        showToast('📋 Data copied to clipboard!');
+                    });
+            }
+
+            function shareQRCode() {
+                const canvas = getCanvas();
+                if (!canvas) return;
+                const padding = 20;
+                const size = canvas.width + padding * 2;
+                const newCanvas = document.createElement('canvas');
+                newCanvas.width = size;
+                newCanvas.height = size;
+                const ctx = newCanvas.getContext('2d');
+                ctx.fillStyle = '#ffffff';
+                ctx.fillRect(0, 0, size, size);
+                ctx.drawImage(canvas, padding, padding);
+                newCanvas.toBlob(function(blob) {
+                    if (navigator.share) {
+                        const file = new File([blob], 'qrcode.png', { type: 'image/png' });
+                        navigator.share({
+                            title: 'QR Code',
+                            text: currentQrData || 'QR Code from 99toolhub',
+                            files: [file]
+                        }).catch(() => {});
+                    } else {
+                        const link = document.createElement('a');
+                        link.download = 'qrcode-99toolhub.png';
+                        link.href = newCanvas.toDataURL('image/png');
+                        link.click();
+                        showToast('📤 Downloaded — share the file manually');
+                    }
+                }, 'image/png');
+            }
+
+            // ============================================================
+            //  EVENT BINDINGS
+            // ============================================================
+
+            // QR Type buttons
+            qrTypeButtons.forEach(btn => {
+                btn.addEventListener('click', function() {
+                    qrTypeButtons.forEach(b => b.classList.remove('active'));
+                    this.classList.add('active');
+                    currentType = this.dataset.type;
+                    renderInputs(currentType);
+                    // Reset QR display
+                    qrContainer.innerHTML = '';
+                    qrContainer.style.display = 'none';
+                    placeholder.style.display = 'flex';
+                    infoType.textContent = '—';
+                    infoLength.textContent = '—';
+                    infoSize.textContent = '—';
+                    infoData.textContent = '—';
+                    infoDataRow.style.display = 'none';
+                    qrCodeInstance = null;
+                    currentCanvas = null;
+                    currentQrData = '';
+                    // Auto-generate if there's a default value or for quick demo
+                    // Not auto-generating to keep clean
+                });
+            });
+
+            generateBtn.addEventListener('click', generateQR);
+
+            resetBtn.addEventListener('click', resetAll);
+
+            // Download buttons
+            downloadPNG.addEventListener('click', downloadPNGImage);
+            downloadSVG.addEventListener('click', downloadSVGImage);
+            downloadJPG.addEventListener('click', downloadJPGImage);
+            printQR.addEventListener('click', printQRCode);
+            copyImage.addEventListener('click', copyQRImage);
+            copyLink.addEventListener('click', copyQRDataLink);
+            shareQR.addEventListener('click', shareQRCode);
+
+            // Enter key support on input fields
+            inputFieldsContainer.addEventListener('keydown', function(e) {
+                if (e.key === 'Enter' && e.target.tagName !== 'TEXTAREA') {
+                    e.preventDefault();
+                    generateQR();
+                }
+            });
+
+            // ============================================================
+            //  FAQ TOGGLE
+            // ============================================================
+            document.querySelectorAll('.faq-item').forEach(item => {
+                item.querySelector('.faq-q').addEventListener('click', () => {
+                    item.classList.toggle('open');
+                });
+            });
+
+            // ============================================================
+            //  INIT
+            // ============================================================
+            renderInputs('text');
+            infoType.textContent = 'Text';
+            infoLength.textContent = '—';
+            infoSize.textContent = '—';
+            infoData.textContent = '—';
+            infoDataRow.style.display = 'none';
+
+            // Set default text for Text type
+            const defaultText = document.getElementById('field_text');
+            if (defaultText) {
+                defaultText.value = 'https://99toolhub.com';
+            }
+
+            // Auto-generate on load with default
+            setTimeout(generateQR, 400);
+
+        })();
+    </script>
+
+</body>
+</html>

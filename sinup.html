@@ -1,0 +1,468 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Login · Bell Push</title>
+
+    <style>
+        /* ===== RESET & ROOT ===== */
+        :root {
+            --bg-color: #121417;
+            --lamp-matte: #e8e2d9;
+            --lamp-shade: #f5f0e6;
+            --lamp-base: #d1ccc2;
+            --glow-color: rgba(255, 214, 110, 0.3);
+            --accent-color: #d4a373;
+            --on: 0;
+            --transition: 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            min-height: 100vh;
+            display: grid;
+            place-items: center;
+            background: var(--bg-color);
+            font-family: "Inter", system-ui, -apple-system, sans-serif;
+            overflow: hidden;
+            transition: background var(--transition);
+            padding: 1rem;
+        }
+
+        body::before {
+            content: "";
+            position: absolute;
+            inset: 0;
+            background: radial-gradient(circle at 50% 40%, var(--glow-color), transparent 70%);
+            opacity: var(--on);
+            transition: opacity var(--transition);
+            pointer-events: none;
+        }
+
+        .container {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 6vmin;
+            flex-wrap: wrap;
+            width: 100%;
+            max-width: 1100px;
+            z-index: 1;
+            position: relative;
+        }
+
+        /* ===== LAMP ===== */
+        .lamp-wrapper {
+            position: relative;
+            width: 280px;
+            height: 400px;
+            display: flex;
+            justify-content: center;
+        }
+
+        .lamp-svg {
+            width: 100%;
+            height: 100%;
+            overflow: visible;
+        }
+
+        .lamp-shade {
+            fill: var(--lamp-shade);
+            transition: fill var(--transition);
+        }
+
+        [data-on="true"] .lamp-shade {
+            fill: #fff;
+            filter: drop-shadow(0 0 30px rgba(255, 255, 200, 0.4));
+        }
+
+        .lamp-base {
+            fill: var(--lamp-base);
+        }
+
+        .inner-glow {
+            fill: #ffdb8a;
+            opacity: 0;
+            filter: blur(15px);
+            transition: opacity var(--transition);
+        }
+
+        [data-on="true"] .inner-glow {
+            opacity: 0.6;
+        }
+
+        .cord-line {
+            stroke: #555;
+            stroke-width: 2;
+        }
+
+        .cord-bead {
+            fill: var(--accent-color);
+        }
+
+        .cord-hit {
+            cursor: pointer;
+        }
+
+        /* ===== LOGIN FORM ===== */
+        .login-form {
+            width: 340px;
+            padding: 2.5rem;
+            border-radius: 30px;
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+            opacity: 0;
+            pointer-events: none;
+            transform: translateY(30px);
+            transition: all 0.7s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            position: relative;
+        }
+
+        .login-form.active {
+            opacity: 1;
+            transform: translateY(0);
+            pointer-events: auto;
+        }
+
+        .login-form h2 {
+            color: #fff;
+            text-align: center;
+            margin-bottom: 1.5rem;
+            font-weight: 500;
+            font-size: 1.5rem;
+        }
+
+        .form-group {
+            margin-bottom: 1.2rem;
+        }
+
+        .form-group label {
+            display: block;
+            color: #999;
+            margin-bottom: 0.5rem;
+            margin-left: 5px;
+            font-size: 0.85rem;
+        }
+
+        .form-group input {
+            width: 100%;
+            padding: 14px 18px;
+            border: 1px solid transparent;
+            border-radius: 15px;
+            outline: none;
+            color: #fff;
+            background: rgba(255, 255, 255, 0.07);
+            transition: 0.3s;
+            font-size: 1rem;
+        }
+
+        .form-group input:focus {
+            border-color: var(--accent-color);
+            background: rgba(255, 255, 255, 0.12);
+        }
+
+        .btn-group {
+            display: flex;
+            gap: 0.8rem;
+            margin-top: 10px;
+        }
+
+        .btn-group button {
+            flex: 1;
+            padding: 15px 10px;
+            border: none;
+            border-radius: 15px;
+            cursor: pointer;
+            font-size: 1rem;
+            font-weight: 600;
+            transition: 0.3s;
+        }
+
+        .login-btn {
+            color: #121417;
+            background: linear-gradient(135deg,
+                    #bf953f, #fcf6ba, #b38728, #fcf6ba, #aa771c);
+            width: 100%;
+        }
+
+        .login-btn:hover {
+            transform: scale(1.02);
+            background: var(--lamp-shade);
+        }
+
+        /* ===== BELL PUSH (side message) ===== */
+        .bell-push {
+            position: absolute;
+            right: -130px;
+            top: 50%;
+            transform: translateY(-50%) scale(1);
+            background: rgba(255, 215, 0, 0.12);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 215, 0, 0.25);
+            border-radius: 20px;
+            padding: 16px 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 4px;
+            opacity: 1;
+            pointer-events: auto;
+            transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+            box-shadow: 0 0 30px rgba(255, 215, 0, 0.08);
+            white-space: nowrap;
+        }
+
+        .bell-push .bell-icon {
+            font-size: 2.4rem;
+            animation: ring 2s ease-in-out infinite;
+        }
+
+        .bell-push .bell-text {
+            color: #f5d742;
+            font-weight: 600;
+            font-size: 0.85rem;
+            letter-spacing: 0.5px;
+            text-shadow: 0 0 20px rgba(255, 215, 0, 0.15);
+        }
+
+        @keyframes ring {
+            0%,
+            100% {
+                transform: rotate(0);
+            }
+            10% {
+                transform: rotate(20deg);
+            }
+            20% {
+                transform: rotate(-20deg);
+            }
+            30% {
+                transform: rotate(10deg);
+            }
+            40% {
+                transform: rotate(-10deg);
+            }
+            50%,
+            100% {
+                transform: rotate(0);
+            }
+        }
+
+        /* ===== RESPONSIVE ===== */
+        @media (max-width: 820px) {
+            .container {
+                flex-direction: column;
+                gap: 2rem;
+                padding: 0.5rem;
+            }
+            .lamp-wrapper {
+                width: 200px;
+                height: 300px;
+            }
+            .login-form {
+                width: 100%;
+                max-width: 380px;
+                padding: 1.8rem;
+            }
+            .bell-push {
+                position: relative;
+                right: auto;
+                top: auto;
+                transform: scale(1) translateY(0);
+                margin-top: 1.2rem;
+                width: 100%;
+                flex-direction: row;
+                justify-content: center;
+                gap: 12px;
+                padding: 12px 20px;
+                white-space: nowrap;
+                border-radius: 50px;
+            }
+            .bell-push .bell-icon {
+                font-size: 1.8rem;
+            }
+            .bell-push .bell-text {
+                font-size: 0.85rem;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .lamp-wrapper {
+                width: 160px;
+                height: 240px;
+            }
+            .login-form {
+                padding: 1.4rem;
+                border-radius: 20px;
+            }
+            .bell-push {
+                padding: 10px 16px;
+                border-radius: 30px;
+                flex-wrap: wrap;
+                white-space: normal;
+                justify-content: center;
+            }
+        }
+    </style>
+</head>
+
+<body data-on="false">
+
+    <div class="container">
+
+        <!-- ===== LAMP SVG ===== -->
+        <div class="lamp-wrapper">
+            <svg class="lamp-svg" viewBox="0 0 200 300" xmlns="http://www.w3.org/2000/svg">
+                <ellipse class="inner-glow" cx="100" cy="110" rx="60" ry="30" />
+                <rect class="lamp-base" x="92" y="100" width="16" height="160" rx="8" />
+                <rect class="lamp-base" x="60" y="250" width="80" height="12" rx="6" />
+
+                <g class="pull-cord">
+                    <line class="cord-line" x1="130" y1="110" x2="130" y2="180" />
+                    <circle class="cord-bead" cx="130" cy="190" r="6" />
+                    <circle class="cord-hit" cx="130" cy="190" r="25" fill="transparent" />
+                </g>
+
+                <path class="lamp-shade" d="M30 110 C 30 50, 170 50, 170 110 C 170 125, 30 125, 30 110 Z" />
+            </svg>
+        </div>
+
+        <!-- ===== LOGIN FORM + BELL PUSH ===== -->
+        <div class="login-form" id="loginForm">
+            <h2>Welcome</h2>
+            <form id="loginFormElement" onsubmit="return false;">
+                <div class="form-group">
+                    <label>Username</label>
+                    <input type="text" placeholder="Enter name" id="username" />
+                </div>
+                <div class="form-group">
+                    <label>Password</label>
+                    <input type="password" placeholder="Enter Password" id="password" />
+                </div>
+                <div class="btn-group">
+                    <button class="login-btn" id="signInBtn">Login</button>
+                </div>
+            </form>
+
+            <!-- Bell Push (always visible) -->
+            <div class="bell-push" id="bellPush">
+                <span class="bell-icon">🔔</span>
+                <span class="bell-text">bell push</span>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- ===== GSAP + DRAGGABLE ===== -->
+    <script src="https://unpkg.com/gsap@3/dist/gsap.min.js">
+    </script>
+    <script src="https://unpkg.com/gsap@3/dist/Draggable.min.js">
+    </script>
+
+    <!-- ===== MAIN SCRIPT ===== -->
+    <script>
+        gsap.registerPlugin(Draggable);
+
+        const root = document.documentElement;
+        const body = document.body;
+        const loginForm = document.getElementById("loginForm");
+        const signInBtn = document.getElementById("signInBtn");
+
+        const cordBead = document.querySelector(".cord-bead");
+        const cordLine = document.querySelector(".cord-line");
+        const hitArea = document.querySelector(".cord-hit");
+
+        let isOn = false;
+
+        const clickSound = new Audio(
+            "https://assets.codepen.io/605876/click.mp3"
+        );
+
+        // ---- Draggable pull-cord ----
+        Draggable.create(hitArea, {
+            type: "y",
+            bounds: {
+                minY: 0,
+                maxY: 60,
+            },
+
+            onDrag() {
+                gsap.set(cordBead, {
+                    y: this.y,
+                });
+                gsap.set(cordLine, {
+                    attr: {
+                        y2: 180 + this.y,
+                    },
+                });
+            },
+
+            onRelease() {
+                if (this.y > 30) {
+                    toggleLamp();
+                }
+
+                gsap.to([cordBead, hitArea], {
+                    y: 0,
+                    duration: 0.5,
+                    ease: "back.out(2.5)",
+                });
+
+                gsap.to(cordLine, {
+                    attr: {
+                        y2: 180,
+                    },
+                    duration: 0.5,
+                    ease: "back.out(2.5)",
+                });
+            },
+        });
+
+        // ---- Toggle lamp + form ----
+        function toggleLamp() {
+            isOn = !isOn;
+
+            clickSound.play();
+
+            body.setAttribute("data-on", isOn);
+            root.style.setProperty("--on", isOn ? 1 : 0);
+
+            if (isOn) {
+                loginForm.classList.add("active");
+                gsap.to(body, {
+                    backgroundColor: "#1c1f24",
+                    duration: 0.6,
+                });
+            } else {
+                loginForm.classList.remove("active");
+                gsap.to(body, {
+                    backgroundColor: "#121417",
+                    duration: 0.6,
+                });
+            }
+        }
+
+        // ---- Click the bead also toggles ----
+        cordBead.addEventListener("click", function(e) {
+            e.stopPropagation();
+            toggleLamp();
+        });
+
+        // ---- Login button ----
+        signInBtn.addEventListener("click", function() {
+            alert("🔐 Signed in successfully!");
+        });
+
+        console.log("✨ Pull the cord to reveal the login form. Bell push is always visible.");
+    </script>
+
+</body>
+</html>

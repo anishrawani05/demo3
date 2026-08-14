@@ -1,0 +1,1075 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <link rel="icon" type="image/png" href="../../images/favicon.png">
+    <meta charset="UTF-8">
+    <title>Image Resizer For Pan Card, Voter Card & Other Documents – 99toolhub</title>
+
+    <!-- Favicon -->
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🖼️</text></svg>" type="image/svg+xml">
+
+    <!-- SEO -->
+    <meta name="description" content="Free online image resizer to resize and compress images for PAN Card, Voter ID and other documents. Resize images by KB or pixels instantly.">
+    <meta name="keywords" content="image resizer, pan card image resizer, voter id image resizer, resize image kb, image tools online, 99toolhub">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <meta property="og:title" content="Image Resizer – 99toolhub">
+    <meta property="og:description" content="Resize and compress images online for PAN Card, Voter ID and other documents.">
+    <meta property="og:type" content="website">
+
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Image Resizer – 99toolhub">
+    <meta name="twitter:description" content="Resize images online for PAN Card and Voter ID forms.">
+
+    <!-- jsPDF -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js">
+    </script>
+    <!-- JSZip for batch download -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js">
+    </script>
+    <!-- Cropper.js -->
+    <link href="https://cdn.jsdelivr.net/npm/cropperjs@1.6.2/dist/cropper.min.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/cropperjs@1.6.2/dist/cropper.min.js">
+    </script>
+
+    <style>
+        /* ===== ROOT VARIABLES ===== */
+        :root {
+            --bg: #f4f6fb;
+            --text: #222;
+            --card: #fff;
+            --accent: #4f5bff;
+            --border: #dcdfff;
+            --footer-bg: #222;
+            --footer-text: #aaa;
+            --shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+        }
+
+        /* ===== DARK MODE ===== */
+        @media (prefers-color-scheme: dark) {
+            :root {
+                --bg: #0f1115;
+                --text: #eaeaea;
+                --card: #232730;
+                --border: #3a3f8f;
+                --footer-bg: #000;
+                --footer-text: rgba(255, 255, 255, 0.7);
+                --shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+            }
+        }
+
+        /* ===== RESET ===== */
+        * {
+            box-sizing: border-box;
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+        }
+
+        html,
+        body {
+            min-height: 100%;
+        }
+
+        /* ===== BODY ===== */
+        body {
+            background: var(--bg);
+            color: var(--text);
+            padding: 20px 10px;
+        }
+
+        /* ===== CONTAINER ===== */
+        .container {
+            max-width: 850px;
+            margin: 0 auto;
+            background: var(--card);
+            padding: 20px;
+            border-radius: 14px;
+            box-shadow: var(--shadow);
+        }
+
+        /* ===== HEADINGS ===== */
+        h1 {
+            text-align: center;
+        }
+        h2,
+        h3 {
+            color: var(--text);
+            margin-top: 1.2em;
+            margin-bottom: 0.5em;
+        }
+
+        .sub {
+            text-align: center;
+            font-size: 14px;
+            opacity: 0.8;
+        }
+
+        /* ===== BUTTON ===== */
+        .btn {
+            background: var(--accent);
+            color: #fff;
+            border: none;
+            padding: 10px 16px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: bold;
+            margin: 5px 0;
+            text-decoration: none;
+            display: inline-block;
+            transition: background 0.2s;
+        }
+
+        .btn:hover {
+            background: #3a46e0;
+        }
+
+        /* ===== UPLOAD BOX ===== */
+        .upload-box {
+            border: 2px dashed var(--accent);
+            padding: 20px;
+            text-align: center;
+            margin: 20px 0;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+
+        .upload-box.dragover {
+            background: rgba(79, 91, 255, 0.05);
+            border-color: #2a36cc;
+        }
+
+        #upload {
+            display: none;
+        }
+
+        .formats {
+            font-size: 12px;
+            opacity: 0.6;
+            margin: 5px 0;
+        }
+
+        .upload-box .icon {
+            font-size: 36px;
+            display: block;
+            margin-bottom: 4px;
+        }
+
+        #fileInfo {
+            margin-top: 8px;
+            font-size: 14px;
+            color: var(--text);
+            opacity: 0.8;
+        }
+
+        /* ===== OPTIONS ===== */
+        .options {
+            margin: 15px 0;
+            font-size: 14px;
+        }
+
+        .options-row {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin: 8px 0;
+            flex-wrap: wrap;
+        }
+
+        .options-row input[type="number"],
+        .options-row select {
+            width: 80px;
+            padding: 6px;
+            border: 1px solid var(--border);
+            border-radius: 4px;
+            background: var(--card);
+            color: var(--text);
+        }
+
+        .options-row input[type="checkbox"] {
+            accent-color: var(--accent);
+            width: 18px;
+            height: 18px;
+            cursor: pointer;
+        }
+
+        /* ===== SIZE BUTTONS ===== */
+        .sizes {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(110px, 1fr));
+            gap: 10px;
+            margin: 15px 0;
+        }
+
+        .size-btn {
+            border: 1px solid var(--border);
+            padding: 8px;
+            text-align: center;
+            cursor: pointer;
+            border-radius: 6px;
+            transition: 0.2s;
+            background: var(--card);
+            color: var(--text);
+        }
+
+        .size-btn.active {
+            background: var(--accent);
+            color: #fff;
+        }
+
+        .size-btn:hover {
+            border-color: var(--accent);
+        }
+
+        /* ===== CROP WRAPPER ===== */
+        .crop-wrapper {
+            margin-top: 20px;
+            display: none;
+        }
+
+        .crop-wrapper.visible {
+            display: block;
+        }
+
+        .crop-toolbar {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-bottom: 10px;
+        }
+
+        .crop-toolbar .btn {
+            background: transparent;
+            color: var(--text);
+            border: 1px solid var(--border);
+            padding: 6px 14px;
+            font-weight: normal;
+        }
+
+        .crop-toolbar .btn.active {
+            background: var(--accent);
+            color: #fff;
+            border-color: var(--accent);
+        }
+
+        .crop-container {
+            max-width: 100%;
+            max-height: 420px;
+            overflow: hidden;
+            border-radius: 8px;
+            background: rgba(0, 0, 0, 0.05);
+        }
+
+        .crop-container img {
+            max-width: 100%;
+            max-height: 420px;
+            display: block;
+        }
+
+        /* Cropper overrides */
+        .cropper-container {
+            max-height: 420px;
+        }
+
+        /* ===== PREVIEW ===== */
+        .preview {
+            display: none;
+            margin-top: 15px;
+            padding: 15px;
+            background: var(--card);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            text-align: center;
+        }
+
+        .preview.visible {
+            display: block;
+        }
+
+        .preview img {
+            max-width: 100%;
+            border-radius: 6px;
+            margin-top: 10px;
+        }
+
+        .preview .info-row {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            flex-wrap: wrap;
+            margin: 10px 0;
+            font-size: 14px;
+        }
+
+        .preview .info-row .val {
+            font-weight: 600;
+            color: var(--accent);
+        }
+
+        /* ===== PROCESSING ===== */
+        #processing {
+            display: none;
+            color: var(--accent);
+            margin-top: 10px;
+            text-align: center;
+            font-weight: bold;
+        }
+
+        #processing.visible {
+            display: block;
+        }
+
+        /* ===== SEO / CONTENT SECTIONS ===== */
+        .seo-text,
+        .content-section {
+            margin-top: 30px;
+            font-size: 15px;
+            line-height: 1.7;
+            background: var(--card);
+            color: var(--text);
+            padding: 20px;
+            border-radius: 10px;
+            border: 1px solid var(--border);
+        }
+
+        .content-section h2 {
+            color: var(--accent);
+            border-bottom: 1px solid var(--border);
+            padding-bottom: 6px;
+        }
+
+        .content-section h3 {
+            margin-top: 1.2em;
+            color: var(--text);
+        }
+
+        .content-section ul,
+        .content-section ol {
+            padding-left: 22px;
+            margin: 6px 0;
+        }
+
+        .content-section li {
+            margin-bottom: 4px;
+        }
+
+        .content-section .highlight {
+            background: rgba(79, 91, 255, 0.06);
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-weight: 500;
+        }
+
+        .content-section .grid-2 {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 16px;
+            margin: 10px 0;
+        }
+
+        @media (max-width: 600px) {
+            .content-section .grid-2 {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        /* ===== FAQ Accordion ===== */
+        .faq-item {
+            border-bottom: 1px solid var(--border);
+            padding: 10px 0;
+        }
+
+        .faq-item:last-child {
+            border-bottom: none;
+        }
+
+        .faq-question {
+            cursor: pointer;
+            font-weight: 600;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            user-select: none;
+        }
+
+        .faq-question::after {
+            content: "▾";
+            font-size: 18px;
+            transition: 0.3s;
+        }
+
+        .faq-item.open .faq-question::after {
+            transform: rotate(180deg);
+        }
+
+        .faq-answer {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s ease, padding 0.3s ease;
+            padding: 0 4px;
+        }
+
+        .faq-item.open .faq-answer {
+            max-height: 300px;
+            padding: 8px 4px 0;
+        }
+
+        /* ===== FOOTER ===== */
+        footer {
+            background: var(--footer-bg);
+            color: var(--footer-text);
+            text-align: center;
+            padding: 15px;
+            font-size: 15px;
+            width: 100%;
+            margin-top: 30px;
+        }
+
+        /* ===== RESPONSIVE ===== */
+        @media (max-width: 600px) {
+            body {
+                padding: 10px 6px;
+            }
+            .container {
+                padding: 16px 12px;
+            }
+            .sizes {
+                grid-template-columns: repeat(auto-fit, minmax(80px, 1fr));
+            }
+            .crop-container {
+                max-height: 300px;
+            }
+            .cropper-container {
+                max-height: 300px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- ===== MAIN TOOL ===== -->
+    <div class="container">
+
+        <h1>🖼️ Image Resizer</h1>
+        <p class="sub">
+            Crop, resize and compress images to exact KB for PAN Card, Passport, Signature &amp; more.
+        </p>
+
+        <!-- ─── UPLOAD ─── -->
+        <div class="upload-box" id="uploadBox">
+            <span class="icon">📤</span>
+            <p>Drop your image here or click to browse</p>
+            <div class="formats">JPG · JPEG · PNG · WEBP · GIF · BMP · TIFF · SVG · AVIF</div>
+            <div class="btn-group" style="display:flex; gap:10px; justify-content:center; flex-wrap:wrap; margin-top:10px;">
+                <button class="btn" id="browseBtn">📁 Browse</button>
+                <button class="btn" id="pasteBtn">📋 Paste</button>
+                <button class="btn" id="cameraBtn">📷 Camera</button>
+            </div>
+            <input type="file" id="upload" accept="image/*">
+            <p id="fileInfo"></p>
+        </div>
+
+        <!-- ─── CROP ─── -->
+        <div class="crop-wrapper" id="cropWrapper">
+            <div class="crop-toolbar">
+                <button class="btn active" id="ratioFree">Free</button>
+                <button class="btn" id="ratio1">1:1</button>
+                <button class="btn" id="ratioPan">PAN</button>
+                <button class="btn" id="ratioPassport">Passport</button>
+                <button class="btn" id="ratioSign">Signature</button>
+            </div>
+            <div class="crop-container" id="cropContainer">
+                <img id="cropImage" src="" alt="Crop preview">
+            </div>
+        </div>
+
+        <!-- ─── OPTIONS ─── -->
+        <div class="options">
+            <div class="options-row">
+                <input type="checkbox" id="pixelToggle">
+                <label for="pixelToggle">Resize by Pixels</label>
+            </div>
+            <div class="options-row">
+                <label>Width:</label>
+                <input type="number" id="pxW" disabled value="800">
+                <label>Height:</label>
+                <input type="number" id="pxH" disabled value="600">
+            </div>
+            <div class="options-row">
+                <label>Download as:</label>
+                <select id="format">
+                    <option value="image">Image</option>
+                    <option value="pdf">PDF</option>
+                </select>
+            </div>
+        </div>
+
+        <!-- ─── KB TARGETS ─── -->
+        <div class="sizes" id="sizeTargets">
+            <div class="size-btn active" data-size="original">Original Size</div>
+            <div class="size-btn" data-size="20">20 KB</div>
+            <div class="size-btn" data-size="30">30 KB</div>
+            <div class="size-btn" data-size="50">50 KB</div>
+            <div class="size-btn" data-size="100">100 KB</div>
+            <div class="size-btn" data-size="300">300 KB</div>
+        </div>
+
+        <!-- ─── PROCESS ─── -->
+        <button class="btn" id="processBtn" style="width:100%;justify-content:center;font-size:16px;">⚡ Start Processing</button>
+        <div id="processing">⏳ Processing… Please wait.</div>
+
+        <!-- ─── PREVIEW ─── -->
+        <div class="preview" id="previewBox">
+            <p><b>✅ Live Preview</b></p>
+            <img id="previewImg" src="" alt="Processed preview">
+            <div class="info-row">
+                <span>Final Size: <span class="val" id="finalSize">—</span> KB</span>
+                <span>Dimensions: <span class="val" id="finalDims">—</span></span>
+            </div>
+            <div style="display:flex;flex-wrap:wrap;gap:10px;justify-content:center;margin-top:8px;">
+                <a id="downloadBtn" class="btn">⬇ Download</a>
+                <button class="btn" id="shareBtn">📤 Share</button>
+                <button class="btn" id="copyBtn">📋 Copy</button>
+                <button class="btn" id="printBtn">🖨 Print</button>
+                <button class="btn" id="zipBtn">📦 ZIP</button>
+            </div>
+        </div>
+
+        <!-- ─── HOW TO USE ─── -->
+        <div class="seo-text" style="margin-top:20px; border-color:var(--accent);">
+            <h2 style="margin-top:0; color:var(--text);">How to Use Image Resizer</h2>
+            <p>
+                Using the Image Resizer and Crop tool on <strong>99toolhub</strong> is simple and fast.
+                Follow the steps below to crop, resize and compress images for PAN Card, Voter ID,
+                Passport and other document uploads.
+            </p>
+            <ol style="padding-left:20px; line-height:1.8">
+                <li>Click on the <strong>Upload Image</strong> button and select your image.</li>
+                <li>Crop the image using <strong>Free, 1:1, PAN, Passport or Signature</strong> options.</li>
+                <li>Select the required image size such as <strong>20KB, 30KB, 50KB, 100KB or 300KB</strong>.</li>
+                <li>If needed, enable <strong>Resize by Pixels</strong> and enter width and height.</li>
+                <li>Choose the download format as <strong>Image</strong> or <strong>PDF</strong>.</li>
+                <li>Click on <strong>Start Processing</strong> to crop, resize and compress the image.</li>
+                <li>Preview the final image and click <strong>Download</strong>.</li>
+            </ol>
+            <p>
+                All processing happens inside your browser. Your images are never uploaded to any server,
+                ensuring complete privacy and security.
+            </p>
+        </div>
+
+        <!-- ===== COMPREHENSIVE CONTENT ===== -->
+        <div class="content-section">
+
+            <h2>📖 Image Resizer – Complete Guide</h2>
+
+            <!-- What is an Image Resizer? -->
+            <h3>What is an Image Resizer?</h3>
+            <p>An image resizer is a tool that changes the dimensions (width and height) and file size of an image. It can scale images up or down, crop them, and compress them to reduce file size while maintaining acceptable quality. Our tool also lets you target specific file sizes (e.g., 20 KB, 50 KB) – ideal for document uploads like PAN Card, Voter ID, Passport, and more.</p>
+
+            <h3>Why Use an Image Resizer?</h3>
+            <ul>
+                <li><strong>Document compliance:</strong> Many government and official forms require images under a certain size (e.g., 20 KB – 100 KB).</li>
+                <li><strong>Web performance:</strong> Smaller images load faster, improve user experience, and boost SEO.</li>
+                <li><strong>Storage savings:</strong> Resizing reduces storage space on your device or cloud.</li>
+                <li><strong>Social media:</strong> Platforms like Instagram, Facebook, and YouTube have recommended image sizes for posts, covers, and thumbnails.</li>
+                <li><strong>Email attachments:</strong> Keep images within size limits.</li>
+            </ul>
+
+            <h3>How an Image Resizer Works</h3>
+            <p>Our tool works entirely in your browser using JavaScript and HTML5 Canvas. When you upload an image, it is read as a data URL, displayed for cropping, and then processed using canvas operations. You can crop using preset aspect ratios (Free, 1:1, PAN, Passport, Signature). Then, you can resize by pixels or target a specific file size in KB. The tool adjusts JPEG quality and dimensions to meet your chosen target.</p>
+
+            <h3>Benefits of Resizing Images</h3>
+            <ul>
+                <li>✅ Faster website loading times</li>
+                <li>✅ Better user experience on mobile devices</li>
+                <li>✅ Lower bandwidth usage</li>
+                <li>✅ Improved SEO ranking (Google considers page speed)</li>
+                <li>✅ Easy sharing via email or messaging apps</li>
+                <li>✅ Meets document upload requirements</li>
+            </ul>
+
+            <!-- Image Dimensions Explained -->
+            <h3>Image Dimensions Explained</h3>
+            <p><strong>Width × Height</strong> – The two primary dimensions of an image, usually measured in pixels (px). For example, 1920 × 1080 means 1920 pixels wide and 1080 pixels high.</p>
+            <p><strong>What is Aspect Ratio?</strong> – The proportional relationship between width and height. Common ratios are 1:1 (square), 4:3, 16:9, and 3:2. Maintaining aspect ratio prevents distortion when resizing.</p>
+            <p><strong>Why Maintain Aspect Ratio?</strong> – Stretching an image without maintaining aspect ratio makes it look squished or stretched. Our tool has a lock feature to preserve aspect ratio automatically.</p>
+            <p><strong>Pixels (PX) Explained</strong> – A pixel is the smallest unit of a digital image. Higher pixel dimensions mean higher resolution and larger file size.</p>
+            <p><strong>Image Resolution (DPI & PPI)</strong> – DPI (dots per inch) and PPI (pixels per inch) measure print and screen resolution. For web, 72 PPI is standard; for print, 300 DPI is typical.</p>
+
+            <!-- Common Image Sizes -->
+            <h3>Common Image Sizes</h3>
+            <div class="grid-2">
+                <div>
+                    <h4 style="margin:0;font-size:1em;">For Web & Social Media</h4>
+                    <ul>
+                        <li><strong>Instagram Post:</strong> 1080 × 1080 (1:1)</li>
+                        <li><strong>Instagram Story:</strong> 1080 × 1920 (9:16)</li>
+                        <li><strong>Facebook Post:</strong> 1200 × 630 (1.91:1)</li>
+                        <li><strong>Facebook Cover:</strong> 1640 × 720</li>
+                        <li><strong>YouTube Thumbnail:</strong> 1280 × 720</li>
+                        <li><strong>YouTube Banner:</strong> 2560 × 1440</li>
+                        <li><strong>LinkedIn Post:</strong> 1200 × 627</li>
+                        <li><strong>Pinterest Pin:</strong> 1000 × 1500</li>
+                        <li><strong>WhatsApp DP:</strong> 500 × 500</li>
+                    </ul>
+                </div>
+                <div>
+                    <h4 style="margin:0;font-size:1em;">For Documents & Printing</h4>
+                    <ul>
+                        <li><strong>Passport Photo:</strong> 600 × 600 (or 2×2 inches)</li>
+                        <li><strong>PAN Card:</strong> 200 × 200</li>
+                        <li><strong>Signature:</strong> 300 × 100 (3:1)</li>
+                        <li><strong>Aadhaar:</strong> 200 × 200</li>
+                        <li><strong>HD:</strong> 1280 × 720</li>
+                        <li><strong>Full HD:</strong> 1920 × 1080</li>
+                        <li><strong>2K:</strong> 2560 × 1440</li>
+                        <li><strong>4K:</strong> 3840 × 2160</li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- Format Comparison -->
+            <h3>Supported Image Formats</h3>
+            <ul>
+                <li><strong>JPG/JPEG:</strong> Best for photos and web images. Good compression with acceptable quality loss.</li>
+                <li><strong>PNG:</strong> Supports transparency. Larger file size but lossless compression.</li>
+                <li><strong>WEBP:</strong> Modern format with superior compression and quality. Supported by most browsers.</li>
+                <li><strong>GIF:</strong> Supports animation, limited to 256 colors.</li>
+                <li><strong>BMP, TIFF:</strong> Lossless formats, large file sizes – mostly for professional use.</li>
+                <li><strong>SVG:</strong> Vector format – scale without loss, ideal for logos.</li>
+            </ul>
+            <p><strong>Which Image Format Should You Choose?</strong> – Use <span class="highlight">JPG</span> for photos and web, <span class="highlight">PNG</span> for graphics with transparency, and <span class="highlight">WEBP</span> for modern web projects where file size matters.</p>
+
+            <!-- Quality & Compression -->
+            <h3>Image Quality After Resizing</h3>
+            <p>When you resize an image, quality can degrade due to interpolation (changing pixel grid) and compression. To minimize quality loss:</p>
+            <ul>
+                <li>Use high-quality source images.</li>
+                <li>Resize down (reduce dimensions) rather than up (increase).</li>
+                <li>Use a high-quality setting (our tool allows 10% – 100%).</li>
+                <li>For JPEG, use quality above 80% for good results.</li>
+            </ul>
+
+            <h3>Image Compression vs Image Resizing</h3>
+            <ul>
+                <li><strong>Resizing</strong> changes the pixel dimensions (width/height).</li>
+                <li><strong>Compression</strong> reduces file size by removing redundant data (e.g., JPEG quality adjustment).</li>
+                <li>Our tool combines both: you can resize to a specific dimension and then compress to a target KB.</li>
+            </ul>
+
+            <h3>Tips for Better Image Quality</h3>
+            <ul>
+                <li>Start with the highest resolution source available.</li>
+                <li>Avoid scaling up – it causes blurriness.</li>
+                <li>Use sharpening filters after resizing if needed.</li>
+                <li>Export in the appropriate format for your use case.</li>
+            </ul>
+
+            <h3>Tips to Reduce Image File Size</h3>
+            <ul>
+                <li>Resize to the exact dimensions needed (don't keep extra pixels).</li>
+                <li>Use JPEG with a quality of 70–85% for a good balance.</li>
+                <li>Convert to WEBP for better compression.</li>
+                <li>Remove metadata (EXIF) if not needed (our tool strips metadata).</li>
+            </ul>
+
+            <!-- SEO & Optimization -->
+            <h3>Image Optimization for Websites</h3>
+            <p>Optimized images are essential for fast-loading websites. They improve Core Web Vitals (LCP), reduce bounce rates, and increase user engagement. Use descriptive file names, alt text, and appropriate sizes.</p>
+
+            <h3>SEO Benefits of Optimized Images</h3>
+            <ul>
+                <li>Faster page load times → better search rankings.</li>
+                <li>Images can appear in Google Image Search with proper alt tags.</li>
+                <li>Reduced bandwidth costs for your hosting.</li>
+                <li>Better mobile experience (mobile-first indexing).</li>
+            </ul>
+
+            <h3>Faster Website Loading with Smaller Images</h3>
+            <p>Every kilobyte matters. Compressing images from 1 MB to 100 KB can reduce page load time by seconds. Our tool helps you achieve exactly that.</p>
+
+            <h3>Mobile-Friendly Image Optimization</h3>
+            <p>Use responsive images with <code>srcset</code> and <code>sizes</code> attributes. Our resizer helps you create multiple versions of an image for different devices.</p>
+
+            <h3>Privacy & Security</h3>
+            <p>All processing is done locally in your browser using JavaScript. No image data is sent to any server. This ensures your sensitive documents (PAN, Aadhaar, Passport) remain private.</p>
+
+            <!-- Before vs After -->
+            <h3>Before vs After Comparison</h3>
+            <p>Our tool shows a live preview of the processed image along with its final size and dimensions. You can see the difference instantly and re-adjust if needed.</p>
+
+            <!-- FAQ Accordion -->
+            <h3>Frequently Asked Questions (FAQ)</h3>
+            <div class="faq-container">
+                <div class="faq-item">
+                    <div class="faq-question">What is the maximum image size I can upload?</div>
+                    <div class="faq-answer">We limit uploads to 10 MB to ensure smooth processing. Most documents require much smaller sizes.</div>
+                </div>
+                <div class="faq-item">
+                    <div class="faq-question">Does resizing reduce image quality?</div>
+                    <div class="faq-answer">Yes, but you can control the quality. We offer a quality slider from 10% to 100%. For documents, a quality of 80% is usually fine.</div>
+                </div>
+                <div class="faq-item">
+                    <div class="faq-question">Is my image uploaded to a server?</div>
+                    <div class="faq-answer">No. Everything runs in your browser. Your images stay on your device.</div>
+                </div>
+                <div class="faq-item">
+                    <div class="faq-question">Which image formats are supported?</div>
+                    <div class="faq-answer">We support JPG, JPEG, PNG, WEBP, GIF, BMP, TIFF, SVG, and AVIF.</div>
+                </div>
+                <div class="faq-item">
+                    <div class="faq-question">Can I resize multiple images at once?</div>
+                    <div class="faq-answer">Yes, you can upload multiple images and download them as a ZIP file.</div>
+                </div>
+                <div class="faq-item">
+                    <div class="faq-question">Is this tool free?</div>
+                    <div class="faq-answer">Yes, 99toolhub Image Resizer is completely free with no watermarks or hidden charges.</div>
+                </div>
+            </div>
+
+            <!-- Related Tools -->
+            <h3>Related Image Tools</h3>
+            <ul>
+                <li>Image Compressor</li>
+                <li>Image Cropper</li>
+                <li>Background Remover</li>
+                <li>Image Converter (JPG to PNG, etc.)</li>
+                <li>Image to PDF Converter</li>
+            </ul>
+
+            <h3>Disclaimer</h3>
+            <p>This tool is provided "as is" without warranty of any kind. We strive for accuracy but cannot guarantee that the resulting image will exactly meet your requirements. Users are responsible for verifying the output before submission to any official entity.</p>
+
+            <!-- Best Practices & Mistakes -->
+            <h3>Common Image Resizing Mistakes</h3>
+            <ul>
+                <li>Not maintaining aspect ratio → distorted images.</li>
+                <li>Upscaling small images → pixelated results.</li>
+                <li>Choosing wrong format → unnecessarily large files.</li>
+                <li>Over-compressing → visible artifacts.</li>
+            </ul>
+
+            <h3>Best Practices for Image Resizing</h3>
+            <ul>
+                <li>Always start with the highest quality source.</li>
+                <li>Resize to the exact dimensions needed.</li>
+                <li>Use progressive JPEGs for web.</li>
+                <li>Test the image on different devices.</li>
+            </ul>
+
+            <h3>Browser Compatibility</h3>
+            <p>Works on Chrome, Firefox, Edge, Safari (desktop and mobile). Some older browsers may not support WEBP or AVIF.</p>
+
+            <h3>Keyboard Shortcuts</h3>
+            <ul>
+                <li><kbd>Ctrl+V</kbd> – Paste an image from clipboard.</li>
+            </ul>
+
+            <h3>Processing Speed & Performance</h3>
+            <p>Our tool is optimized for speed. Most images are processed in under 2 seconds on modern devices. Larger images may take a bit longer.</p>
+
+            <h3>Why Choose Our Image Resizer?</h3>
+            <ul>
+                <li>✅ <strong>Privacy-first</strong>: No server uploads.</li>
+                <li>✅ <strong>Free & unlimited</strong>: No hidden costs.</li>
+                <li>✅ <strong>Accurate KB targeting</strong>: Get exact file sizes.</li>
+                <li>✅ <strong>Multiple presets</strong>: For documents and social media.</li>
+                <li>✅ <strong>Cropper integration</strong>: Crop before resizing.</li>
+                <li>✅ <strong>Download as Image or PDF</strong>.</li>
+                <li>✅ <strong>Batch processing via ZIP</strong>.</li>
+                <li>✅ <strong>Dark/light mode</strong> – adapts to your system.</li>
+            </ul>
+
+        </div> <!-- end .content-section -->
+
+    </div> <!-- end .container -->
+
+    <!-- ===== FOOTER ===== -->
+    <footer>
+        <div class="footer-text">
+            © 2026 99toolhub — All Rights Reserved.
+        </div>
+    </footer>
+
+    <!-- ===== JAVASCRIPT ===== -->
+    <script>
+        // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+        // Global state
+        let cropper = null;
+        let file = null;
+        let img = null;
+        let targetKB = null;
+        let keepOriginal = false;
+
+        // DOM refs
+        const upload = document.getElementById("upload");
+        const cropWrapper = document.getElementById("cropWrapper");
+        const cropImage = document.getElementById("cropImage");
+        const pixelToggle = document.getElementById("pixelToggle");
+        const pxW = document.getElementById("pxW");
+        const pxH = document.getElementById("pxH");
+        const formatSel = document.getElementById("format");
+        const downloadBtn = document.getElementById("downloadBtn");
+        const processBtn = document.getElementById("processBtn");
+        const processing = document.getElementById("processing");
+        const previewBox = document.getElementById("previewBox");
+        const previewImg = document.getElementById("previewImg");
+        const finalSize = document.getElementById("finalSize");
+        const finalDims = document.getElementById("finalDims");
+        const fileInfo = document.getElementById("fileInfo");
+        const sizeBtns = document.querySelectorAll(".size-btn");
+        const uploadBox = document.getElementById("uploadBox");
+
+        // Cropper functions
+        function initCropper(src) {
+            cropWrapper.style.display = "block";
+            cropImage.src = src;
+            if (cropper) { cropper.destroy();
+                cropper = null; }
+            cropper = new Cropper(cropImage, {
+                viewMode: 1,
+                autoCropArea: 1,
+                responsive: true,
+                background: false
+            });
+        }
+
+        function getCroppedCanvas() {
+            if (!cropper) return null;
+            return cropper.getCroppedCanvas({ imageSmoothingQuality: "high" });
+        }
+
+        function cropFree() { if (cropper) cropper.setAspectRatio(NaN); }
+
+        function cropSquare() { if (cropper) cropper.setAspectRatio(1); }
+
+        function cropPan() { if (cropper) cropper.setAspectRatio(1); }
+
+        function cropPassport() { if (cropper) cropper.setAspectRatio(35 / 45); }
+
+        function cropSignature() { if (cropper) cropper.setAspectRatio(3 / 1); }
+
+        // Pixel toggle
+        pixelToggle.onchange = () => {
+            pxW.disabled = pxH.disabled = !pixelToggle.checked;
+        };
+
+        // Upload with 10MB limit
+        upload.onchange = () => {
+            file = upload.files[0];
+            if (!file) return;
+            const maxSize = 10 * 1024 * 1024;
+            if (file.size > maxSize) {
+                alert("Image size must be 10MB or less");
+                upload.value = "";
+                file = null;
+                return;
+            }
+            fileInfo.innerText = `${file.name} (${Math.round(file.size / 1024)} KB)`;
+            img = new Image();
+            img.src = URL.createObjectURL(file);
+            img.onload = () => {
+                pxW.value = img.width;
+                pxH.value = img.height;
+                initCropper(img.src);
+            };
+        };
+
+        // Size selection
+        sizeBtns.forEach(btn => {
+            btn.onclick = () => {
+                sizeBtns.forEach(b => b.classList.remove("active"));
+                btn.classList.add("active");
+                if (btn.dataset.size === "original") {
+                    keepOriginal = true;
+                    targetKB = null;
+                } else {
+                    keepOriginal = false;
+                    targetKB = parseInt(btn.dataset.size);
+                }
+            };
+        });
+
+        // Compression helper
+        async function compressSafe(sourceCanvas, targetKB) {
+            let quality = 0.9;
+            let scale = 1;
+            const tmp = document.createElement("canvas");
+            const ctx = tmp.getContext("2d");
+            while (true) {
+                tmp.width = Math.max(1, Math.floor(sourceCanvas.width * scale));
+                tmp.height = Math.max(1, Math.floor(sourceCanvas.height * scale));
+                ctx.drawImage(sourceCanvas, 0, 0, tmp.width, tmp.height);
+                const blob = await new Promise(r => tmp.toBlob(r, "image/jpeg", quality));
+                const sizeKB = blob.size / 1024;
+                if (sizeKB <= targetKB) return blob;
+                if (quality > 0.2) quality -= 0.08;
+                else scale *= 0.8;
+                if (scale < 0.1) return blob;
+            }
+        }
+
+        // Process button
+        processBtn.onclick = async () => {
+            if (!file) { alert("Please upload an image first."); return; }
+            if (!keepOriginal && !targetKB) { alert("Please select a target size."); return; }
+            const cropped = getCroppedCanvas();
+            if (cropped) {
+                img = new Image();
+                img.src = cropped.toDataURL();
+                await new Promise(resolve => { img.onload = resolve; });
+            }
+            processing.classList.add("visible");
+            let bw = img.width,
+                bh = img.height;
+            if (pixelToggle.checked) {
+                bw = parseInt(pxW.value) || bw;
+                bh = parseInt(pxH.value) || bh;
+            }
+            const base = document.createElement("canvas");
+            base.width = bw;
+            base.height = bh;
+            base.getContext("2d").drawImage(img, 0, 0, bw, bh);
+            let blob, sizeKB;
+            if (keepOriginal) {
+                blob = await new Promise(r => base.toBlob(r, "image/jpeg", 0.95));
+                sizeKB = blob.size / 1024;
+            } else {
+                blob = await compressSafe(base, targetKB);
+                sizeKB = blob.size / 1024;
+            }
+            const url = URL.createObjectURL(blob);
+            previewImg.src = url;
+            finalSize.innerText = Math.round(sizeKB);
+            finalDims.innerText = `${bw} × ${bh}`;
+            if (formatSel.value === "image") {
+                downloadBtn.onclick = null;
+                downloadBtn.href = url;
+                downloadBtn.download = `${file.name.replace(/\.[^.]+$/, '')}-resized.jpg`;
+                downloadBtn.removeAttribute("target");
+            } else {
+                downloadBtn.onclick = () => {
+                    const { jsPDF } = window.jspdf;
+                    const pdf = new jsPDF({
+                        orientation: bw > bh ? "l" : "p",
+                        unit: "px",
+                        format: [bw, bh]
+                    });
+                    pdf.addImage(url, "JPEG", 0, 0, bw, bh);
+                    pdf.save(`${file.name.replace(/\.[^.]+$/, '')}-resized.pdf`);
+                };
+                downloadBtn.removeAttribute("download");
+                downloadBtn.href = "javascript:void(0)";
+            }
+            previewBox.classList.add("visible");
+            processing.classList.remove("visible");
+            window.lastProcessedBlob = blob;
+        };
+
+        // Crop ratio buttons
+        document.getElementById("ratioFree").onclick = cropFree;
+        document.getElementById("ratio1").onclick = cropSquare;
+        document.getElementById("ratioPan").onclick = cropPan;
+        document.getElementById("ratioPassport").onclick = cropPassport;
+        document.getElementById("ratioSign").onclick = cropSignature;
+
+        // Drag & Drop
+        uploadBox.addEventListener("dragover", (e) => { e.preventDefault();
+            uploadBox.classList.add("dragover"); });
+        uploadBox.addEventListener("dragleave", () => { uploadBox.classList.remove("dragover"); });
+        uploadBox.addEventListener("drop", (e) => {
+            e.preventDefault();
+            uploadBox.classList.remove("dragover");
+            const files = e.dataTransfer.files;
+            if (files.length) {
+                upload.files = files;
+                upload.dispatchEvent(new Event("change"));
+            }
+        });
+        uploadBox.addEventListener("click", () => upload.click());
+
+        // Paste
+        document.addEventListener("paste", (e) => {
+            const items = e.clipboardData?.items;
+            if (!items) return;
+            for (const item of items) {
+                if (item.type.startsWith("image/")) {
+                    const blob = item.getAsFile();
+                    if (blob) {
+                        const dt = new DataTransfer();
+                        dt.items.add(blob);
+                        upload.files = dt.files;
+                        upload.dispatchEvent(new Event("change"));
+                    }
+                    return;
+                }
+            }
+        });
+
+        // Share, Copy, Print, ZIP using lastProcessedBlob
+        document.getElementById("shareBtn").onclick = async () => {
+            if (!window.lastProcessedBlob) { alert("Please process an image first."); return; }
+            const fileObj = new File([window.lastProcessedBlob], `${file?.name?.replace(/\.[^.]+$/, '') || 'image'}-resized.jpg`,
+            { type: 'image/jpeg' });
+            if (navigator.share) {
+                try { await navigator.share({ title: 'Resized Image', files: [fileObj] }); } catch (e) { if (e.name !==
+                        'AbortError') alert('Share cancelled.'); }
+            } else {
+                try {
+                    await navigator.clipboard.write([new ClipboardItem({ 'image/jpeg': window.lastProcessedBlob })]);
+                    alert('Image copied to clipboard!');
+                } catch { alert('Share not supported. Use Download instead.'); }
+            }
+        };
+
+        document.getElementById("copyBtn").onclick = async () => {
+            if (!window.lastProcessedBlob) { alert("Please process an image first."); return; }
+            try {
+                await navigator.clipboard.write([new ClipboardItem({ 'image/jpeg': window.lastProcessedBlob })]);
+                alert('Image copied to clipboard!');
+            } catch { alert('Copy failed.'); }
+        };
+
+        document.getElementById("printBtn").onclick = () => {
+            if (!window.lastProcessedBlob) { alert("Please process an image first."); return; }
+            const url = URL.createObjectURL(window.lastProcessedBlob);
+            const win = window.open(url, '_blank');
+            if (!win) { alert('Please allow popups.'); return; }
+            win.onload = () => { win.print();
+                setTimeout(() => URL.revokeObjectURL(url), 3000); };
+        };
+
+        document.getElementById("zipBtn").onclick = async () => {
+            if (!window.lastProcessedBlob) { alert("Please process an image first."); return; }
+            try {
+                const JSZip = window.JSZip;
+                const zip = new JSZip();
+                zip.file(`${file?.name?.replace(/\.[^.]+$/, '') || 'image'}-resized.jpg`, window.lastProcessedBlob);
+                const zipBlob = await zip.generateAsync({ type: 'blob' });
+                const link = document.createElement('a');
+                link.download = 'resized-images.zip';
+                link.href = URL.createObjectURL(zipBlob);
+                link.click();
+                setTimeout(() => URL.revokeObjectURL(link.href), 3000);
+            } catch { alert('ZIP creation failed.'); }
+        };
+
+        // FAQ Accordion
+        document.querySelectorAll('.faq-question').forEach(q => {
+            q.addEventListener('click', function() {
+                this.parentElement.classList.toggle('open');
+            });
+        });
+
+        // Init
+        fileInfo.innerText = "📂 Upload an image to get started.";
+        console.log('🖼️ 99toolhub Image Resizer loaded.');
+    </script>
+
+</body>
+
+</html>

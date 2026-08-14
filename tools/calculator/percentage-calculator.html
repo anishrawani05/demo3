@@ -1,0 +1,1643 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <link rel="icon" type="image/png" href="../../images/favicon.png">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Percentage Calculator - 99toolhub</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,400;14..32,500;14..32,600;14..32,700;14..32,800;14..32,900&display=swap" rel="stylesheet">
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: #F0F7F7;
+            color: #1a2a3a;
+            line-height: 1.7;
+            padding: 0;
+        }
+
+        .page-wrapper {
+            max-width: 860px;
+            width: 100%;
+            margin: 0 auto;
+            padding: 30px 20px 40px;
+        }
+
+        /* ─── BRAND BAR ─── */
+        .brand-bar {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 12px;
+            margin-bottom: 28px;
+            padding: 0 4px;
+        }
+
+        .brand-bar .logo {
+            font-weight: 800;
+            font-size: 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            color: #0b2a2a;
+        }
+
+        .brand-bar .logo i {
+            color: #009688;
+            font-size: 1.7rem;
+        }
+
+        .brand-bar .logo span {
+            background: linear-gradient(135deg, #009688, #26a69a);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .brand-bar .tagline {
+            font-size: 14px;
+            color: #64748b;
+            font-weight: 500;
+            background: #e8f0f0;
+            padding: 6px 18px;
+            border-radius: 30px;
+            border: 1px solid #c8dede;
+        }
+
+        /* ─── HEADER ─── */
+        .tool-header {
+            text-align: center;
+            padding: 20px 0 10px;
+        }
+
+        .tool-header h1 {
+            font-size: 2.2rem;
+            font-weight: 900;
+            color: #0b2a2a;
+            letter-spacing: -0.03em;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 12px;
+        }
+
+        .tool-header h1 i {
+            color: #009688;
+        }
+
+        .tool-header p {
+            color: #5a7a7a;
+            font-size: 1.05rem;
+            margin-top: 4px;
+        }
+
+        .tool-header .badge {
+            display: inline-block;
+            background: #dcfce7;
+            color: #00796B;
+            font-size: 12px;
+            font-weight: 600;
+            padding: 3px 16px;
+            border-radius: 30px;
+            margin-top: 6px;
+        }
+
+        .tool-header .badge i {
+            font-size: 10px;
+            color: #009688;
+            margin-right: 4px;
+        }
+
+        /* ─── CALCULATOR CARDS ─── */
+        .calc-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 24px;
+            margin: 28px 0 10px;
+        }
+
+        .calc-card {
+            background: #ffffff;
+            border-radius: 20px;
+            padding: 28px 26px 32px;
+            border: 1px solid #d8eaea;
+            box-shadow: 0 6px 24px rgba(0, 100, 90, 0.06);
+            transition: box-shadow 0.25s ease;
+        }
+
+        .calc-card:hover {
+            box-shadow: 0 12px 40px rgba(0, 100, 90, 0.10);
+        }
+
+        .calc-card .card-title {
+            font-weight: 700;
+            font-size: 1rem;
+            color: #00796B;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 18px;
+        }
+
+        .calc-card .card-title i {
+            font-size: 1.2rem;
+            color: #009688;
+        }
+
+        .calc-card label {
+            display: block;
+            font-weight: 600;
+            font-size: 0.85rem;
+            color: #3a5a5a;
+            margin-bottom: 6px;
+        }
+
+        .calc-card .row {
+            display: flex;
+            gap: 12px;
+            margin-bottom: 14px;
+        }
+
+        .calc-card .row input {
+            width: 100%;
+            padding: 12px 16px;
+            border: 1.5px solid #d8eaea;
+            border-radius: 12px;
+            outline: none;
+            font-size: 1rem;
+            font-family: 'Inter', sans-serif;
+            background: #faffff;
+            transition: 0.2s;
+            color: #0b2a2a;
+        }
+
+        .calc-card .row input:focus {
+            border-color: #009688;
+            box-shadow: 0 0 0 4px rgba(0, 150, 136, 0.10);
+            background: #ffffff;
+        }
+
+        .calc-card .row input::placeholder {
+            color: #9ab8b8;
+            font-weight: 400;
+        }
+
+        .calc-card .btn-calc {
+            background: #009688;
+            color: white;
+            border: none;
+            padding: 12px 28px;
+            border-radius: 60px;
+            font-weight: 600;
+            font-size: 0.95rem;
+            cursor: pointer;
+            transition: 0.25s;
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            font-family: 'Inter', sans-serif;
+        }
+
+        .calc-card .btn-calc:hover {
+            background: #00796B;
+            transform: translateY(-2px);
+            box-shadow: 0 8px 24px rgba(0, 150, 136, 0.30);
+        }
+
+        .calc-card .btn-calc:active {
+            transform: scale(0.96);
+        }
+
+        .calc-card .result-box {
+            margin-top: 16px;
+            padding: 14px 18px;
+            border-radius: 12px;
+            background: #f5fbfb;
+            border: 1px solid #d8eaea;
+            font-weight: 600;
+            font-size: 1rem;
+            color: #00796B;
+            min-height: 54px;
+            display: flex;
+            align-items: center;
+        }
+
+        .calc-card .result-box .empty {
+            color: #9ab8b8;
+            font-weight: 400;
+        }
+
+        /* ─── ACTION BAR ─── */
+        .action-bar {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin: 24px 0 8px 0;
+            padding: 18px 0 6px 0;
+            border-top: 2px solid #d8eaea;
+            justify-content: center;
+        }
+
+        .action-bar .btn-action {
+            padding: 10px 20px;
+            border-radius: 60px;
+            font-weight: 600;
+            font-size: 0.85rem;
+            border: none;
+            cursor: pointer;
+            transition: 0.25s;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            font-family: 'Inter', sans-serif;
+            background: #eaf5f5;
+            color: #0b2a2a;
+            border: 1px solid #c8dede;
+        }
+
+        .action-bar .btn-action:hover {
+            background: #d8eaea;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.06);
+        }
+
+        .action-bar .btn-action i {
+            font-size: 1rem;
+        }
+
+        .action-bar .btn-action.reset-btn {
+            background: #fef2f2;
+            border-color: #fccccc;
+            color: #991b1b;
+        }
+
+        .action-bar .btn-action.reset-btn:hover {
+            background: #fde8e8;
+        }
+
+        .action-bar .btn-action.copy-btn {
+            background: #e8f0fe;
+            border-color: #bdd3f0;
+            color: #1a4a8a;
+        }
+
+        .action-bar .btn-action.copy-btn:hover {
+            background: #d4e4fc;
+        }
+
+        .action-bar .btn-action.pdf-btn {
+            background: #fef3e8;
+            border-color: #fad4b8;
+            color: #8a3a1a;
+        }
+
+        .action-bar .btn-action.pdf-btn:hover {
+            background: #fce8d4;
+        }
+
+        .action-bar .btn-action.share-btn {
+            background: #e8faf0;
+            border-color: #b8e8cc;
+            color: #1a6a3a;
+        }
+
+        .action-bar .btn-action.share-btn:hover {
+            background: #d4f5e0;
+        }
+
+        @media (max-width: 640px) {
+            .calc-grid {
+                grid-template-columns: 1fr;
+                gap: 18px;
+            }
+
+            .calc-card .row {
+                flex-direction: column;
+                gap: 10px;
+            }
+
+            .tool-header h1 {
+                font-size: 1.6rem;
+            }
+
+            .brand-bar .logo {
+                font-size: 1.2rem;
+            }
+
+            .brand-bar .tagline {
+                font-size: 12px;
+                padding: 4px 12px;
+            }
+
+            .action-bar .btn-action {
+                flex: 1 1 100%;
+                justify-content: center;
+                padding: 12px 16px;
+            }
+        }
+
+        /* ─── CONTENT SECTION ─── */
+        .content-section {
+            margin-top: 48px;
+            background: rgba(255, 255, 255, 0.88);
+            backdrop-filter: blur(12px);
+            border-radius: 28px;
+            padding: 36px 40px 40px 40px;
+            border: 1px solid rgba(200, 220, 220, 0.5);
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.04);
+        }
+
+        .content-section h2 {
+            font-size: 26px;
+            font-weight: 800;
+            color: #0b2a2a;
+            margin: 42px 0 16px 0;
+            letter-spacing: -0.3px;
+            border-left: 5px solid #009688;
+            padding-left: 18px;
+        }
+
+        .content-section h2:first-of-type {
+            margin-top: 0;
+        }
+
+        .content-section h3 {
+            font-size: 20px;
+            font-weight: 700;
+            color: #1a3a3a;
+            margin: 28px 0 12px 0;
+        }
+
+        .content-section h4 {
+            font-size: 17px;
+            font-weight: 600;
+            color: #2a4a4a;
+            margin: 20px 0 8px 0;
+        }
+
+        .content-section p {
+            font-size: 16px;
+            line-height: 1.9;
+            color: #2a4a4a;
+            margin-bottom: 16px;
+        }
+
+        .content-section ul,
+        .content-section ol {
+            margin: 12px 0 20px 28px;
+            line-height: 1.9;
+            color: #2a4a4a;
+        }
+
+        .content-section li {
+            margin-bottom: 8px;
+            font-size: 16px;
+        }
+
+        .content-section .card-tip {
+            background: #eaf5f5;
+            border-radius: 14px;
+            padding: 20px 24px;
+            margin: 20px 0;
+            border-left: 4px solid #009688;
+        }
+
+        .content-section .card-tip i {
+            color: #009688;
+            margin-right: 8px;
+        }
+
+        .content-section .faq-item {
+            border-bottom: 1px solid #d8eaea;
+            padding: 18px 0;
+        }
+
+        .content-section .faq-item:last-child {
+            border-bottom: none;
+        }
+
+        .content-section .faq-item .q {
+            font-weight: 700;
+            font-size: 17px;
+            color: #0b2a2a;
+            display: flex;
+            gap: 12px;
+            align-items: flex-start;
+        }
+
+        .content-section .faq-item .q i {
+            color: #009688;
+            font-size: 18px;
+            margin-top: 2px;
+        }
+
+        .content-section .faq-item .a {
+            margin-top: 6px;
+            padding-left: 34px;
+            color: #3a5a5a;
+            line-height: 1.8;
+        }
+
+        .formula-box {
+            background: #0b2a2a;
+            color: #d8eaea;
+            padding: 18px 24px;
+            border-radius: 12px;
+            font-family: 'Courier New', monospace;
+            font-size: 16px;
+            margin: 16px 0 24px 0;
+            overflow-x: auto;
+            white-space: pre-wrap;
+            word-break: break-word;
+            line-height: 1.8;
+        }
+
+        .formula-box .hl {
+            color: #4dd0e1;
+        }
+
+        .formula-box .hl-green {
+            color: #81c784;
+        }
+
+        .formula-box .hl-blue {
+            color: #64b5f6;
+        }
+
+        .example-box {
+            background: #fefce8;
+            border: 1px solid #fde68a;
+            border-radius: 14px;
+            padding: 20px 24px;
+            margin: 16px 0 24px 0;
+        }
+
+        .example-box strong {
+            color: #7a5a0a;
+        }
+
+        .divider {
+            width: 100%;
+            height: 1px;
+            background: #d8eaea;
+            margin: 32px 0;
+        }
+
+        .glossary-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px;
+        }
+
+        .glossary-item {
+            background: #f5fbfb;
+            border-radius: 12px;
+            padding: 12px 16px;
+            border: 1px solid #d8eaea;
+        }
+
+        .glossary-item .term {
+            font-weight: 700;
+            color: #0b2a2a;
+            font-size: 0.95rem;
+        }
+
+        .glossary-item .def {
+            font-size: 0.85rem;
+            color: #5a7a7a;
+            margin-top: 2px;
+        }
+
+        .disclaimer-box {
+            background: #fef2f2;
+            border-radius: 16px;
+            padding: 24px 28px;
+            border-left: 5px solid #dc2626;
+            margin: 32px 0 16px 0;
+        }
+
+        .disclaimer-box .disclaimer-title {
+            font-weight: 700;
+            color: #991b1b;
+            font-size: 18px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .disclaimer-box .disclaimer-title i {
+            font-size: 22px;
+        }
+
+        .disclaimer-box p {
+            color: #7f1d1d;
+            font-size: 15px;
+            line-height: 1.8;
+            margin-top: 8px;
+        }
+
+        .footer-note {
+            text-align: center;
+            padding: 24px 0 10px;
+            color: #8aaaaa;
+            font-size: 14px;
+            border-top: 1px solid #d8eaea;
+            margin-top: 30px;
+        }
+
+        .footer-note strong {
+            color: #009688;
+            font-weight: 700;
+        }
+
+        .footer-note .heart {
+            color: #ef4444;
+        }
+
+        /* ─── TOAST ─── */
+        .toast {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            background: #0b2a2a;
+            color: #ffffff;
+            padding: 14px 28px;
+            border-radius: 60px;
+            font-weight: 500;
+            box-shadow: 0 12px 30px rgba(0, 0, 0, 0.2);
+            backdrop-filter: blur(8px);
+            opacity: 0;
+            transform: translateY(20px);
+            transition: 0.3s ease;
+            pointer-events: none;
+            z-index: 999;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 0.95rem;
+            font-family: 'Inter', sans-serif;
+        }
+
+        .toast.show {
+            opacity: 1;
+            transform: translateY(0);
+            pointer-events: auto;
+        }
+
+        @media (max-width: 640px) {
+            .content-section {
+                padding: 24px 18px;
+                border-radius: 20px;
+            }
+
+            .content-section h2 {
+                font-size: 21px;
+                padding-left: 12px;
+            }
+
+            .content-section h3 {
+                font-size: 18px;
+            }
+
+            .formula-box {
+                font-size: 14px;
+                padding: 14px 16px;
+            }
+
+            .glossary-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .disclaimer-box {
+                padding: 16px 18px;
+            }
+
+            .toast {
+                right: 16px;
+                left: 16px;
+                bottom: 20px;
+                font-size: 0.85rem;
+                padding: 12px 18px;
+                text-align: center;
+                justify-content: center;
+            }
+        }
+
+        @media print {
+            .brand-bar .tagline,
+            .calc-card .btn-calc,
+            .action-bar,
+            .footer-note,
+            .toast {
+                display: none !important;
+            }
+
+            .content-section {
+                background: #fff !important;
+                backdrop-filter: none !important;
+                box-shadow: none !important;
+                border: 1px solid #d8eaea !important;
+            }
+
+            .calc-card {
+                box-shadow: none !important;
+                border: 1px solid #d8eaea !important;
+            }
+
+            body {
+                background: #fff !important;
+                padding: 10px !important;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="page-wrapper">
+
+        <!-- ===== BRAND BAR ===== -->
+        <div class="brand-bar">
+            <div class="logo">
+             <i class="fas fa-percent"></i>
+                <span>99toolhub</span>
+            </div>
+            <span class="tagline"><i class="fas fa-bolt" style="color:#009688;"></i> Free Online Tools</span>
+        </div>
+
+        <!-- ===== TOOL HEADER ===== -->
+        <div class="tool-header">
+            <h1><i class="fas fa-percent"></i> Percentage Calculator</h1>
+            <p>Calculate percentages, increases, decreases, and more — instantly.</p>
+            <span class="badge"><i class="fas fa-circle"></i> Live Calculation</span>
+        </div>
+
+        <!-- ===== CALCULATOR GRID ===== -->
+        <div class="calc-grid">
+
+            <!-- Card 1: Percentage of a Number -->
+            <div class="calc-card">
+                <div class="card-title"><i class="fas fa-calculator"></i> Percentage of a Number</div>
+                <label>What is <span style="color:#009688; font-weight:700;">%</span> of <span style="color:#009688; font-weight:700;">Number</span>?</label>
+                <div class="row">
+                    <input id="percent" type="number" placeholder="Percentage %" step="any">
+                    <input id="number" type="number" placeholder="Number" step="any">
+                </div>
+                <button class="btn-calc" onclick="calculatePercentage()"><i class="fas fa-equals"></i> Calculate</button>
+                <div class="result-box" id="result1"><span class="empty">Enter values to see result</span></div>
+            </div>
+
+            <!-- Card 2: Percentage Increase / Decrease -->
+            <div class="calc-card">
+                <div class="card-title"><i class="fas fa-arrow-trend-up"></i> Percentage Change</div>
+                <label>Change from <span style="color:#009688; font-weight:700;">Old</span> to <span style="color:#009688; font-weight:700;">New</span></label>
+                <div class="row">
+                    <input id="oldValue" type="number" placeholder="Old Value" step="any">
+                    <input id="newValue" type="number" placeholder="New Value" step="any">
+                </div>
+                <button class="btn-calc" onclick="calculateChange()"><i class="fas fa-arrows-left-right"></i> Calculate Change</button>
+                <div class="result-box" id="result2"><span class="empty">Enter values to see result</span></div>
+            </div>
+
+        </div>
+
+        <!-- ===== ACTION BAR (Download, Share, PDF, Print, Reset) ===== -->
+        <div class="action-bar">
+            <button class="btn-action reset-btn" onclick="resetAll()"><i class="fas fa-undo-alt"></i> Reset</button>
+            <button class="btn-action copy-btn" onclick="copyResult()"><i class="fas fa-copy"></i> Copy</button>
+            <button class="btn-action pdf-btn" onclick="downloadPDF()"><i class="fas fa-file-pdf"></i> PDF</button>
+            <button class="btn-action" onclick="printPage()"><i class="fas fa-print"></i> Print</button>
+            <button class="btn-action share-btn" onclick="shareResult()"><i class="fas fa-share-alt"></i> Share</button>
+        </div>
+
+        <!-- ===== CONTENT SECTION (29 Sections) ===== -->
+        <div class="content-section">
+
+            <!-- 1. About Percentage Calculator -->
+            <h2>📘 About Percentage Calculator</h2>
+            <p>
+                The <strong>99toolhub Percentage Calculator</strong> is a simple yet powerful online tool designed to help you perform all common percentage calculations with ease and accuracy. Whether you need to find what percentage one number is of another, calculate a percentage of a specific number, or determine the percentage increase or decrease between two values, this tool handles it all in seconds.
+            </p>
+            <p>
+                Percentages are everywhere in our daily lives — from shopping discounts and exam scores to financial interest rates and business profit margins. Understanding percentages is essential for making informed decisions, whether you're a student, a professional, a business owner, or just someone managing a personal budget.
+            </p>
+            <p>
+                Our calculator features two dedicated modes:
+            </p>
+            <ul>
+                <li><strong>Percentage of a Number:</strong> Quickly find what a given percentage of any number equals.</li>
+                <li><strong>Percentage Change:</strong> Easily compute the percentage increase or decrease between two values.</li>
+            </ul>
+            <p>
+                The tool is designed with a clean, distraction-free interface that works seamlessly on desktop, tablet, and mobile. All calculations are performed locally in your browser — no data is sent to any server, ensuring your privacy is always protected.
+            </p>
+
+            <div class="divider"></div>
+
+            <!-- 2. What is Percentage? -->
+            <h2>📊 What is Percentage?</h2>
+            <p>
+                A <strong>percentage</strong> is a number or ratio expressed as a fraction of <strong>100</strong>. The term "percent" comes from the Latin <em>"per centum"</em>, which means "by the hundred." Percentages are denoted using the percent sign (<strong>%</strong>).
+            </p>
+            <p>
+                In simple terms, a percentage tells you how many parts out of one hundred something represents. For example, if you score <strong>85%</strong> on a test, it means you answered 85 out of every 100 questions correctly.
+            </p>
+            <p>
+                Percentages are a universal way of comparing numbers relative to a common scale (100). This makes them incredibly useful for comparing data across different contexts — such as comparing the performance of two students who took tests with different total marks, or comparing the discount on two products with different original prices.
+            </p>
+            <p>
+                The mathematical relationship can be expressed as:
+            </p>
+            <div class="formula-box">
+                Percentage = ( Part ÷ Whole ) × 100
+            </div>
+            <p>
+                Where <strong>Part</strong> is the portion you're interested in, and <strong>Whole</strong> is the total or complete quantity.
+            </p>
+
+            <div class="divider"></div>
+
+            <!-- 3. Why Use a Percentage Calculator? -->
+            <h2>🎯 Why Use a Percentage Calculator?</h2>
+            <p>
+                While percentages are conceptually simple, calculating them manually can be time-consuming and prone to errors, especially when dealing with large numbers, decimals, or multiple steps. Here are the key reasons why a dedicated percentage calculator is invaluable:
+            </p>
+            <ul>
+                <li><strong>⚡ Speed & Efficiency:</strong> Get accurate results in milliseconds. No more mental math or paper-and-pen calculations.</li>
+                <li><strong>🎯 100% Accuracy:</strong> Eliminate calculation errors that can occur when multiplying or dividing large numbers.</li>
+                <li><strong>🔄 Two Modes in One:</strong> Calculate percentage of a number and percentage change — both in the same tool.</li>
+                <li><strong>📱 Accessible Anywhere:</strong> Works on all devices — desktop, tablet, and mobile.</li>
+                <li><strong>🆓 Completely Free:</strong> No sign-ups, no subscriptions, no hidden charges.</li>
+                <li><strong>🔒 Private & Secure:</strong> All calculations happen locally in your browser. No data is stored or shared.</li>
+                <li><strong>📚 Educational:</strong> Helps students learn and practice percentage concepts with instant feedback.</li>
+            </ul>
+
+            <div class="divider"></div>
+
+            <!-- 4. How to Use the Percentage Calculator -->
+            <h2>🛠️ How to Use the Percentage Calculator</h2>
+            <p>
+                Using the 99toolhub Percentage Calculator is incredibly straightforward. Here's how to use each mode:
+            </p>
+
+            <h3>📌 Mode 1: Percentage of a Number</h3>
+            <ol>
+                <li><strong>Enter the Percentage:</strong> Type the percentage value you want to calculate (e.g., 25 for 25%).</li>
+                <li><strong>Enter the Number:</strong> Type the number you want to apply the percentage to (e.g., 200).</li>
+                <li><strong>Click Calculate:</strong> Press the "Calculate" button to see the result instantly.</li>
+                <li><strong>Result:</strong> The tool will display the answer — e.g., "25% of 200 = 50".</li>
+            </ol>
+
+            <h3>📌 Mode 2: Percentage Change</h3>
+            <ol>
+                <li><strong>Enter the Old Value:</strong> Type the starting or original value.</li>
+                <li><strong>Enter the New Value:</strong> Type the ending or updated value.</li>
+                <li><strong>Click Calculate Change:</strong> Press the "Calculate Change" button.</li>
+                <li><strong>Result:</strong> The tool will display the percentage increase or decrease, e.g., "Increase: 25.00%".</li>
+            </ol>
+            <p>
+                Both modes are designed to give you instant feedback, making it easy to experiment with different numbers and see the results in real-time.
+            </p>
+
+            <div class="divider"></div>
+
+            <!-- 5. Percentage Formula -->
+            <h2>📐 Percentage Formula</h2>
+            <p>
+                The fundamental percentage formula is the backbone of all percentage calculations. Here are the key formulas used in our calculator:
+            </p>
+
+            <div class="formula-box">
+                <span class="hl-blue">1. Percentage of a Number</span>
+                <span class="hl">Result</span> = ( Percentage ÷ 100 ) × Number
+
+                <span class="hl-blue">2. Percentage Change</span>
+                <span class="hl">Change %</span> = ( ( New Value − Old Value ) ÷ Old Value ) × 100
+
+                <span class="hl-blue">3. Percentage Difference</span>
+                <span class="hl">Difference %</span> = ( | Value₁ − Value₂ | ÷ ( ( Value₁ + Value₂ ) ÷ 2 ) ) × 100
+
+                <span class="hl-blue">4. Finding the Original Value</span>
+                <span class="hl">Original</span> = Part ÷ ( Percentage ÷ 100 )
+            </div>
+
+            <p>
+                These formulas are universal and form the basis of virtually all percentage calculations in mathematics, finance, business, and everyday life.
+            </p>
+
+            <div class="divider"></div>
+
+            <!-- 6. How to Calculate Percentage -->
+            <h2>🧮 How to Calculate Percentage</h2>
+            <p>
+                Calculating a percentage manually involves a few simple steps. Here's the standard method:
+            </p>
+            <ol>
+                <li><strong>Identify the part and the whole:</strong> Determine what number represents the "part" and what represents the "whole" (total).</li>
+                <li><strong>Divide the part by the whole:</strong> Use the formula: Part ÷ Whole.</li>
+                <li><strong>Multiply by 100:</strong> Take the result from step 2 and multiply it by 100 to get the percentage.</li>
+            </ol>
+            <div class="example-box">
+                <p><strong>Example:</strong> If you scored 45 marks out of a total of 60 marks:</p>
+                <ul>
+                    <li>Step 1: Part = 45, Whole = 60</li>
+                    <li>Step 2: 45 ÷ 60 = 0.75</li>
+                    <li>Step 3: 0.75 × 100 = <strong>75%</strong></li>
+                </ul>
+            </div>
+            <p>
+                This method works for any situation where you want to express a portion as a percentage of the total.
+            </p>
+
+            <div class="divider"></div>
+
+            <!-- 7. Percentage Increase Formula -->
+            <h2>📈 Percentage Increase Formula</h2>
+            <p>
+                Percentage increase is used when a value grows or rises over time. The formula is:
+            </p>
+            <div class="formula-box">
+                <span class="hl-green">Percentage Increase</span> = ( ( New Value − Old Value ) ÷ Old Value ) × 100
+            </div>
+            <p>
+                The result is positive when the new value is greater than the old value. A percentage increase of <strong>25%</strong> means the value has grown by one-quarter of its original size.
+            </p>
+            <div class="example-box">
+                <p><strong>Example:</strong> A product price increases from ₹200 to ₹250.</p>
+                <ul>
+                    <li>Old Value = 200, New Value = 250</li>
+                    <li>Change = 250 − 200 = 50</li>
+                    <li>Percentage Increase = (50 ÷ 200) × 100 = <strong>25%</strong></li>
+                </ul>
+            </div>
+
+            <div class="divider"></div>
+
+            <!-- 8. Percentage Decrease Formula -->
+            <h2>📉 Percentage Decrease Formula</h2>
+            <p>
+                Percentage decrease is used when a value declines or shrinks. The formula is:
+            </p>
+            <div class="formula-box">
+                <span class="hl-green">Percentage Decrease</span> = ( ( Old Value − New Value ) ÷ Old Value ) × 100
+            </div>
+            <p>
+                The result is positive when the new value is less than the old value. A percentage decrease of <strong>20%</strong> means the value has fallen by one-fifth of its original size.
+            </p>
+            <div class="example-box">
+                <p><strong>Example:</strong> A product price drops from ₹250 to ₹200.</p>
+                <ul>
+                    <li>Old Value = 250, New Value = 200</li>
+                    <li>Change = 250 − 200 = 50</li>
+                    <li>Percentage Decrease = (50 ÷ 250) × 100 = <strong>20%</strong></li>
+                </ul>
+            </div>
+
+            <div class="divider"></div>
+
+            <!-- 9. Percentage Difference Formula -->
+            <h2>📊 Percentage Difference Formula</h2>
+            <p>
+                Percentage difference is used to compare two numbers without designating one as "old" or "new." It's often used when comparing two measurements, prices, or scores.
+            </p>
+            <div class="formula-box">
+                <span class="hl-green">Percentage Difference</span> = ( | Value₁ − Value₂ | ÷ ( ( Value₁ + Value₂ ) ÷ 2 ) ) × 100
+            </div>
+            <p>
+                The absolute value (| |) ensures the result is always positive, representing the relative difference between the two numbers.
+            </p>
+            <div class="example-box">
+                <p><strong>Example:</strong> Compare 150 and 200.</p>
+                <ul>
+                    <li>Value₁ = 150, Value₂ = 200</li>
+                    <li>Difference = |150 − 200| = 50</li>
+                    <li>Average = (150 + 200) ÷ 2 = 175</li>
+                    <li>Percentage Difference = (50 ÷ 175) × 100 = <strong>28.57%</strong></li>
+                </ul>
+            </div>
+
+            <div class="divider"></div>
+
+            <!-- 10. Percentage Change Explained -->
+            <h2>🔄 Percentage Change Explained</h2>
+            <p>
+                <strong>Percentage change</strong> is a measure that quantifies the relative change in a value over time. It is widely used in finance, economics, business, and everyday life to understand growth or decline.
+            </p>
+            <p>
+                The key distinction between percentage increase and percentage decrease is simply the direction of the change:
+            </p>
+            <ul>
+                <li><strong>Positive percentage change</strong> = Increase (value has gone up).</li>
+                <li><strong>Negative percentage change</strong> = Decrease (value has gone down).</li>
+            </ul>
+            <p>
+                Our calculator handles both scenarios automatically. If the new value is greater than the old value, it shows <strong>"Increase"</strong> with the percentage. If the new value is smaller, it shows <strong>"Decrease"</strong>.
+            </p>
+            <p>
+                This concept is essential for understanding trends — whether you're tracking stock prices, sales figures, population growth, or any other metric that changes over time.
+            </p>
+
+            <div class="divider"></div>
+
+            <!-- 11. Percentage of a Number Explained -->
+            <h2>🔢 Percentage of a Number Explained</h2>
+            <p>
+                The phrase <strong>"percentage of a number"</strong> refers to calculating a specific percentage of a given quantity. It's one of the most common percentage calculations in everyday life.
+            </p>
+            <p>
+                The calculation involves multiplying the number by the percentage expressed as a decimal (percentage ÷ 100).
+            </p>
+            <div class="example-box">
+                <p><strong>Example 1:</strong> What is 15% of 120?</p>
+                <ul>
+                    <li>Step 1: 15% = 15 ÷ 100 = 0.15</li>
+                    <li>Step 2: 0.15 × 120 = <strong>18</strong></li>
+                </ul>
+                <p style="margin-top:8px;"><strong>Answer:</strong> 15% of 120 is 18.</p>
+            </div>
+            <div class="example-box">
+                <p><strong>Example 2:</strong> What is 8.5% of 2,000?</p>
+                <ul>
+                    <li>Step 1: 8.5% = 8.5 ÷ 100 = 0.085</li>
+                    <li>Step 2: 0.085 × 2000 = <strong>170</strong></li>
+                </ul>
+                <p style="margin-top:8px;"><strong>Answer:</strong> 8.5% of 2,000 is 170.</p>
+            </div>
+            <p>
+                This calculation is used everywhere — from calculating tips and discounts to determining tax amounts and interest.
+            </p>
+
+            <div class="divider"></div>
+
+            <!-- 12. Finding the Original Value from a Percentage -->
+            <h2>🔍 Finding the Original Value from a Percentage</h2>
+            <p>
+                Sometimes you know a percentage and the resulting part, but you need to find the original (whole) value. This is known as <strong>reverse percentage calculation</strong>.
+            </p>
+            <div class="formula-box">
+                <span class="hl-blue">Original Value</span> = Part ÷ ( Percentage ÷ 100 )
+            </div>
+            <div class="example-box">
+                <p><strong>Example:</strong> If 40% of a number is 80, what is the original number?</p>
+                <ul>
+                    <li>Part = 80, Percentage = 40%</li>
+                    <li>Original = 80 ÷ (40 ÷ 100) = 80 ÷ 0.40 = <strong>200</strong></li>
+                </ul>
+                <p style="margin-top:8px;"><strong>Answer:</strong> The original number is 200.</p>
+            </div>
+            <p>
+                This is particularly useful when you know the discounted price and the discount percentage, and you want to find the original price before the discount.
+            </p>
+
+            <div class="divider"></div>
+
+            <!-- 13. Common Percentage Calculations -->
+            <h2>📋 Common Percentage Calculations</h2>
+            <p>
+                Here are some of the most frequently used percentage calculations in daily life:
+            </p>
+            <ul>
+                <li><strong>Discount Calculation:</strong> "What is 20% off a ₹500 item?" → 20% of 500 = ₹100 discount.</li>
+                <li><strong>Tip Calculation:</strong> "What is 15% tip on a ₹800 bill?" → 15% of 800 = ₹120.</li>
+                <li><strong>Tax Calculation:</strong> "What is 12% GST on ₹2,000?" → 12% of 2000 = ₹240.</li>
+                <li><strong>Exam Score:</strong> "What percentage is 85 out of 100?" → (85 ÷ 100) × 100 = 85%.</li>
+                <li><strong>Profit Margin:</strong> "What percentage profit is ₹50 on a ₹200 cost?" → (50 ÷ 200) × 100 = 25%.</li>
+                <li><strong>Population Growth:</strong> "Population increased from 10,000 to 12,000 — what percentage?" → (2000 ÷ 10000) × 100 = 20% increase.</li>
+                <li><strong>Salary Hike:</strong> "Salary increased from ₹50,000 to ₹55,000 — what percentage hike?" → (5000 ÷ 50000) × 100 = 10%.</li>
+            </ul>
+
+            <div class="divider"></div>
+
+            <!-- 14. Real-Life Uses of Percentages -->
+            <h2>🌍 Real-Life Uses of Percentages</h2>
+            <p>
+                Percentages are woven into almost every aspect of modern life. Here are some key areas where percentages are indispensable:
+            </p>
+            <ul>
+                <li><strong>Shopping & Discounts:</strong> Retailers use percentages to advertise sales (e.g., "50% off").</li>
+                <li><strong>Education:</strong> Exam scores, grade point averages, and academic performance metrics.</li>
+                <li><strong>Finance & Banking:</strong> Interest rates, loan APRs, investment returns, and tax calculations.</li>
+                <li><strong>Business:</strong> Profit margins, revenue growth, market share, and performance metrics.</li>
+                <li><strong>Healthcare:</strong> Body fat percentage, vaccine efficacy rates, and treatment success rates.</li>
+                <li><strong>Sports:</strong> Batting averages, shooting percentages, and win-loss percentages.</li>
+                <li><strong>News & Media:</strong> Polls, surveys, and statistical reports use percentages to communicate findings.</li>
+            </ul>
+
+            <div class="divider"></div>
+
+            <!-- 15. Percentage in Exams and Marks -->
+            <h2>🎓 Percentage in Exams and Marks</h2>
+            <p>
+                In education, percentages are the most common way to represent a student's performance. Whether it's a school exam, a competitive test, or a university course, percentages provide a standardized metric to compare results.
+            </p>
+            <p>
+                To calculate the percentage of marks obtained in an exam:
+            </p>
+            <div class="formula-box">
+                Percentage = ( Marks Obtained ÷ Total Marks ) × 100
+            </div>
+            <p>
+                For example, if a student scores 320 marks out of a total of 400, the percentage would be:
+            </p>
+            <ul>
+                <li>(320 ÷ 400) × 100 = <strong>80%</strong></li>
+            </ul>
+            <p>
+                Many educational institutions also use <strong>CGPA</strong> (Cumulative Grade Point Average) systems, where percentages are converted to grade points using specific conversion formulas.
+            </p>
+            <p>
+                For competitive exams like JEE, NEET, CAT, and UPSC, percentages are often used to determine eligibility and rank. A difference of just a few percentage points can significantly impact admissions and career opportunities.
+            </p>
+
+            <div class="divider"></div>
+
+            <!-- 16. Percentage in Business and Finance -->
+            <h2>🏢 Percentage in Business and Finance</h2>
+            <p>
+                In the business world, percentages are the language of performance, growth, and profitability. Here's how they're used:
+            </p>
+            <ul>
+                <li><strong>Profit Margin:</strong> (Profit ÷ Revenue) × 100 — indicates how much profit a company makes for every rupee of revenue.</li>
+                <li><strong>Revenue Growth:</strong> ((Current Revenue − Previous Revenue) ÷ Previous Revenue) × 100 — tracks business growth.</li>
+                <li><strong>Market Share:</strong> (Company Sales ÷ Total Market Sales) × 100 — shows a company's portion of the total market.</li>
+                <li><strong>Employee Productivity:</strong> Percentage of targets achieved or tasks completed.</li>
+                <li><strong>Return on Investment (ROI):</strong> ((Gain from Investment − Cost of Investment) ÷ Cost of Investment) × 100.</li>
+                <li><strong>Budget Allocation:</strong> Percentage of total budget allocated to different departments or projects.</li>
+            </ul>
+            <p>
+                Investors and analysts rely heavily on percentage-based metrics to evaluate companies, make investment decisions, and forecast future performance.
+            </p>
+
+            <div class="divider"></div>
+
+            <!-- 17. Percentage in Shopping and Discounts -->
+            <h2>🛍️ Percentage in Shopping and Discounts</h2>
+            <p>
+                Discounts are one of the most common real-life applications of percentages. Understanding discounts helps you make smarter purchasing decisions and save money.
+            </p>
+            <p>
+                To calculate the discount amount:
+            </p>
+            <div class="formula-box">
+                Discount Amount = Original Price × ( Discount Percentage ÷ 100 )
+            </div>
+            <div class="example-box">
+                <p><strong>Example:</strong> A laptop costs ₹50,000 and is offered at a 20% discount.</p>
+                <ul>
+                    <li>Discount Amount = 50,000 × 0.20 = ₹10,000</li>
+                    <li>Final Price = 50,000 − 10,000 = ₹40,000</li>
+                </ul>
+            </div>
+            <p>
+                Additional discount scenarios include:
+            </p>
+            <ul>
+                <li><strong>Successive Discounts:</strong> When two or more discounts are applied one after the other (e.g., 10% off, then 5% off).</li>
+                <li><strong>Cashback Offers:</strong> A percentage of the purchase amount returned as cashback.</li>
+                <li><strong>Buy One Get One (BOGO):</strong> Often equivalent to a 50% discount if both items have the same price.</li>
+            </ul>
+
+            <div class="divider"></div>
+
+            <!-- 18. Percentage in GST and Tax Calculations -->
+            <h2>🧾 Percentage in GST and Tax Calculations</h2>
+            <p>
+                Taxes are almost always calculated as a percentage of the transaction value. In India, the <strong>Goods and Services Tax (GST)</strong> is applied at different percentage rates depending on the product or service category.
+            </p>
+            <div class="formula-box">
+                Tax Amount = Transaction Value × ( Tax Rate ÷ 100 )
+            </div>
+            <p>
+                Common GST rates in India include 5%, 12%, 18%, and 28%. For example, if you purchase a product worth ₹10,000 with an 18% GST:
+            </p>
+            <ul>
+                <li>Tax Amount = 10,000 × 0.18 = ₹1,800</li>
+                <li>Total Price = 10,000 + 1,800 = ₹11,800</li>
+            </ul>
+            <p>
+                Income tax is also calculated using percentage-based slabs, where different portions of your income are taxed at different rates. Our Income Tax Calculator (available on 99toolhub) uses these percentage-based slabs to compute your tax liability.
+            </p>
+
+            <div class="divider"></div>
+
+            <!-- 19. Percentage in Profit and Loss -->
+            <h2>📈 Percentage in Profit and Loss</h2>
+            <p>
+                In business, profit and loss are commonly expressed as percentages to evaluate performance and compare different ventures.
+            </p>
+            <div class="formula-box">
+                Profit Percentage = ( Profit ÷ Cost Price ) × 100
+                Loss Percentage = ( Loss ÷ Cost Price ) × 100
+            </div>
+            <div class="example-box">
+                <p><strong>Example:</strong> An item is purchased for ₹500 and sold for ₹650.</p>
+                <ul>
+                    <li>Profit = 650 − 500 = ₹150</li>
+                    <li>Profit Percentage = (150 ÷ 500) × 100 = <strong>30%</strong></li>
+                </ul>
+            </div>
+            <p>
+                Profit and loss percentages are essential for understanding business health, pricing strategies, and investment decisions.
+            </p>
+
+            <div class="divider"></div>
+
+            <!-- 20. Percentage in Banking and Interest -->
+            <h2>🏦 Percentage in Banking and Interest</h2>
+            <p>
+                Banking and finance are built on percentages. Interest rates, which are always expressed as percentages, determine how much you earn on savings or pay on loans.
+            </p>
+            <ul>
+                <li><strong>Simple Interest:</strong> Interest calculated on the principal amount only.</li>
+                <li><strong>Compound Interest:</strong> Interest calculated on both the principal and accumulated interest.</li>
+                <li><strong>Annual Percentage Rate (APR):</strong> The annual rate charged for borrowing or earned through investment.</li>
+            </ul>
+            <p>
+                For example, if you deposit ₹10,000 in a savings account with an annual interest rate of 5%:
+            </p>
+            <ul>
+                <li>Interest earned in one year = 10,000 × 0.05 = ₹500</li>
+            </ul>
+            <p>
+                Credit cards, home loans, car loans, and personal loans all use percentage-based interest rates to determine your monthly payments and total repayment amounts.
+            </p>
+
+            <div class="divider"></div>
+
+            <!-- 21. Common Percentage Calculation Mistakes -->
+            <h2>⚠️ Common Percentage Calculation Mistakes</h2>
+            <p>
+                Even though percentages are simple in concept, mistakes are surprisingly common. Here are the most frequent errors to avoid:
+            </p>
+            <ul>
+                <li><strong>Confusing Percentage and Percentage Points:</strong> A change from 10% to 15% is a 5 percentage point increase, but a 50% relative increase.</li>
+                <li><strong>Using the Wrong Base Value:</strong> Always use the original value as the base for percentage change calculations.</li>
+                <li><strong>Forgetting to Multiply by 100:</strong> After dividing part by whole, don't forget to multiply by 100 to get the percentage.</li>
+                <li><strong>Misplacing the Decimal Point:</strong> 25% = 0.25, not 2.5. A small decimal error can lead to huge inaccuracies.</li>
+                <li><strong>Adding or Subtracting Percentages Directly:</strong> If a price increases by 10% and then decreases by 10%, it does not return to the original price.</li>
+                <li><strong>Not Accounting for Successive Discounts Correctly:</strong> Two discounts of 10% each are not the same as a single 20% discount.</li>
+                <li><strong>Using Percentage Change for Small Numbers:</strong> When values are very small, percentage changes can be misleadingly large.</li>
+            </ul>
+            <div class="card-tip">
+                <i class="fas fa-lightbulb"></i> <strong>Pro Tip:</strong> Always double-check your base value and the direction of change. When in doubt, use a calculator like the one above to verify your results.
+            </div>
+
+            <div class="divider"></div>
+
+            <!-- 22. Benefits of Using a Percentage Calculator -->
+            <h2>✅ Benefits of Using a Percentage Calculator</h2>
+            <p>
+                Here's why the 99toolhub Percentage Calculator is the right choice for all your percentage needs:
+            </p>
+            <ul>
+                <li><strong>⚡ Instant Results:</strong> No waiting, no manual steps. Just enter the numbers and get the answer immediately.</li>
+                <li><strong>🎯 100% Accuracy:</strong> Eliminates human errors that can occur with mental or paper calculations.</li>
+                <li><strong>🔄 Dual Modes:</strong> Two of the most common percentage calculations in one simple interface.</li>
+                <li><strong>📱 Device Agnostic:</strong> Works perfectly on phones, tablets, laptops, and desktops.</li>
+                <li><strong>🆓 Free & Unlimited:</strong> No restrictions, no sign-ups, no hidden costs.</li>
+                <li><strong>🔒 Privacy-First:</strong> All calculations run locally in your browser — your data never leaves your device.</li>
+                <li><strong>🧠 Learning Tool:</strong> Great for students learning percentages, teachers demonstrating concepts, or anyone wanting to practice.</li>
+                <li><strong>📤 Actionable Insights:</strong> Understand discounts, tax, profit, and growth with clear, immediate feedback.</li>
+            </ul>
+
+            <div class="divider"></div>
+
+            <!-- 23. Example Percentage Calculations -->
+            <h2>🧮 Example Percentage Calculations</h2>
+            <p>
+                Let's walk through a variety of examples to illustrate how percentages work in different scenarios.
+            </p>
+
+            <div class="example-box">
+                <p><strong>Example 1: Discount on a Product</strong></p>
+                <ul>
+                    <li><strong>Original Price:</strong> ₹2,500</li>
+                    <li><strong>Discount:</strong> 30%</li>
+                    <li><strong>Calculation:</strong> 30% of 2,500 = (30 ÷ 100) × 2500 = ₹750</li>
+                    <li><strong>Final Price:</strong> 2,500 − 750 = ₹1,750</li>
+                </ul>
+            </div>
+
+            <div class="example-box">
+                <p><strong>Example 2: Exam Score</strong></p>
+                <ul>
+                    <li><strong>Marks Obtained:</strong> 420</li>
+                    <li><strong>Total Marks:</strong> 500</li>
+                    <li><strong>Percentage:</strong> (420 ÷ 500) × 100 = <strong>84%</strong></li>
+                </ul>
+            </div>
+
+            <div class="example-box">
+                <p><strong>Example 3: Salary Hike</strong></p>
+                <ul>
+                    <li><strong>Old Salary:</strong> ₹45,000</li>
+                    <li><strong>New Salary:</strong> ₹49,500</li>
+                    <li><strong>Increase:</strong> 49,500 − 45,000 = ₹4,500</li>
+                    <li><strong>Percentage Hike:</strong> (4,500 ÷ 45,000) × 100 = <strong>10%</strong></li>
+                </ul>
+            </div>
+
+            <div class="example-box">
+                <p><strong>Example 4: Population Decrease</strong></p>
+                <ul>
+                    <li><strong>Old Population:</strong> 8,000</li>
+                    <li><strong>New Population:</strong> 7,200</li>
+                    <li><strong>Decrease:</strong> 8,000 − 7,200 = 800</li>
+                    <li><strong>Percentage Decrease:</strong> (800 ÷ 8,000) × 100 = <strong>10%</strong></li>
+                </ul>
+            </div>
+
+            <div class="divider"></div>
+
+            <!-- 24. Frequently Asked Questions (FAQs) -->
+            <h2>❓ Frequently Asked Questions</h2>
+
+            <div class="faq-item">
+                <div class="q"><i class="fas fa-question-circle"></i> What is a percentage?</div>
+                <div class="a">A percentage is a number or ratio expressed as a fraction of 100. It is denoted by the symbol % and represents "parts per hundred."</div>
+            </div>
+
+            <div class="faq-item">
+                <div class="q"><i class="fas fa-question-circle"></i> How do I calculate a percentage of a number?</div>
+                <div class="a">Multiply the number by the percentage (as a decimal). For example, 20% of 150 = (20 ÷ 100) × 150 = 30.</div>
+            </div>
+
+            <div class="faq-item">
+                <div class="q"><i class="fas fa-question-circle"></i> What is the formula for percentage increase?</div>
+                <div class="a">Percentage Increase = ((New Value − Old Value) ÷ Old Value) × 100. This gives the percentage by which the value has grown.</div>
+            </div>
+
+            <div class="faq-item">
+                <div class="q"><i class="fas fa-question-circle"></i> What is the formula for percentage decrease?</div>
+                <div class="a">Percentage Decrease = ((Old Value − New Value) ÷ Old Value) × 100. This gives the percentage by which the value has declined.</div>
+            </div>
+
+            <div class="faq-item">
+                <div class="q"><i class="fas fa-question-circle"></i> How do I find the original number from a percentage?</div>
+                <div class="a">If you know the percentage and the part, divide the part by (percentage ÷ 100). For example, if 25% of a number is 50, the original number is 50 ÷ 0.25 = 200.</div>
+            </div>
+
+            <div class="faq-item">
+                <div class="q"><i class="fas fa-question-circle"></i> What is the difference between percentage and percentage points?</div>
+                <div class="a">A percentage point is the absolute difference between two percentage values. For example, an increase from 20% to 25% is a 5 percentage point increase, but a 25% relative increase.</div>
+            </div>
+
+            <div class="faq-item">
+                <div class="q"><i class="fas fa-question-circle"></i> Can I use this calculator for GST and tax calculations?</div>
+                <div class="a">Yes! The "Percentage of a Number" mode is perfect for calculating GST, VAT, or any other tax based on a percentage of the transaction value.</div>
+            </div>
+
+            <div class="faq-item">
+                <div class="q"><i class="fas fa-question-circle"></i> How do I calculate a discount percentage?</div>
+                <div class="a">Discount Percentage = (Discount Amount ÷ Original Price) × 100. For example, if you save ₹200 on a ₹1,000 item, the discount percentage is (200 ÷ 1000) × 100 = 20%.</div>
+            </div>
+
+            <div class="faq-item">
+                <div class="q"><i class="fas fa-question-circle"></i> What is a percentage difference?</div>
+                <div class="a">Percentage difference measures the relative difference between two numbers, regardless of which is larger. It uses the average of the two numbers as the base.</div>
+            </div>
+
+            <div class="faq-item">
+                <div class="q"><i class="fas fa-question-circle"></i> Is this calculator free to use?</div>
+                <div class="a">Yes, the 99toolhub Percentage Calculator is completely free to use. No registration or payment is required.</div>
+            </div>
+
+            <div class="faq-item">
+                <div class="q"><i class="fas fa-question-circle"></i> Are my calculations stored or shared?</div>
+                <div class="a">No. All calculations are performed locally in your browser. Your data is never sent to any server, stored, or shared with third parties.</div>
+            </div>
+
+            <div class="faq-item">
+                <div class="q"><i class="fas fa-question-circle"></i> Can this calculator be used offline?</div>
+                <div class="a">Yes! Once the page is loaded, the calculator works entirely offline. You can save the page to your device and use it without an internet connection.</div>
+            </div>
+
+            <div class="divider"></div>
+
+            <!-- 25. Percentage Terms Glossary -->
+            <h2>📖 Percentage Terms Glossary</h2>
+            <div class="glossary-grid">
+                <div class="glossary-item"><div class="term">Percentage</div><div class="def">A number or ratio expressed as a fraction of 100, denoted by %.</div></div>
+                <div class="glossary-item"><div class="term">Percent</div><div class="def">Latin "per centum" meaning "by the hundred."</div></div>
+                <div class="glossary-item"><div class="term">Part</div><div class="def">The portion of the whole being considered.</div></div>
+                <div class="glossary-item"><div class="term">Whole</div><div class="def">The total or complete quantity.</div></div>
+                <div class="glossary-item"><div class="term">Percentage Point</div><div class="def">The absolute difference between two percentage values.</div></div>
+                <div class="glossary-item"><div class="term">Relative Change</div><div class="def">The percentage change expressed relative to the original value.</div></div>
+                <div class="glossary-item"><div class="term">Discount</div><div class="def">A reduction in price, usually expressed as a percentage.</div></div>
+                <div class="glossary-item"><div class="term">Markup</div><div class="def">The percentage added to the cost price to determine the selling price.</div></div>
+                <div class="glossary-item"><div class="term">Interest Rate</div><div class="def">The percentage charged or earned on a principal amount over time.</div></div>
+                <div class="glossary-item"><div class="term">Profit Margin</div><div class="def">Profit expressed as a percentage of revenue.</div></div>
+            </div>
+
+            <div class="divider"></div>
+
+            <!-- 26. Tips for Accurate Percentage Calculations -->
+            <h2>💡 Tips for Accurate Percentage Calculations</h2>
+            <p>
+                Follow these tips to ensure your percentage calculations are always accurate:
+            </p>
+            <ul>
+                <li><strong>Always use the correct base:</strong> For percentage change, use the original value as the denominator.</li>
+                <li><strong>Convert percentages to decimals correctly:</strong> 25% = 0.25, not 2.5.</li>
+                <li><strong>Double-check your inputs:</strong> A small typo can completely change the result.</li>
+                <li><strong>Use parentheses when calculating:</strong> (Part ÷ Whole) × 100, not Part ÷ Whole × 100 (which would be interpreted differently in some calculators).</li>
+                <li><strong>Understand the context:</strong> Be clear about whether you're calculating a percentage of a number, a percentage change, or a percentage difference.</li>
+                <li><strong>Round appropriately:</strong> For financial calculations, round to two decimal places. For general purposes, one or two decimal places is usually sufficient.</li>
+                <li><strong>Verify with a second method:</strong> If possible, cross-check your results using a different formula or tool.</li>
+            </ul>
+
+            <div class="divider"></div>
+
+            <!-- 27. Related Calculators -->
+            <h2>🔗 Related Calculators</h2>
+            <p>
+                Explore other useful calculators on 99toolhub:
+            </p>
+            <ul>
+                <li><strong>Income Tax Calculator:</strong> Compute your income tax liability as per the Income-tax Act, 1961.</li>
+                <li><strong>Discount Calculator:</strong> Calculate discounts, final prices, and savings on any product.</li>
+                <li><strong>GST Calculator:</strong> Compute GST amounts and total prices for any transaction.</li>
+                <li><strong>EMI Calculator:</strong> Calculate monthly installments for home, auto, and personal loans.</li>
+                <li><strong>BMI Calculator:</strong> Check your Body Mass Index and understand your health status.</li>
+                <li><strong>Gratuity Calculator:</strong> Estimate your gratuity payout based on salary and years of service.</li>
+                <li><strong>Marks Percentage Calculator:</strong> Convert marks into percentages for exams and assessments.</li>
+            </ul>
+
+            <div class="divider"></div>
+
+            <!-- 28. Disclaimer -->
+            <div class="disclaimer-box" id="disclaimer">
+                <div class="disclaimer-title">
+                    <i class="fas fa-triangle-exclamation"></i> Important Disclaimer
+                </div>
+                <p>
+                    The <strong>99toolhub Percentage Calculator</strong> is provided for <strong>educational and informational purposes only</strong>. While every effort has been made to ensure the accuracy of the calculations, this tool should not be used as the sole basis for financial, business, or legal decisions.
+                </p>
+                <p>
+                    Percentages can vary based on context, rounding, and specific requirements. For critical applications — such as tax calculations, loan interest, or investment decisions — always consult a qualified professional or refer to official documents and standards.
+                </p>
+                <p>
+                    99toolhub and its creators disclaim all liability for any errors, omissions, or inaccuracies in the calculations, and for any decisions made based on the information provided by this tool. All calculations are performed locally in your browser — no data is stored, shared, or transmitted.
+                </p>
+                <p style="margin-top: 8px; font-weight: 600; color: #991b1b;">
+                    Please verify your results independently before making any important decisions.
+                </p>
+            </div>
+
+            <!-- 29. Conclusion -->
+            <h2>📝 Conclusion</h2>
+            <p>
+                The <strong>99toolhub Percentage Calculator</strong> is designed to make percentage calculations effortless, accurate, and accessible to everyone. Whether you're calculating discounts while shopping, analyzing exam scores, evaluating business growth, or understanding financial interest rates, this tool provides instant, reliable results.
+            </p>
+            <p>
+                Percentages are a fundamental part of our daily lives, and having a reliable tool at your fingertips can save time, reduce errors, and help you make better decisions. With two powerful modes — Percentage of a Number and Percentage Change — this calculator covers the most common percentage needs in a simple, intuitive interface.
+            </p>
+            <p>
+                We hope you find this tool valuable and easy to use. Remember, understanding percentages is not just about crunching numbers — it's about building confidence in your financial and analytical skills.
+            </p>
+            <p style="text-align:center; color:#5a7a7a; font-size:15px; margin-top:20px;">
+                <i class="fas fa-heart" style="color:#ef4444;"></i> Thank you for using <strong>99toolhub</strong> Percentage Calculator. Calculate with confidence!
+            </p>
+
+        </div>
+
+        <!-- ===== FOOTER NOTE ===== -->
+        <div class="footer-note">
+            <p>
+            <i class="fas fa-percent"></i>
+                <strong>99toolhub</strong> &bull; Free Online Tools &bull;
+                <span class="heart">❤️</span> Made with precision
+            </p>
+            <p style="font-size:13px; margin-top:4px; color:#9ab8b8;">
+                &copy; 2026 99toolhub &bull; All rights reserved
+            </p>
+        </div>
+
+    </div>
+
+    <!-- ===== TOAST ===== -->
+    <div class="toast" id="toast">
+        <i class="fas fa-check-circle" style="color:#4ade80;"></i>
+        <span id="toastMsg">Done!</span>
+    </div>
+
+    <!-- ===== SCRIPT ===== -->
+    <script>
+        // ─── DOM REFS ───
+        const result1 = document.getElementById("result1");
+        const result2 = document.getElementById("result2");
+        const percentInput = document.getElementById("percent");
+        const numberInput = document.getElementById("number");
+        const oldValueInput = document.getElementById("oldValue");
+        const newValueInput = document.getElementById("newValue");
+        const toast = document.getElementById("toast");
+        const toastMsg = document.getElementById("toastMsg");
+
+        let toastTimer = null;
+
+        // ─── TOAST ───
+        function showToast(msg) {
+            toastMsg.textContent = msg;
+            toast.classList.add('show');
+            clearTimeout(toastTimer);
+            toastTimer = setTimeout(() => toast.classList.remove('show'), 2800);
+        }
+
+        // ─── Percentage of a Number ───
+        function calculatePercentage() {
+            const percent = parseFloat(percentInput.value);
+            const number = parseFloat(numberInput.value);
+
+            if (isNaN(percent) || isNaN(number)) {
+                result1.innerHTML = '<span style="color:#b05a5a;">⚠️ Please enter valid numbers.</span>';
+                return;
+            }
+
+            const result = (percent / 100) * number;
+            result1.innerHTML =
+                '<span style="font-weight:700;">' + percent + '%</span> of <span style="font-weight:700;">' + number +
+                '</span> = <span style="font-weight:800; font-size:1.1rem; color:#00796B;">' + result.toFixed(2) + '</span>';
+        }
+
+        // ─── Percentage Change ───
+        function calculateChange() {
+            const oldValue = parseFloat(oldValueInput.value);
+            const newValue = parseFloat(newValueInput.value);
+
+            if (isNaN(oldValue) || isNaN(newValue)) {
+                result2.innerHTML = '<span style="color:#b05a5a;">⚠️ Please enter valid numbers.</span>';
+                return;
+            }
+
+            if (oldValue === 0) {
+                result2.innerHTML = '<span style="color:#b05a5a;">⚠️ Old value cannot be zero.</span>';
+                return;
+            }
+
+            const change = ((newValue - oldValue) / oldValue) * 100;
+            const type = change >= 0 ? "Increase" : "Decrease";
+            const absChange = Math.abs(change);
+
+            result2.innerHTML =
+                '<span style="font-weight:700; color:' + (change >= 0 ? '#00796B' : '#b05a5a') + ';">' + type +
+                ':</span> <span style="font-weight:800; font-size:1.1rem; color:#0b2a2a;">' + absChange.toFixed(2) +
+                '%</span> <span style="opacity:0.5; font-size:0.85rem;">(' +
+                (change >= 0 ? '↑' : '↓') + ' ' + (change >= 0 ? newValue - oldValue : oldValue - newValue).toFixed(2) +
+                ' units)</span>';
+        }
+
+        // ─── RESET ───
+        function resetAll() {
+            percentInput.value = '';
+            numberInput.value = '';
+            oldValueInput.value = '';
+            newValueInput.value = '';
+            result1.innerHTML = '<span class="empty">Enter values to see result</span>';
+            result2.innerHTML = '<span class="empty">Enter values to see result</span>';
+            showToast('🔄 Reset complete');
+        }
+
+        // ─── COPY ───
+        function copyResult() {
+            const r1 = result1.innerText.trim();
+            const r2 = result2.innerText.trim();
+            if ((r1 === 'Enter values to see result' || r1 === '⚠️ Please enter valid numbers.') &&
+                (r2 === 'Enter values to see result' || r2 === '⚠️ Please enter valid numbers.' || r2 ===
+                    '⚠️ Old value cannot be zero.')) {
+                showToast('⚠️ No results to copy. Calculate first!');
+                return;
+            }
+
+            const text =
+                '📊 Percentage Calculator Results\n' +
+                '─────────────────────────────\n' +
+                'Result 1: ' + r1 + '\n' +
+                'Result 2: ' + r2 + '\n' +
+                '─────────────────────────────\n' +
+                '🔗 99toolhub.com';
+
+            if (navigator.clipboard && navigator.clipboard.writeText) {
+                navigator.clipboard.writeText(text).then(() => {
+                    showToast('📋 Results copied to clipboard!');
+                }).catch(() => fallbackCopy(text));
+            } else {
+                fallbackCopy(text);
+            }
+        }
+
+        function fallbackCopy(text) {
+            const ta = document.createElement('textarea');
+            ta.value = text;
+            ta.style.position = 'fixed';
+            ta.style.opacity = '0';
+            document.body.appendChild(ta);
+            ta.select();
+            try {
+                document.execCommand('copy');
+                showToast('📋 Copied!');
+            } catch (e) {
+                showToast('❌ Could not copy. Please copy manually.');
+            }
+            document.body.removeChild(ta);
+        }
+
+        // ─── SHARE ───
+        function shareResult() {
+            const r1 = result1.innerText.trim();
+            const r2 = result2.innerText.trim();
+            if ((r1 === 'Enter values to see result' || r1 === '⚠️ Please enter valid numbers.') &&
+                (r2 === 'Enter values to see result' || r2 === '⚠️ Please enter valid numbers.' || r2 ===
+                    '⚠️ Old value cannot be zero.')) {
+                showToast('⚠️ No results to share. Calculate first!');
+                return;
+            }
+
+            const shareText =
+                '📊 Percentage Calculator Results\n' +
+                '─────────────────────────────\n' +
+                'Result 1: ' + r1 + '\n' +
+                'Result 2: ' + r2 + '\n' +
+                '─────────────────────────────\n' +
+                '🔗 Calculated via 99toolhub.com';
+
+            if (navigator.share) {
+                navigator.share({
+                    title: 'Percentage Calculator Results - 99toolhub',
+                    text: shareText,
+                }).catch(err => {
+                    if (err.name !== 'AbortError') {
+                        fallbackShare(shareText);
+                    }
+                });
+            } else {
+                fallbackShare(shareText);
+            }
+        }
+
+        function fallbackShare(text) {
+            if (navigator.clipboard && navigator.clipboard.writeText) {
+                navigator.clipboard.writeText(text).then(() => {
+                    showToast('📋 Results copied to clipboard! Share it anywhere.');
+                }).catch(() => {
+                    showToast('Could not copy. Please copy manually.');
+                });
+            } else {
+                const ta = document.createElement('textarea');
+                ta.value = text;
+                ta.style.position = 'fixed';
+                ta.style.left = '-9999px';
+                ta.style.top = '-9999px';
+                document.body.appendChild(ta);
+                ta.select();
+                try {
+                    document.execCommand('copy');
+                    showToast('📋 Copied to clipboard!');
+                } catch (e) {
+                    prompt('Copy this result:', text);
+                    showToast('📋 Copied (select all & copy).');
+                }
+                document.body.removeChild(ta);
+            }
+        }
+
+        // ─── PRINT ───
+        function printPage() {
+            window.print();
+            showToast('🖨️ Print dialog opened.');
+        }
+
+        // ─── PDF (triggers print with "Save as PDF") ───
+        function downloadPDF() {
+            showToast('📄 Choose "Save as PDF" in the print dialog.');
+            setTimeout(() => { window.print(); }, 300);
+        }
+
+        // ─── ENTER KEY SUPPORT ───
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Enter') {
+                const active = document.activeElement;
+                if (active && (active.id === 'percent' || active.id === 'number')) {
+                    e.preventDefault();
+                    calculatePercentage();
+                } else if (active && (active.id === 'oldValue' || active.id === 'newValue')) {
+                    e.preventDefault();
+                    calculateChange();
+                }
+            }
+        });
+
+        // ─── INIT ───
+        console.log('✅ 99toolhub Percentage Calculator loaded successfully.');
+    </script>
+
+</body>
+</html>

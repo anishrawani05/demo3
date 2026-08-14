@@ -1,0 +1,1192 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+   <link rel="icon" type="image/png" href="../../images/favicon.png">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Privacy Policy | 99ToolHub</title>
+
+    <meta
+        name="description"
+        content=" Privacy $ Policy of 99ToolHub. Learn how we handle information while providing free online calculators, PDF tools, image tools and other utilities."
+    >
+
+    <style>
+
+        /* ==============================
+           RESET
+        ============================== */
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family:
+                Inter,
+                system-ui,
+                -apple-system,
+                BlinkMacSystemFont,
+                "Segoe UI",
+                sans-serif;
+
+            background: #b7f5ce;
+            color: #222;
+            line-height: 1.7;
+        }
+
+        a {
+            color: inherit;
+            text-decoration: none;
+        }
+
+
+        /* ==============================
+           READING PROGRESS
+        ============================== */
+
+        .reading-progress {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 0%;
+            height: 4px;
+
+            background:
+                linear-gradient(
+                    90deg,
+                    #e83e8c,
+                    #7c3aed
+                );
+
+            z-index: 9999;
+        }
+
+
+        /* ==============================
+           HERO
+        ============================== */
+
+        .privacy-hero {
+            padding: 80px 20px 65px;
+            text-align: center;
+
+            background:
+                radial-gradient(
+                    circle at 15% 20%,
+                    rgba(232, 62, 140, 0.13),
+                    transparent 35%
+                ),
+                radial-gradient(
+                    circle at 85% 25%,
+                    rgba(124, 58, 237, 0.12),
+                    transparent 35%
+                ),
+                #a8fcc8;
+        }
+
+        .hero-container {
+            width: min(900px, 100%);
+            margin: auto;
+        }
+
+        .privacy-badge {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+
+            padding: 7px 15px;
+            margin-bottom: 20px;
+
+            border-radius: 50px;
+
+            background: #ff0000;
+            color: #000000;
+
+            font-size: 12px;
+            font-weight: 800;
+            letter-spacing: .4px;
+        }
+
+        .privacy-title {
+            font-size:
+                clamp(38px, 6vw, 64px);
+
+            line-height: 1.08;
+            letter-spacing: -2px;
+
+            color: #111;
+        }
+
+        .privacy-title span {
+            background:
+                linear-gradient(
+                    90deg,
+                    #00b1fd,
+                    #00ff04
+                );
+
+            -webkit-background-clip: text;
+            background-clip: text;
+
+            -webkit-text-fill-color: transparent;
+        }
+
+        .privacy-description {
+            max-width: 700px;
+            margin: 20px auto 0;
+
+            font-size: 16px;
+            color: #666;
+        }
+
+        .updated-date {
+            margin-top: 18px;
+
+            font-size: 13px;
+            color: #888;
+        }
+
+
+        /* ==============================
+           MAIN CONTENT
+        ============================== */
+
+        .privacy-wrapper {
+            width:
+                min(900px, calc(100% - 40px));
+
+            margin: 55px auto 80px;
+        }
+
+        .privacy-card {
+            background: #f1b1f8;
+
+            border: 1px solid #eeeeee;
+
+            border-radius: 24px;
+
+            padding: 45px;
+
+            box-shadow:
+                0 20px 60px
+                rgba(0, 0, 0, 0.05);
+        }
+
+
+        /* ==============================
+           INTRO NOTICE
+        ============================== */
+
+        .notice {
+            padding: 22px 24px;
+
+            margin-bottom: 40px;
+
+            border-radius: 17px;
+
+            background:
+                linear-gradient(
+                    135deg,
+                    #fffdfd,
+                    #fefeff
+                );
+
+            border: 1px solid #f0dfeb;
+        }
+
+        .notice strong {
+            display: block;
+            margin-bottom: 6px;
+
+            color: #222;
+        }
+
+        .notice p {
+            margin: 0;
+            color: #555;
+            font-size: 14px;
+        }
+
+
+        /* ==============================
+           SECTIONS
+        ============================== */
+
+        .privacy-section {
+            margin-top: 48px;
+        }
+
+        .privacy-section:first-of-type {
+            margin-top: 0;
+        }
+
+        .privacy-section h2 {
+            margin-bottom: 15px;
+
+            font-size: 27px;
+
+            line-height: 1.3;
+
+            color: #111;
+
+            letter-spacing: -.5px;
+        }
+
+        .privacy-section h3 {
+            margin-top: 24px;
+            margin-bottom: 8px;
+
+            font-size: 19px;
+            color: #222;
+        }
+
+        .privacy-section p {
+            margin-bottom: 15px;
+
+            font-size: 15px;
+            color: #555;
+        }
+
+
+        /* ==============================
+           LIST
+        ============================== */
+
+        .privacy-list {
+            list-style: none;
+
+            display: grid;
+            gap: 10px;
+
+            margin: 18px 0;
+        }
+
+        .privacy-list li {
+            position: relative;
+
+            padding:
+                12px 15px 12px 40px;
+
+            border-radius: 12px;
+
+            background: #fafafa;
+
+            border: 1px solid #eeeeee;
+
+            color: #555;
+
+            font-size: 14px;
+        }
+
+        .privacy-list li::before {
+            content: "✓";
+
+            position: absolute;
+
+            left: 13px;
+            top: 50%;
+
+            transform:
+                translateY(-50%);
+
+            width: 21px;
+            height: 21px;
+
+            display: flex;
+
+            align-items: center;
+            justify-content: center;
+
+            border-radius: 50%;
+
+            background: #fff0f6;
+
+            color: #d63384;
+
+            font-size: 11px;
+            font-weight: 800;
+        }
+
+
+        /* ==============================
+           HIGHLIGHT BOX
+        ============================== */
+
+        .highlight-box {
+            margin: 20px 0;
+
+            padding: 22px;
+
+            border-radius: 17px;
+
+            background: #171717;
+
+            color: #ffffff;
+        }
+
+        .highlight-box strong {
+            display: block;
+            margin-bottom: 6px;
+
+            font-size: 16px;
+        }
+
+        .highlight-box p {
+            margin: 0;
+
+            color: #d7d7d7;
+        }
+
+
+        /* ==============================
+           CONTACT BOX
+        ============================== */
+
+        .contact-box {
+            margin-top: 20px;
+
+            padding: 25px;
+
+            border-radius: 18px;
+
+            background:
+                linear-gradient(
+                    135deg,
+                    #ffb4d2,
+                    #79f3e2
+                );
+
+            border: 1px solid #0511ff;
+        }
+
+        .contact-box p {
+            margin-bottom: 7px;
+            color: #ff0000;
+        }
+
+        .contact-box strong {
+            color: #020202;
+        }
+
+
+        /* ==============================
+           BACK TO TOP
+        ============================== */
+
+        .back-top {
+            position: fixed;
+
+            right: 20px;
+            bottom: 20px;
+
+            width: 45px;
+            height: 45px;
+
+            border: none;
+            border-radius: 13px;
+
+            background: #171717;
+            color: #ffffff;
+
+            font-size: 18px;
+
+            cursor: pointer;
+
+            opacity: 0;
+            visibility: hidden;
+
+            transform: translateY(10px);
+
+            transition:
+                .25s ease;
+
+            z-index: 1000;
+        }
+
+        .back-top.show {
+            opacity: 1;
+            visibility: visible;
+
+            transform: translateY(0);
+        }
+
+        .back-top:hover {
+            background: #e83e8c;
+        }
+
+
+        /* ==============================
+           FOOTER
+        ============================== */
+
+        footer {
+            padding: 35px 20px;
+
+            text-align: center;
+
+            border-top: 1px solid #eeeeee;
+
+            color: #777;
+
+            font-size: 13px;
+
+            background: #eaeaea;
+        }
+
+
+        /* ==============================
+           TABLET
+        ============================== */
+
+        @media (max-width: 800px) {
+
+            .privacy-hero {
+                padding:
+                    65px 20px 50px;
+            }
+
+            .privacy-wrapper {
+                width:
+                    calc(100% - 30px);
+
+                margin-top: 35px;
+            }
+
+            .privacy-card {
+                padding: 30px;
+                border-radius: 20px;
+            }
+
+            .privacy-section h2 {
+                font-size: 25px;
+            }
+
+        }
+
+
+        /* ==============================
+           MOBILE
+        ============================== */
+
+        @media (max-width: 600px) {
+
+            .privacy-hero {
+                padding:
+                    50px 15px 40px;
+            }
+
+            .privacy-title {
+                font-size: 34px;
+                letter-spacing: -1px;
+            }
+
+            .privacy-description {
+                font-size: 14px;
+                line-height: 1.6;
+            }
+
+            .privacy-wrapper {
+                width:
+                    calc(100% - 24px);
+
+                margin:
+                    25px auto 50px;
+            }
+
+            .privacy-card {
+                padding: 22px 18px;
+
+                border-radius: 17px;
+            }
+
+            .privacy-section {
+                margin-top: 38px;
+            }
+
+            .privacy-section h2 {
+                font-size: 23px;
+            }
+
+            .privacy-section p {
+                font-size: 14px;
+            }
+
+            .privacy-list li {
+                font-size: 13px;
+
+                padding:
+                    11px 12px 11px 38px;
+            }
+
+            .highlight-box {
+                padding: 20px;
+            }
+
+            .contact-box {
+                padding: 20px;
+            }
+
+            .back-top {
+                right: 15px;
+                bottom: 15px;
+            }
+
+        }
+
+    </style>
+</head>
+
+
+<body>
+
+
+    <!-- READING PROGRESS -->
+
+    <div
+        class="reading-progress"
+        id="readingProgress">
+    </div>
+
+
+    <!-- HERO -->
+
+    <header class="privacy-hero">
+
+        <div class="hero-container">
+
+            <div class="privacy-badge">
+                🔒 Privacy & Security
+            </div>
+
+            <h1 class="privacy-title">
+                Privacy <span>Policy</span>
+            </h1>
+
+            <p class="privacy-description">
+                Learn how 99ToolHub handles information while
+                providing free online tools for students,
+                educators, professionals, creators and businesses.
+            </p>
+
+            <div class="updated-date">
+                Last Updated: September 5, 2026
+            </div>
+
+        </div>
+
+    </header>
+
+
+    <!-- MAIN -->
+
+    <main class="privacy-wrapper">
+
+        <div class="privacy-card">
+
+
+            <!-- 1 -->
+
+            <section class="privacy-section">
+
+                <h2>
+                    1. Introduction
+                </h2>
+
+                <p>
+                    Welcome to 99ToolHub. We provide free online
+                    calculators, PDF tools, image tools and other
+                    useful utilities for students, teachers,
+                    freelancers, professionals, creators and
+                    businesses.
+                </p>
+
+                <p>
+                    This Privacy Policy explains what information
+                    may be handled when you use our website and
+                    how we use that information.
+                </p>
+
+            </section>
+
+
+            <!-- 2 -->
+
+            <section class="privacy-section">
+
+                <h2>
+                    2. Information We Collect
+                </h2>
+
+                <p>
+                    99ToolHub does not intentionally collect or
+                    store personal information from users simply
+                    for using our online tools.
+                </p>
+
+                <p>
+                    Depending on the services enabled on the
+                    website, limited technical information may
+                    be processed by the website or third-party
+                    services.
+                </p>
+
+            </section>
+
+
+            <!-- 3 -->
+
+            <section class="privacy-section">
+
+                <h2>
+                    3. Information You Provide
+                </h2>
+
+                <p>
+                    99ToolHub does not require users to create an
+                    account or provide personal information to use
+                    the website's general online tools.
+                </p>
+
+                <p>
+                    If you voluntarily contact us, the information
+                    you include in your message may be used only
+                    to respond to your request.
+                </p>
+
+            </section>
+
+
+            <!-- 4 -->
+
+            <section class="privacy-section">
+
+                <h2>
+                    4. Automatically Collected Information
+                </h2>
+
+                <p>
+                    Our website itself is designed not to maintain
+                    a personal user database.
+                </p>
+
+                <p>
+                    However, standard web infrastructure or
+                    third-party services may process technical
+                    information such as browser type, device
+                    information, approximate location or pages
+                    visited. Such processing depends on the
+                    services actually enabled on the website.
+                </p>
+
+            </section>
+
+
+            <!-- 5 -->
+
+            <section class="privacy-section">
+
+                <h2>
+                    5. How We Use Your Information
+                </h2>
+
+                <p>
+                    Since 99ToolHub does not maintain a personal
+                    user database for normal tool usage, we do not
+                    use user information to create personal
+                    profiles.
+                </p>
+
+                <p>
+                    Information that may be processed by website
+                    infrastructure or enabled third-party services
+                    may be used for purposes such as:
+                </p>
+
+                <ul class="privacy-list">
+
+                    <li>
+                        Operating and maintaining the website.
+                    </li>
+
+                    <li>
+                        Improving website performance and usability.
+                    </li>
+
+                    <li>
+                        Understanding general website usage.
+                    </li>
+
+                    <li>
+                        Displaying advertising where applicable.
+                    </li>
+
+                    <li>
+                        Protecting the website against abuse or
+                        technical problems.
+                    </li>
+
+                </ul>
+
+            </section>
+
+
+            <!-- 6 -->
+
+            <section class="privacy-section">
+
+                <h2>
+                    6. Cookies and Similar Technologies
+                </h2>
+
+                <p>
+                    99ToolHub may use cookies or similar technologies
+                    if required by website functionality or third-party
+                    services.
+                </p>
+
+                <p>
+                    Cookies may be used to remember preferences,
+                    understand website usage or support advertising
+                    services.
+                </p>
+
+                <p>
+                    You can manage or disable cookies through your
+                    browser settings. Some website features may be
+                    affected when cookies are disabled.
+                </p>
+
+            </section>
+
+
+            <!-- 7 -->
+
+            <section class="privacy-section">
+
+                <h2>
+                    7. PDF and Image Tools / Uploaded Files
+                </h2>
+
+                <div class="highlight-box">
+
+                    <strong>
+                        Important
+                    </strong>
+
+                    <p>
+                        99ToolHub does not intentionally store
+                        users' uploaded PDF or image files as a
+                        personal file collection.
+                    </p>
+
+                </div>
+
+                <p>
+                    Some tools may process files temporarily in
+                    order to perform the requested operation.
+                    The exact handling depends on how the specific
+                    tool is technically implemented.
+                </p>
+
+                <p>
+                    Do not upload sensitive, confidential or
+                    private documents unless you are comfortable
+                    using the relevant tool.
+                </p>
+
+            </section>
+
+
+            <!-- 8 -->
+
+            <section class="privacy-section">
+
+                <h2>
+                    8. Third-Party Services
+                </h2>
+
+                <p>
+                    99ToolHub may use third-party services for
+                    specific website functions, such as analytics,
+                    advertising, hosting or other technical
+                    services.
+                </p>
+
+                <p>
+                    Third-party services may process information
+                    according to their own privacy policies.
+                </p>
+
+                <p>
+                    Only services actually enabled on the website
+                    should be listed or referenced here.
+                </p>
+
+            </section>
+
+
+            <!-- 9 -->
+
+            <section class="privacy-section">
+
+                <h2>
+                    9. Google AdSense and Advertising
+                </h2>
+
+                <p>
+                    If Google AdSense or another advertising
+                    service is enabled on 99ToolHub, advertisements
+                    may be displayed on the website.
+                </p>
+
+                <p>
+                    Advertising providers may use cookies or
+                    similar technologies to provide, measure or
+                    personalize advertisements, subject to their
+                    applicable policies and settings.
+                </p>
+
+                <p>
+                    If advertising is not enabled on your website,
+                    remove this section before publishing the
+                    policy.
+                </p>
+
+            </section>
+
+
+            <!-- 10 -->
+
+            <section class="privacy-section">
+
+                <h2>
+                    10. Google Analytics
+                </h2>
+
+                <p>
+                    If Google Analytics is enabled, it may collect
+                    information about how visitors interact with
+                    the website, such as pages viewed, device
+                    information and general usage information.
+                </p>
+
+                <p>
+                    99ToolHub does not use Google Analytics to
+                    intentionally create a personal user database.
+                </p>
+
+                <p>
+                    If Google Analytics is not used on the website,
+                    remove this section.
+                </p>
+
+            </section>
+
+
+            <!-- 11 -->
+
+            <section class="privacy-section">
+
+                <h2>
+                    11. Data Sharing and Disclosure
+                </h2>
+
+                <p>
+                    99ToolHub does not sell or rent users' personal
+                    information.
+                </p>
+
+                <p>
+                    Information may be processed by third-party
+                    service providers only when required for
+                    services that are actually used on the website,
+                    or when disclosure is required by applicable
+                    law.
+                </p>
+
+            </section>
+
+
+            <!-- 12 -->
+
+            <section class="privacy-section">
+
+                <h2>
+                    12. Data Security
+                </h2>
+
+                <p>
+                    We take reasonable measures to protect the
+                    website and information processed through it.
+                </p>
+
+                <p>
+                    However, no website or internet transmission
+                    can be guaranteed to be completely secure.
+                </p>
+
+            </section>
+
+
+            <!-- 13 -->
+
+            <section class="privacy-section">
+
+                <h2>
+                    13. Data Retention
+                </h2>
+
+                <p>
+                    99ToolHub does not maintain a personal database
+                    of information submitted through normal use of
+                    its tools.
+                </p>
+
+                <p>
+                    Temporary processing or information handled by
+                    hosting providers or third-party services may
+                    be retained according to their respective
+                    technical practices and policies.
+                </p>
+
+            </section>
+
+
+            <!-- 14 -->
+
+            <section class="privacy-section">
+
+                <h2>
+                    14. User Privacy Rights and Choices
+                </h2>
+
+                <p>
+                    Depending on your location and applicable law,
+                    you may have rights concerning personal
+                    information processed by third-party services.
+                </p>
+
+                <ul class="privacy-list">
+
+                    <li>
+                        Manage cookies through your browser.
+                    </li>
+
+                    <li>
+                        Control certain advertising preferences
+                        through applicable advertising settings.
+                    </li>
+
+                    <li>
+                        Contact us regarding privacy-related
+                        questions.
+                    </li>
+
+                </ul>
+
+            </section>
+
+
+            <!-- 15 -->
+
+            <section class="privacy-section">
+
+                <h2>
+                    15. Children's Privacy
+                </h2>
+
+                <p>
+                    99ToolHub is designed as a general-purpose
+                    online tools website and may be useful for
+                    students and educational users.
+                </p>
+
+                <p>
+                    We do not intentionally collect personal
+                    information from children through normal use
+                    of our tools.
+                </p>
+
+            </section>
+
+
+            <!-- 16 -->
+
+            <section class="privacy-section">
+
+                <h2>
+                    16. External Links
+                </h2>
+
+                <p>
+                    99ToolHub may contain links to external websites
+                    or services.
+                </p>
+
+                <p>
+                    We are not responsible for the privacy practices,
+                    security or content of external websites. Users
+                    should review the privacy policies of those
+                    websites before providing information.
+                </p>
+
+            </section>
+
+
+            <!-- 17 -->
+
+            <section class="privacy-section">
+
+                <h2>
+                    17. Changes to This Privacy Policy
+                </h2>
+
+                <p>
+                    We may update this Privacy Policy from time to
+                    time to reflect changes in our website, tools,
+                    services or applicable requirements.
+                </p>
+
+                <p>
+                    Any updated version will be published on this
+                    page with a revised "Last Updated" date.
+                </p>
+
+            </section>
+
+
+            <!-- 18 -->
+
+            <section class="privacy-section">
+
+                <h2>
+                    18. Contact Us
+                </h2>
+
+                <p>
+                    If you have questions, suggestions or concerns
+                    about this Privacy Policy, you can contact us.
+                </p>
+
+        <div class="contact-box">
+  <p><strong>📧 Email:</strong> <a href="mailto:99toolhub@gmail.com">99toolhub@gmail.com</a></p>
+  <p><strong>🌐 Website:</strong> <a href="https://99toolhub.com" target="_blank">99toolhub.com</a></p>
+</div>
+            </section>
+
+
+        </div>
+
+    </main>
+
+
+    <!-- BACK TO TOP -->
+
+    <button
+        class="back-top"
+        id="backTop"
+        aria-label="Back to top">
+
+        ↑
+
+    </button>
+
+
+    <!-- FOOTER -->
+
+    <footer>
+
+        ©
+        <span id="currentYear"></span>
+        99ToolHub.
+        All rights reserved.
+
+    </footer>
+
+
+    <!-- JAVASCRIPT -->
+
+    <script>
+
+        /* ==============================
+           CURRENT YEAR
+        ============================== */
+
+        document.getElementById("currentYear").textContent =
+            new Date().getFullYear();
+
+
+        /* ==============================
+           READING PROGRESS
+        ============================== */
+
+        window.addEventListener("scroll", function () {
+
+            const progress =
+                document.getElementById("readingProgress");
+
+            const scrollTop =
+                window.scrollY;
+
+            const documentHeight =
+                document.documentElement.scrollHeight -
+                window.innerHeight;
+
+            const percentage =
+                documentHeight > 0
+                    ? (scrollTop / documentHeight) * 100
+                    : 0;
+
+            progress.style.width =
+                percentage + "%";
+
+        });
+
+
+        /* ==============================
+           BACK TO TOP
+        ============================== */
+
+        const backTop =
+            document.getElementById("backTop");
+
+
+        window.addEventListener("scroll", function () {
+
+            if (window.scrollY > 500) {
+
+                backTop.classList.add("show");
+
+            } else {
+
+                backTop.classList.remove("show");
+
+            }
+
+        });
+
+
+        backTop.addEventListener("click", function () {
+
+            window.scrollTo({
+
+                top: 0,
+
+                behavior: "smooth"
+
+            });
+
+        });
+
+    </script>
+
+</body>
+</html>
